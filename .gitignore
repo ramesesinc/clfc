@@ -6,6 +6,14 @@ client/*/dist
 client/*/build
 client/*/build.xml
 client/*/nbproject/private
+platform/*/dist
+platform/*/build
+platform/*/build.xml
+platform/*/nbproject/private
+platform/*/*/dist
+platform/*/*/build
+platform/*/*/build.xml
+platform/*/*/nbproject/private
 workspace
 _baks
 _tmp
