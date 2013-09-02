@@ -1,12 +1,10 @@
-*/dist
-*/build
-*/build.xml
-*/nbproject/private
+_baks
+_tmp
+build/workspace
 build/*/dist
 build/*/build
 build/*/build.xml
 build/*/nbproject/private
-build/workspace
 client/*/dist
 client/*/build
 client/*/build.xml
@@ -19,5 +17,3 @@ platform/*/*/dist
 platform/*/*/build
 platform/*/*/build.xml
 platform/*/*/nbproject/private
-_baks
-_tmp
