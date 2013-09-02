@@ -60,14 +60,14 @@
     =======================================================-->
     <target name="deploy-project-shared" depends="init">
         <property name="target.downloads.shared.dir" value="${workspace.osiris3.dir}/workspace/web/clfc/downloads/modules/shared"/>
-        <copy file="${shared.projects.dir}/client/dist/client-system.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
-        <copy file="${shared.projects.dir}/client/dist/client-ui-extended.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
-        <copy file="${shared.projects.dir}/client/dist/rameses-client-menu.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
-        <copy file="${shared.projects.dir}/client/dist/rameses-client-report.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
-        <copy file="${shared.projects.dir}/client/dist/rameses-enterprise-accounts.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
-        <copy file="${shared.projects.dir}/client/dist/rameses-enterprise-admin.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
-        <copy file="${shared.projects.dir}/client/dist/rameses-enterprise-entity.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
-        <copy file="${shared.projects.dir}/client/dist/rameses-enterprise-treasury.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-system/dist/client-system.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-accounts/dist/rameses-enterprise-accounts.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-treasury/dist/rameses-enterprise-treasury.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
     </target>
     
     <target name="build-workspace" depends="init,cleanup,copy-osiris3-server,copy-clfc-platform,deploy-server-codes,deploy-project-devlibs,deploy-project-shared">
