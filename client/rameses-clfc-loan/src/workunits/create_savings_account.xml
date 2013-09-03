@@ -1,0 +1,30 @@
+<workunit>
+    <invokers>
+        <invoker type="savings:create" caption="Savings Account Form" target="popup"/>
+        <invoker type="savings:open" action="open" caption="Savings Account Form" target="popup"/>
+        
+        <invoker type="formActions" action="_close" caption="Cancel" mnemonic="c" shortcut="ctrl C" icon="images/cancel.png" immediate="true"/>
+        <invoker type="formActions" action="ok" caption="Ok" mnemonic="o" shortcut="ctrl O" icon="images/save.png"/>
+    </invokers>
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.osiris2.client.*;
+            
+            class SavingsAccountController
+            {
+                def entity = [:]
+                def handler
+                
+                def ok() {
+                    if( handler ) handler(entity)
+                    return "_close"
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="com.rameses.clfc.loan.BankAccountsFormPage"/>
+    </pages>
+</workunit>

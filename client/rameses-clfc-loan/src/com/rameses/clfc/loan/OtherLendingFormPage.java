@@ -54,22 +54,22 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Kind of Loan");
         xTextField1.setCaptionWidth(130);
+        xTextField1.setName("entity.kindofLoan");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel1.add(xTextField1);
 
-        xTextField2.setText("xTextField2");
         xTextField2.setCaption("Name of Lending Inst.");
         xTextField2.setCaptionWidth(130);
+        xTextField2.setName("entity.company");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xTextField3.setText("xTextField3");
         xTextField3.setCaption("Address");
         xTextField3.setCaptionWidth(130);
+        xTextField3.setName("entity.address");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel1.add(xTextField3);
 
@@ -77,30 +77,34 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xFormPanel1.setBounds(10, 20, 450, 70);
 
         xFormPanel2.setPadding(new java.awt.Insets(7, 0, 0, 0));
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Loan Amount");
         xNumberField1.setCaptionWidth(130);
         xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setName("entity.loanAmount");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField1.setRequired(true);
         xFormPanel2.add(xNumberField1);
 
-        xNumberField2.setText("xNumberField2");
         xNumberField2.setCaption("Term");
         xNumberField2.setCaptionWidth(130);
         xNumberField2.setFieldType(Integer.class);
+        xNumberField2.setName("entity.term");
         xNumberField2.setPreferredSize(new java.awt.Dimension(70, 19));
         xFormPanel2.add(xNumberField2);
 
         xComboBox1.setCaption("Mode of Payment");
         xComboBox1.setCaptionWidth(130);
+        xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("modesOfPayment");
+        xComboBox1.setName("entity.modeofPayment");
         xComboBox1.setPreferredSize(new java.awt.Dimension(100, 19));
         xFormPanel2.add(xComboBox1);
 
-        xNumberField3.setText("xNumberField3");
         xNumberField3.setCaption("Payment");
         xNumberField3.setCaptionWidth(130);
         xNumberField3.setFieldType(BigDecimal.class);
+        xNumberField3.setName("entity.lendingPayment");
         xNumberField3.setPreferredSize(new java.awt.Dimension(120, 19));
         xNumberField3.setRequired(true);
         xFormPanel2.add(xNumberField3);
@@ -109,13 +113,13 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xFormPanel2.setBounds(10, 80, 250, 90);
 
         xFormPanel3.setPadding(new java.awt.Insets(7, 0, 0, 0));
-        xDateField1.setText("xDateField1");
         xDateField1.setCaption("Date Granted");
+        xDateField1.setName("entity.dateGranted");
         xDateField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel3.add(xDateField1);
 
-        xDateField2.setText("xDateField2");
         xDateField2.setCaption("Maturity Date");
+        xDateField2.setName("entity.maturityDate");
         xDateField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel3.add(xDateField2);
 
@@ -133,6 +137,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         jPanel1.add(xLabel1);
         xLabel1.setBounds(10, 170, 110, 20);
 
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
@@ -144,6 +149,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         jPanel1.add(xLabel2);
         xLabel2.setBounds(10, 260, 110, 20);
 
+        xTextArea2.setName("entity.collateralOffered");
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
 

@@ -79,6 +79,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setName("entity.crecom");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -90,18 +91,18 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
 
         xFormPanel2.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xNumberField4.setText("xNumberField4");
         xNumberField4.setCaption("CAO");
         xNumberField4.setCaptionWidth(50);
         xNumberField4.setFieldType(BigDecimal.class);
+        xNumberField4.setName("caoRecomAmt");
         xNumberField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField4.setRequired(true);
         xFormPanel2.add(xNumberField4);
 
-        xNumberField5.setText("xNumberField5");
         xNumberField5.setCaption("BCOH");
         xNumberField5.setCaptionWidth(50);
         xNumberField5.setFieldType(BigDecimal.class);
+        xNumberField5.setName("bcohRecomAmt");
         xNumberField5.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField5.setRequired(true);
         xFormPanel2.add(xNumberField5);
@@ -135,6 +136,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        xTextArea2.setName("comment");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
@@ -146,26 +148,26 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
 
         xFormPanel4.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
         xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xNumberField6.setText("xNumberField1");
         xNumberField6.setCaption("Marketer");
         xNumberField6.setCaptionWidth(70);
         xNumberField6.setFieldType(BigDecimal.class);
+        xNumberField6.setName("entity.marketerRecomAmt");
         xNumberField6.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField6.setRequired(true);
         xFormPanel4.add(xNumberField6);
 
-        xNumberField7.setText("xNumberField2");
         xNumberField7.setCaption("CI");
         xNumberField7.setCaptionWidth(70);
         xNumberField7.setFieldType(BigDecimal.class);
+        xNumberField7.setName("ciRecomAmt");
         xNumberField7.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField7.setRequired(true);
         xFormPanel4.add(xNumberField7);
 
-        xNumberField8.setText("xNumberField3");
         xNumberField8.setCaption("FCA");
         xNumberField8.setCaptionWidth(70);
         xNumberField8.setFieldType(BigDecimal.class);
+        xNumberField8.setName("fcaRecomAmt");
         xNumberField8.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField8.setRequired(true);
         xFormPanel4.add(xNumberField8);

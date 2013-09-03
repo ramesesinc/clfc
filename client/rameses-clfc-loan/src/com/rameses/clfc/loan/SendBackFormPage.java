@@ -27,7 +27,6 @@ public class SendBackFormPage extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xLabel1 = new com.rameses.rcp.control.XLabel();
-        xSeparator1 = new com.rameses.rcp.control.XSeparator();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
@@ -46,24 +45,12 @@ public class SendBackFormPage extends javax.swing.JPanel {
         xLabel1.setText("Please specify remarks");
         xFormPanel1.add(xLabel1);
 
-        xSeparator1.setPreferredSize(new java.awt.Dimension(700, 19));
-        javax.swing.GroupLayout xSeparator1Layout = new javax.swing.GroupLayout(xSeparator1);
-        xSeparator1.setLayout(xSeparator1Layout);
-        xSeparator1Layout.setHorizontalGroup(
-            xSeparator1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        xSeparator1Layout.setVerticalGroup(
-            xSeparator1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 19, Short.MAX_VALUE)
-        );
-        xFormPanel1.add(xSeparator1);
-
         jPanel1.add(xFormPanel1);
         xFormPanel1.setBounds(10, 30, 410, 40);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -98,7 +85,6 @@ public class SendBackFormPage extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XLabel xLabel1;
-    private com.rameses.rcp.control.XSeparator xSeparator1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     // End of variables declaration//GEN-END:variables
     

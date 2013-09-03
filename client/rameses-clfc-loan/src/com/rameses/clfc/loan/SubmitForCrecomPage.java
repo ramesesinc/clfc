@@ -70,6 +70,7 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setName("entity.ci");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -105,6 +106,7 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        xTextArea2.setName("remarks");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);

@@ -46,7 +46,7 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xTextField10 = new com.rameses.rcp.control.XTextField();
         xTextField11 = new com.rameses.rcp.control.XTextField();
         xTextField12 = new com.rameses.rcp.control.XTextField();
-        xTextField13 = new com.rameses.rcp.control.XTextField();
+        xNumberField7 = new com.rameses.rcp.control.XNumberField();
         xNumberField2 = new com.rameses.rcp.control.XNumberField();
         xNumberField3 = new com.rameses.rcp.control.XNumberField();
         xNumberField4 = new com.rameses.rcp.control.XNumberField();
@@ -65,83 +65,91 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
         xComboBox1.setCaption("Kind of Vehicle");
         xComboBox1.setCaptionWidth(135);
+        xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("classifications");
+        xComboBox1.setName("entity.classification");
         xComboBox1.setPreferredSize(new java.awt.Dimension(120, 19));
         xComboBox1.setRequired(true);
         xFormPanel1.add(xComboBox1);
 
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Make");
         xTextField1.setCaptionWidth(135);
+        xTextField1.setName("entity.make");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xTextField2.setText("xTextField1");
         xTextField2.setCaption("Model");
         xTextField2.setCaptionWidth(135);
+        xTextField2.setName("entity.model");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xTextField3.setText("xTextField1");
         xTextField3.setCaption("Body Type");
         xTextField3.setCaptionWidth(135);
+        xTextField3.setName("entity.type");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField3.setRequired(true);
         xFormPanel1.add(xTextField3);
 
         xComboBox2.setCaption("Use");
         xComboBox2.setCaptionWidth(135);
+        xComboBox2.setExpression("#{item.value}");
+        xComboBox2.setItemKey("value");
+        xComboBox2.setItems("uses");
+        xComboBox2.setName("entity.use");
         xComboBox2.setPreferredSize(new java.awt.Dimension(120, 19));
         xComboBox2.setRequired(true);
         xFormPanel1.add(xComboBox2);
 
-        xDateField1.setText("xDateField1");
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(135);
+        xDateField1.setName("entity.dateAcquired");
         xDateField1.setPreferredSize(new java.awt.Dimension(100, 19));
         xDateField1.setRequired(true);
         xFormPanel1.add(xDateField1);
 
-        xTextField4.setText("xTextField1");
         xTextField4.setCaption("Acquired From");
         xTextField4.setCaptionWidth(135);
+        xTextField4.setName("entity.acquiredFrom");
         xTextField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField4.setRequired(true);
         xFormPanel1.add(xTextField4);
 
-        xTextField5.setText("xTextField1");
         xTextField5.setCaption("Registered Name");
         xTextField5.setCaptionWidth(135);
+        xTextField5.setName("entity.registeredName");
         xTextField5.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField5.setRequired(true);
         xFormPanel1.add(xTextField5);
 
-        xTextField6.setText("xTextField1");
         xTextField6.setCaption("Chassis No.");
         xTextField6.setCaptionWidth(135);
+        xTextField6.setName("entity.chassisno");
         xTextField6.setPreferredSize(new java.awt.Dimension(150, 19));
         xTextField6.setRequired(true);
         xFormPanel1.add(xTextField6);
 
-        xTextField7.setText("xTextField1");
         xTextField7.setCaption("Plate No.");
         xTextField7.setCaptionWidth(135);
+        xTextField7.setName("entity.plateno");
         xTextField7.setPreferredSize(new java.awt.Dimension(150, 19));
         xTextField7.setRequired(true);
         xFormPanel1.add(xTextField7);
 
-        xTextField8.setText("xTextField1");
         xTextField8.setCaption("Engine No.");
         xTextField8.setCaptionWidth(135);
+        xTextField8.setName("entity.engineno");
         xTextField8.setPreferredSize(new java.awt.Dimension(150, 19));
         xTextField8.setRequired(true);
         xFormPanel1.add(xTextField8);
 
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Market/Appraisal Value");
         xNumberField1.setCaptionWidth(135);
         xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setName("entity.appraisedvalue");
         xNumberField1.setPreferredSize(new java.awt.Dimension(100, 19));
         xNumberField1.setRequired(true);
         xFormPanel1.add(xNumberField1);
@@ -152,70 +160,77 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xFormPanel2.setPadding(new java.awt.Insets(3, 0, 0, 0));
         xCheckBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        xCheckBox1.setName("hasORCR");
         xCheckBox1.setOpaque(false);
         xCheckBox1.setPreferredSize(new java.awt.Dimension(53, 19));
         xCheckBox1.setShowCaption(false);
         xCheckBox1.setText(" OR/CR");
         xFormPanel2.add(xCheckBox1);
 
-        xTextField9.setText("xTextField9");
         xTextField9.setCaption("CR No.");
         xTextField9.setCaptionWidth(110);
+        xTextField9.setName("entity.crno");
         xTextField9.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField9.setRequired(true);
         xFormPanel2.add(xTextField9);
 
-        xTextField10.setText("xTextField9");
         xTextField10.setCaption("Fuel");
         xTextField10.setCaptionWidth(110);
+        xTextField10.setName("entity.fuel");
         xTextField10.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xTextField10);
 
-        xTextField11.setText("xTextField9");
         xTextField11.setCaption("Denomination");
         xTextField11.setCaptionWidth(110);
+        xTextField11.setName("entity.denomination");
         xTextField11.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xTextField11);
 
-        xTextField12.setText("xTextField9");
         xTextField12.setCaption("Series");
         xTextField12.setCaptionWidth(110);
+        xTextField12.setName("entity.series");
         xTextField12.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xTextField12);
 
-        xTextField13.setText("xTextField9");
-        xTextField13.setCaption("Piston Displacement");
-        xTextField13.setCaptionWidth(110);
-        xTextField13.setPreferredSize(new java.awt.Dimension(0, 19));
-        xFormPanel2.add(xTextField13);
+        xNumberField7.setCaption("Piston Displacement");
+        xNumberField7.setCaptionWidth(110);
+        xNumberField7.setFieldType(BigDecimal.class);
+        xNumberField7.setName("entity.pistondisplacement");
+        xNumberField7.setPreferredSize(new java.awt.Dimension(0, 19));
+        xFormPanel2.add(xNumberField7);
 
-        xNumberField2.setText("xNumberField2");
         xNumberField2.setCaption("No. of cylinders");
         xNumberField2.setCaptionWidth(110);
+        xNumberField2.setFieldType(BigDecimal.class);
+        xNumberField2.setName("entity.noofcylinders");
         xNumberField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField2);
 
-        xNumberField3.setText("xNumberField3");
         xNumberField3.setCaption("Net Wt.");
         xNumberField3.setCaptionWidth(110);
+        xNumberField3.setFieldType(BigDecimal.class);
+        xNumberField3.setName("entity.netwt");
         xNumberField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField3);
 
-        xNumberField4.setText("xNumberField4");
         xNumberField4.setCaption("Gross Wt.");
         xNumberField4.setCaptionWidth(110);
+        xNumberField4.setFieldType(BigDecimal.class);
+        xNumberField4.setName("entity.grosswt");
         xNumberField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField4);
 
-        xNumberField5.setText("xNumberField5");
         xNumberField5.setCaption("Net Capacity");
         xNumberField5.setCaptionWidth(110);
+        xNumberField5.setFieldType(BigDecimal.class);
+        xNumberField5.setName("entity.netcap");
         xNumberField5.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField5);
 
-        xNumberField6.setText("xNumberField6");
         xNumberField6.setCaption("Shipping Wt.");
         xNumberField6.setCaptionWidth(110);
+        xNumberField6.setFieldType(BigDecimal.class);
+        xNumberField6.setName("entity.shipwt");
         xNumberField6.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField6);
 
@@ -226,6 +241,7 @@ public class VehicleFormPage extends javax.swing.JPanel {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
         xTextArea1.setCaption("Remarks");
         xTextArea1.setCaptionWidth(135);
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -270,12 +286,12 @@ public class VehicleFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XNumberField xNumberField4;
     private com.rameses.rcp.control.XNumberField xNumberField5;
     private com.rameses.rcp.control.XNumberField xNumberField6;
+    private com.rameses.rcp.control.XNumberField xNumberField7;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField10;
     private com.rameses.rcp.control.XTextField xTextField11;
     private com.rameses.rcp.control.XTextField xTextField12;
-    private com.rameses.rcp.control.XTextField xTextField13;
     private com.rameses.rcp.control.XTextField xTextField2;
     private com.rameses.rcp.control.XTextField xTextField3;
     private com.rameses.rcp.control.XTextField xTextField4;

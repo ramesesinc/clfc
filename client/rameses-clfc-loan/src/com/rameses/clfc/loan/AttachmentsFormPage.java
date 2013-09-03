@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class AttachmentsFormPage extends javax.swing.JPanel {
     
     /** Creates new form AttachmentsForm */
@@ -32,14 +36,15 @@ public class AttachmentsFormPage extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setTitle("Attachment Information");
         xFormPanel1.setBorder(xTitledBorder1);
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Type");
+        xTextField1.setName("entity.name");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
         xTextArea1.setCaption("Remarks");
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);

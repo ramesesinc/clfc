@@ -50,23 +50,23 @@ public class SiblingsFormPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Name");
         xTextField1.setCaptionWidth(70);
+        xTextField1.setName("entity.name");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xTextField2.setText("xTextField2");
         xTextField2.setCaption("Address");
         xTextField2.setCaptionWidth(70);
+        xTextField2.setName("entity.address");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Age");
         xNumberField1.setCaptionWidth(70);
+        xNumberField1.setName("entity.age");
         xNumberField1.setPreferredSize(new java.awt.Dimension(50, 19));
         xNumberField1.setRequired(true);
         xFormPanel1.add(xNumberField1);
@@ -148,7 +148,7 @@ public class SiblingsFormPage extends javax.swing.JPanel {
 
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", null}
+                new Object[]{"name", "kindOfBusiness"}
                 , new Object[]{"caption", "Sources of Income"}
                 , new Object[]{"width", 200}
                 , new Object[]{"minWidth", 0}
@@ -174,12 +174,14 @@ public class SiblingsFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable1.setHandler("otherIncomeHandler");
+        xDataTable1.setName("selectedOtherIncome");
         jPanel1.add(xDataTable1);
         xDataTable1.setBounds(10, 250, 410, 80);
 
         xDataTable2.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "name"}
+                new Object[]{"name", "employer"}
                 , new Object[]{"caption", "Name"}
                 , new Object[]{"width", 150}
                 , new Object[]{"minWidth", 0}
@@ -218,6 +220,8 @@ public class SiblingsFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable2.setHandler("employmentHandler");
+        xDataTable2.setName("selectedEmployment");
         jPanel1.add(xDataTable2);
         xDataTable2.setBounds(10, 110, 410, 80);
 

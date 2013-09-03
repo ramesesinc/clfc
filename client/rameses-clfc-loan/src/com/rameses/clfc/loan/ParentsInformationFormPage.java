@@ -43,16 +43,16 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Father's Name");
         xTextField1.setCaptionWidth(100);
+        xTextField1.setName("entity.fathersName");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xTextField2.setText("xTextField2");
         xTextField2.setCaption("Mother's Name");
         xTextField2.setCaptionWidth(100);
+        xTextField2.setName("entity.mothersName");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
@@ -61,17 +61,17 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
         xFormPanel1.setBounds(10, 20, 330, 50);
 
         xFormPanel2.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Age");
         xNumberField1.setCaptionWidth(50);
         xNumberField1.setFieldType(Integer.class);
+        xNumberField1.setName("entity.fathersAge");
         xNumberField1.setRequired(true);
         xFormPanel2.add(xNumberField1);
 
-        xNumberField2.setText("xNumberField1");
         xNumberField2.setCaption("Age");
         xNumberField2.setCaptionWidth(50);
         xNumberField2.setFieldType(Integer.class);
+        xNumberField2.setName("entity.mothersAge");
         xNumberField2.setRequired(true);
         xFormPanel2.add(xNumberField2);
 
@@ -79,9 +79,9 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
         xFormPanel2.setBounds(350, 20, 100, 50);
 
         xFormPanel3.setPadding(new java.awt.Insets(5, 0, 0, 0));
-        xTextField3.setText("xTextField3");
         xTextField3.setCaption("Address");
         xTextField3.setCaptionWidth(100);
+        xTextField3.setName("entity.address");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField3.setRequired(true);
         xFormPanel3.add(xTextField3);
@@ -89,6 +89,7 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 60));
         xTextArea1.setCaption("Remarks");
         xTextArea1.setCaptionWidth(100);
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 

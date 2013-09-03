@@ -6,10 +6,15 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+import java.math.BigDecimal;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class EmploymentFormPage extends javax.swing.JPanel {
     
     /** Creates new form EmploymentForm */
@@ -38,51 +43,57 @@ public class EmploymentFormPage extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setTitle("Employment Information");
         xFormPanel1.setBorder(xTitledBorder1);
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Employer");
         xTextField1.setCaptionWidth(100);
+        xTextField1.setName("entity.employer");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xTextField2.setText("xTextField2");
         xTextField2.setCaption("Tel. No.");
         xTextField2.setCaptionWidth(100);
+        xTextField2.setName("entity.telno");
         xTextField2.setPreferredSize(new java.awt.Dimension(100, 19));
         xFormPanel1.add(xTextField2);
 
-        xTextField3.setText("xTextField3");
         xTextField3.setCaption("Address");
         xTextField3.setCaptionWidth(100);
+        xTextField3.setName("entity.address");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel1.add(xTextField3);
 
-        xTextField4.setText("xTextField4");
         xTextField4.setCaption("Position");
         xTextField4.setCaptionWidth(100);
+        xTextField4.setName("entity.position");
         xTextField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel1.add(xTextField4);
 
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Salary");
         xNumberField1.setCaptionWidth(100);
+        xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setName("entity.salary");
         xNumberField1.setPreferredSize(new java.awt.Dimension(130, 19));
         xFormPanel1.add(xNumberField1);
 
-        xTextField5.setText("xTextField5");
         xTextField5.setCaption("Length of Service");
         xTextField5.setCaptionWidth(100);
+        xTextField5.setName("entity.years");
         xTextField5.setPreferredSize(new java.awt.Dimension(130, 19));
         xFormPanel1.add(xTextField5);
 
         xComboBox1.setCaption("Status");
         xComboBox1.setCaptionWidth(100);
+        xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("statusList");
+        xComboBox1.setName("entity.status");
         xComboBox1.setPreferredSize(new java.awt.Dimension(150, 22));
         xFormPanel1.add(xComboBox1);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
         xTextArea1.setCaption("Remarks");
         xTextArea1.setCaptionWidth(100);
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);

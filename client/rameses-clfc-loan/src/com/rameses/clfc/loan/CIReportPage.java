@@ -104,6 +104,8 @@ public class CIReportPage extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setName("entity.businessEvaluation");
+        xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
@@ -114,6 +116,9 @@ public class CIReportPage extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        jPanel3.setName("entity.physicalOutlook");
+        xTextArea2.setName("entity.physicalOutlook");
+        xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
 
@@ -146,15 +151,15 @@ public class CIReportPage extends javax.swing.JPanel {
         xFormPanel3.setBounds(10, 250, 380, 30);
 
         xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Time");
+        xTextField1.setName("entity.timefiled");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel4.add(xTextField1);
 
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Amount");
         xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setName("entity.amount");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField1.setRequired(true);
         xFormPanel4.add(xNumberField1);
@@ -167,11 +172,12 @@ public class CIReportPage extends javax.swing.JPanel {
         xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
         xLabel5.setBorder(xLineBorder1);
         xLabel5.setCaption("Filed By");
+        xLabel5.setName("entity.filedby");
         xLabel5.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel5.add(xLabel5);
 
-        xDateField2.setText("xDateField1");
         xDateField2.setCaption("Date");
+        xDateField2.setName("entity.dtfiled");
         xDateField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xDateField2.setRequired(true);
         xFormPanel5.add(xDateField2);

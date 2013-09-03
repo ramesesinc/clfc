@@ -33,16 +33,16 @@ public class EducationalBackgroundFormPage extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setTitle("Educational Background Information");
         xFormPanel1.setBorder(xTitledBorder1);
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Educational Attainment");
         xTextField1.setCaptionWidth(140);
+        xTextField1.setName("entity.profession");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xTextField2.setText("xTextField2");
         xTextField2.setCaption("School Attended");
         xTextField2.setCaptionWidth(140);
+        xTextField2.setName("entity.schoolAttended");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
@@ -50,6 +50,7 @@ public class EducationalBackgroundFormPage extends javax.swing.JPanel {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 120));
         xTextArea1.setCaption("Remarks");
         xTextArea1.setCaptionWidth(140);
+        xTextArea1.setName("entity.othersSpecs");
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 

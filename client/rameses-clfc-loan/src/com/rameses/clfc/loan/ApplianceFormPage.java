@@ -6,12 +6,15 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class ApplianceFormPage extends javax.swing.JPanel {
     
     /** Creates new form ApplianceFormPage */
@@ -44,47 +47,45 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Type");
         xTextField1.setCaptionWidth(65);
+        xTextField1.setName("entity.type");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xTextField2.setText("xTextField2");
         xTextField2.setCaption("Brand");
         xTextField2.setCaptionWidth(65);
+        xTextField2.setName("entity.brand");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xTextField4.setText("xTextField4");
         xTextField4.setCaption("Serial No");
         xTextField4.setCaptionWidth(65);
+        xTextField4.setName("entity.serial");
         xTextField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField4.setRequired(true);
         xFormPanel1.add(xTextField4);
 
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xDateField1.setText("xDateField1");
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(135);
-        xDateField1.setHint("yyyy-MM-dd");
-        xDateField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xDateField1.setName("entity.dateAcquired");
         xDateField1.setRequired(true);
         xFormPanel2.add(xDateField1);
 
-        xTextField3.setText("xTextField3");
         xTextField3.setCaption("Model No.");
         xTextField3.setCaptionWidth(135);
+        xTextField3.setName("entity.model");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField3.setRequired(true);
         xFormPanel2.add(xTextField3);
 
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Market/Appraisal Value");
         xNumberField1.setCaptionWidth(135);
         xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setName("entity.appraisedValue");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField1.setRequired(true);
         xFormPanel2.add(xNumberField1);
@@ -92,6 +93,8 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         xLabel1.setPadding(new java.awt.Insets(1, 0, 1, 1));
         xLabel1.setText("Remarks");
 
+        xTextArea1.setCaption("Remarks");
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -139,7 +142,7 @@ public class ApplianceFormPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class ChildFormPage extends javax.swing.JPanel {
     
     /** Creates new form ChildrenFormPage */
@@ -58,16 +62,16 @@ public class ChildFormPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xTextField1.setText("xTextField1");
         xTextField1.setCaption("Name");
         xTextField1.setCaptionWidth(70);
+        xTextField1.setName("entity.name");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xNumberField1.setText("xNumberField1");
         xNumberField1.setCaption("Age");
         xNumberField1.setCaptionWidth(70);
+        xNumberField1.setName("entity.age");
         xNumberField1.setPreferredSize(new java.awt.Dimension(50, 19));
         xNumberField1.setRequired(true);
         xFormPanel1.add(xNumberField1);
@@ -125,9 +129,9 @@ public class ChildFormPage extends javax.swing.JPanel {
 
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", null}
-                , new Object[]{"caption", "Sources of Income"}
-                , new Object[]{"width", 200}
+                new Object[]{"name", "kindOfBusiness"}
+                , new Object[]{"caption", "Source of Income"}
+                , new Object[]{"width", 250}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
@@ -151,12 +155,14 @@ public class ChildFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable1.setHandler("otherIncomeHandler");
+        xDataTable1.setName("selectedOtherIncome");
         jPanel1.add(xDataTable1);
         xDataTable1.setBounds(10, 330, 410, 80);
 
         xDataTable2.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "name"}
+                new Object[]{"name", "employer"}
                 , new Object[]{"caption", "Name"}
                 , new Object[]{"width", 150}
                 , new Object[]{"minWidth", 0}
@@ -195,13 +201,19 @@ public class ChildFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable2.setHandler("employmentHandler");
+        xDataTable2.setName("selectedEmployment");
         jPanel1.add(xDataTable2);
         xDataTable2.setBounds(10, 190, 410, 80);
 
+        xButton1.setImmediate(true);
+        xButton1.setName("addEmployment");
         xButton1.setText("Add");
         jPanel1.add(xButton1);
         xButton1.setBounds(10, 280, 51, 23);
 
+        xButton2.setImmediate(true);
+        xButton2.setName("addOtherIncome");
         xButton2.setText("Add");
         jPanel1.add(xButton2);
         xButton2.setBounds(10, 420, 51, 23);
@@ -233,6 +245,7 @@ public class ChildFormPage extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setName("entity.educationalAttainment");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -267,6 +280,7 @@ public class ChildFormPage extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        xTextArea2.setName("entity.status");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);

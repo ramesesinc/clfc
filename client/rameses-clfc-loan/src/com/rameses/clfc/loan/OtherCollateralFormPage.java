@@ -33,6 +33,7 @@ public class OtherCollateralFormPage extends javax.swing.JPanel {
         xFormPanel1.setBorder(xTitledBorder1);
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 130));
         xTextArea1.setCaption("Remarks");
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
