@@ -1,22 +1,5 @@
-<workunit extends="wtemplates/LookupController.xml">
-    <invokers>
-        <invoker type="principalborrower:lookup" caption="Principal Borrower Lookup" target="popup"/>
-    </invokers>
-    <code>
-        import com.rameses.rcp.common.*;
-        import com.rameses.rcp.annotations.*;
-        import com.rameses.osiris2.common.*;
-        
-        class PrincipalBorrowerLookup extends LookupController
-        {
-            public String getServiceName() { return "PrincipalBorrowerService" }
-            public Column[] getColumns() {
-                return [
-                    new Column(name:'txnno', caption:'Customer No.'),
-                    new Column(name:'name', caption:'Name'),
-                    new Column(name:'address', caption:'Address')
-                ] as Column[]
-            }
-        }
-    </code>
+<workunit extends="wtemplates/ServiceLookupController.xml" serviceName="CustomerLookupService">
+   <invokers>
+         <invoker type="customer:lookup" caption="Lookup Customer" target="popup"/>
+   </invokers>
 </workunit>

@@ -14,12 +14,16 @@
             {
                 String serviceName = 'LoanApplicationService'
                 String prefixId = 'LOANAPP'
-                def principalBorrowerLookup = InvokerUtil.lookupOpener('principalborrower:lookup', [:])
+                def principalBorrowerLookup; 
                 def clientTypes = LOV.LOAN_CLIENT_TYPES
                 def productTypes = LOV.LOAN_PROD_TYPES
                 def renewalTypes = LOV.LOAN_RENEWAL_TYPES
                 def appmode
                 def borrower
+                
+                def getCustomerLookupHandler() {
+                    return InvokerUtil.lookupOpener('customer:lookup', [:]); 
+                } 
                 
                 void setBorrower( borrower ) {
                     this.borrower = borrower

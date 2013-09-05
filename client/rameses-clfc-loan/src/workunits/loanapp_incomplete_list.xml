@@ -1,0 +1,7 @@
+<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
+    entityName="loanapp" tag="incomplete">
+    
+    <invokers>
+        <invoker folderid="/explorer/loan" caption="Incomplete Applications" permission="system" index="0"/>
+   </invokers>
+</workunit>
