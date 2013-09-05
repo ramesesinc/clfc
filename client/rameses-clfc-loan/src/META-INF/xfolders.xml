@@ -1,5 +1,7 @@
 <folders>
     <folder id="explorer">
+        <folder id="loan" caption="Loans" index="99"/>
+        
         <folder id="txn" caption="Transactions" index="0">
             <folder id="clfc" caption="CLFC"/>
         </folder>

@@ -79,7 +79,7 @@ public class ApplicationPage extends javax.swing.JPanel {
         xLookupField1.setCaption("Name");
         xLookupField1.setCaptionWidth(60);
         xLookupField1.setExpression("#{item.name}");
-        xLookupField1.setHandler("principalBorrowerLookup");
+        xLookupField1.setHandler("customerLookupHandler");
         xLookupField1.setName("borrower");
         xLookupField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xLookupField1.setRequired(true);

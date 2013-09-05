@@ -39,6 +39,9 @@
     = DEPLOY SERVER CODES  
     =======================================================-->
     <target name="deploy-server-codes" depends="init">
+        <copy todir="${workspace.dir}/osiris3-server/workspace/services/apps/clfc/modules">
+            <fileset dir="${clfc.project.dir}/server"/>
+        </copy> 
     </target>
             
     <!--=====================================================
