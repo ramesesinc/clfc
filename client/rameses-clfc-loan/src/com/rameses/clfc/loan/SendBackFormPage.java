@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class SendBackFormPage extends javax.swing.JPanel {
     
     /** Creates new form SendBackFormPage */
@@ -25,40 +29,31 @@ public class SendBackFormPage extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
-        xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xLabel1 = new com.rameses.rcp.control.XLabel();
-        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
 
         jPanel1.setLayout(null);
 
-        com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Send Back");
-        jPanel1.setBorder(xTitledBorder1);
-
-        xFormPanel1.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        jPanel1.setBackground(new java.awt.Color(232, 232, 226));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        jPanel1.setBorder(xLineBorder1);
         xLabel1.setPadding(new java.awt.Insets(1, 0, 1, 0));
         xLabel1.setPreferredSize(new java.awt.Dimension(113, 19));
         xLabel1.setShowCaption(false);
         xLabel1.setText("Please specify remarks");
-        xFormPanel1.add(xLabel1);
+        jPanel1.add(xLabel1);
+        xLabel1.setBounds(10, 10, 113, 19);
 
-        jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 30, 410, 40);
-
-        jPanel2.setLayout(new java.awt.BorderLayout());
-
+        xTextArea1.setCaption("Remarks");
         xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
-        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 410, 100);
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(10, 30, 410, 80);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -73,7 +68,7 @@ public class SendBackFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -81,9 +76,7 @@ public class SendBackFormPage extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     // End of variables declaration//GEN-END:variables

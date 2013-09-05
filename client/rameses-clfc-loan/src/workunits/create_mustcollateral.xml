@@ -1,0 +1,66 @@
+<workunit>
+    <invokers>
+        <invoker type="mustcollateral:create" action="init" caption="Must Collateral Form" target="popup"/>
+        
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
+        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
+    </invokers>
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.osiris2.client.*;
+            
+            class MustCollateralFormController
+            {
+                def entity
+                def loanapp
+                def handler
+                
+                def init() {
+                    entity = [
+                        appliancelist: copyList(loanapp.appliancelist)
+                    ]
+                }
+                
+                def copyList( src ) {
+                    def list = []
+                    src.each{
+                        list.add(it)
+                    }
+                    return list
+                }
+                
+                def approve() {
+                    if( handler ) handler(entity)
+                    return "_close"
+                }
+                
+                def cancel() {
+                    return "_close"
+                }
+                
+                def applianceHandler = [
+                    fetchList: {o->
+                        return entity.appliancelist
+                    }
+                ] as EditorListModel
+                
+                def vehicleHandler = [
+                    fetchList: {o->
+                        return entity.vehiclelist
+                    }
+                ] as EditorListModel
+                
+                def propertyHandler = [
+                    fetchList: {o->
+                        return entity.propertylist
+                    }
+                ] as EditorListModel
+            }
+        ]]>
+    </code>    
+    <pages>
+        <page template="com.rameses.clfc.loan.MustCollateralFormPage"/>
+    </pages>    
+</workunit>

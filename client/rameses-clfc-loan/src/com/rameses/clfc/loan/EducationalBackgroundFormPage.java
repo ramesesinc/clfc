@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class EducationalBackgroundFormPage extends javax.swing.JPanel {
     
     /** Creates new form EducationalBackgroundForm */

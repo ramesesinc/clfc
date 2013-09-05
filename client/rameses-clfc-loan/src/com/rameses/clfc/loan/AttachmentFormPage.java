@@ -14,10 +14,10 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  Rameses
  */
 @Template(FormPage.class)
-public class AttachmentsFormPage extends javax.swing.JPanel {
+public class AttachmentFormPage extends javax.swing.JPanel {
     
     /** Creates new form AttachmentsForm */
-    public AttachmentsFormPage() {
+    public AttachmentFormPage() {
         initComponents();
     }
     

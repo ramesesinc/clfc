@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class MustCollateralFormPage extends javax.swing.JPanel {
     
     /** Creates new form MustCollateralFormPage */
@@ -28,26 +32,22 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xLabel1 = new com.rameses.rcp.control.XLabel();
         xSeparator5 = new com.rameses.rcp.control.XSeparator();
-        xDataTable1 = new com.rameses.rcp.control.XDataTable();
+        xDataTable2 = new com.rameses.rcp.control.XDataTable();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xSeparator6 = new com.rameses.rcp.control.XSeparator();
-        xDataTable2 = new com.rameses.rcp.control.XDataTable();
+        xDataTable3 = new com.rameses.rcp.control.XDataTable();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         xLabel6 = new com.rameses.rcp.control.XLabel();
         xSeparator7 = new com.rameses.rcp.control.XSeparator();
-        xDataTable3 = new com.rameses.rcp.control.XDataTable();
+        xDataTable4 = new com.rameses.rcp.control.XDataTable();
+        xLabel7 = new com.rameses.rcp.control.XLabel();
         xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
         xLabel3 = new com.rameses.rcp.control.XLabel();
         xSeparator8 = new com.rameses.rcp.control.XSeparator();
-        xDataTable4 = new com.rameses.rcp.control.XDataTable();
-        xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
-        xLabel5 = new com.rameses.rcp.control.XLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
         xLabel4 = new com.rameses.rcp.control.XLabel();
-        xLabel7 = new com.rameses.rcp.control.XLabel();
-        xLabel8 = new com.rameses.rcp.control.XLabel();
 
         jPanel1.setLayout(null);
 
@@ -80,62 +80,6 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
         jPanel1.add(xFormPanel1);
         xFormPanel1.setBounds(10, 30, 570, 40);
 
-        xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
-            new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "selected"}
-                , new Object[]{"caption", " "}
-                , new Object[]{"width", 20}
-                , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 0}
-                , new Object[]{"required", false}
-                , new Object[]{"resizable", true}
-                , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", false}
-                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.CheckBoxColumnHandler(java.lang.Boolean.class, true, false)}
-            }),
-            new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "remarks"}
-                , new Object[]{"caption", "Remarks"}
-                , new Object[]{"width", 700}
-                , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 0}
-                , new Object[]{"required", false}
-                , new Object[]{"resizable", true}
-                , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", false}
-                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
-            })
-        });
-        jPanel1.add(xDataTable1);
-        xDataTable1.setBounds(10, 370, 570, 70);
-
-        xFormPanel2.setCellspacing(0);
-        xFormPanel2.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel2.setPadding(new java.awt.Insets(1, 1, 1, 0));
-        xLabel2.setShowCaption(false);
-        xLabel2.setText("<html><b>Vehicle(s)</b></html>");
-        xLabel2.setUseHtml(true);
-        xFormPanel2.add(xLabel2);
-
-        xSeparator6.setPreferredSize(new java.awt.Dimension(700, 19));
-        javax.swing.GroupLayout xSeparator6Layout = new javax.swing.GroupLayout(xSeparator6);
-        xSeparator6.setLayout(xSeparator6Layout);
-        xSeparator6Layout.setHorizontalGroup(
-            xSeparator6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        xSeparator6Layout.setVerticalGroup(
-            xSeparator6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 19, Short.MAX_VALUE)
-        );
-        xFormPanel2.add(xSeparator6);
-
-        jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(10, 130, 570, 40);
-
         xDataTable2.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "selected"}
@@ -144,9 +88,10 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
-                , new Object[]{"resizable", true}
+                , new Object[]{"resizable", false}
                 , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", false}
+                , new Object[]{"editable", true}
+                , new Object[]{"editableWhen", null}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.CheckBoxColumnHandler(java.lang.Boolean.class, true, false)}
             }),
@@ -164,9 +109,9 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "info"}
-                , new Object[]{"caption", "Brand/Serial No./Model No."}
-                , new Object[]{"width", 250}
+                new Object[]{"name", "brand"}
+                , new Object[]{"caption", "Brand"}
+                , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
@@ -177,7 +122,33 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "appraisedvalue"}
+                new Object[]{"name", "serial"}
+                , new Object[]{"caption", "Serial No."}
+                , new Object[]{"width", 100}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
+            }),
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "model"}
+                , new Object[]{"caption", "Model No."}
+                , new Object[]{"width", 100}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
+            }),
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "appraisedValue"}
                 , new Object[]{"caption", "Appraise Value"}
                 , new Object[]{"width", 150}
                 , new Object[]{"minWidth", 0}
@@ -203,33 +174,35 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable2.setHandler("applianceHandler");
+        xDataTable2.setName("selectedAppliance");
         jPanel1.add(xDataTable2);
-        xDataTable2.setBounds(10, 50, 570, 70);
+        xDataTable2.setBounds(10, 50, 570, 100);
 
-        xFormPanel3.setCellspacing(0);
-        xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel6.setPadding(new java.awt.Insets(1, 1, 1, 0));
-        xLabel6.setShowCaption(false);
-        xLabel6.setText("<html><b>Property(ies)</b></html>");
-        xLabel6.setUseHtml(true);
-        xFormPanel3.add(xLabel6);
+        xFormPanel2.setCellspacing(0);
+        xFormPanel2.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xLabel2.setPadding(new java.awt.Insets(1, 1, 1, 0));
+        xLabel2.setShowCaption(false);
+        xLabel2.setText("<html><b>Vehicle(s)</b></html>");
+        xLabel2.setUseHtml(true);
+        xFormPanel2.add(xLabel2);
 
-        xSeparator7.setPreferredSize(new java.awt.Dimension(700, 19));
-        javax.swing.GroupLayout xSeparator7Layout = new javax.swing.GroupLayout(xSeparator7);
-        xSeparator7.setLayout(xSeparator7Layout);
-        xSeparator7Layout.setHorizontalGroup(
-            xSeparator7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        xSeparator6.setPreferredSize(new java.awt.Dimension(700, 19));
+        javax.swing.GroupLayout xSeparator6Layout = new javax.swing.GroupLayout(xSeparator6);
+        xSeparator6.setLayout(xSeparator6Layout);
+        xSeparator6Layout.setHorizontalGroup(
+            xSeparator6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 700, Short.MAX_VALUE)
         );
-        xSeparator7Layout.setVerticalGroup(
-            xSeparator7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        xSeparator6Layout.setVerticalGroup(
+            xSeparator6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 19, Short.MAX_VALUE)
         );
-        xFormPanel3.add(xSeparator7);
+        xFormPanel2.add(xSeparator6);
 
-        jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 230, 570, 40);
+        jPanel1.add(xFormPanel2);
+        xFormPanel2.setBounds(10, 160, 570, 50);
 
         xDataTable3.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
@@ -241,14 +214,15 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"required", false}
                 , new Object[]{"resizable", true}
                 , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", false}
+                , new Object[]{"editable", true}
+                , new Object[]{"editableWhen", null}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.CheckBoxColumnHandler(java.lang.Boolean.class, true, false)}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "make"}
                 , new Object[]{"caption", "Make"}
-                , new Object[]{"width", 50}
+                , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
@@ -261,7 +235,7 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "model"}
                 , new Object[]{"caption", "Model"}
-                , new Object[]{"width", 50}
+                , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
@@ -272,9 +246,35 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "info"}
-                , new Object[]{"caption", "Type/ Engine No./ Chassis No./ Plate No./ Reg. No."}
-                , new Object[]{"width", 250}
+                new Object[]{"name", "engineno"}
+                , new Object[]{"caption", "Engine No."}
+                , new Object[]{"width", 100}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
+            }),
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "chassisno"}
+                , new Object[]{"caption", "Chassis No."}
+                , new Object[]{"width", 100}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
+            }),
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "plateno"}
+                , new Object[]{"caption", "Plate No."}
+                , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
@@ -311,33 +311,35 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable3.setHandler("vehicleHandler");
+        xDataTable3.setName("selectedVehicle");
         jPanel1.add(xDataTable3);
-        xDataTable3.setBounds(10, 150, 570, 70);
+        xDataTable3.setBounds(10, 180, 570, 90);
 
-        xFormPanel4.setCellspacing(0);
-        xFormPanel4.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel3.setPadding(new java.awt.Insets(1, 1, 1, 0));
-        xLabel3.setShowCaption(false);
-        xLabel3.setText("<html><b>Other Collateral(s)</b></html>");
-        xLabel3.setUseHtml(true);
-        xFormPanel4.add(xLabel3);
+        xFormPanel3.setCellspacing(0);
+        xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xLabel6.setPadding(new java.awt.Insets(1, 1, 1, 0));
+        xLabel6.setShowCaption(false);
+        xLabel6.setText("<html><b>Property(ies)</b></html>");
+        xLabel6.setUseHtml(true);
+        xFormPanel3.add(xLabel6);
 
-        xSeparator8.setPreferredSize(new java.awt.Dimension(700, 19));
-        javax.swing.GroupLayout xSeparator8Layout = new javax.swing.GroupLayout(xSeparator8);
-        xSeparator8.setLayout(xSeparator8Layout);
-        xSeparator8Layout.setHorizontalGroup(
-            xSeparator8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        xSeparator7.setPreferredSize(new java.awt.Dimension(700, 19));
+        javax.swing.GroupLayout xSeparator7Layout = new javax.swing.GroupLayout(xSeparator7);
+        xSeparator7.setLayout(xSeparator7Layout);
+        xSeparator7Layout.setHorizontalGroup(
+            xSeparator7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 700, Short.MAX_VALUE)
         );
-        xSeparator8Layout.setVerticalGroup(
-            xSeparator8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        xSeparator7Layout.setVerticalGroup(
+            xSeparator7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 19, Short.MAX_VALUE)
         );
-        xFormPanel4.add(xSeparator8);
+        xFormPanel3.add(xSeparator7);
 
-        jPanel1.add(xFormPanel4);
-        xFormPanel4.setBounds(10, 350, 570, 50);
+        jPanel1.add(xFormPanel3);
+        xFormPanel3.setBounds(10, 280, 570, 40);
 
         xDataTable4.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
@@ -349,14 +351,15 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"required", false}
                 , new Object[]{"resizable", true}
                 , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", false}
+                , new Object[]{"editable", true}
+                , new Object[]{"editableWhen", null}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.CheckBoxColumnHandler(java.lang.Boolean.class, true, false)}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "make"}
+                new Object[]{"name", "classification"}
                 , new Object[]{"caption", "Type"}
-                , new Object[]{"width", 80}
+                , new Object[]{"width", 150}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
@@ -369,19 +372,6 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "location"}
                 , new Object[]{"caption", "Location"}
-                , new Object[]{"width", 80}
-                , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 0}
-                , new Object[]{"required", false}
-                , new Object[]{"resizable", true}
-                , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", false}
-                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
-            }),
-            new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "zonalvalue"}
-                , new Object[]{"caption", "Zonal Value"}
                 , new Object[]{"width", 150}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
@@ -393,7 +383,20 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "appraisedvalue"}
+                new Object[]{"name", "zonalValue"}
+                , new Object[]{"caption", "Zonal Value"}
+                , new Object[]{"width", 100}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
+            }),
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "appraisedValue"}
                 , new Object[]{"caption", "Appraised Value"}
                 , new Object[]{"width", 200}
                 , new Object[]{"minWidth", 0}
@@ -419,46 +422,55 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable4.setHandler("propertyHandler");
+        xDataTable4.setName("selectedProperty");
         jPanel1.add(xDataTable4);
-        xDataTable4.setBounds(10, 250, 570, 70);
-
-        xFormPanel5.setCellspacing(0);
-        xFormPanel5.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel5.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel5.setPadding(new java.awt.Insets(1, 1, 1, 0));
-        xLabel5.setShowCaption(false);
-        xLabel5.setText("<html><b>Additional Collateral(s) to be offered. </b>(Pls. specify if any)</html>");
-        xLabel5.setUseHtml(true);
-        xFormPanel5.add(xLabel5);
-
-        jPanel1.add(xFormPanel5);
-        xFormPanel5.setBounds(10, 470, 570, 40);
-
-        xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
-        jScrollPane1.setViewportView(xTextArea1);
-
-        jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 490, 570, 60);
-
-        xLabel4.setPadding(new java.awt.Insets(1, 1, 1, 1));
-        xLabel4.setText("<html><b>Total Collateral Appraised Value:</b></html>");
-        xLabel4.setUseHtml(true);
-        jPanel1.add(xLabel4);
-        xLabel4.setBounds(10, 580, 200, 16);
+        xDataTable4.setBounds(10, 300, 570, 90);
 
         xLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         xLabel7.setPadding(new java.awt.Insets(3, 1, 1, 1));
         xLabel7.setText("<html><b>Property(ies)</b>(Total Appraised = #{propertytotalappraised})</html>");
         xLabel7.setUseHtml(true);
         jPanel1.add(xLabel7);
-        xLabel7.setBounds(10, 320, 310, 20);
+        xLabel7.setBounds(10, 390, 310, 20);
 
-        xLabel8.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        xLabel8.setPadding(new java.awt.Insets(3, 1, 1, 1));
-        xLabel8.setText("<html><b>Other Collateral(s)</b>(Total Appraised = #{othercollateraltotalappraised})</html>");
-        xLabel8.setUseHtml(true);
-        jPanel1.add(xLabel8);
-        xLabel8.setBounds(10, 440, 390, 20);
+        xFormPanel4.setCellspacing(0);
+        xFormPanel4.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xLabel3.setPadding(new java.awt.Insets(1, 1, 1, 0));
+        xLabel3.setShowCaption(false);
+        xLabel3.setText("<html><b>Other Collateral(s)</b></html>");
+        xLabel3.setUseHtml(true);
+        xFormPanel4.add(xLabel3);
+
+        xSeparator8.setPreferredSize(new java.awt.Dimension(700, 19));
+        javax.swing.GroupLayout xSeparator8Layout = new javax.swing.GroupLayout(xSeparator8);
+        xSeparator8.setLayout(xSeparator8Layout);
+        xSeparator8Layout.setHorizontalGroup(
+            xSeparator8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 700, Short.MAX_VALUE)
+        );
+        xSeparator8Layout.setVerticalGroup(
+            xSeparator8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 19, Short.MAX_VALUE)
+        );
+        xFormPanel4.add(xSeparator8);
+
+        jPanel1.add(xFormPanel4);
+        xFormPanel4.setBounds(10, 420, 570, 30);
+
+        xTextArea1.setName("entity.otherCollateral");
+        xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
+        jScrollPane1.setViewportView(xTextArea1);
+
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(10, 440, 570, 60);
+
+        xLabel4.setPadding(new java.awt.Insets(1, 1, 1, 1));
+        xLabel4.setText("<html><b>Total Collateral Appraised Value:</b></html>");
+        xLabel4.setUseHtml(true);
+        jPanel1.add(xLabel4);
+        xLabel4.setBounds(10, 530, 200, 16);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -473,7 +485,7 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -482,7 +494,6 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable2;
     private com.rameses.rcp.control.XDataTable xDataTable3;
     private com.rameses.rcp.control.XDataTable xDataTable4;
@@ -490,15 +501,12 @@ public class MustCollateralFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
     private com.rameses.rcp.control.XFormPanel xFormPanel4;
-    private com.rameses.rcp.control.XFormPanel xFormPanel5;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLabel xLabel4;
-    private com.rameses.rcp.control.XLabel xLabel5;
     private com.rameses.rcp.control.XLabel xLabel6;
     private com.rameses.rcp.control.XLabel xLabel7;
-    private com.rameses.rcp.control.XLabel xLabel8;
     private com.rameses.rcp.control.XSeparator xSeparator5;
     private com.rameses.rcp.control.XSeparator xSeparator6;
     private com.rameses.rcp.control.XSeparator xSeparator7;

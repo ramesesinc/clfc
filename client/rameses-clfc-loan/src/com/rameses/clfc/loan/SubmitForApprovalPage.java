@@ -6,12 +6,15 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class SubmitForApprovalPage extends javax.swing.JPanel {
     
     /** Creates new form SubmitForApprovalPage */
@@ -33,6 +36,10 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
+        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
+        xNumberField6 = new com.rameses.rcp.control.XNumberField();
+        xNumberField7 = new com.rameses.rcp.control.XNumberField();
+        xNumberField8 = new com.rameses.rcp.control.XNumberField();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xNumberField4 = new com.rameses.rcp.control.XNumberField();
         xNumberField5 = new com.rameses.rcp.control.XNumberField();
@@ -42,16 +49,13 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         xTextArea2 = new com.rameses.rcp.control.XTextArea();
-        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
-        xNumberField6 = new com.rameses.rcp.control.XNumberField();
-        xNumberField7 = new com.rameses.rcp.control.XNumberField();
-        xNumberField8 = new com.rameses.rcp.control.XNumberField();
 
         jPanel1.setLayout(null);
 
-        com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Submit For Approval");
-        jPanel1.setBorder(xTitledBorder1);
+        jPanel1.setBackground(new java.awt.Color(232, 232, 226));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        jPanel1.setBorder(xLineBorder1);
 
         xFormPanel1.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -75,10 +79,11 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xFormPanel1.add(xSeparator1);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 30, 360, 40);
+        xFormPanel1.setBounds(10, 10, 360, 40);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setCaption("Recommendations");
         xTextArea1.setName("entity.crecom");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
@@ -87,14 +92,43 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 360, 70);
+        jPanel2.setBounds(10, 30, 360, 70);
+
+        xFormPanel4.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
+        xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xNumberField6.setCaption("Marketer");
+        xNumberField6.setCaptionWidth(70);
+        xNumberField6.setFieldType(BigDecimal.class);
+        xNumberField6.setName("entity.marketerRecomAmt");
+        xNumberField6.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField6.setRequired(true);
+        xFormPanel4.add(xNumberField6);
+
+        xNumberField7.setCaption("CI");
+        xNumberField7.setCaptionWidth(70);
+        xNumberField7.setFieldType(BigDecimal.class);
+        xNumberField7.setName("entity.ciRecomAmt");
+        xNumberField7.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField7.setRequired(true);
+        xFormPanel4.add(xNumberField7);
+
+        xNumberField8.setCaption("FCA");
+        xNumberField8.setCaptionWidth(70);
+        xNumberField8.setFieldType(BigDecimal.class);
+        xNumberField8.setName("entity.fcaRecomAmt");
+        xNumberField8.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField8.setRequired(true);
+        xFormPanel4.add(xNumberField8);
+
+        jPanel1.add(xFormPanel4);
+        xFormPanel4.setBounds(10, 110, 180, 70);
 
         xFormPanel2.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xNumberField4.setCaption("CAO");
         xNumberField4.setCaptionWidth(50);
         xNumberField4.setFieldType(BigDecimal.class);
-        xNumberField4.setName("caoRecomAmt");
+        xNumberField4.setName("entity.caoRecomAmt");
         xNumberField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField4.setRequired(true);
         xFormPanel2.add(xNumberField4);
@@ -102,13 +136,13 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xNumberField5.setCaption("BCOH");
         xNumberField5.setCaptionWidth(50);
         xNumberField5.setFieldType(BigDecimal.class);
-        xNumberField5.setName("bcohRecomAmt");
+        xNumberField5.setName("entity.bcohRecomAmt");
         xNumberField5.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField5.setRequired(true);
         xFormPanel2.add(xNumberField5);
 
         jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(200, 130, 170, 60);
+        xFormPanel2.setBounds(200, 110, 170, 60);
 
         xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -132,11 +166,12 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xFormPanel3.add(xSeparator2);
 
         jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 210, 360, 40);
+        xFormPanel3.setBounds(10, 180, 360, 40);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        xTextArea2.setName("comment");
+        xTextArea2.setCaption("Remarks");
+        xTextArea2.setName("entity.comment");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
@@ -144,36 +179,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel3);
-        jPanel3.setBounds(10, 230, 360, 80);
-
-        xFormPanel4.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
-        xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xNumberField6.setCaption("Marketer");
-        xNumberField6.setCaptionWidth(70);
-        xNumberField6.setFieldType(BigDecimal.class);
-        xNumberField6.setName("entity.marketerRecomAmt");
-        xNumberField6.setPreferredSize(new java.awt.Dimension(0, 19));
-        xNumberField6.setRequired(true);
-        xFormPanel4.add(xNumberField6);
-
-        xNumberField7.setCaption("CI");
-        xNumberField7.setCaptionWidth(70);
-        xNumberField7.setFieldType(BigDecimal.class);
-        xNumberField7.setName("ciRecomAmt");
-        xNumberField7.setPreferredSize(new java.awt.Dimension(0, 19));
-        xNumberField7.setRequired(true);
-        xFormPanel4.add(xNumberField7);
-
-        xNumberField8.setCaption("FCA");
-        xNumberField8.setCaptionWidth(70);
-        xNumberField8.setFieldType(BigDecimal.class);
-        xNumberField8.setName("fcaRecomAmt");
-        xNumberField8.setPreferredSize(new java.awt.Dimension(0, 19));
-        xNumberField8.setRequired(true);
-        xFormPanel4.add(xNumberField8);
-
-        jPanel1.add(xFormPanel4);
-        xFormPanel4.setBounds(10, 130, 180, 70);
+        jPanel3.setBounds(10, 200, 360, 80);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -188,7 +194,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

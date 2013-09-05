@@ -1,0 +1,91 @@
+<workunit>
+    <invokers>
+        <invoker type="application-approval:create" action="init" caption="Approval Form" target="popup"/>
+        
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
+        <invoker type="formActions" action="approve" caption="Approve" mnemonic="a" shortcut="ctrl A"/>
+    </invokers>
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.osiris2.client.*;
+            
+            class ApprovalFormController
+            {
+                String title = "Approval Form"
+                def loanamount
+                def loanapp
+                def entity
+                def handler
+                def selectedOffer
+                def appliancelist
+                def vehiclelist
+                def propertylist
+                
+                def init() {
+                    entity = [ 
+                        loanamount:loanamount, 
+                        shoot:[ 
+                            policy:30, 
+                            mustCollateral:[ list:[] ] 
+                        ], 
+                        offer:[], 
+                        option:[ 
+                            policy:30,
+                            mustCollateral:[ list:[] ]
+                        ] 
+                    ]
+                }
+                
+                def cancel() {
+                    return "_close"
+                }
+                
+                def addOffer() {
+                    def handler = {offer->
+                        entity.offer.add(offer)
+                        offerHandler.load()
+                    }
+                    return InvokerUtil.lookupOpener("approvaloffer:create", [handler:handler, loanamount:loanamount, loanapp:loanapp])
+                }
+                
+                def offerHandler = [
+                    fetchList: {o->
+                        return entity.offer
+                    },
+                    onRemoveItem: {o->
+                        if(MsgBox.confirm("You are about to remove this offer. Do you want to continue?")) {
+                            entity.offer.remove(o)
+                            return true
+                        }
+                        return false
+                    }
+                ] as EditorListModel
+                
+                def addShootMustCollateral() {
+                    def handler = {
+                        entity.shoot.mustCollateral.additionalCollateral = it.additionalCollateral
+                        println loanapp.appliancelist
+                    }
+                    return InvokerUtil.lookupOpener("mustcollateral:create", [handler:handler, loanapp:loanapp])
+                }
+                
+                def shootMustCollateralHandler = [
+                    fetchList: {o->
+                        return entity.shoot.mustCollateral.list
+                    }
+                ] as EditorListModel
+                
+                def optionMustCollateralHandler = [
+                    fetchList: {o->
+                        return []
+                    }
+                ] as EditorListModel
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="com.rameses.clfc.loan.ApprovalFormPage"/>
+    </pages>
+</workunit>

@@ -6,12 +6,15 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class CIReportPage extends javax.swing.JPanel {
     
     /** Creates new form CIReportPage */
@@ -27,128 +30,84 @@ public class CIReportPage extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
-        xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
-        xLabel1 = new com.rameses.rcp.control.XLabel();
-        xSeparator1 = new com.rameses.rcp.control.XSeparator();
-        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
-        xLabel2 = new com.rameses.rcp.control.XLabel();
-        xSeparator2 = new com.rameses.rcp.control.XSeparator();
-        jPanel2 = new javax.swing.JPanel();
+        xLabel4 = new com.rameses.rcp.control.XLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
-        jPanel3 = new javax.swing.JPanel();
+        xLabel6 = new com.rameses.rcp.control.XLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         xTextArea2 = new com.rameses.rcp.control.XTextArea();
-        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
-        xLabel3 = new com.rameses.rcp.control.XLabel();
-        xSeparator3 = new com.rameses.rcp.control.XSeparator();
-        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
-        xTextField1 = new com.rameses.rcp.control.XTextField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xLabel7 = new com.rameses.rcp.control.XLabel();
         xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
         xLabel5 = new com.rameses.rcp.control.XLabel();
         xDateField2 = new com.rameses.rcp.control.XDateField();
+        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
+        xTextField1 = new com.rameses.rcp.control.XTextField();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xSeparator1 = new com.rameses.rcp.control.XSeparator();
+        xSeparator2 = new com.rameses.rcp.control.XSeparator();
 
         jPanel1.setLayout(null);
 
-        com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("CI Report");
-        jPanel1.setBorder(xTitledBorder1);
+        jPanel1.setBackground(new java.awt.Color(232, 232, 226));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        jPanel1.setBorder(xLineBorder1);
+        xLabel4.setPadding(new java.awt.Insets(1, 0, 1, 1));
+        xLabel4.setPreferredSize(new java.awt.Dimension(95, 20));
+        xLabel4.setText("Business Evaluation");
+        jPanel1.add(xLabel4);
+        xLabel4.setBounds(10, 10, 100, 20);
 
-        xFormPanel1.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel1.setPadding(new java.awt.Insets(1, 0, 1, 0));
-        xLabel1.setPreferredSize(new java.awt.Dimension(98, 19));
-        xLabel1.setShowCaption(false);
-        xLabel1.setText("Business Evaluation");
-        xFormPanel1.add(xLabel1);
-
-        xSeparator1.setPreferredSize(new java.awt.Dimension(700, 19));
-        javax.swing.GroupLayout xSeparator1Layout = new javax.swing.GroupLayout(xSeparator1);
-        xSeparator1.setLayout(xSeparator1Layout);
-        xSeparator1Layout.setHorizontalGroup(
-            xSeparator1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        xSeparator1Layout.setVerticalGroup(
-            xSeparator1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 19, Short.MAX_VALUE)
-        );
-        xFormPanel1.add(xSeparator1);
-
-        jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 30, 380, 30);
-
-        xFormPanel2.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel2.setPadding(new java.awt.Insets(1, 0, 1, 0));
-        xLabel2.setShowCaption(false);
-        xLabel2.setText("Physical Outlook");
-        xFormPanel2.add(xLabel2);
-
-        xSeparator2.setPreferredSize(new java.awt.Dimension(700, 19));
-        javax.swing.GroupLayout xSeparator2Layout = new javax.swing.GroupLayout(xSeparator2);
-        xSeparator2.setLayout(xSeparator2Layout);
-        xSeparator2Layout.setHorizontalGroup(
-            xSeparator2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        xSeparator2Layout.setVerticalGroup(
-            xSeparator2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 19, Short.MAX_VALUE)
-        );
-        xFormPanel2.add(xSeparator2);
-
-        jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(10, 140, 380, 30);
-
-        jPanel2.setLayout(new java.awt.BorderLayout());
-
+        xTextArea1.setCaption("Business Evaluation");
         xTextArea1.setName("entity.businessEvaluation");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
-        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(10, 30, 380, 70);
 
-        jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 380, 70);
+        xLabel6.setPadding(new java.awt.Insets(1, 0, 1, 1));
+        xLabel6.setText("Physical Outlook");
+        jPanel1.add(xLabel6);
+        xLabel6.setBounds(10, 120, 110, 20);
 
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        jPanel3.setName("entity.physicalOutlook");
+        xTextArea2.setCaption("Physical Outlook");
         xTextArea2.setName("entity.physicalOutlook");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
 
-        jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel1.add(jScrollPane2);
+        jScrollPane2.setBounds(10, 140, 380, 70);
 
-        jPanel1.add(jPanel3);
-        jPanel3.setBounds(10, 160, 380, 70);
+        com.rameses.rcp.control.border.XEtchedBorder xEtchedBorder1 = new com.rameses.rcp.control.border.XEtchedBorder();
+        xEtchedBorder1.setHideLeft(true);
+        xEtchedBorder1.setHideRight(true);
+        xEtchedBorder1.setHideTop(true);
+        xLabel7.setBorder(xEtchedBorder1);
+        xLabel7.setPadding(new java.awt.Insets(1, 0, 1, 1));
+        xLabel7.setText("Cash Count");
+        jPanel1.add(xLabel7);
+        xLabel7.setBounds(10, 230, 380, 18);
 
-        xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel3.setPadding(new java.awt.Insets(1, 0, 1, 0));
-        xLabel3.setShowCaption(false);
-        xLabel3.setText("Cash Count");
-        xFormPanel3.add(xLabel3);
+        xFormPanel5.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
+        xLabel5.setBorder(xLineBorder2);
+        xLabel5.setCaption("Filed By");
+        xLabel5.setName("entity.filedby");
+        xLabel5.setPreferredSize(new java.awt.Dimension(0, 19));
+        xFormPanel5.add(xLabel5);
 
-        xSeparator3.setPreferredSize(new java.awt.Dimension(700, 19));
-        javax.swing.GroupLayout xSeparator3Layout = new javax.swing.GroupLayout(xSeparator3);
-        xSeparator3.setLayout(xSeparator3Layout);
-        xSeparator3Layout.setHorizontalGroup(
-            xSeparator3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        xSeparator3Layout.setVerticalGroup(
-            xSeparator3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 19, Short.MAX_VALUE)
-        );
-        xFormPanel3.add(xSeparator3);
+        xDateField2.setCaption("Date");
+        xDateField2.setName("entity.dtfiled");
+        xDateField2.setPreferredSize(new java.awt.Dimension(0, 19));
+        xDateField2.setRequired(true);
+        xFormPanel5.add(xDateField2);
 
-        jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 250, 380, 30);
+        jPanel1.add(xFormPanel5);
+        xFormPanel5.setBounds(20, 250, 180, 50);
 
         xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xTextField1.setCaption("Time");
@@ -165,40 +124,49 @@ public class CIReportPage extends javax.swing.JPanel {
         xFormPanel4.add(xNumberField1);
 
         jPanel1.add(xFormPanel4);
-        xFormPanel4.setBounds(210, 270, 180, 50);
+        xFormPanel4.setBounds(210, 250, 180, 50);
 
-        xFormPanel5.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
-        xLabel5.setBorder(xLineBorder1);
-        xLabel5.setCaption("Filed By");
-        xLabel5.setName("entity.filedby");
-        xLabel5.setPreferredSize(new java.awt.Dimension(0, 19));
-        xFormPanel5.add(xLabel5);
+        xSeparator1.setPadding(new java.awt.Insets(0, 6, 0, 0));
+        javax.swing.GroupLayout xSeparator1Layout = new javax.swing.GroupLayout(xSeparator1);
+        xSeparator1.setLayout(xSeparator1Layout);
+        xSeparator1Layout.setHorizontalGroup(
+            xSeparator1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 290, Short.MAX_VALUE)
+        );
+        xSeparator1Layout.setVerticalGroup(
+            xSeparator1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        jPanel1.add(xSeparator1);
+        xSeparator1.setBounds(100, 10, 290, 20);
 
-        xDateField2.setCaption("Date");
-        xDateField2.setName("entity.dtfiled");
-        xDateField2.setPreferredSize(new java.awt.Dimension(0, 19));
-        xDateField2.setRequired(true);
-        xFormPanel5.add(xDateField2);
-
-        jPanel1.add(xFormPanel5);
-        xFormPanel5.setBounds(20, 270, 180, 50);
+        javax.swing.GroupLayout xSeparator2Layout = new javax.swing.GroupLayout(xSeparator2);
+        xSeparator2.setLayout(xSeparator2Layout);
+        xSeparator2Layout.setHorizontalGroup(
+            xSeparator2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+        xSeparator2Layout.setVerticalGroup(
+            xSeparator2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        jPanel1.add(xSeparator2);
+        xSeparator2.setBounds(90, 120, 300, 20);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -206,24 +174,18 @@ public class CIReportPage extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private com.rameses.rcp.control.XDateField xDateField2;
-    private com.rameses.rcp.control.XFormPanel xFormPanel1;
-    private com.rameses.rcp.control.XFormPanel xFormPanel2;
-    private com.rameses.rcp.control.XFormPanel xFormPanel3;
     private com.rameses.rcp.control.XFormPanel xFormPanel4;
     private com.rameses.rcp.control.XFormPanel xFormPanel5;
-    private com.rameses.rcp.control.XLabel xLabel1;
-    private com.rameses.rcp.control.XLabel xLabel2;
-    private com.rameses.rcp.control.XLabel xLabel3;
+    private com.rameses.rcp.control.XLabel xLabel4;
     private com.rameses.rcp.control.XLabel xLabel5;
+    private com.rameses.rcp.control.XLabel xLabel6;
+    private com.rameses.rcp.control.XLabel xLabel7;
     private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XSeparator xSeparator1;
     private com.rameses.rcp.control.XSeparator xSeparator2;
-    private com.rameses.rcp.control.XSeparator xSeparator3;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextArea xTextArea2;
     private com.rameses.rcp.control.XTextField xTextField1;

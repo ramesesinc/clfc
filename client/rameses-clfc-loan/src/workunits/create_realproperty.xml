@@ -1,0 +1,54 @@
+<workunit>
+    <invokers>
+        <invoker type="realproperty:create" action="init" caption="Real Property Form" target="popup"/>
+        <invoker type="realproperty:open" action="open" caption="Real Property Form" target="popup"/>
+        
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
+        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
+    </invokers>
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.osiris2.client.*;
+            
+            class RealPropertyFormController
+            {
+                String title = "Real Property Form"
+                def entity
+                def handler
+                def classifications = [
+                    [key:'1', value:'RESIDENCIAL'], 
+                    [key:'2', value:'AGRICULTURAL']
+                ]
+                def uomList = [
+                    [key:'1', value:'sqm'], 
+                    [key:'2', value:'hectares']
+                ]
+                def modesOfAcquisition = [
+                    [key:'1', value:'INHERETED'], 
+                    [key:'2', value:'SALE'], 
+                    [key:'3', value:'DONATION'], 
+                    [key:'4', value:'GRANTS/AWARDS'], 
+                    [key:'5', value:'OTHERS']
+                ]
+                
+                def init() {
+                    entity = [:]
+                }
+                
+                def approve() {
+                    if( handler ) handler(entity)
+                    return "_close"
+                }
+                
+                def cancel() {
+                    return "_close"
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="com.rameses.clfc.loan.RealPropertyFormPage"/>
+    </pages>
+</workunit>

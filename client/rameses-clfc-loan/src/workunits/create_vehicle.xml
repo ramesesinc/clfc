@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="appliance:create" action="init" caption="Appliance Form" target="popup"/>
-        <invoker type="appliance:open" action="open" caption="Appliance Form" target="popup"/>
+        <invoker type="vehicle:create" action="init" caption="Vehicle Form" target="popup"/>
+        <invoker type="vehicle:open" action="open" caption="Vehicle Form" target="popup"/>
         
         <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
         <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
@@ -10,16 +10,27 @@
         <![CDATA[
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
-            import com.rameses.osiris2.client.*;
+            import com.rameses.osirsi2.client.*;
             
-            class ApplianceFormController
+            class VehicleFormController
             {
-                String title = "Appliance Form"
+                String title = "Vehicle Form"
                 def entity
                 def handler
+                def hasORCR
+                def kinds = [
+                    [key:'1', value:'MOTORCYCLE'], 
+                    [key:'2', value:'PUJ'], 
+                    [key:'3', value:'OTHERS']
+                ]
+                def uses = [
+                    [key:'1', value:'FOR HIRE'], 
+                    [key:'2', value:'PRIVATE']
+                ]
                 
                 def init() {
                     entity = [:]
+                    hasORCR = true
                 }
                 
                 def approve() {
@@ -34,6 +45,6 @@
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.ApplianceFormPage"/>
+        <page template="com.rameses.clfc.loan.VehicleFormPage"/>
     </pages>
 </workunit>

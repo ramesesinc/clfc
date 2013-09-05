@@ -1,10 +1,10 @@
 <workunit>
     <invokers>
-        <invoker type="employment:create" caption="Employment Form" target="popup"/>
+        <invoker type="employment:create" action="init" caption="Employment Form" target="popup"/>
         <invoker type="employment:open" action="open" caption="Employment Form" target="popup"/>
         
-        <invoker type="formActions" action="_close" caption="Cancel" mnemonic="c" shortcut="ctrl C" icon="images/cancel.png" immediate="true"/>
-        <invoker type="formActions" action="ok" caption="Ok" mnemonic="o" shortcut="ctrl O" icom="images/save.png"/>
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
+        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>   
     </invokers>
     <code>
         <![CDATA[
@@ -12,8 +12,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class EmploymentController
+            class EmploymentFormController
             {
+                String title = "Employment Form"
                 def entity = [:]
                 def handler
                 def statusList = [
@@ -24,8 +25,16 @@
                     [key:'5', value:'OTHERS']
                 ]
                 
-                def ok() {
+                def init() {
+                    entity = [:]
+                }
+                
+                def approve() {
                     if( handler ) handler(entity)
+                    return "_close"
+                }
+                
+                def cancel() {
                     return "_close"
                 }
             }

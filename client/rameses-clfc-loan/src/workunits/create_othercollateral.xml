@@ -1,10 +1,10 @@
 <workunit>
     <invokers>
-        <invoker type="checking:create" action="init" caption="Checking Account Form" target="popup"/>
-        <invoker type="checking:open" action="open" caption="Checking Account Form" target="popup"/>
+        <invoker type="othercollateral:create" action="init" caption="Other Collateral Form" target="popup"/>
+        <invoker type="othercollateral:open" action="open" caption="Other Collateral Form" target="popup"/>
         
         <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>       
+        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
     </invokers>
     <code>
         <![CDATA[
@@ -12,9 +12,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class CheckingAccountFormController
+            class OtherCollateralFormController
             {
-                String title = "Checking Account Form"
+                String title = "Other Collateral Form"
                 def entity
                 def handler
                 
@@ -34,6 +34,6 @@
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.BankAccountsFormPage"/>
+        <page template="com.rameses.clfc.loan.OtherCollateralFormPage"/>
     </pages>
 </workunit>

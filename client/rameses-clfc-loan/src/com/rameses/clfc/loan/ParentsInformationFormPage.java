@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class ParentsInformationFormPage extends javax.swing.JPanel {
     
     /** Creates new form ParentsInformationFormPage */
@@ -25,11 +29,11 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
+        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
+        xTextField4 = new com.rameses.rcp.control.XTextField();
+        xNumberField3 = new com.rameses.rcp.control.XNumberField();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
-        xTextField1 = new com.rameses.rcp.control.XTextField();
         xTextField2 = new com.rameses.rcp.control.XTextField();
-        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
         xNumberField2 = new com.rameses.rcp.control.XNumberField();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         xTextField3 = new com.rameses.rcp.control.XTextField();
@@ -42,41 +46,47 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
         xTitledBorder1.setTitle("Parents Information");
         jPanel1.setBorder(xTitledBorder1);
 
-        xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xTextField1.setCaption("Father's Name");
-        xTextField1.setCaptionWidth(100);
-        xTextField1.setName("entity.fathersName");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
-        xTextField1.setRequired(true);
-        xFormPanel1.add(xTextField1);
+        xFormPanel4.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel4.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        xTextField4.setCaption("Father's Name");
+        xTextField4.setCaptionWidth(100);
+        xTextField4.setCellPadding(new java.awt.Insets(0, 0, 0, 10));
+        xTextField4.setName("entity.fathersName");
+        xTextField4.setPreferredSize(new java.awt.Dimension(230, 19));
+        xTextField4.setRequired(true);
+        xFormPanel4.add(xTextField4);
 
+        xNumberField3.setCaption("Age");
+        xNumberField3.setCaptionWidth(50);
+        xNumberField3.setFieldType(Integer.class);
+        xNumberField3.setName("entity.fathersAge");
+        xNumberField3.setPreferredSize(new java.awt.Dimension(45, 19));
+        xNumberField3.setRequired(true);
+        xFormPanel4.add(xNumberField3);
+
+        jPanel1.add(xFormPanel4);
+        xFormPanel4.setBounds(10, 20, 440, 30);
+
+        xFormPanel1.setCellpadding(new java.awt.Insets(0, 0, 0, 10));
+        xFormPanel1.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel1.setPadding(new java.awt.Insets(4, 0, 0, 0));
         xTextField2.setCaption("Mother's Name");
         xTextField2.setCaptionWidth(100);
         xTextField2.setName("entity.mothersName");
-        xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField2.setPreferredSize(new java.awt.Dimension(230, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
-
-        jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 20, 330, 50);
-
-        xFormPanel2.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xNumberField1.setCaption("Age");
-        xNumberField1.setCaptionWidth(50);
-        xNumberField1.setFieldType(Integer.class);
-        xNumberField1.setName("entity.fathersAge");
-        xNumberField1.setRequired(true);
-        xFormPanel2.add(xNumberField1);
 
         xNumberField2.setCaption("Age");
         xNumberField2.setCaptionWidth(50);
         xNumberField2.setFieldType(Integer.class);
         xNumberField2.setName("entity.mothersAge");
+        xNumberField2.setPreferredSize(new java.awt.Dimension(45, 19));
         xNumberField2.setRequired(true);
-        xFormPanel2.add(xNumberField2);
+        xFormPanel1.add(xNumberField2);
 
-        jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(350, 20, 100, 50);
+        jPanel1.add(xFormPanel1);
+        xFormPanel1.setBounds(10, 40, 440, 30);
 
         xFormPanel3.setPadding(new java.awt.Insets(5, 0, 0, 0));
         xTextField3.setCaption("Address");
@@ -111,7 +121,7 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -121,14 +131,14 @@ public class ParentsInformationFormPage extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
-    private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
+    private com.rameses.rcp.control.XFormPanel xFormPanel4;
     private com.rameses.rcp.control.XNumberField xNumberField2;
+    private com.rameses.rcp.control.XNumberField xNumberField3;
     private com.rameses.rcp.control.XTextArea xTextArea1;
-    private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField2;
     private com.rameses.rcp.control.XTextField xTextField3;
+    private com.rameses.rcp.control.XTextField xTextField4;
     // End of variables declaration//GEN-END:variables
     
 }

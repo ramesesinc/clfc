@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="appliance:create" action="init" caption="Appliance Form" target="popup"/>
-        <invoker type="appliance:open" action="open" caption="Appliance Form" target="popup"/>
+        <invoker type="approvaloffer:create" action="init" caption="Approval Offer Form"/>
+        <invoker type="approvaloffer:open" action="open" caption="Approval Offer Form"/>
         
         <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
         <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
@@ -12,14 +12,20 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class ApplianceFormController
+            class ApprovalOfferFormController
             {
-                String title = "Appliance Form"
+                String title = "Approval Offer Form"
+                def loanamount
+                def loanapp
                 def entity
                 def handler
+                def absenceTypes = [
+                    [key:'1', value:'POLICY'], 
+                    [key:'2', value:'PROVISIONS']
+                ]
                 
                 def init() {
-                    entity = [:]
+                    entity = [ policy:30 ]
                 }
                 
                 def approve() {
@@ -30,10 +36,16 @@
                 def cancel() {
                     return "_close"
                 }
+                
+                def mustCollateralHandler = [
+                    fetchList: {o->
+                        return []
+                    }
+                ] as EditorListModel
             }
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.ApplianceFormPage"/>
+        <page template="com.rameses.clfc.loan.ApprovalOfferFormPage"/>
     </pages>
 </workunit>

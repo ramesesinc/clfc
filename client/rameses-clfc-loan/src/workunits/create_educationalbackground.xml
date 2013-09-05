@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="checking:create" action="init" caption="Checking Account Form" target="popup"/>
-        <invoker type="checking:open" action="open" caption="Checking Account Form" target="popup"/>
+        <invoker type="educbackground:create" action="init" caption="Educational Background Form" target="popup"/>
+        <invoker type="educbackground:open" action="open" caption="Educational Background Form" target="popup"/>
         
         <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
         <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>       
@@ -12,10 +12,10 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class CheckingAccountFormController
+            class EducationalBackgroundFormController
             {
-                String title = "Checking Account Form"
-                def entity
+                String title = "Education Background Form"
+                def entity = [:]
                 def handler
                 
                 def init() {
@@ -34,6 +34,6 @@
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.BankAccountsFormPage"/>
+        <page template="com.rameses.clfc.loan.EducationalBackgroundFormPage"/>
     </pages>
 </workunit>

@@ -6,12 +6,15 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class OtherLendingFormPage extends javax.swing.JPanel {
     
     /** Creates new form OtherLendingForm */
@@ -123,9 +126,9 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xDateField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel3.add(xDateField2);
 
-        xNumberField4.setText("xNumberField4");
         xNumberField4.setCaption("Interest Rate");
         xNumberField4.setFieldType(BigDecimal.class);
+        xNumberField4.setName("entity.interestRate");
         xNumberField4.setPreferredSize(new java.awt.Dimension(50, 19));
         xFormPanel3.add(xNumberField4);
 

@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class SubmitForInspectionPage extends javax.swing.JPanel {
     
     /** Creates new form SubmitForInspectionPage */
@@ -34,9 +38,10 @@ public class SubmitForInspectionPage extends javax.swing.JPanel {
 
         jPanel1.setLayout(null);
 
-        com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Submit For Inspection");
-        jPanel1.setBorder(xTitledBorder1);
+        jPanel1.setBackground(new java.awt.Color(232, 232, 226));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        jPanel1.setBorder(xLineBorder1);
 
         xFormPanel1.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -60,10 +65,11 @@ public class SubmitForInspectionPage extends javax.swing.JPanel {
         xFormPanel1.add(xSeparator1);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 30, 410, 40);
+        xFormPanel1.setBounds(10, 10, 410, 30);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setCaption("Remarks");
         xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
@@ -72,7 +78,7 @@ public class SubmitForInspectionPage extends javax.swing.JPanel {
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 410, 100);
+        jPanel2.setBounds(10, 30, 410, 90);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -87,7 +93,7 @@ public class SubmitForInspectionPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

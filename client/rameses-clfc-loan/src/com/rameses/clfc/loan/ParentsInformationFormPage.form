@@ -23,7 +23,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" pref="161" max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" pref="160" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -43,55 +43,34 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel1">
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel4">
           <Properties>
+            <Property name="orientation" type="java.lang.String" value="HORIZONTAL"/>
             <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[3, 0, 0, 0]"/>
             </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="20" width="330" height="-1"/>
+              <AbsoluteConstraints x="10" y="20" width="440" height="30"/>
             </Constraint>
           </Constraints>
           <SubComponents>
-            <Component class="com.rameses.rcp.control.XTextField" name="xTextField1">
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField4">
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Father&apos;s Name"/>
                 <Property name="captionWidth" type="int" value="100"/>
+                <Property name="cellPadding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[0, 0, 0, 10]"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="entity.fathersName"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 19]"/>
+                  <Dimension value="[230, 19]"/>
                 </Property>
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
-            <Component class="com.rameses.rcp.control.XTextField" name="xTextField2">
-              <Properties>
-                <Property name="caption" type="java.lang.String" value="Mother&apos;s Name"/>
-                <Property name="captionWidth" type="int" value="100"/>
-                <Property name="name" type="java.lang.String" value="entity.mothersName"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 19]"/>
-                </Property>
-                <Property name="required" type="boolean" value="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel2">
-          <Properties>
-            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[3, 0, 0, 0]"/>
-            </Property>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="350" y="20" width="-1" height="-1"/>
-            </Constraint>
-          </Constraints>
-          <SubComponents>
-            <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField1">
+            <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField3">
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Age"/>
                 <Property name="captionWidth" type="int" value="50"/>
@@ -99,6 +78,38 @@
                   <Connection code="Integer.class" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="entity.fathersAge"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[45, 19]"/>
+                </Property>
+                <Property name="required" type="boolean" value="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel1">
+          <Properties>
+            <Property name="cellpadding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 0, 0, 10]"/>
+            </Property>
+            <Property name="orientation" type="java.lang.String" value="HORIZONTAL"/>
+            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[4, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="10" y="40" width="440" height="30"/>
+            </Constraint>
+          </Constraints>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField2">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Mother&apos;s Name"/>
+                <Property name="captionWidth" type="int" value="100"/>
+                <Property name="name" type="java.lang.String" value="entity.mothersName"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[230, 19]"/>
+                </Property>
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
@@ -110,6 +121,9 @@
                   <Connection code="Integer.class" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="entity.mothersAge"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[45, 19]"/>
+                </Property>
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>

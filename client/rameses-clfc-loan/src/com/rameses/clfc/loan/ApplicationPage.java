@@ -40,25 +40,23 @@ public class ApplicationPage extends javax.swing.JPanel {
         xLabel16 = new com.rameses.rcp.control.XLabel();
         xLabel17 = new com.rameses.rcp.control.XLabel();
         jPanel3 = new javax.swing.JPanel();
-        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
-        xLabel3 = new com.rameses.rcp.control.XLabel();
-        xSeparator3 = new com.rameses.rcp.control.XSeparator();
         xFormPanel6 = new com.rameses.rcp.control.XFormPanel();
         xLabel5 = new com.rameses.rcp.control.XLabel();
         xLabel6 = new com.rameses.rcp.control.XLabel();
         xFormPanel7 = new com.rameses.rcp.control.XFormPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         xTextArea4 = new com.rameses.rcp.control.XTextArea();
+        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
+        xLabel3 = new com.rameses.rcp.control.XLabel();
         jPanel4 = new javax.swing.JPanel();
-        xFormPanel8 = new com.rameses.rcp.control.XFormPanel();
-        xLabel4 = new com.rameses.rcp.control.XLabel();
-        xSeparator4 = new com.rameses.rcp.control.XSeparator();
         xFormPanel9 = new com.rameses.rcp.control.XFormPanel();
         xLabel7 = new com.rameses.rcp.control.XLabel();
         xLabel8 = new com.rameses.rcp.control.XLabel();
         xFormPanel10 = new com.rameses.rcp.control.XFormPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         xTextArea5 = new com.rameses.rcp.control.XTextArea();
+        xFormPanel8 = new com.rameses.rcp.control.XFormPanel();
+        xLabel4 = new com.rameses.rcp.control.XLabel();
         jPanel2 = new javax.swing.JPanel();
         xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
         xComboBox3 = new com.rameses.rcp.control.XComboBox();
@@ -141,30 +139,6 @@ public class ApplicationPage extends javax.swing.JPanel {
 
         jPanel3.setOpaque(false);
 
-        xFormPanel3.setCellspacing(0);
-        xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xLabel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel3.setPreferredSize(new java.awt.Dimension(49, 15));
-        xLabel3.setShowCaption(false);
-        xLabel3.setText("Residency");
-        xFormPanel3.add(xLabel3);
-
-        xSeparator3.setPreferredSize(new java.awt.Dimension(300, 15));
-        javax.swing.GroupLayout xSeparator3Layout = new javax.swing.GroupLayout(xSeparator3);
-        xSeparator3.setLayout(xSeparator3Layout);
-        xSeparator3Layout.setHorizontalGroup(
-            xSeparator3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-        xSeparator3Layout.setVerticalGroup(
-            xSeparator3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 15, Short.MAX_VALUE)
-        );
-        xFormPanel3.add(xSeparator3);
-
-        jPanel3.add(xFormPanel3);
-        xFormPanel3.setBounds(0, 0, 300, 20);
-
         xFormPanel6.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
         xFormPanel6.setCellspacing(1);
         xFormPanel6.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
@@ -204,33 +178,25 @@ public class ApplicationPage extends javax.swing.JPanel {
         jPanel3.add(xFormPanel7);
         xFormPanel7.setBounds(10, 30, 290, 50);
 
+        xFormPanel3.setPadding(new java.awt.Insets(0, 5, 0, 0));
+        com.rameses.rcp.control.border.XEtchedBorder xEtchedBorder1 = new com.rameses.rcp.control.border.XEtchedBorder();
+        xEtchedBorder1.setHideLeft(true);
+        xEtchedBorder1.setHideRight(true);
+        xEtchedBorder1.setHideTop(true);
+        xLabel3.setBorder(xEtchedBorder1);
+        xLabel3.setPadding(new java.awt.Insets(1, 1, 1, 1));
+        xLabel3.setPreferredSize(new java.awt.Dimension(0, 16));
+        xLabel3.setShowCaption(false);
+        xLabel3.setText("<html><b>Residency</b></html>");
+        xLabel3.setUseHtml(true);
+        xFormPanel3.add(xLabel3);
+
+        jPanel3.add(xFormPanel3);
+        xFormPanel3.setBounds(0, 0, 300, 20);
+
         jPanel4.setLayout(null);
 
         jPanel4.setOpaque(false);
-
-        xFormPanel8.setCellspacing(0);
-        xFormPanel8.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xLabel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xLabel4.setPreferredSize(new java.awt.Dimension(71, 15));
-        xLabel4.setShowCaption(false);
-        xLabel4.setText("Lot Occupancy");
-        xFormPanel8.add(xLabel4);
-
-        xSeparator4.setPreferredSize(new java.awt.Dimension(300, 15));
-        javax.swing.GroupLayout xSeparator4Layout = new javax.swing.GroupLayout(xSeparator4);
-        xSeparator4.setLayout(xSeparator4Layout);
-        xSeparator4Layout.setHorizontalGroup(
-            xSeparator4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-        xSeparator4Layout.setVerticalGroup(
-            xSeparator4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 15, Short.MAX_VALUE)
-        );
-        xFormPanel8.add(xSeparator4);
-
-        jPanel4.add(xFormPanel8);
-        xFormPanel8.setBounds(0, 0, 300, 20);
 
         xFormPanel9.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
         xFormPanel9.setCellspacing(1);
@@ -270,6 +236,22 @@ public class ApplicationPage extends javax.swing.JPanel {
 
         jPanel4.add(xFormPanel10);
         xFormPanel10.setBounds(10, 30, 290, 50);
+
+        xFormPanel8.setPadding(new java.awt.Insets(0, 5, 0, 0));
+        com.rameses.rcp.control.border.XEtchedBorder xEtchedBorder2 = new com.rameses.rcp.control.border.XEtchedBorder();
+        xEtchedBorder2.setHideLeft(true);
+        xEtchedBorder2.setHideRight(true);
+        xEtchedBorder2.setHideTop(true);
+        xLabel4.setBorder(xEtchedBorder2);
+        xLabel4.setPadding(new java.awt.Insets(1, 1, 1, 1));
+        xLabel4.setPreferredSize(new java.awt.Dimension(0, 16));
+        xLabel4.setShowCaption(false);
+        xLabel4.setText("<html><b>Lot Occupancy</b></html>");
+        xLabel4.setUseHtml(true);
+        xFormPanel8.add(xLabel4);
+
+        jPanel4.add(xFormPanel8);
+        xFormPanel8.setBounds(0, 0, 300, 20);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -531,8 +513,6 @@ public class ApplicationPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLookupField xLookupField1;
     private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XNumberField xNumberField2;
-    private com.rameses.rcp.control.XSeparator xSeparator3;
-    private com.rameses.rcp.control.XSeparator xSeparator4;
     private com.rameses.rcp.control.XTextArea xTextArea3;
     private com.rameses.rcp.control.XTextArea xTextArea4;
     private com.rameses.rcp.control.XTextArea xTextArea5;

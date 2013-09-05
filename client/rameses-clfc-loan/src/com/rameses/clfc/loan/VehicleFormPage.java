@@ -6,12 +6,15 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class VehicleFormPage extends javax.swing.JPanel {
     
     /** Creates new form VehicleFormPage */
@@ -67,8 +70,8 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xComboBox1.setCaptionWidth(135);
         xComboBox1.setExpression("#{item.value}");
         xComboBox1.setItemKey("value");
-        xComboBox1.setItems("classifications");
-        xComboBox1.setName("entity.classification");
+        xComboBox1.setItems("kinds");
+        xComboBox1.setName("entity.kind");
         xComboBox1.setPreferredSize(new java.awt.Dimension(120, 19));
         xComboBox1.setRequired(true);
         xFormPanel1.add(xComboBox1);

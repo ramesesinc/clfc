@@ -6,16 +6,19 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
 /**
  *
  * @author  Rameses
  */
-public class ApprovalFormOfferPage extends javax.swing.JPanel {
+@Template(FormPage.class)
+public class ApprovalOfferFormPage extends javax.swing.JPanel {
     
     /** Creates new form ApprovalFormOfferPage */
-    public ApprovalFormOfferPage() {
+    public ApprovalOfferFormPage() {
         initComponents();
     }
     
@@ -27,34 +30,110 @@ public class ApprovalFormOfferPage extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
         jPanel4 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xNumberField2 = new com.rameses.rcp.control.XNumberField();
+        xNumberField3 = new com.rameses.rcp.control.XNumberField();
+        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
+        xComboBox1 = new com.rameses.rcp.control.XComboBox();
+        xNumberField5 = new com.rameses.rcp.control.XNumberField();
+        xNumberField6 = new com.rameses.rcp.control.XNumberField();
+        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
+        xNumberField4 = new com.rameses.rcp.control.XNumberField();
         xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
         xLabel1 = new com.rameses.rcp.control.XLabel();
         xSeparator1 = new com.rameses.rcp.control.XSeparator();
+        xDataTable1 = new com.rameses.rcp.control.XDataTable();
+        xButton1 = new com.rameses.rcp.control.XButton();
         xFormPanel6 = new com.rameses.rcp.control.XFormPanel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xSeparator2 = new com.rameses.rcp.control.XSeparator();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
-        xDataTable1 = new com.rameses.rcp.control.XDataTable();
-        jPanel6 = new javax.swing.JPanel();
-        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
-        xNumberField2 = new com.rameses.rcp.control.XNumberField();
-        xNumberField3 = new com.rameses.rcp.control.XNumberField();
-        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
-        xNumberField4 = new com.rameses.rcp.control.XNumberField();
-        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
-        xComboBox1 = new com.rameses.rcp.control.XComboBox();
-        xNumberField5 = new com.rameses.rcp.control.XNumberField();
-        xNumberField6 = new com.rameses.rcp.control.XNumberField();
-        xButton1 = new com.rameses.rcp.control.XButton();
 
         jPanel4.setLayout(null);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Offer Form");
+        xTitledBorder1.setTitle("Offer Information");
         jPanel4.setBorder(xTitledBorder1);
+        jPanel6.setLayout(null);
+
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        jPanel6.setBorder(xLineBorder1);
+        jPanel6.setOpaque(false);
+
+        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xNumberField1.setCaption("Applied Amount");
+        xNumberField1.setCaptionWidth(110);
+        xNumberField1.setEnabled(false);
+        xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setName("loanamount");
+        xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xFormPanel2.add(xNumberField1);
+
+        xNumberField2.setCaption("Approved Amount");
+        xNumberField2.setCaptionWidth(110);
+        xNumberField2.setFieldType(BigDecimal.class);
+        xNumberField2.setName("entity.amountapproved");
+        xNumberField2.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField2.setRequired(true);
+        xFormPanel2.add(xNumberField2);
+
+        xNumberField3.setCaption("Credit Limit");
+        xNumberField3.setCaptionWidth(110);
+        xNumberField3.setFieldType(BigDecimal.class);
+        xNumberField3.setName("entity.creditlimit");
+        xNumberField3.setPreferredSize(new java.awt.Dimension(0, 19));
+        xNumberField3.setRequired(true);
+        xFormPanel2.add(xNumberField3);
+
+        jPanel6.add(xFormPanel2);
+        xFormPanel2.setBounds(10, 10, 240, 70);
+
+        xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel3.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        xComboBox1.setAllowNull(false);
+        xComboBox1.setCaption("Absences");
+        xComboBox1.setCaptionWidth(110);
+        xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("absenceTypes");
+        xComboBox1.setName("entity.absences");
+        xComboBox1.setPreferredSize(new java.awt.Dimension(130, 19));
+        xComboBox1.setRequired(true);
+        xFormPanel3.add(xComboBox1);
+
+        xNumberField5.setFieldType(Integer.class);
+        xNumberField5.setName("entity.policy");
+        xNumberField5.setPreferredSize(new java.awt.Dimension(50, 19));
+        xNumberField5.setShowCaption(false);
+        xFormPanel3.add(xNumberField5);
+
+        xNumberField6.setFieldType(Integer.class);
+        xNumberField6.setName("entity.provisions");
+        xNumberField6.setPreferredSize(new java.awt.Dimension(50, 19));
+        xNumberField6.setShowCaption(false);
+        xFormPanel3.add(xNumberField6);
+
+        jPanel6.add(xFormPanel3);
+        xFormPanel3.setBounds(10, 70, 380, 30);
+
+        xFormPanel4.setPadding(new java.awt.Insets(4, 0, 0, 0));
+        xNumberField4.setCaption("Gradual Increase");
+        xNumberField4.setCaptionWidth(110);
+        xNumberField4.setFieldType(BigDecimal.class);
+        xNumberField4.setName("entity.increase");
+        xNumberField4.setPreferredSize(new java.awt.Dimension(0, 19));
+        xFormPanel4.add(xNumberField4);
+
+        jPanel6.add(xFormPanel4);
+        xFormPanel4.setBounds(10, 90, 240, 30);
+
+        jPanel4.add(jPanel6);
+        jPanel6.setBounds(10, 30, 470, 120);
 
         xFormPanel5.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel5.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -78,6 +157,30 @@ public class ApprovalFormOfferPage extends javax.swing.JPanel {
 
         jPanel4.add(xFormPanel5);
         xFormPanel5.setBounds(10, 160, 470, 30);
+
+        xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "description"}
+                , new Object[]{"caption", "Description"}
+                , new Object[]{"width", 100}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
+            })
+        });
+        xDataTable1.setHandler("mustCollateralHandler");
+        xDataTable1.setName("selectedMustCollateral");
+        jPanel4.add(xDataTable1);
+        xDataTable1.setBounds(10, 180, 470, 90);
+
+        xButton1.setText("Add");
+        jPanel4.add(xButton1);
+        xButton1.setBounds(10, 280, 77, 23);
 
         xFormPanel6.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel6.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -113,105 +216,6 @@ public class ApprovalFormOfferPage extends javax.swing.JPanel {
 
         jPanel4.add(jPanel5);
         jPanel5.setBounds(10, 330, 470, 70);
-
-        xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
-            new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "description"}
-                , new Object[]{"caption", "Description"}
-                , new Object[]{"width", 100}
-                , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 0}
-                , new Object[]{"required", false}
-                , new Object[]{"resizable", true}
-                , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", false}
-                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
-            })
-        });
-        xDataTable1.setHandler("mustCollateralHandler");
-        xDataTable1.setName("selectedMustCollateral");
-        jPanel4.add(xDataTable1);
-        xDataTable1.setBounds(10, 180, 470, 90);
-
-        jPanel6.setLayout(null);
-
-        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
-        jPanel6.setBorder(xLineBorder1);
-        jPanel6.setOpaque(false);
-
-        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xNumberField1.setCaption("Applied Amount");
-        xNumberField1.setCaptionWidth(110);
-        xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.loanamount");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
-        xFormPanel2.add(xNumberField1);
-
-        xNumberField2.setCaption("Approved Amount");
-        xNumberField2.setCaptionWidth(110);
-        xNumberField2.setFieldType(BigDecimal.class);
-        xNumberField2.setName("entity.amountapproved");
-        xNumberField2.setPreferredSize(new java.awt.Dimension(0, 19));
-        xNumberField2.setRequired(true);
-        xFormPanel2.add(xNumberField2);
-
-        xNumberField3.setCaption("Credit Limit");
-        xNumberField3.setCaptionWidth(110);
-        xNumberField3.setFieldType(BigDecimal.class);
-        xNumberField3.setName("entity.creditlimit");
-        xNumberField3.setPreferredSize(new java.awt.Dimension(0, 19));
-        xNumberField3.setRequired(true);
-        xFormPanel2.add(xNumberField3);
-
-        jPanel6.add(xFormPanel2);
-        xFormPanel2.setBounds(10, 10, 240, 70);
-
-        xFormPanel4.setPadding(new java.awt.Insets(4, 0, 0, 0));
-        xNumberField4.setCaption("Gradual Increase");
-        xNumberField4.setCaptionWidth(110);
-        xNumberField4.setFieldType(BigDecimal.class);
-        xNumberField4.setName("entity.increase");
-        xNumberField4.setPreferredSize(new java.awt.Dimension(0, 19));
-        xFormPanel4.add(xNumberField4);
-
-        jPanel6.add(xFormPanel4);
-        xFormPanel4.setBounds(10, 90, 240, 30);
-
-        xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel3.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xComboBox1.setCaption("Absences");
-        xComboBox1.setCaptionWidth(110);
-        xComboBox1.setExpression("#{item.value}");
-        xComboBox1.setItemKey("value");
-        xComboBox1.setItems("absenceTypes");
-        xComboBox1.setName("entity.absences");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(130, 19));
-        xComboBox1.setRequired(true);
-        xFormPanel3.add(xComboBox1);
-
-        xNumberField5.setFieldType(Integer.class);
-        xNumberField5.setName("entity.policy");
-        xNumberField5.setPreferredSize(new java.awt.Dimension(50, 19));
-        xNumberField5.setShowCaption(false);
-        xFormPanel3.add(xNumberField5);
-
-        xNumberField6.setFieldType(Integer.class);
-        xNumberField6.setName("entity.provisions");
-        xNumberField6.setPreferredSize(new java.awt.Dimension(50, 19));
-        xNumberField6.setShowCaption(false);
-        xFormPanel3.add(xNumberField6);
-
-        jPanel6.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 70, 380, 30);
-
-        jPanel4.add(jPanel6);
-        jPanel6.setBounds(10, 30, 470, 120);
-
-        xButton1.setText("Add");
-        jPanel4.add(xButton1);
-        xButton1.setBounds(10, 280, 77, 23);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

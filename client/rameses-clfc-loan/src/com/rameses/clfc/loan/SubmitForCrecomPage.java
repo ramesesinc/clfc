@@ -6,10 +6,14 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.Template;
+
 /**
  *
  * @author  Rameses
  */
+@Template(FormPage.class)
 public class SubmitForCrecomPage extends javax.swing.JPanel {
     
     /** Creates new form SubmitForCrecomPage */
@@ -40,9 +44,10 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
 
         jPanel1.setLayout(null);
 
-        com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Submit For CRECOM");
-        jPanel1.setBorder(xTitledBorder1);
+        jPanel1.setBackground(new java.awt.Color(232, 232, 226));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        jPanel1.setBorder(xLineBorder1);
 
         xFormPanel1.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -66,10 +71,11 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
         xFormPanel1.add(xSeparator1);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 30, 370, 40);
+        xFormPanel1.setBounds(10, 10, 370, 30);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setCaption("Recommendations");
         xTextArea1.setName("entity.ci");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
@@ -78,7 +84,7 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 50, 370, 70);
+        jPanel2.setBounds(10, 30, 370, 60);
 
         xFormPanel2.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -102,11 +108,11 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
         xFormPanel2.add(xSeparator2);
 
         jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(10, 140, 370, 40);
+        xFormPanel2.setBounds(10, 110, 370, 40);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        xTextArea2.setName("remarks");
+        xTextArea2.setName("entity.remarks");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
@@ -114,7 +120,7 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
         jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel3);
-        jPanel3.setBounds(10, 160, 370, 70);
+        jPanel3.setBounds(10, 130, 370, 70);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -129,7 +135,7 @@ public class SubmitForCrecomPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

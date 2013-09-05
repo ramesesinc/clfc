@@ -1,0 +1,65 @@
+<workunit>
+    <invokers>
+        <invoker type="business:create" action="init" caption="Business Form" target="popup"/>
+        <invoker type="business:open" action="open" caption="Business Form" target="popup"/>
+        
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
+        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
+    </invokers>
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.osiris2.client.*;
+            
+            class BusinessFormController
+            {
+                String title = "Business Form"
+                def entity
+                def handler
+                def kinds = [
+                    [key:'1', value:'SARI-SARI STORE'], 
+                    [key:'2', value:'CARENDERIA'], 
+                    [key:'3', value:'OPERATOR'], 
+                    [key:'4', value:'OTHERS']
+                ]
+                def occupancyTypes = [
+                    [key:'1', value:'OWNED'], 
+                    [key:'2', value:'RENTED'], 
+                    [key:'3', value:'FREE USE'], 
+                    [key:'4', value:'OTHERS']
+                ]
+                def rentTypes = [
+                    [key:'1', value:'W/CONTRACT'], 
+                    [key:'2', value:'W/O CONTRACT']
+                ]
+                def ownerships = [
+                    [key:'1', value:'SOLE PROPRIETORSHIP'], 
+                    [key:'2', value:'PARTNERSHIP'], 
+                    [key:'3', value:'CORPORATION']
+                ]
+                
+                def init() {
+                    entity = [:]
+                }
+                
+                def approve() {
+                    if( entity.occupancy.type == 'RENTED' ) {
+                        if( !entity.occupancy.renttype ) throw new Exception("Rent Type is required.")
+                        if( !entity.occupancy.rentamount ) throw new Exception("Rent Amount is required.")
+                    }
+                    
+                    if( handler ) handler(entity)
+                    return "_close"
+                }
+                
+                def cancel() {
+                    return "_close"
+                }
+            }
+        ]]>
+    </code>
+    <pages>
+        <page template="com.rameses.clfc.loan.BusinessFormPage"/>
+    </pages>
+</workunit>

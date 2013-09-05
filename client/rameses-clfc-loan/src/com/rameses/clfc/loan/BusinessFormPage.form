@@ -43,6 +43,59 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel3">
+          <Properties>
+            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[4, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="10" y="20" width="280" height="30"/>
+            </Constraint>
+          </Constraints>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox1">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Kind of Business"/>
+                <Property name="captionWidth" type="int" value="105"/>
+                <Property name="expression" type="java.lang.String" value="#{item.value}"/>
+                <Property name="itemKey" type="java.lang.String" value="value"/>
+                <Property name="items" type="java.lang.String" value="kinds"/>
+                <Property name="name" type="java.lang.String" value="entity.kind"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[120, 19]"/>
+                </Property>
+                <Property name="required" type="boolean" value="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel2">
+          <Properties>
+            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[4, 5, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="290" y="20" width="310" height="30"/>
+            </Constraint>
+          </Constraints>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField3">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Stall Size/P.O. Size(in mtrs.)"/>
+                <Property name="captionWidth" type="int" value="160"/>
+                <Property name="name" type="java.lang.String" value="entity.stallsize"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 19]"/>
+                </Property>
+                <Property name="required" type="boolean" value="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
         <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel1">
           <Properties>
             <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -79,51 +132,26 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel2">
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel12">
           <Properties>
             <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[4, 5, 0, 0]"/>
+              <Insets value="[7, 0, 0, 0]"/>
             </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="290" y="20" width="310" height="30"/>
+              <AbsoluteConstraints x="10" y="80" width="280" height="30"/>
             </Constraint>
           </Constraints>
           <SubComponents>
-            <Component class="com.rameses.rcp.control.XTextField" name="xTextField3">
+            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox9">
               <Properties>
-                <Property name="caption" type="java.lang.String" value="Stall Size/P.O. Size(in mtrs.)"/>
-                <Property name="captionWidth" type="int" value="160"/>
-                <Property name="name" type="java.lang.String" value="entity.stallsize"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 19]"/>
-                </Property>
-                <Property name="required" type="boolean" value="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel3">
-          <Properties>
-            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[4, 0, 0, 0]"/>
-            </Property>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="20" width="280" height="30"/>
-            </Constraint>
-          </Constraints>
-          <SubComponents>
-            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox1">
-              <Properties>
-                <Property name="caption" type="java.lang.String" value="Kind of Business"/>
+                <Property name="caption" type="java.lang.String" value="Occupancy"/>
                 <Property name="captionWidth" type="int" value="105"/>
                 <Property name="expression" type="java.lang.String" value="#{item.value}"/>
                 <Property name="itemKey" type="java.lang.String" value="value"/>
-                <Property name="items" type="java.lang.String" value="businessTypes"/>
-                <Property name="name" type="java.lang.String" value="entity.kind"/>
+                <Property name="items" type="java.lang.String" value="occupancyTypes"/>
+                <Property name="name" type="java.lang.String" value="entity.occupancy.type"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[120, 19]"/>
                 </Property>
@@ -132,19 +160,73 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel5">
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel13">
           <Properties>
             <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[5, 0, 0, 0]"/>
+              <Insets value="[8, 0, 0, 0]"/>
             </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="230" width="590" height="50"/>
+              <AbsoluteConstraints x="10" y="100" width="280" height="30"/>
             </Constraint>
           </Constraints>
           <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox10">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Rent Type"/>
+                <Property name="captionWidth" type="int" value="105"/>
+                <Property name="expression" type="java.lang.String" value="#{item.value}"/>
+                <Property name="itemKey" type="java.lang.String" value="value"/>
+                <Property name="items" type="java.lang.String" value="rentTypes"/>
+                <Property name="name" type="java.lang.String" value="entity.occupancy.renttype"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[120, 19]"/>
+                </Property>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel10">
+          <Properties>
+            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[8, 5, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="290" y="100" width="310" height="30"/>
+            </Constraint>
+          </Constraints>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField2">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Rent Amount"/>
+                <Property name="captionWidth" type="int" value="160"/>
+                <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="BigDecimal.class" type="code"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="entity.occupancy.rentamount"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 19]"/>
+                </Property>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel8">
+          <Properties>
+            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="10" y="130" width="590" height="40"/>
+            </Constraint>
+          </Constraints>
+          <SubComponents>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane4">
               <Properties>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 40]"/>
@@ -156,11 +238,11 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea3">
+                <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea4">
                   <Properties>
-                    <Property name="caption" type="java.lang.String" value="Business Hours"/>
+                    <Property name="caption" type="java.lang.String" value="Remarks"/>
                     <Property name="captionWidth" type="int" value="105"/>
-                    <Property name="name" type="java.lang.String" value="entity.businesshours"/>
+                    <Property name="name" type="java.lang.String" value="entity.occupancy.remarks"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[100, 38]"/>
                     </Property>
@@ -223,75 +305,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel8">
-          <Properties>
-            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[0, 0, 0, 0]"/>
-            </Property>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="130" width="590" height="40"/>
-            </Constraint>
-          </Constraints>
-          <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane4">
-              <Properties>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 40]"/>
-                </Property>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea4">
-                  <Properties>
-                    <Property name="caption" type="java.lang.String" value="Remarks"/>
-                    <Property name="captionWidth" type="int" value="105"/>
-                    <Property name="name" type="java.lang.String" value="entity.occupancy.remarks"/>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[100, 38]"/>
-                    </Property>
-                    <Property name="required" type="boolean" value="true"/>
-                    <Property name="textCase" type="com.rameses.rcp.constant.TextCase" editor="com.rameses.beaninfo.editor.TextCasePropertyEditor">
-                      <SerializedValue value="-84,-19,0,5,126,114,0,33,99,111,109,46,114,97,109,101,115,101,115,46,114,99,112,46,99,111,110,115,116,97,110,116,46,84,101,120,116,67,97,115,101,0,0,0,0,0,0,0,0,18,0,0,120,114,0,14,106,97,118,97,46,108,97,110,103,46,69,110,117,109,0,0,0,0,0,0,0,0,18,0,0,120,112,116,0,5,85,80,80,69,82"/>
-                    </Property>
-                  </Properties>
-                </Component>
-              </SubComponents>
-            </Container>
-          </SubComponents>
-        </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel10">
-          <Properties>
-            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[8, 5, 0, 0]"/>
-            </Property>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="290" y="100" width="310" height="30"/>
-            </Constraint>
-          </Constraints>
-          <SubComponents>
-            <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField2">
-              <Properties>
-                <Property name="caption" type="java.lang.String" value="Rent Amount"/>
-                <Property name="captionWidth" type="int" value="160"/>
-                <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="BigDecimal.class" type="code"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="entity.occupancy.rentamount"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 19]"/>
-                </Property>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
         <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel11">
           <Properties>
             <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -308,9 +321,9 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Ownership"/>
                 <Property name="captionWidth" type="int" value="160"/>
-                <Property name="expression" type="java.lang.String" value="#[{item.value}"/>
+                <Property name="expression" type="java.lang.String" value="#{item.value}"/>
                 <Property name="itemKey" type="java.lang.String" value="value"/>
-                <Property name="items" type="java.lang.String" value="ownershipTypes"/>
+                <Property name="items" type="java.lang.String" value="ownerships"/>
                 <Property name="name" type="java.lang.String" value="entity.ownership"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[120, 19]"/>
@@ -331,59 +344,46 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel12">
+        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel5">
           <Properties>
             <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[7, 0, 0, 0]"/>
+              <Insets value="[5, 0, 0, 0]"/>
             </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="80" width="280" height="30"/>
+              <AbsoluteConstraints x="10" y="230" width="590" height="50"/>
             </Constraint>
           </Constraints>
           <SubComponents>
-            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox9">
+            <Container class="javax.swing.JScrollPane" name="jScrollPane3">
               <Properties>
-                <Property name="caption" type="java.lang.String" value="Occupancy"/>
-                <Property name="captionWidth" type="int" value="105"/>
-                <Property name="expression" type="java.lang.String" value="#{item.value}"/>
-                <Property name="itemKey" type="java.lang.String" value="value"/>
-                <Property name="items" type="java.lang.String" value="occupancyTypes"/>
-                <Property name="name" type="java.lang.String" value="entity.occupancy.type"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[120, 19]"/>
-                </Property>
-                <Property name="required" type="boolean" value="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="com.rameses.rcp.control.XFormPanel" name="xFormPanel13">
-          <Properties>
-            <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[8, 0, 0, 0]"/>
-            </Property>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="100" width="280" height="30"/>
-            </Constraint>
-          </Constraints>
-          <SubComponents>
-            <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox10">
-              <Properties>
-                <Property name="caption" type="java.lang.String" value="Rent Type"/>
-                <Property name="captionWidth" type="int" value="105"/>
-                <Property name="expression" type="java.lang.String" value="#{item.value}"/>
-                <Property name="itemKey" type="java.lang.String" value="value"/>
-                <Property name="items" type="java.lang.String" value="rentTypes"/>
-                <Property name="name" type="java.lang.String" value="entity.occupancy.renttype"/>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[120, 19]"/>
+                  <Dimension value="[0, 40]"/>
                 </Property>
               </Properties>
-            </Component>
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea3">
+                  <Properties>
+                    <Property name="caption" type="java.lang.String" value="Business Hours"/>
+                    <Property name="captionWidth" type="int" value="105"/>
+                    <Property name="name" type="java.lang.String" value="entity.businesshours"/>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[100, 38]"/>
+                    </Property>
+                    <Property name="required" type="boolean" value="true"/>
+                    <Property name="textCase" type="com.rameses.rcp.constant.TextCase" editor="com.rameses.beaninfo.editor.TextCasePropertyEditor">
+                      <SerializedValue value="-84,-19,0,5,126,114,0,33,99,111,109,46,114,97,109,101,115,101,115,46,114,99,112,46,99,111,110,115,116,97,110,116,46,84,101,120,116,67,97,115,101,0,0,0,0,0,0,0,0,18,0,0,120,114,0,14,106,97,118,97,46,108,97,110,103,46,69,110,117,109,0,0,0,0,0,0,0,0,18,0,0,120,112,116,0,5,85,80,80,69,82"/>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
       </SubComponents>

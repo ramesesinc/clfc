@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="child:create" action="init" caption="Child Information Form" target="popup"/>
-        <invoker type="child:open" action="open" caption="Child Information Form" target="popup"/>
+        <invoker type="sibling:create" action="init" caption="Sibling Information Form" target="popup"/>
+        <invoker type="sibling:open" action="open" caption="Sibling Information Form" target="popup"/>
         
         <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
         <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
@@ -12,11 +12,13 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class ChildInformationFormController
+            class SiblingInformationFormController
             {
-                String title = "Child Information Form"
+                String title = "Sibling Information Form"
                 def entity
-                def handler                
+                def handler
+                def selectedEmployment
+                def selectedOtherIncome
                 
                 def init() {
                     entity = [ employmentList:[], otherIncomeList:[] ]
@@ -46,7 +48,6 @@
                     onRemoveItem: {o->
                         if(MsgBox.confirm("You are about to remove this employment. Continue?")) {
                             entity.employmentList.remove(o)
-                            employmentHandler.load()
                             return true
                         }
                         return false
@@ -54,8 +55,8 @@
                 ] as EditorListModel
                 
                 def addOtherIncome() {
-                    def handler = {otherIncome->
-                        entity.otherIncomeList.add(otherIncome)
+                    def handler = {otherincome->
+                        entity.otherIncomeList.add(otherincome)
                         otherIncomeHandler.load()
                     }
                     return InvokerUtil.lookupOpener("otherincome:create", [handler:handler])
@@ -69,7 +70,6 @@
                         if(MsgBox.confirm("You are about to remove this source of income. Continue?")) {
                             entity.otherIncomeList.remove(o)
                             otherIncomeHandler.load()
-                            return true
                         }
                         return false
                     }
@@ -78,6 +78,6 @@
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.ChildFormPage"/>
+        <page template="com.rameses.clfc.loan.SiblingsFormPage"/>
     </pages>
 </workunit>
