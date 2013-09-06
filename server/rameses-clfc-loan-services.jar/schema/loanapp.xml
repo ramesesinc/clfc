@@ -1,0 +1,50 @@
+<schema>
+
+	<element name="loanapp" tablename="loanapp">
+		<field name="objid" primary="true"/>
+		<field name="state" required="true"/>
+		<field name="mode" required="true"/>
+		<field name="dtcreated" required="true"/>
+		<field name="createdby" required="true"/>
+		<field name="appno" required="true"/>
+		<field name="apptype" required="true"/>
+		<field name="loanno" required="true"/>
+		<field name="version" required="true"/>
+		<field name="branch_code" required="true"/>
+		<field name="branch_name" required="true"/>
+		<field name="borrower_objid" required="true"/>
+		<field name="borrower_name" required="true"/>
+		<field name="schedule_term" required="true"/>
+		<field name="schedule_interestrate" required="true"/>
+		<field name="schedule_pastduerate" required="true"/>
+		<field name="schedule_underpaymentpenalty" required="true"/>
+		<field name="schedule_surchargerate" required="true"/>
+		<field name="schedule_absentpenalty" required="true"/>
+		<field name="schedule_code" required="true"/>
+		<complex name="previousloans" ref="previousloan" required="false" type="list" serializer="default"/> 
+	</element>
+
+	<element name="previousloan">
+		<field name="dtreleased" required="true"/>
+		<field name="loanamount" required="true"/>
+		<field name="remarks" required="true"/>
+	</element> 
+
+	<element name="approval" tablename="loanapp">
+		<field name="objid" primary="true"/>
+		<field name="approval_type"/>
+		<field name="approval_amount"/>
+		<field name="approval_absencetype"/>
+		<field name="approval_absencepolicy"/>
+		<field name="approval_absenceprovision"/>
+	</element>	
+
+	<element name="search_borrower_index" tablename="loanapp_search_borrower_index">
+		<field name="objid" primary="true"/> 
+		<field name="loanappid" required="true"/> 
+		<field name="borrowerid" required="true"/> 
+		<field name="borrowername" required="true"/> 
+		<field name="borrowertype" required="true"/> 
+	</element> 
+	
+</schema>

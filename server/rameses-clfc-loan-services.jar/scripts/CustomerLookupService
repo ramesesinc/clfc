@@ -22,14 +22,14 @@ class CustomerLookupService
 		[filter: ' c.firstname LIKE $P{searchtext} '] 
 	];
 
-
 	public def getList( params ) { 
 		params.searchtext = removeLeadingChar(params.searchtext,'%')+'%';
 		if (!params._start) params._start = 0;
 		if (!params._limit) params._limit = 10;
-		println params;
+
 		for (o in searchTypes) { 
 			params.putAll(o); 
+			println 'getList-> ' + params;			
 			def list = em.getLookupCustomers(params); 
 			if (!list.isEmpty()) return list; 
 		}

@@ -1,0 +1,11 @@
+<schema>
+
+	<element name="loanapp_collateral" tablename="loanapp_collateral">
+		<field name="objid" primary="true"/>
+		<field name="appliances"/>
+		<field name="vehicles"/>
+		<field name="properties"/>
+		<field name="othercollateral"/>
+	</element>
+
+</schema>

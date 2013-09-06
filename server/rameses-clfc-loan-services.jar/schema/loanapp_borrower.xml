@@ -1,0 +1,12 @@
+<schema>
+
+	<element name="loanapp_borrower" tablename="loanapp_borrower">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/> 
+		<field name="principalid" required="true"/>
+		<field name="relaterid" required="true"/>
+		<field name="type" required="true"/>
+		<field name="relation"/>
+	</element>
+
+</schema>
