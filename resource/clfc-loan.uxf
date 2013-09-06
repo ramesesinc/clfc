@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>832</x>
+      <y>416</y>
+      <w>136</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>loanapp_log
+--
+objid
+parentid
+dtposted
+postedby
+remarks</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>720</x>
+      <y>48</y>
+      <w>192</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>loanapp_borrower
+--
+objid
+parentid
+borrowerid
+type       (principal|joint|comaker) 
+relation   
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>320</x>
+      <y>208</y>
+      <w>136</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+objid..parentid</panel_attributes>
+    <additional_attributes>120;40;24;40</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>440</x>
+      <y>32</y>
+      <w>184</w>
+      <h>368</h>
+    </coordinates>
+    <panel_attributes>loanapp
+--
+objid
+state
+mode
+dtcreated
+createdby
+appno
+apptype
+loanno
+version
+branch_code
+branch_name
+borrower_objid
+borrower_name
+schedule_term
+schedule_interestrate
+schedule_pastduerate
+schedule_underpaymentpenalty
+schedule_surchargerate
+schedule_absentpenalty
+schedule_code
+previousloans (list) 
+approval_type
+approval_amount
+approval_absencetype
+approval_absencepolicy
+approval_absenceprovision
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>608</x>
+      <y>448</y>
+      <w>184</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>loanapp_recommendation
+--
+objid
+ciremarks
+crecomremarks
+marketeramount
+ciamount
+fcaamount
+caoamount
+bcohamount</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>320</x>
+      <y>80</y>
+      <w>136</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+objid..objid</panel_attributes>
+    <additional_attributes>120;40;24;40</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>208</x>
+      <y>8</y>
+      <w>136</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>loanapp_search_index
+--
+objid
+state
+dtcreated
+createdby
+appno
+branchcode
+branchname
+routecode
+fullborrowername
+loanamount
+dtsubmitted
+submittedby</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>600</x>
+      <y>72</y>
+      <w>136</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+objid..parentid</panel_attributes>
+    <additional_attributes>24;56;120;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1032</x>
+      <y>64</y>
+      <w>160</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>borrower
+--
+objid
+info          (map) 
+spouseid
+spouse         (map)
+children   (list)
+educations  (list) 
+employments (list) 
+parents        (map) 
+siblings    (list)
+otherincomes  (list) 
+savingaccts (list) 
+checkingaccts (list)
+otheracct 
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>888</x>
+      <y>64</y>
+      <w>160</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+objid..borrowerid</panel_attributes>
+    <additional_attributes>144;56;24;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>528</x>
+      <y>376</y>
+      <w>98</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+objid..objid</panel_attributes>
+    <additional_attributes>24;24;80;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>600</x>
+      <y>152</y>
+      <w>136</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+objid..parentid</panel_attributes>
+    <additional_attributes>24;24;120;80</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>720</x>
+      <y>192</y>
+      <w>136</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>loanapp_otherlending
+--
+objid
+parentid
+name
+address
+kind
+amount
+dtgranted
+dtmatured
+term
+interest
+paymentmode
+paymentamount
+collateral
+remarks
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>208</x>
+      <y>216</y>
+      <w>136</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>loanapp_business
+--
+objid
+parentid
+tradename
+address
+kind
+dtstarted
+capital
+ownership
+stallsize
+avgsales
+officehours
+occupancy_type
+occupancy_remarks
+occupancy_renttype
+occupancy_rentamount
+ci
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>416</x>
+      <y>376</y>
+      <w>112</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+objid..objid</panel_attributes>
+    <additional_attributes>96;24;24;64</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>888</x>
+      <y>288</y>
+      <w>136</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>loanapp_approval
+--
+objid
+shoot    (map)
+offers   (list)
+option   (map) </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>0</x>
+      <y>8</y>
+      <w>136</w>
+      <h>232</h>
+    </coordinates>
+    <panel_attributes>LOAN_STATUS
+bg=YELLOW
+----------------------
+INCOMPLETE
+PENDING
+FOR-INSPECTION
+FOR-CRECOM
+FOR-APPROVAL
+APPROVED
+FOR-RELEASE
+RELEASED
+DISAPPROVED
+DISQUALIFIED_OUT
+CANCELLED_OUT
+BACK_OUT
+CLOSED
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>368</x>
+      <y>440</y>
+      <w>144</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>loanapp_collateral
+--
+objid
+appliances   (list)
+vehicles     (list)
+properties    (list)
+othercollateral  </panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
