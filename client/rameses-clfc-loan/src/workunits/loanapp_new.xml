@@ -1,0 +1,13 @@
+<workunit>
+    <invokers>
+        <invoker type="quick_launcher" code="CAP_LOAN" action="initCapture" caption="Capture Renewal"/>
+        
+        <invoker type="loanapp:create" caption="Loan Application" action="initOnline"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.controller.NewLoanApplicationController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.NewLoanApplicationPage"/>
+    </pages>
+</workunit>
