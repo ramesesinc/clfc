@@ -1,0 +1,22 @@
+<workunit extends="wtemplates/ListController.xml">
+    <invokers>
+        <invoker type="quick_launcher" caption="Search Customer" code="SC"/>
+        <invoker type="customer:search" caption="Search Customer"/>
+   </invokers>
+   
+   <code>
+   <![CDATA[ 
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+
+        public class CustomerSearchController extends ListController {
+        
+            String serviceName = 'CustomerService';
+            String entityName = 'customer';
+            String title = 'Search Customer';
+        } 
+   ]]>
+   </code>
+</workunit>

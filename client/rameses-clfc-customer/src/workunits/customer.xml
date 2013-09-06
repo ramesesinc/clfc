@@ -1,0 +1,24 @@
+<workunit>
+    <invokers>
+        <invoker type="customer:create" caption="Customer Information" action="create"/>
+        <invoker type="customer:open" caption="Customer Information" action="open"/>
+   </invokers>
+   
+   <code>
+   <![CDATA[ 
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+
+        public class CustomerController extends CRUDController {
+        
+            String serviceName = 'CustomerService';
+        } 
+   ]]>
+   </code>
+   
+   <pages>
+       <page template="com.rameses.clfc.customer.CustomerPage"/>
+   </pages>
+</workunit>
