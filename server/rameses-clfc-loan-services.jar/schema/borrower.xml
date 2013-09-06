@@ -1,0 +1,24 @@
+<schema>
+
+	<element name="borrower" tablename="borrower">
+		<field name="objid" primary="true"/>
+		<complex name="info" required="true" serializer="default"/> 
+		<field name="spouseid"/> 
+		<complex name="spouse" serializer="default"/> 
+		<complex name="children" serializer="default" type="list"/> 
+		<complex name="educations" serializer="default" type="list"/> 
+		<complex name="employments" serializer="default" type="list"/> 
+		<complex name="parents" serializer="default"/> 
+		<complex name="siblings" serializer="default" type="list"/> 
+		<complex name="otherincomes" serializer="default" type="list"/> 
+		<complex name="savingaccts" serializer="default" type="list"/> 
+		<complex name="checkingaccts" serializer="default" type="list"/> 
+		<field name="otheracct"/> 
+	</element>
+
+	<element name="info" tablename="borrower">
+		<field name="objid" primary="true"/>
+		<complex name="info" required="true" serializer="default"/> 	
+	</element>
+	
+</schema>	

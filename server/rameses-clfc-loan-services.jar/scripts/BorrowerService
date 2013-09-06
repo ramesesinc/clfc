@@ -1,0 +1,9 @@
+import com.rameses.annotations.*;
+import com.rameses.common.*;
+import com.rameses.services.extended.*;
+
+class BorrowerService extends ActiveCrudService 
+{	
+	@ActiveDB(value='borrower')
+	def em;
+}
