@@ -69,7 +69,15 @@
 		<field name="objid" primary="true"/> 
 		<field name="refid" required="true"/>
 		<field name="name" required="true"/> 
-		<field name="remark"/> 
-	</element> 		
+		<field name="remarks"/> 
+	</element> 	
+
+	<element name="education" tablename="borrower_education"> 
+		<field name="objid" primary="true"/> 
+		<field name="borrowerid" required="true"/>
+		<field name="attainment" required="true"/> 
+		<field name="school" required="true"/> 
+		<field name="remarks"/> 
+	</element>		
 
 </schema>

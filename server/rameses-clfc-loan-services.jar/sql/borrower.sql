@@ -18,3 +18,9 @@ SELECT * FROM sourceofincome WHERE refid=$P{refid}
 
 [removeOtherIncomes]
 DELETE FROM sourceofincome WHERE refid=$P{refid} 
+
+[getEducations]
+SELECT * FROM borrower_education WHERE borrowerid=$P{borrowerid} 
+
+[removeEducations]
+DELETE FROM borrower_education WHERE borrowerid=$P{borrowerid} 

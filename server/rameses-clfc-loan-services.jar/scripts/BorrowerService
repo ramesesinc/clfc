@@ -19,6 +19,7 @@ class BorrowerService
 			child.employments = em.getEmployments([refid: child.objid]); 
 			child.otherincomes = em.getOtherIncomes([refid: child.objid]); 
 		} 
+		o.educations = em.getEducations([borrowerid: o.objid]);
 		return o;
 	}
 
@@ -31,6 +32,7 @@ class BorrowerService
 			em.update(data);
 		}
 		updateChildren(data);
+		updateEducations(data);
 		return data; 
 	}
 
@@ -55,10 +57,20 @@ class BorrowerService
 			} 
 
 			if (o.otherincomes == null) o.otherincomes = [];
-			for (oo in o.employments) { 
+			for (oo in o.otherincomes) { 
 				oo.refid =  o.objid; 
 				em.create(oo, 'sourceofincome'); 
 			} 
+		} 
+	} 
+
+	private void updateEducations(data) {
+		em.removeEducations([borrowerid: data.objid]); 
+		if (data.educations == null) data.educations = [];
+
+		for (o in data.educations) { 
+			o.borrowerid =  data.objid; 
+			em.create(o, 'education'); 
 		} 
 	}
 }
