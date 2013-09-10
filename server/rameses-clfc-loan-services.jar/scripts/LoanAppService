@@ -12,44 +12,11 @@ class LoanAppService
 		def data = em.read(params); 
 		if (data == null) throw new Exception('loan application record not found');
 
-		if (params.name == 'principalborrower') {
-			def borrower = em.findPrincipalBorrower([parentid: data.objid, principalid: data.borrower.objid]); 
-			if (borrower) {
-				def name = borrower.lastname +', ' + borrower.firstname;
-				if (borrower.middlename) name = name + ' ' + borrower.middlename;
-
-				borrower.name = name;
-				data.borrower = borrower;
-			}
-		}
 		return data;
 	}
 
 	@ProxyMethod 
-	public def save( params ) {
-		if (params._uitype == 'principalborrower') {
-			def data = params.borrower;
-			data = em.update(data, 'borrower');
-			em.updatePrincipalBorrower([ 
-				parentid: params._loanappid, 
-				principalid: data.objid
-			]);
-			em.updatePrincipalBorrowerIndex([ 
-				loanappid: params._loanappid, 
-				borrowerid: data.objid, 
-				borrowername: data.name 
-			]); 
-
-			def names = em.getBorrowerNames([parentid: params._loanappid, type:'principal']);
-			names.addAll(em.getBorrowerNames([parentid: params._loanappid, type:'joint'])); 
-			def colls = names.collect{  
-				it.lastname + ', ' + it.firstname + (it.middlename? ' '+it.middlename: '');
-			}
-			em.updateFullBorrowerName([
-				objid: params._loanappid, 
-				fullborrowername: colls.join(' AND ')  
-			]);
-		}
-		return params;
+	public def update( params ) {
+		return em.update(params);
 	}
 }
