@@ -51,5 +51,25 @@
 		<field name="education"/> 
 		<field name="remarks"/> 
 	</element> 	
-	
-</schema>	
+
+	<element name="employment" tablename="employment"> 
+		<field name="objid" primary="true"/> 
+		<field name="refid" required="true"/>
+		<field name="employer" required="true"/>
+		<field name="address"/>
+		<field name="contactno"/>
+		<field name="position"/>
+		<field name="salary"/>
+		<field name="lengthofservice"/>
+		<field name="status"/>
+		<field name="remarks" required="true"/>
+	</element> 	
+
+	<element name="sourceofincome" tablename="sourceofincome"> 
+		<field name="objid" primary="true"/> 
+		<field name="refid" required="true"/>
+		<field name="name" required="true"/> 
+		<field name="remark"/> 
+	</element> 		
+
+</schema>

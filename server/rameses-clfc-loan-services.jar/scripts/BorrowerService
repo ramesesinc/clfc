@@ -15,6 +15,9 @@ class BorrowerService
 		if (o == null) throw new Exception('borrower record not found');
 
 		o.children = em.getChildren([borrowerid: o.objid]); 
+		for (child in o.children) {
+			child.employments = em.getEmployments([refid: child.objid]); 
+		} 
 		return o;
 	}
 
@@ -26,12 +29,35 @@ class BorrowerService
 		} else {
 			em.update(data);
 		}
+		updateChildren(data);
+		return data; 
+	}
 
-		em.removeChildren([objid: data.objid]); 
-		data.children?.each {
-			it.objid = 'BCH' + new UID(); 
-			it.borrowerid = data.objid; 
-			em.create(it, 'children'); 
+	private void updateChildren(data) {
+		def oldchildren = em.getChildren([borrowerid: data.objid]); 
+		oldchildren?.each {
+			em.removeEmployments([refid: it.objid]); 
+			em.removeOtherIncomes([refid: it.objid]);
 		}
+
+		em.removeChildren([borrowerid: data.objid]); 
+		if (data.children == null) data.children = [];
+
+		for (o in data.children) {
+			o.borrowerid = data.objid; 
+			em.create(o, 'children'); 
+
+			if (o.employments == null) o.employments = [];
+			for (oo in o.employments) { 
+				oo.refid =  o.objid; 
+				em.create(oo, 'employment'); 
+			} 
+
+			if (o.otherincomes == null) o.otherincomes = [];
+			for (oo in o.employments) { 
+				oo.refid =  o.objid; 
+				em.create(oo, 'sourceofincome'); 
+			} 
+		} 
 	}
 }
