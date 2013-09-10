@@ -5,8 +5,8 @@
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1463</x>
-      <y>511</y>
-      <w>140</w>
+      <y>574</y>
+      <w>139</w>
       <h>49</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
@@ -17,7 +17,7 @@ objid..borrowerid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1064</x>
-      <y>728</y>
+      <y>791</y>
       <w>140</w>
       <h>154</h>
     </coordinates>
@@ -37,9 +37,9 @@ remarks
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1183</x>
-      <y>427</y>
-      <w>147</w>
-      <h>49</h>
+      <y>490</y>
+      <w>146</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 borrowerid..objid</panel_attributes>
@@ -49,7 +49,7 @@ borrowerid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1589</x>
-      <y>721</y>
+      <y>784</y>
       <w>168</w>
       <h>182</h>
     </coordinates>
@@ -64,7 +64,7 @@ remarks*
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>532</x>
-      <y>224</y>
+      <y>287</y>
       <w>153</w>
       <h>49</h>
     </coordinates>
@@ -76,18 +76,19 @@ objid..parentid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>672</x>
-      <y>126</y>
+      <y>168</y>
       <w>168</w>
-      <h>84</h>
+      <h>105</h>
     </coordinates>
     <panel_attributes>loanapp_borrower
 --
-objid
-parentid
-borrowerid
-type       (principal|joint|comaker) 
-relation   
-
+objid*
+parentid*
+borrowerid*
+principalid*
+relaterid
+type*     (principal|joint|comaker) 
+relation
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -95,9 +96,9 @@ relation
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1183</x>
-      <y>301</y>
-      <w>147</w>
-      <h>49</h>
+      <y>364</y>
+      <w>146</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 borrowerid..objid</panel_attributes>
@@ -107,7 +108,7 @@ borrowerid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1883</x>
-      <y>168</y>
+      <y>231</y>
       <w>140</w>
       <h>147</h>
     </coordinates>
@@ -124,7 +125,7 @@ remarks
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>203</x>
-      <y>630</y>
+      <y>693</y>
       <w>161</w>
       <h>119</h>
     </coordinates>
@@ -144,7 +145,7 @@ bcohamount</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>490</x>
-      <y>483</y>
+      <y>546</y>
       <w>125</w>
       <h>160</h>
     </coordinates>
@@ -156,7 +157,7 @@ objid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>742</x>
-      <y>588</y>
+      <y>651</y>
       <w>168</w>
       <h>112</h>
     </coordinates>
@@ -177,7 +178,7 @@ remarks*
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>392</x>
-      <y>126</y>
+      <y>189</y>
       <w>161</w>
       <h>378</h>
     </coordinates>
@@ -224,7 +225,7 @@ approval_absenceprovision
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>574</x>
-      <y>630</y>
+      <y>693</y>
       <w>119</w>
       <h>84</h>
     </coordinates>
@@ -241,7 +242,7 @@ remarks</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>742</x>
-      <y>427</y>
+      <y>490</y>
       <w>168</w>
       <h>140</h>
     </coordinates>
@@ -264,7 +265,7 @@ remarks
     <type>com.umlet.element.Note</type>
     <coordinates>
       <x>0</x>
-      <y>119</y>
+      <y>182</y>
       <w>119</w>
       <h>203</h>
     </coordinates>
@@ -291,7 +292,7 @@ CLOSED
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>532</x>
-      <y>448</y>
+      <y>511</y>
       <w>223</w>
       <h>153</h>
     </coordinates>
@@ -303,7 +304,7 @@ objid..parentid</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>532</x>
-      <y>399</y>
+      <y>462</y>
       <w>223</w>
       <h>76</h>
     </coordinates>
@@ -315,8 +316,8 @@ objid..parentid</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1463</x>
-      <y>210</y>
-      <w>140</w>
+      <y>273</y>
+      <w>139</w>
       <h>49</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
@@ -327,9 +328,9 @@ objid..borrowerid</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1183</x>
-      <y>665</y>
-      <w>147</w>
-      <h>77</h>
+      <y>728</y>
+      <w>146</w>
+      <h>76</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 objid..objid</panel_attributes>
@@ -339,7 +340,7 @@ objid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>182</x>
-      <y>0</y>
+      <y>63</y>
       <w>147</w>
       <h>91</h>
     </coordinates>
@@ -358,7 +359,7 @@ borrowertype
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1064</x>
-      <y>280</y>
+      <y>343</y>
       <w>140</w>
       <h>98</h>
     </coordinates>
@@ -377,7 +378,7 @@ remarks
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1316</x>
-      <y>196</y>
+      <y>259</y>
       <w>168</w>
       <h>490</h>
     </coordinates>
@@ -430,7 +431,7 @@ spouse_occupancy_rentamount
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1064</x>
-      <y>553</y>
+      <y>616</y>
       <w>140</w>
       <h>98</h>
     </coordinates>
@@ -447,7 +448,7 @@ remarks</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>672</x>
-      <y>224</y>
+      <y>287</y>
       <w>168</w>
       <h>189</h>
     </coordinates>
@@ -474,7 +475,7 @@ remarks
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>161</x>
-      <y>119</y>
+      <y>182</y>
       <w>119</w>
       <h>168</h>
     </coordinates>
@@ -498,7 +499,7 @@ submittedby</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>427</x>
-      <y>483</y>
+      <y>546</y>
       <w>77</w>
       <h>160</h>
     </coordinates>
@@ -510,7 +511,7 @@ objid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1883</x>
-      <y>322</y>
+      <y>385</y>
       <w>140</w>
       <h>147</h>
     </coordinates>
@@ -532,7 +533,7 @@ remarks*</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>259</x>
-      <y>329</y>
+      <y>392</y>
       <w>146</w>
       <h>49</h>
     </coordinates>
@@ -544,7 +545,7 @@ objid..parentid</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>259</x>
-      <y>182</y>
+      <y>245</y>
       <w>146</w>
       <h>49</h>
     </coordinates>
@@ -556,7 +557,7 @@ objid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>161</x>
-      <y>315</y>
+      <y>378</y>
       <w>119</w>
       <h>280</h>
     </coordinates>
@@ -590,9 +591,9 @@ ci_amount*
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1183</x>
-      <y>161</y>
-      <w>147</w>
-      <h>91</h>
+      <y>224</y>
+      <w>146</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 borrowerid..objid</panel_attributes>
@@ -602,9 +603,9 @@ borrowerid..objid</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1344</x>
-      <y>665</y>
-      <w>105</w>
-      <h>98</h>
+      <y>728</y>
+      <w>106</w>
+      <h>97</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 objid..borrowerid</panel_attributes>
@@ -614,19 +615,19 @@ objid..borrowerid</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>532</x>
-      <y>133</y>
+      <y>196</y>
       <w>153</w>
-      <h>49</h>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 objid..parentid</panel_attributes>
-    <additional_attributes>21;35;140;35</additional_attributes>
+    <additional_attributes>21;35;140;28</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1589</x>
-      <y>504</y>
+      <y>567</y>
       <w>168</w>
       <h>182</h>
     </coordinates>
@@ -652,7 +653,7 @@ remarks*
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>259</x>
-      <y>483</y>
+      <y>546</y>
       <w>188</w>
       <h>160</h>
     </coordinates>
@@ -664,7 +665,7 @@ objid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>392</x>
-      <y>630</y>
+      <y>693</y>
       <w>161</w>
       <h>119</h>
     </coordinates>
@@ -682,7 +683,7 @@ remarks*
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1316</x>
-      <y>749</y>
+      <y>812</y>
       <w>168</w>
       <h>154</h>
     </coordinates>
@@ -700,7 +701,7 @@ address*
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1064</x>
-      <y>140</y>
+      <y>203</y>
       <w>140</w>
       <h>105</h>
     </coordinates>
@@ -718,7 +719,7 @@ remarks</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1589</x>
-      <y>133</y>
+      <y>196</y>
       <w>168</w>
       <h>343</h>
     </coordinates>
@@ -757,7 +758,7 @@ shippingwt
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>308</x>
-      <y>70</y>
+      <y>133</y>
       <w>97</w>
       <h>69</h>
     </coordinates>
@@ -769,9 +770,9 @@ objid..objid</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1463</x>
-      <y>665</y>
-      <w>140</w>
-      <h>70</h>
+      <y>728</y>
+      <w>139</w>
+      <h>69</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 objid..objid</panel_attributes>
@@ -781,7 +782,7 @@ objid..objid</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>1064</x>
-      <y>399</y>
+      <y>462</y>
       <w>140</w>
       <h>133</h>
     </coordinates>
@@ -803,9 +804,9 @@ remarks*
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>1183</x>
-      <y>546</y>
-      <w>147</w>
-      <h>70</h>
+      <y>609</y>
+      <w>146</w>
+      <h>69</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 borrowerid..objid</panel_attributes>
