@@ -61,10 +61,10 @@ class LoanAppController
         }
         
         def invtype = 'loanapp-'+selectedMenu.name+':open'; 
-        return InvokerUtil.lookupOpener(invtype, [
-            handlers: handlers,       
+        return InvokerUtil.lookupOpener(invtype, [            
             loanapp: entity, 
-            caller: this
+            caller: this,
+            handlers: handlers
         ]); 
     } 
     

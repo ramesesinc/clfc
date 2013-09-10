@@ -9,15 +9,15 @@ import com.rameses.clfc.loan.controller.*;
 class LoanAppPrincipalBorrowerController 
 {
     //feed by the caller
-    def handlers, loanapp, caller;
+    def loanapp, caller, handlers;
     
     @Service('BorrowerService') 
     def service;    
     
     void setHandlers(handlers) {
         this.handlers = handlers;
-        handlers.saveHandler = { save(); }
         loanapp.borrower = service.open([objid: loanapp.borrower?.objid]); 
+        handlers.saveHandler = { save(); }        
     }
     
     def createOpenerParams() {
