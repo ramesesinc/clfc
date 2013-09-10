@@ -17,6 +17,7 @@ class BorrowerService
 		o.children = em.getChildren([borrowerid: o.objid]); 
 		for (child in o.children) {
 			child.employments = em.getEmployments([refid: child.objid]); 
+			child.otherincomes = em.getOtherIncomes([refid: child.objid]); 
 		} 
 		return o;
 	}
