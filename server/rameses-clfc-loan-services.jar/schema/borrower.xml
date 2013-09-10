@@ -13,12 +13,12 @@
 		<complex name="otherincomes" serializer="default" type="list"/> 
 		<complex name="savingaccts" serializer="default" type="list"/> 
 		<complex name="checkingaccts" serializer="default" type="list"/> 
-		<field name="otheracct"/> 
+		<field name="otheracct"/>  
 	</element>
 
-	<element name="info" tablename="borrower">
+	<element name="borrower-info" tablename="borrower">
 		<field name="objid" primary="true"/>
-		<complex name="info" required="true" serializer="default"/> 	
+		<complex name="info" serializer="default"/> 	
 	</element>
 	
 </schema>	

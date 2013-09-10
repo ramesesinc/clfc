@@ -20,7 +20,7 @@
 		<field name="schedule_underpaymentpenalty" required="true"/>
 		<field name="schedule_surchargerate" required="true"/>
 		<field name="schedule_absentpenalty" required="true"/>
-		<field name="schedule_code" required="true"/>
+		<field name="schedule_name" required="true"/>
 		<complex name="previousloans" ref="previousloan" required="false" type="list" serializer="default"/> 
 	</element>
 

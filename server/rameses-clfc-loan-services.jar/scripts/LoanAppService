@@ -14,20 +14,27 @@ class LoanAppService extends ActiveCrudService
 	@ActiveDB(value='borrower')
 	def borrower;
 
+	@Service('DateService')
+	def dtSvc
+
+	void beforeCreate(data) {
+		data.dtcreated = dtSvc.serverDate.toString()
+	}
+
 	void afterCreate(data) {
 		rebuildBorrower(data); 
 	}
 
 	void afterUpdate(data) {
-		lab.removeItems([parentid: data.objid]);		
+		lab.removeItems([parentid: data.objid]);
 		rebuildBorrower(data); 
 	} 
 
 	void rebuildBorrower(data) {
-		def o = borrower.read([objid: data.borrower.objid]);
+		def o = borrower.findByObjid([objid: data.borrower.objid]);
 		if (o == null) {
-			o = [objid: data.borrower.objid, info:data.borrower]; 
-			borrower.create(o, 'info'); 
+			o = [objid: data.borrower.objid, info:data.borrower];
+			borrower.create(o, 'borrower-info'); 
 		} 
 
 		o = [
