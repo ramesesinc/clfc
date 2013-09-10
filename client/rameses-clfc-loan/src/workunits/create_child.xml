@@ -1,10 +1,7 @@
-<workunit>
+<workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="child:create" action="init" caption="Child Information Form" target="popup"/>
+        <invoker type="child:create" action="create" caption="Child Information Form" target="popup"/>
         <invoker type="child:open" action="open" caption="Child Information Form" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
     </invokers>
     <code>
         <![CDATA[
@@ -12,28 +9,17 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class ChildInformationFormController
+            class ChildInformationFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
                 String title = "Child Information Form"
-                def entity
-                def handler                
                 
-                def init() {
-                    entity = [ employmentList:[], otherIncomeList:[] ]
-                }
-                
-                def approve() {
-                    if( handler ) handler(entity)
-                    return "_close"
-                }
-                
-                def cancel() {
-                    return "_close"
+                public def createEntity() {
+                    return [ employments:[], otherincomes:[] ]
                 }
                 
                 def addEmployment() {
                     def handler = {employment->
-                        entity.employmentList.add(employment)
+                        entity.employments.add(employment)
                         employmentHandler.load()
                     }
                     return InvokerUtil.lookupOpener("employment:create", [handler:handler])
@@ -41,21 +27,24 @@
                 
                 def employmentHandler = [
                     fetchList: {o->
-                        return entity.employmentList
+                        return entity.employments
                     },
                     onRemoveItem: {o->
                         if(MsgBox.confirm("You are about to remove this employment. Continue?")) {
-                            entity.employmentList.remove(o)
+                            entity.employments.remove(o)
                             employmentHandler.load()
                             return true
                         }
                         return false
+                    },
+                    onOpenItem: {o, colName->
+                        return InvokerUtil.lookupOpener("employment:open", [entity:o])
                     }
                 ] as EditorListModel
                 
                 def addOtherIncome() {
-                    def handler = {otherIncome->
-                        entity.otherIncomeList.add(otherIncome)
+                    def handler = {otherincome->
+                        entity.otherincomes.add(otherincome)
                         otherIncomeHandler.load()
                     }
                     return InvokerUtil.lookupOpener("otherincome:create", [handler:handler])
@@ -63,15 +52,18 @@
                 
                 def otherIncomeHandler = [
                     fetchList: {o->
-                        return entity.otherIncomeList
+                        return entity.otherincomes
                     },
                     onRemoveItem: {o->
                         if(MsgBox.confirm("You are about to remove this source of income. Continue?")) {
-                            entity.otherIncomeList.remove(o)
+                            entity.otherincomes.remove(o)
                             otherIncomeHandler.load()
                             return true
                         }
                         return false
+                    },
+                    onOpenItem: {o, colName->
+                        return InvokerUtil.lookupOpener("otherincome:open", [entity:o])
                     }
                 ] as EditorListModel
             }

@@ -9,5 +9,6 @@
     
     <pages>
         <page template="com.rameses.clfc.loan.NewLoanApplicationPage"/>
+        <page name="capture" template="com.rameses.clfc.loan.CaptureLoanApplicationPage"/>
     </pages>
 </workunit>

@@ -1,10 +1,7 @@
-<workunit>
+<workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="appliance:create" action="init" caption="Appliance Form" target="popup"/>
+        <invoker type="appliance:create" action="create" caption="Appliance Form" target="popup"/>
         <invoker type="appliance:open" action="open" caption="Appliance Form" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
     </invokers>
     <code>
         <![CDATA[
@@ -12,24 +9,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class ApplianceFormController
+            class ApplianceFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
                 String title = "Appliance Form"
-                def entity
-                def handler
-                
-                def init() {
-                    entity = [:]
-                }
-                
-                def approve() {
-                    if( handler ) handler(entity)
-                    return "_close"
-                }
-                
-                def cancel() {
-                    return "_close"
-                }
             }
         ]]>
     </code>

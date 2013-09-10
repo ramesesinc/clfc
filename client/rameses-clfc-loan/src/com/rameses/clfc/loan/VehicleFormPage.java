@@ -7,6 +7,7 @@
 package com.rameses.clfc.loan;
 
 import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
+@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
 @Template(FormPage.class)
 public class VehicleFormPage extends javax.swing.JPanel {
     

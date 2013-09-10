@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="checking:create" action="create" caption="Checking Account Form" target="popup"/>
-        <invoker type="checking:open" action="open" caption="Checking Account Form" target="popup"/>   
+        <invoker type="saving:create" action="create" caption="Savings Account Form" target="popup"/>
+        <invoker type="saving:open" action="open" caption="Savings Account Form" target="popup"/>    
     </invokers>
     <code>
         <![CDATA[
@@ -9,9 +9,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class CheckingAccountFormController extends com.rameses.clfc.loan.controller.PopupMasterController
+            class SavingsAccountFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                String title = "Checking Account Form"
+                String title = "Savings Account Form"
             }
         ]]>
     </code>

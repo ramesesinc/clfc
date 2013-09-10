@@ -6,7 +6,7 @@
             <folder id="clfc" caption="CLFC"/>
         </folder>
         <folder id="master" caption="Master Management" index="1">
-            <folder id="clfc" caption="CLFC"/>
+            <folder id="loan" caption="Loans"/>
         </folder>
         <folder id="txnmgmt" caption="Transaction Management" index="2">
             <folder id="clfc" caption="CLFC"/>

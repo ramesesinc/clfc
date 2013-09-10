@@ -1,10 +1,7 @@
-<workunit>
+<workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="business:create" action="init" caption="Business Form" target="popup"/>
+        <invoker type="business:create" action="create" caption="Business Form" target="popup"/>
         <invoker type="business:open" action="open" caption="Business Form" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
     </invokers>
     <code>
         <![CDATA[
@@ -12,11 +9,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class BusinessFormController
+            class BusinessFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
                 String title = "Business Form"
-                def entity
-                def handler
                 def kinds = [
                     [key:'1', value:'SARI-SARI STORE'], 
                     [key:'2', value:'CARENDERIA'], 
@@ -39,22 +34,12 @@
                     [key:'3', value:'CORPORATION']
                 ]
                 
-                def init() {
-                    entity = [:]
-                }
-                
-                def approve() {
+                public def approve() {
                     if( entity.occupancy.type == 'RENTED' ) {
                         if( !entity.occupancy.renttype ) throw new Exception("Rent Type is required.")
                         if( !entity.occupancy.rentamount ) throw new Exception("Rent Amount is required.")
                     }
-                    
-                    if( handler ) handler(entity)
-                    return "_close"
-                }
-                
-                def cancel() {
-                    return "_close"
+                    return super.approve()
                 }
             }
         ]]>

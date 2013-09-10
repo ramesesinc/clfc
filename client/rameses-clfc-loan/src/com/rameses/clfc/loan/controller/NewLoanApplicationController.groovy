@@ -6,25 +6,34 @@ import com.rameses.clfc.loan.*;
 
 class NewLoanApplicationController extends CRUDController
 {
+    @Service('LoanProductTypeService')
+    def prodTypeSvc
+
+    @PropertyChangeListener
+    def listener = [
+        "entity.clienttype": {o->
+            if( entity.clienttype != 'MARKET' ) entity.marketedby = null
+            binding.refresh('entity.marketedby')
+        }
+    ]
+
     String serviceName = 'LoanAppService';
     String prefixId = 'LOAN';
 
-    def appTypes = LOV.LOAN_APP_TYPES;
+    def renewalTypes = LOV.LOAN_RENEWAL_TYPES;
     def clientTypes = LOV.LOAN_CLIENT_TYPES;
-    def productTypes = LOV.LOAN_PROD_TYPES;
 
     Map createEntity() { 
         return [
-            previousloans:[], 
-            schedule: [
-                term:                120, 
-                interestrate:        5.00, 
-                pastduerate:         6.00, 
-                underpaymentpenalty: 3.00,                 
-                surchargerate:       3.00, 
-                absentpenalty:       3.00, 
-                code:               'DAILY' 
-            ] 
+            apptype: 'NEW',
+            version:1,
+            appno:'1',
+            loanno:'1',
+            branch:[
+                code:'006',
+                name:'N. BACALSO BRANCH'
+            ],
+            previousloans:[],
         ]; 
     } 
 
@@ -33,14 +42,18 @@ class NewLoanApplicationController extends CRUDController
         entity.mode = 'ONLINE';
     }
 
-    void initCapture() {
+    def initCapture() {
         create(); 
         entity.mode = 'CAPTURE';
-    }
-    
+        return "capture"
+    }    
     
     def getCustomerLookupHandler() {
         return InvokerUtil.lookupOpener('customer:lookup', [:]); 
+    }
+
+    def getProductTypes() {
+        return prodTypeSvc.getList([:])
     }
 
     def previousLoansHandler = [
