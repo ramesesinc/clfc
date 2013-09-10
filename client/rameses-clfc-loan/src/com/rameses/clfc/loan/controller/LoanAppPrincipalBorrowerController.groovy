@@ -9,20 +9,38 @@ import com.rameses.clfc.loan.controller.*;
 class LoanAppPrincipalBorrowerController 
 {
     //feed by the caller
-    def loanapp, entity, caller;
+    def handlers, loanapp, caller;
+    
+    @Service('BorrowerService') 
+    def service;    
+    
+    void setHandlers(handlers) {
+        this.handlers = handlers;
+        handlers.saveHandler = { save(); }
+        loanapp.borrower = service.open([objid: loanapp.borrower?.objid]); 
+    }
+    
+    def createOpenerParams() {
+        return [
+            service: service, 
+            loanapp: loanapp, 
+            mode: caller.mode 
+        ]; 
+    }
     
     def tabHandler = [
         getOpeners: {
-            return InvokerUtil.lookupOpeners('loanapp-borrower:plugin', [
-                loanapp: loanapp,
-                mode: caller.mode
-            ]);
+            return InvokerUtil.lookupOpeners('loanapp-borrower:plugin', createOpenerParams());
         },
         getOpenerParams: {
-            return [
-                loanapp: loanapp, 
-                mode: caller.mode
-            ]; 
+            return createOpenerParams(); 
         }
     ] as TabbedPaneModel 
+    
+    void save() {
+        def data = loanapp.borrower;
+        data._loanappid = loanapp.objid; 
+        data._datatype = 'principalborrower';
+        service.update(data);
+    }
 }

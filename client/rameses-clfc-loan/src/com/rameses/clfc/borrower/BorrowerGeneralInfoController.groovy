@@ -8,7 +8,9 @@ import com.rameses.clfc.borrower.*;
 
 class BorrowerGeneralInfoController 
 {
+    //feed by the caller
     def loanapp, mode;
+    
     def entity = [:];
     
     void setLoanapp(loanapp) {

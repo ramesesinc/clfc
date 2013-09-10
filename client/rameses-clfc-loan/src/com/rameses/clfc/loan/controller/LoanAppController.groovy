@@ -12,6 +12,7 @@ class LoanAppController
     
     def loanappid;
     def entity = [:];
+    def handlers = [:];
     def mode = 'read';
     
     void open() {
@@ -49,6 +50,7 @@ class LoanAppController
         }, 
         onselect: {o->             
             entity = service.open([objid: loanappid, name:o?.name]); 
+            handlers = [:];
         } 
     ] as ListPaneModel;
     
@@ -60,20 +62,24 @@ class LoanAppController
         
         def invtype = 'loanapp-'+selectedMenu.name+':open'; 
         return InvokerUtil.lookupOpener(invtype, [
+            handlers: handlers,       
             loanapp: entity, 
-            entity: entity, 
             caller: this
         ]); 
-    }    
+    } 
     
     void edit() {
         mode = 'edit';
     }
     
     void save() {
-        entity._uitype = selectedMenu.name;
-        entity._loanappid = loanappid;
-        service.save(entity);
+        def saveHandler = handlers.saveHandler; 
+        if (saveHandler == null) return; 
+        
+        //entity._uitype = selectedMenu.name;
+        //entity._loanappid = loanappid;
+        //service.save(entity);
+        saveHandler(); 
         mode = 'read';        
     }
     
