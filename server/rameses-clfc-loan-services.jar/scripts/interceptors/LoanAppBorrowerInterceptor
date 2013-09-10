@@ -16,6 +16,9 @@ class LoanAppBorrowerInterceptor
 		if (!loanapp) return; 
 
 		if (result._datatype == 'principalborrower') {
+			loanapp.borrower.objid = result.objid;
+			loanapp.borrower.name = result.name;
+			em.update(loanapp);
 			updatePrincipalBorrower(result);
 
 		} else if (result._datatype == 'jointborrower') {
