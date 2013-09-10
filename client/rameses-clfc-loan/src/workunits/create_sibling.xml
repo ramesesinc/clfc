@@ -1,10 +1,7 @@
-<workunit>
+<workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="sibling:create" action="init" caption="Sibling Information Form" target="popup"/>
+        <invoker type="sibling:create" action="create" caption="Sibling Information Form" target="popup"/>
         <invoker type="sibling:open" action="open" caption="Sibling Information Form" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
     </invokers>
     <code>
         <![CDATA[
@@ -12,30 +9,19 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class SiblingInformationFormController
+            class SiblingInformationFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
                 String title = "Sibling Information Form"
-                def entity
-                def handler
                 def selectedEmployment
                 def selectedOtherIncome
                 
-                def init() {
-                    entity = [ employmentList:[], otherIncomeList:[] ]
-                }
-                
-                def approve() {
-                    if( handler ) handler(entity)
-                    return "_close"
-                }
-                
-                def cancel() {
-                    return "_close"
+                public def createEntity() {
+                    return [ employments:[], otherincomes:[] ]
                 }
                 
                 def addEmployment() {
                     def handler = {employment->
-                        entity.employmentList.add(employment)
+                        entity.employments.add(employment)
                         employmentHandler.load()
                     }
                     return InvokerUtil.lookupOpener("employment:create", [handler:handler])
@@ -43,11 +29,11 @@
                 
                 def employmentHandler = [
                     fetchList: {o->
-                        return entity.employmentList
+                        return entity.employments
                     },
                     onRemoveItem: {o->
                         if(MsgBox.confirm("You are about to remove this employment. Continue?")) {
-                            entity.employmentList.remove(o)
+                            entity.employments.remove(o)
                             return true
                         }
                         return false
@@ -56,7 +42,7 @@
                 
                 def addOtherIncome() {
                     def handler = {otherincome->
-                        entity.otherIncomeList.add(otherincome)
+                        entity.otherincomes.add(otherincome)
                         otherIncomeHandler.load()
                     }
                     return InvokerUtil.lookupOpener("otherincome:create", [handler:handler])
@@ -64,11 +50,11 @@
                 
                 def otherIncomeHandler = [
                     fetchList: {o->
-                        return entity.otherIncomeList
+                        return entity.otherincomes
                     },
                     onRemoveItem: {o->
                         if(MsgBox.confirm("You are about to remove this source of income. Continue?")) {
-                            entity.otherIncomeList.remove(o)
+                            entity.otherincomes.remove(o)
                             otherIncomeHandler.load()
                         }
                         return false

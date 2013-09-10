@@ -1,10 +1,7 @@
-<workunit>
+<workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="vehicle:create" action="init" caption="Vehicle Form" target="popup"/>
+        <invoker type="vehicle:create" action="create" caption="Vehicle Form" target="popup"/>
         <invoker type="vehicle:open" action="open" caption="Vehicle Form" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
     </invokers>
     <code>
         <![CDATA[
@@ -12,11 +9,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osirsi2.client.*;
             
-            class VehicleFormController
+            class VehicleFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
                 String title = "Vehicle Form"
-                def entity
-                def handler
                 def hasORCR
                 def kinds = [
                     [key:'1', value:'MOTORCYCLE'], 
@@ -28,18 +23,9 @@
                     [key:'2', value:'PRIVATE']
                 ]
                 
-                def init() {
-                    entity = [:]
+                public def create() {
                     hasORCR = true
-                }
-                
-                def approve() {
-                    if( handler ) handler(entity)
-                    return "_close"
-                }
-                
-                def cancel() {
-                    return "_close"
+                    super.create()
                 }
             }
         ]]>

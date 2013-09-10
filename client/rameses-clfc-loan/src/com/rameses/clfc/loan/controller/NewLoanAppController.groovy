@@ -31,7 +31,7 @@ class NewLoanApplicationController extends CRUDController
         entity.mode = 'ONLINE';
     }
 
-    void initCapture() {
+    def initCapture() {
         create(); 
         entity.mode = 'CAPTURE';
     }
@@ -45,6 +45,10 @@ class NewLoanApplicationController extends CRUDController
     
     def getCustomerLookupHandler() {
         return InvokerUtil.lookupOpener('customer:lookup', [:]); 
+    }
+
+    def getProductTypes() {
+        return prodTypeSvc.getList([:])
     }
 
     def previousLoansHandler = [

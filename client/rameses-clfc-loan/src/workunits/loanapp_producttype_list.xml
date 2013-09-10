@@ -1,0 +1,5 @@
+<workunit extends="wtemplates/ListController.xml" serviceName="LoanProductTypeService" entityName="producttype">
+    <invokers>
+        <invoker folderid="/explorer/master/loan" caption="Product Types"/>
+    </invokers>
+</workunit>

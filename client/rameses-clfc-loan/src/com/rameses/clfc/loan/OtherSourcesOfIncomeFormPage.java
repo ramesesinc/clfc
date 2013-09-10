@@ -7,12 +7,14 @@
 package com.rameses.clfc.loan;
 
 import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
  * @author  Rameses
  */
+@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
 @Template(FormPage.class)
 public class OtherSourcesOfIncomeFormPage extends javax.swing.JPanel {
     

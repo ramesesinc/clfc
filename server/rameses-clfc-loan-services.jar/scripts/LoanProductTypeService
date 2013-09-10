@@ -6,4 +6,19 @@ class LoanProductTypeService extends ActiveCrudListService
 {	
 	@ActiveDB(value='loan_product_type')
 	def em;
+
+	@ProxyMethod
+	public def getColumns( params ) {
+		return [
+			[name:'name', caption:'Name'],
+			[name:'description', caption:'Description'],
+			[name:'term', caption:'Term'],			
+			[name:'interestrate', caption:'Interest Rate'],
+			[name:'pastduerate', caption:'Past Due Rate'],
+			[name:'underpaymentpenalty', caption:'Underpayment Penalty'],
+			[name:'surchargerate', caption:'Surcharge Rate'],
+			[name:'absentpenalty', caption:'Absent Penalty'],
+		]
+
+	}
 }

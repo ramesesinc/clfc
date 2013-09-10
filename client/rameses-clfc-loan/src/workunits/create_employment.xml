@@ -1,10 +1,7 @@
-<workunit>
+<workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="employment:create" action="init" caption="Employment Form" target="popup"/>
-        <invoker type="employment:open" action="open" caption="Employment Form" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>   
+        <invoker type="employment:create" action="create" caption="Employment Form" target="popup"/>
+        <invoker type="employment:open" action="open" caption="Employment Form" target="popup"/>        
     </invokers>
     <code>
         <![CDATA[
@@ -12,11 +9,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             
-            class EmploymentFormController
+            class EmploymentFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
                 String title = "Employment Form"
-                def entity = [:]
-                def handler
                 def statusList = [
                     [key:'1', value:'REGULAR'], 
                     [key:'2', value:'CONTRACTUAL'], 
@@ -24,19 +19,6 @@
                     [key:'4', value:'RETIRED'], 
                     [key:'5', value:'OTHERS']
                 ]
-                
-                def init() {
-                    entity = [:]
-                }
-                
-                def approve() {
-                    if( handler ) handler(entity)
-                    return "_close"
-                }
-                
-                def cancel() {
-                    return "_close"
-                }
             }
         ]]>
     </code>
