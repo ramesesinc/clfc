@@ -13,7 +13,9 @@ class LoanAppPrincipalBorrowerController
     
     @Service('BorrowerService') 
     def service;    
-        
+    
+    def beforeSaveHandlers = [:];
+    
     void setHandlers(handlers) {
         this.handlers = handlers;
         handlers.saveHandler = { save(); }  
@@ -24,6 +26,7 @@ class LoanAppPrincipalBorrowerController
     
     def createOpenerParams() {
         return [
+            beforeSaveHandlers: beforeSaveHandlers, 
             service: service, 
             loanapp: loanapp, 
             mode: caller.mode 
@@ -40,6 +43,10 @@ class LoanAppPrincipalBorrowerController
     ] as TabbedPaneModel 
     
     void save() {
+        beforeSaveHandlers.each{k,v-> 
+            if (v != null) v(); 
+        }
+        
         def data = loanapp.borrower;
         data._loanappid = loanapp.objid; 
         data._loanappno = loanapp.appno;
