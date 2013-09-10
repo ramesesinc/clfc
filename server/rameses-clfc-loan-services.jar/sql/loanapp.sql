@@ -1,3 +1,21 @@
+[getBorrowers] 
+SELECT 
+	lb.borrowerid, lb.type as borrowertype,  
+	b.lastname, b.firstname, b.middlename 
+FROM loanapp_borrower lb 
+	INNER JOIN borrower b ON lb.borrowerid=b.objid 
+WHERE lb.parentid=$P{parentid} 
+
+[getQualifiedIndexNames]
+SELECT borrowername FROM loanapp_borrower_index 
+WHERE loanappid=$P{loanappid} AND borrowertype IN ('principal','joint') 
+
+[findBorrower]
+SELECT * FROM loanapp_borrower WHERE parentid=$P{parentid} AND type=$P{type}  
+
+[removeBorrowerIndices]
+DELETE FROM loanapp_borrower_index WHERE loanappid=$P{loanappid} 
+
 [removeBorrowerIndex]
 DELETE FROM loanapp_borrower_index 
 WHERE loanappid=$P{loanappid} AND borrowerid=$P{borrowerid} 

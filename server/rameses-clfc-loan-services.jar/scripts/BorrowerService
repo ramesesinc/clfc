@@ -8,11 +8,15 @@ class BorrowerService
 	@ActiveDB(value='borrower') 
 	def em;
 
-
 	@ProxyMethod 
 	public def open( data ) {
-		def o = em.read(data); 
+		def o = em.findByObjid(data); 
 		if (o == null) throw new Exception('borrower record not found');
+
+		o.name = createFullName(o.lastname, o.firstname, o.middlename);
+		
+		if (o.spouse == null) o.spouse = [:];
+		o.spouse.name = createFullName(o.spouse.lastname, o.spouse.firstname, o.spouse.middlename); 
 
 		o.children = em.getChildren([borrowerid: o.objid]); 
 		for (item in o.children) {
@@ -21,7 +25,7 @@ class BorrowerService
 		} 
 		o.educations = em.getEducations([borrowerid: o.objid]);
 		o.employments = em.getEmployments([refid: o.objid]);
-		o.parent = em.read(data, 'parent');
+		o.parent = em.findParent(data);
 		if (o.parent == null) o.parent = [:]; 
 
 		o.siblings = em.getSiblings([borrowerid: o.objid]);
@@ -54,9 +58,17 @@ class BorrowerService
 		return data; 
 	}
 
+
+	private String createFullName(lname, fname, mname) {
+		def s = lname + ', ' + fname; 
+		if (mname) s = s + ' ' + mname; 
+
+		return s;
+	}
+
 	private void updateChildren(data) {
-		def oldchildren = em.getChildren([borrowerid: data.objid]); 
-		oldchildren?.each {
+		def list = em.getChildren([borrowerid: data.objid]); 
+		list?.each {
 			em.removeEmployments([refid: it.objid]); 
 			em.removeOtherIncomes([refid: it.objid]);
 		}
@@ -65,17 +77,20 @@ class BorrowerService
 		if (data.children == null) data.children = [];
 
 		for (o in data.children) {
+			o.objid = 'BCHLD'+new UID();
 			o.borrowerid = data.objid; 
 			em.create(o, 'children'); 
 
 			if (o.employments == null) o.employments = [];
 			for (oo in o.employments) { 
+				oo.objid = 'EMPL'+new UID();
 				oo.refid =  o.objid; 
 				em.create(oo, 'employment'); 
 			} 
 
 			if (o.otherincomes == null) o.otherincomes = [];
 			for (oo in o.otherincomes) { 
+				oo.objid = 'SOI'+new UID();
 				oo.refid =  o.objid; 
 				em.create(oo, 'sourceofincome'); 
 			} 
@@ -87,6 +102,7 @@ class BorrowerService
 		if (data.educations == null) data.educations = [];
 
 		for (o in data.educations) { 
+			o.objid = 'EDUC'+new UID();
 			o.borrowerid =  data.objid; 
 			em.create(o, 'education'); 
 		} 
@@ -97,16 +113,20 @@ class BorrowerService
 		if (data.employments == null) data.employments = []; 
 
 		for (o in data.employments) { 
+			o.objid = 'EMPL'+new UID();
 			o.refid =  data.objid; 
 			em.create(o, 'employment'); 
 		} 
 	}
 
 	private void updateParent(data) { 
-		if (data.parent == null) data.parent = [:];
-		data.parent.objid = data.objid;
+		if (!data.parent) {
+			em.removeParent(data); 
+			return;
+		}
 
-		def o = em.read([objid: data.objid], 'parent'); 
+		data.parent.objid = data.objid;
+		def o = em.findParent(data); 
 		if (o == null) { 
 			em.create(data.parent, 'parent'); 
 		} else {
@@ -125,17 +145,20 @@ class BorrowerService
 		if (data.siblings == null) data.siblings = [];
 
 		for (o in data.siblings) {
+			o.objid = 'SIBL'+new UID();
 			o.borrowerid = data.objid; 
 			em.create(o, 'sibling'); 
 
 			if (o.employments == null) o.employments = [];
 			for (oo in o.employments) { 
+				oo.objid = 'EMPL'+new UID();
 				oo.refid =  o.objid; 
 				em.create(oo, 'employment'); 
 			} 
 
 			if (o.otherincomes == null) o.otherincomes = [];
 			for (oo in o.otherincomes) { 
+				oo.objid = 'SOI'+new UID();
 				oo.refid =  o.objid; 
 				em.create(oo, 'sourceofincome'); 
 			} 
@@ -147,6 +170,7 @@ class BorrowerService
 
 		if (data.otherincomes == null) data.otherincomes = [];
 		for (o in data.otherincomes) {
+			o.objid = 'SOI'+new UID();
 			o.refid = data.objid; 
 			em.create(o, 'sourceofincome');
 		}
@@ -157,6 +181,7 @@ class BorrowerService
 
 		if (data.savingaccts == null) data.savingaccts = [];
 		for (o in data.savingaccts) { 
+			o.objid = 'BACCT'+new UID();
 			o.borrowerid = data.objid;  
 			o.type = 'SAVING';
 			em.create(o, 'bankacct'); 
@@ -164,14 +189,16 @@ class BorrowerService
 
 		if (data.checkingaccts == null) data.checkingaccts = [];
 		for (o in data.checkingaccts) {
+			o.objid = 'BACCT'+new UID();
 			o.borrowerid = data.objid; 
 			o.type = 'CHECKING';
 			em.create(o, 'bankacct');
 		}
 
 		if (data.otheracct != null) {
-			data.bankname = 'OTHER';
-			data.type = 'OTHER';
+			data.otheracct.objid = 'BACCT'+new UID();
+			data.otheracct.bankname = 'OTHER';
+			data.otheracct.type = 'OTHER';
 			em.create(data.otheracct, 'bankacct'); 
 		} 
 	} 
