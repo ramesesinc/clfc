@@ -1,0 +1,11 @@
+<workunit>
+    <invokers>
+        <invoker type="loanapp-borrower:plugin" caption=" Savings Account  " index="-92"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.borrower.BorrowerSavingsAccountController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.borrower.BorrowerSavingsAccountPage"/>
+    </pages>
+</workunit>

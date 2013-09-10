@@ -1,0 +1,11 @@
+<workunit>
+    <invokers>
+        <invoker type="loanapp-borrower:plugin" caption=" Children  " index="-98"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.borrower.BorrowerChildrenController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.borrower.BorrowerChildrenPage"/>
+    </pages>
+</workunit>
