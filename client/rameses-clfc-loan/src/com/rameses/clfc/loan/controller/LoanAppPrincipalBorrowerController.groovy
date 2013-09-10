@@ -16,8 +16,10 @@ class LoanAppPrincipalBorrowerController
     
     void setHandlers(handlers) {
         this.handlers = handlers;
+        handlers.saveHandler = { save(); }  
+        if (loanapp.borrower?.objid) return;
+        
         loanapp.borrower = service.open([objid: loanapp.borrower?.objid]); 
-        handlers.saveHandler = { save(); }        
     }
     
     def createOpenerParams() {
