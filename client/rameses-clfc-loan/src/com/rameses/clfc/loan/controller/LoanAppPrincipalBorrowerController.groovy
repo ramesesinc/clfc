@@ -13,7 +13,7 @@ class LoanAppPrincipalBorrowerController
     
     @Service('BorrowerService') 
     def service;    
-    
+        
     void setHandlers(handlers) {
         this.handlers = handlers;
         handlers.saveHandler = { save(); }  
@@ -42,6 +42,7 @@ class LoanAppPrincipalBorrowerController
     void save() {
         def data = loanapp.borrower;
         data._loanappid = loanapp.objid; 
+        data._loanappno = loanapp.appno;
         data._datatype = 'principalborrower';
         service.update(data);
     }
