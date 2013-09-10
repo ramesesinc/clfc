@@ -1,41 +1,55 @@
 import com.rameses.annotations.*;
 import com.rameses.common.*;
 import com.rameses.services.extended.*;
-import java.rmi.server.UID;
 
-class LoanAppService extends ActiveCrudService 
+class LoanAppService 
 {	
 	@ActiveDB(value='loanapp')
 	def em;
 
-	@ActiveDB(value='loanapp_borrower')
-	def lab;
+	@ProxyMethod 
+	public def open( params ) {
+		def data = em.read(params); 
+		if (data == null) throw new Exception('loan application record not found');
 
-	@ActiveDB(value='borrower')
-	def borrower;
+		if (params.name == 'principalborrower') {
+			def borrower = em.findPrincipalBorrower([parentid: data.objid, principalid: data.borrower.objid]); 
+			if (borrower) {
+				def name = borrower.lastname +', ' + borrower.firstname;
+				if (borrower.middlename) name = name + ' ' + borrower.middlename;
 
-	void afterCreate(data) {
-		rebuildBorrower(data); 
+				borrower.name = name;
+				data.borrower = borrower;
+			}
+		}
+		return data;
 	}
 
-	void afterUpdate(data) {
-		lab.removeItems([parentid: data.objid]);		
-		rebuildBorrower(data); 
-	} 
+	@ProxyMethod 
+	public def save( params ) {
+		if (params._uitype == 'principalborrower') {
+			def data = params.borrower;
+			data = em.update(data, 'borrower');
+			em.updatePrincipalBorrower([ 
+				parentid: params._loanappid, 
+				principalid: data.objid
+			]);
+			em.updatePrincipalBorrowerIndex([ 
+				loanappid: params._loanappid, 
+				borrowerid: data.objid, 
+				borrowername: data.name 
+			]); 
 
-	void rebuildBorrower(data) {
-		def o = borrower.read([objid: data.borrower.objid]);
-		if (o == null) {
-			o = [objid: data.borrower.objid, info:data.borrower]; 
-			borrower.create(o, 'info'); 
-		} 
-
-		o = [
-			objid: 			'LAB'+new UID(), 
-			parentid: 		data.objid, 
-			principalid: 	data.borrower.objid,
-			type:  			'principal'
-		];
-		lab.create(o); 		
+			def names = em.getBorrowerNames([parentid: params._loanappid, type:'principal']);
+			names.addAll(em.getBorrowerNames([parentid: params._loanappid, type:'joint'])); 
+			def colls = names.collect{  
+				it.lastname + ', ' + it.firstname + (it.middlename? ' '+it.middlename: '');
+			}
+			em.updateFullBorrowerName([
+				objid: params._loanappid, 
+				fullborrowername: colls.join(' AND ')  
+			]);
+		}
+		return params;
 	}
 }

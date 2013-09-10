@@ -24,8 +24,8 @@ class LoanAppSearchService
 
 	@ProxyMethod 
 	public List getList( params ) { 
-		if (params.state == null) params.state = params._tag;
-
+		params.searchtext = (params.searchtext? params.searchtext: '')+'%'; 
+		params.state = (params.state? param.state: params._tag);		
 		for (o in searchTypes) {
 			params.putAll(o); 
 			def list = em.getList(params);
