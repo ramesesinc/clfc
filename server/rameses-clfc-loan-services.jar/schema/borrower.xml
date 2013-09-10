@@ -80,4 +80,31 @@
 		<field name="remarks"/> 
 	</element>		
 
+	<element name="parent" tablename="borrower_parent"> 
+		<field name="objid" primary="true"/> 
+		<field name="fathername" required="true"/>
+		<field name="fatherage"  required="true"/>
+		<field name="mothername" required="true"/>
+		<field name="motherage"  required="true"/>
+		<field name="address"    required="true"/>
+		<field name="remarks"/>
+	</element>
+
+	<element name="sibling" tablename="borrower_sibling"> 
+		<field name="objid" primary="true"/> 
+		<field name="borrowerid" required="true"/>
+		<field name="name" required="true"/>
+		<field name="age" required="true"/>
+		<field name="address" required="true"/>		
+	</element>
+
+	<element name="bankacct" tablename="borrower_bankacct"> 
+		<field name="objid" primary="true"/> 
+		<field name="borrowerid" required="true"/> 
+		<field name="type"/> 
+		<field name="bankname" required="true"/> 
+		<field name="acctno"/> 
+		<field name="remarks"/> 
+	</element>	
+
 </schema>

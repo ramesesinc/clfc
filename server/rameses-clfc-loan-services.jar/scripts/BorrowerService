@@ -15,11 +15,24 @@ class BorrowerService
 		if (o == null) throw new Exception('borrower record not found');
 
 		o.children = em.getChildren([borrowerid: o.objid]); 
-		for (child in o.children) {
-			child.employments = em.getEmployments([refid: child.objid]); 
-			child.otherincomes = em.getOtherIncomes([refid: child.objid]); 
+		for (item in o.children) {
+			item.employments = em.getEmployments([refid: item.objid]); 
+			item.otherincomes = em.getOtherIncomes([refid: item.objid]); 
 		} 
 		o.educations = em.getEducations([borrowerid: o.objid]);
+		o.employments = em.getEmployments([refid: o.objid]);
+		o.parent = em.read(data, 'parent');
+		if (o.parent == null) o.parent = [:]; 
+
+		o.siblings = em.getSiblings([borrowerid: o.objid]);
+		for (item in o.siblings) {
+			item.employments = em.getEmployments([refid: item.objid]); 
+			item.otherincomes = em.getOtherIncomes([refid: item.objid]); 
+		}
+		o.otherincomes = em.getOtherIncomes([refid: data.objid]); 
+		o.savingaccts = em.getBankAccts([borrowerid: data.objid, type:'SAVING']); 
+		o.checkingaccts = em.getBankAccts([borrowerid: data.objid, type:'CHECKING']); 
+		o.otheracct = em.findBankAcct([borrowerid: data.objid, type:'OTHER']);
 		return o;
 	}
 
@@ -33,6 +46,11 @@ class BorrowerService
 		}
 		updateChildren(data);
 		updateEducations(data);
+		updateEmployments(data);
+		updateParent(data);
+		updateSiblings(data);
+		updateOtherIncomes(data);
+		updateBankAccts(data);
 		return data; 
 	}
 
@@ -72,5 +90,89 @@ class BorrowerService
 			o.borrowerid =  data.objid; 
 			em.create(o, 'education'); 
 		} 
+	} 
+
+	private void updateEmployments(data) {	
+		em.removeEmployments([refid: data.objid]);
+		if (data.employments == null) data.employments = []; 
+
+		for (o in data.employments) { 
+			o.refid =  data.objid; 
+			em.create(o, 'employment'); 
+		} 
 	}
+
+	private void updateParent(data) { 
+		if (data.parent == null) data.parent = [:];
+		data.parent.objid = data.objid;
+
+		def o = em.read([objid: data.objid], 'parent'); 
+		if (o == null) { 
+			em.create(data.parent, 'parent'); 
+		} else {
+			em.update(data.parent, 'parent'); 
+		} 
+	} 
+
+	private void updateSiblings(data) {
+		def list = em.getSiblings([borrowerid: data.objid]); 
+		list?.each {
+			em.removeEmployments([refid: it.objid]); 
+			em.removeOtherIncomes([refid: it.objid]);
+		}
+
+		em.removeSiblings([borrowerid: data.objid]); 
+		if (data.siblings == null) data.siblings = [];
+
+		for (o in data.siblings) {
+			o.borrowerid = data.objid; 
+			em.create(o, 'sibling'); 
+
+			if (o.employments == null) o.employments = [];
+			for (oo in o.employments) { 
+				oo.refid =  o.objid; 
+				em.create(oo, 'employment'); 
+			} 
+
+			if (o.otherincomes == null) o.otherincomes = [];
+			for (oo in o.otherincomes) { 
+				oo.refid =  o.objid; 
+				em.create(oo, 'sourceofincome'); 
+			} 
+		} 
+	} 
+
+	private void updateOtherIncomes(data) { 
+		em.removeOtherIncomes([refid: data.objid]); 
+
+		if (data.otherincomes == null) data.otherincomes = [];
+		for (o in data.otherincomes) {
+			o.refid = data.objid; 
+			em.create(o, 'sourceofincome');
+		}
+	} 
+
+	private void updateBankAccts(data) { 
+		em.removeAllBankAccts([borrowerid: data.objid]); 
+
+		if (data.savingaccts == null) data.savingaccts = [];
+		for (o in data.savingaccts) { 
+			o.borrowerid = data.objid;  
+			o.type = 'SAVING';
+			em.create(o, 'bankacct'); 
+		} 
+
+		if (data.checkingaccts == null) data.checkingaccts = [];
+		for (o in data.checkingaccts) {
+			o.borrowerid = data.objid; 
+			o.type = 'CHECKING';
+			em.create(o, 'bankacct');
+		}
+
+		if (data.otheracct != null) {
+			data.bankname = 'OTHER';
+			data.type = 'OTHER';
+			em.create(data.otheracct, 'bankacct'); 
+		} 
+	} 
 }

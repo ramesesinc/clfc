@@ -24,3 +24,30 @@ SELECT * FROM borrower_education WHERE borrowerid=$P{borrowerid}
 
 [removeEducations]
 DELETE FROM borrower_education WHERE borrowerid=$P{borrowerid} 
+
+[findParent]
+SELECT * FROM borrower_parent WHERE objid=$P{objid} 
+
+[removeParent]
+DELETE FROM borrower_parent WHERE objid=$P{objid} 
+
+[getSiblings]
+SELECT * FROM borrower_sibling WHERE borrowerid=$P{borrowerid} 
+
+[removeSiblings]
+DELETE FROM borrower_sibling WHERE borrowerid=$P{borrowerid} 
+
+[findBankAcct]
+SELECT * FROM borrower_bankacct 
+WHERE borrowerid=$P{borrowerid} AND type=$P{type} 
+
+[getBankAccts]
+SELECT * FROM borrower_bankacct 
+WHERE borrowerid=$P{borrowerid} AND type=$P{type} 
+
+[removeBankAccts]
+DELETE FROM borrower_bankacct 
+WHERE borrowerid=$P{borrowerid} AND type=$P{type} 
+
+[removeAllBankAccts]
+DELETE FROM borrower_bankacct WHERE borrowerid=$P{borrowerid} 
