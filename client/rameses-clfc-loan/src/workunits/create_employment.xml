@@ -1,24 +1,22 @@
 <workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
         <invoker type="employment:create" action="create" caption="Employment Form" target="popup"/>
-        <invoker type="employment:open" action="open" caption="Employment Form" target="popup"/>        
+        <invoker type="employment:open" caption="Employment Form" target="popup"/>        
     </invokers>
     <code>
         <![CDATA[
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
+            import com.rameses.osiris2.common.*;
+            import java.rmi.server.UID;
             
             class EmploymentFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                String title = "Employment Form"
-                def statusList = [
-                    [key:'1', value:'REGULAR'], 
-                    [key:'2', value:'CONTRACTUAL'], 
-                    [key:'3', value:'PROBATIONARY'], 
-                    [key:'4', value:'RETIRED'], 
-                    [key:'5', value:'OTHERS']
-                ]
+                def createEntity() {
+                    return [ objid:'EMP'+new UID() ]
+                }
+                def statusList = LOV.LOAN_EMP_STATUS
             }
         ]]>
     </code>

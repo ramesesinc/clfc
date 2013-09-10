@@ -6,14 +6,16 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
  * @author  Rameses
  */
-@Template(FormPage.class)
+@StyleSheet
+@Template(OKCancelPage.class)
 public class ChildFormPage extends javax.swing.JPanel {
     
     /** Creates new form ChildrenFormPage */
@@ -71,6 +73,7 @@ public class ChildFormPage extends javax.swing.JPanel {
 
         xNumberField1.setCaption("Age");
         xNumberField1.setCaptionWidth(70);
+        xNumberField1.setFieldType(Integer.class);
         xNumberField1.setName("entity.age");
         xNumberField1.setPreferredSize(new java.awt.Dimension(50, 19));
         xNumberField1.setRequired(true);
@@ -129,7 +132,7 @@ public class ChildFormPage extends javax.swing.JPanel {
 
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "kindOfBusiness"}
+                new Object[]{"name", "name"}
                 , new Object[]{"caption", "Source of Income"}
                 , new Object[]{"width", 250}
                 , new Object[]{"minWidth", 0}
@@ -245,8 +248,8 @@ public class ChildFormPage extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        xTextArea1.setCaption("Educational Attainment");
         xTextArea1.setName("entity.educationalAttainment");
-        xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
@@ -280,8 +283,8 @@ public class ChildFormPage extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        xTextArea2.setCaption("Status");
         xTextArea2.setName("entity.status");
-        xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
 

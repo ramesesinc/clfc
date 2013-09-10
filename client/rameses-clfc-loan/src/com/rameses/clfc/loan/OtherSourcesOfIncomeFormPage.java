@@ -6,7 +6,7 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
@@ -15,7 +15,7 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  Rameses
  */
 @StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
-@Template(FormPage.class)
+@Template(OKCancelPage.class)
 public class OtherSourcesOfIncomeFormPage extends javax.swing.JPanel {
     
     /** Creates new form OtherSourcesOfIncomeFormPage */
@@ -40,7 +40,7 @@ public class OtherSourcesOfIncomeFormPage extends javax.swing.JPanel {
         xFormPanel1.setBorder(xTitledBorder1);
         xTextField1.setCaption("Sources of Income");
         xTextField1.setCaptionWidth(120);
-        xTextField1.setName("entity.kindOfBusiness");
+        xTextField1.setName("entity.name");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);

@@ -6,14 +6,16 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
  * @author  Rameses
  */
-@Template(FormPage.class)
+@StyleSheet
+@Template(OKCancelPage.class)
 public class SiblingsFormPage extends javax.swing.JPanel {
     
     /** Creates new form SiblingsInformationFormPage */
@@ -115,7 +117,7 @@ public class SiblingsFormPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "telno"}
+                new Object[]{"name", "contactno"}
                 , new Object[]{"caption", "Tel. No."}
                 , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
@@ -178,7 +180,7 @@ public class SiblingsFormPage extends javax.swing.JPanel {
 
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "kindOfBusiness"}
+                new Object[]{"name", "name"}
                 , new Object[]{"caption", "Sources of Income"}
                 , new Object[]{"width", 200}
                 , new Object[]{"minWidth", 0}

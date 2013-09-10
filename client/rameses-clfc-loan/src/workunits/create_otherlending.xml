@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
         <invoker type="otherlending:create" action="create" caption="Other Lending Form" target="popup"/>
-        <invoker type="otherlending:open" action="open" caption="Other Lending Form" target="popup"/>
+        <invoker type="otherlending:open" caption="Other Lending Form" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
@@ -11,7 +11,6 @@
             
             class OtherLendingFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                String title = "Other Lending Form"
                 def modesOfPayment = [
                     [key:'1', value:'DAILY'], 
                     [key:'2', value:'WEEKLY'], 

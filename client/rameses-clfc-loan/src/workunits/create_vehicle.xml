@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
         <invoker type="vehicle:create" action="create" caption="Vehicle Form" target="popup"/>
-        <invoker type="vehicle:open" action="open" caption="Vehicle Form" target="popup"/>
+        <invoker type="vehicle:open" caption="Vehicle Form" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
@@ -11,7 +11,6 @@
             
             class VehicleFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                String title = "Vehicle Form"
                 def hasORCR
                 def kinds = [
                     [key:'1', value:'MOTORCYCLE'], 

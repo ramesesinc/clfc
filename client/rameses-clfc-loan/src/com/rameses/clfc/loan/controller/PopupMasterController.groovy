@@ -27,15 +27,15 @@ public class PopupMasterController
     public def create() {
         init()
         mode = 'create'
-        return "default"
+        return null
     }
-
-    public def approve() {
+    
+    public def doOk() {
         if( handler ) handler(entity)
-        return close()
+        return "_close"
     }
 
-    public def cancel() {
+    public def doCancel() {
         if( mode == 'edit' ) {
             if( !MsgBox.confirm("Changes will be discarded. Continue?") ) return null
 
@@ -46,20 +46,6 @@ public class PopupMasterController
             mode = 'read'
             return null
         }
-        return close()
-    }
-
-    public def open() {
-        mode = 'read'
-        return null
-    }
-
-    public def edit() {
-        mode = 'edit'
-        binding.refresh()
-    }
-
-    public def close() {
         return "_close"
     }
 }

@@ -1,0 +1,8 @@
+"addEducation" [mode != 'edit']{
+    enabled: false; 
+    background-color: rgb(250,250,250);
+}
+"addEducation" [mode == 'edit']{
+    enabled: true;
+    background-color: #fff;
+}

@@ -8,5 +8,33 @@ import com.rameses.clfc.borrower.*;
 
 class BorrowerChildrenController 
 {
+    def loanapp, mode;
 
+    def childrenHandler = [
+        fetchList: {o->
+            if( loanapp.borrower.children == null ) loanapp.borrower.children = []
+            loanapp.borrower.children.each{ it._filetype = "child" }
+            return loanapp.borrower.children;
+        },
+        onRemoveItem: {o->
+            if( mode == 'edit' ) return false;
+            if(MsgBox.confirm("You are about to remove this child. Continue?")) {
+                loanapp.borrower.children.remove(o);
+                return true;
+            }
+            return false;
+        },
+        getOpenerParams: {o->
+            return [ mode: mode ]
+        }
+    ] as EditorListModel
+
+    def addChild() {
+        def handler = {child->
+            child.borrowerid = loanapp.borrower?.objid;
+            loanapp.borrower.children.add(child);
+            childrenHandler.reload();
+        }
+        return InvokerUtil.lookupOpener("child:create", [handler:handler]);
+    }
 }

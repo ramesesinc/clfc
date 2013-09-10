@@ -1,63 +1,75 @@
 <workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
-        <invoker type="sibling:create" action="create" caption="Sibling Information Form" target="popup"/>
-        <invoker type="sibling:open" action="open" caption="Sibling Information Form" target="popup"/>
+        <invoker type="sibling:create" action="create" caption="Sibling Form" target="popup"/>
+        <invoker type="sibling:open" caption="Sibling Form" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
+            import com.rameses.osiris2.common.*;
+            import java.rmi.server.UID;
             
             class SiblingInformationFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                String title = "Sibling Information Form"
-                def selectedEmployment
-                def selectedOtherIncome
-                
                 public def createEntity() {
-                    return [ employments:[], otherincomes:[] ]
+                    return [ objid:'BS'+new UID() ]
                 }
                 
                 def addEmployment() {
                     def handler = {employment->
-                        entity.employments.add(employment)
-                        employmentHandler.load()
+                        employment.refid = entity.objid;
+                        entity.employments.add(employment);
+                        employmentHandler.reload();
                     }
                     return InvokerUtil.lookupOpener("employment:create", [handler:handler])
                 }
                 
                 def employmentHandler = [
                     fetchList: {o->
+                        if( !entity.employments ) entity.employments = []
+                        entity.employments.each{ it._filetype = "employment" }
                         return entity.employments
                     },
                     onRemoveItem: {o->
+                        if( mode == 'edit' ) return false;
                         if(MsgBox.confirm("You are about to remove this employment. Continue?")) {
                             entity.employments.remove(o)
                             return true
                         }
                         return false
+                    },
+                    getOpenerParams: {o->
+                        return [mode: mode]
                     }
                 ] as EditorListModel
                 
                 def addOtherIncome() {
                     def handler = {otherincome->
-                        entity.otherincomes.add(otherincome)
-                        otherIncomeHandler.load()
+                        otherincome.refid = entity.objid;
+                        entity.otherincomes.add(otherincome);
+                        otherIncomeHandler.reload();
                     }
                     return InvokerUtil.lookupOpener("otherincome:create", [handler:handler])
                 }
                 
                 def otherIncomeHandler = [
                     fetchList: {o->
+                        if( !entity.otherincomes ) entity.otherincomes = []
+                        entity.otherincomes.each{ it._filetype = "otherincome" }
                         return entity.otherincomes
                     },
                     onRemoveItem: {o->
+                        if( mode == 'edit' ) return false;
                         if(MsgBox.confirm("You are about to remove this source of income. Continue?")) {
                             entity.otherincomes.remove(o)
-                            otherIncomeHandler.load()
+                            return true
                         }
                         return false
+                    },
+                    getOpenerParams: {o->
+                        return [mode: mode]
                     }
                 ] as EditorListModel
             }

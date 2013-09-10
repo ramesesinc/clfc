@@ -6,7 +6,7 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  * @author  Rameses
  */
 @StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
-@Template(FormPage.class)
+@Template(OKCancelPage.class)
 public class EmploymentFormPage extends javax.swing.JPanel {
     
     /** Creates new form EmploymentForm */
@@ -54,7 +54,7 @@ public class EmploymentFormPage extends javax.swing.JPanel {
 
         xTextField2.setCaption("Tel. No.");
         xTextField2.setCaptionWidth(100);
-        xTextField2.setName("entity.telno");
+        xTextField2.setName("entity.contactno");
         xTextField2.setPreferredSize(new java.awt.Dimension(100, 19));
         xFormPanel1.add(xTextField2);
 
@@ -79,7 +79,7 @@ public class EmploymentFormPage extends javax.swing.JPanel {
 
         xTextField5.setCaption("Length of Service");
         xTextField5.setCaptionWidth(100);
-        xTextField5.setName("entity.years");
+        xTextField5.setName("entity.lengthofservice");
         xTextField5.setPreferredSize(new java.awt.Dimension(130, 19));
         xFormPanel1.add(xTextField5);
 

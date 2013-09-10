@@ -6,7 +6,7 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
@@ -15,7 +15,7 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  Rameses
  */
 @StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
-@Template(FormPage.class)
+@Template(OKCancelPage.class)
 public class EducationalBackgroundFormPage extends javax.swing.JPanel {
     
     /** Creates new form EducationalBackgroundForm */
@@ -30,6 +30,7 @@ public class EducationalBackgroundFormPage extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
+        xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xTextField1 = new com.rameses.rcp.control.XTextField();
         xTextField2 = new com.rameses.rcp.control.XTextField();
@@ -41,14 +42,14 @@ public class EducationalBackgroundFormPage extends javax.swing.JPanel {
         xFormPanel1.setBorder(xTitledBorder1);
         xTextField1.setCaption("Educational Attainment");
         xTextField1.setCaptionWidth(140);
-        xTextField1.setName("entity.profession");
+        xTextField1.setName("entity.attainment");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("School Attended");
         xTextField2.setCaptionWidth(140);
-        xTextField2.setName("entity.schoolAttended");
+        xTextField2.setName("entity.school");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
@@ -56,7 +57,7 @@ public class EducationalBackgroundFormPage extends javax.swing.JPanel {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 120));
         xTextArea1.setCaption("Remarks");
         xTextArea1.setCaptionWidth(140);
-        xTextArea1.setName("entity.othersSpecs");
+        xTextArea1.setName("entity.remarks");
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
@@ -84,6 +85,7 @@ public class EducationalBackgroundFormPage extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
+    private com.rameses.rcp.control.border.XLineBorder xLineBorder1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField2;

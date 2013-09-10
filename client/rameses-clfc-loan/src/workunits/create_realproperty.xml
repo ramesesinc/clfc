@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
         <invoker type="realproperty:create" action="create" caption="Real Property Form" target="popup"/>
-        <invoker type="realproperty:open" action="open" caption="Real Property Form" target="popup"/>
+        <invoker type="realproperty:open" caption="Real Property Form" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
@@ -11,7 +11,6 @@
             
             class RealPropertyFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                String title = "Real Property Form"
                 def classifications = [
                     [key:'1', value:'RESIDENCIAL'], 
                     [key:'2', value:'AGRICULTURAL']

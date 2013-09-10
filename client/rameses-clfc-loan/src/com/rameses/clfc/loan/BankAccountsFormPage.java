@@ -6,7 +6,7 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
@@ -15,7 +15,7 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  Rameses
  */
 @StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
-@Template(FormPage.class)
+@Template(OKCancelPage.class)
 public class BankAccountsFormPage extends javax.swing.JPanel {
     
     /** Creates new form BankAccountsForm */
@@ -39,7 +39,7 @@ public class BankAccountsFormPage extends javax.swing.JPanel {
         xTitledBorder1.setTitle("Bank Account Information");
         xFormPanel1.setBorder(xTitledBorder1);
         xTextField1.setCaption("Bank Name");
-        xTextField1.setName("entity.bankName");
+        xTextField1.setName("entity.bankname");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);

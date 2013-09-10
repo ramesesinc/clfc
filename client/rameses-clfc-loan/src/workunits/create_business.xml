@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/PopupMasterController.xml">
     <invokers>
         <invoker type="business:create" action="create" caption="Business Form" target="popup"/>
-        <invoker type="business:open" action="open" caption="Business Form" target="popup"/>
+        <invoker type="business:open" caption="Business Form" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
@@ -11,7 +11,6 @@
             
             class BusinessFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                String title = "Business Form"
                 def kinds = [
                     [key:'1', value:'SARI-SARI STORE'], 
                     [key:'2', value:'CARENDERIA'], 
