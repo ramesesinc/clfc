@@ -17,6 +17,8 @@ class LoanAppService
 
 	@ProxyMethod 
 	public def update( params ) {
-		return em.update(params);
+		em.update(params);
+		em.update(params, 'route')
+		return params;
 	}
 }
