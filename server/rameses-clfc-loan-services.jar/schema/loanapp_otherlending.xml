@@ -4,17 +4,17 @@
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/> 
 		<field name="name" required="true"/> 
-		<field name="address" required="true"/> 
-		<field name="kind" required="true"/> 
+		<field name="address"/> 
+		<field name="kind"/> 
 		<field name="amount" required="true"/> 
-		<field name="dtgranted" required="true"/> 
-		<field name="dtmatured" required="true"/> 
-		<field name="term" required="true"/> 
-		<field name="interest" required="true"/> 
-		<field name="paymentmode" required="true"/> 
+		<field name="dtgranted"/> 
+		<field name="dtmatured"/> 
+		<field name="term"/> 
+		<field name="interest"/> 
+		<field name="paymentmode"/> 
 		<field name="paymentamount" required="true"/> 
-		<field name="collateral" required="true"/> 
-		<field name="remarks" required="true"/> 		
+		<field name="collateral"/> 
+		<field name="remarks"/> 
 	</element>
 	
 </schema>

@@ -5,20 +5,28 @@ import com.rameses.services.extended.*;
 class LoanAppService 
 {	
 	@ActiveDB(value='loanapp')
-	def em;
+	def loanapp;
+
+	@ProxyMethod(local=true) 
+	public def getEm() { return loanapp; } 	
 
 	@ProxyMethod 
 	public def open( params ) {
-		def data = em.read(params); 
-		if (data == null) throw new Exception('loan application record not found');
+		def data = loanapp.findByObjid(params); 
+		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found');
 
 		return data;
 	}
 
 	@ProxyMethod 
 	public def update( params ) {
-		em.update(params);
-		em.update(params, 'route')
+		loanapp.update(params);
+		loanapp.update(params, 'route')
 		return params;
+	} 
+
+	@ProxyMethod(local=true) 
+	public void updatePrincipalBorrower(borrower) { 
+		
 	}
 }

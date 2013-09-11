@@ -1,3 +1,6 @@
+[findByObjid]
+SELECT * FROM loanapp WHERE objid=$P{objid} 
+
 [getBorrowers] 
 SELECT 
 	lb.borrowerid, lb.type as borrowertype,  

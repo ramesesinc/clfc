@@ -1,0 +1,54 @@
+import com.rameses.annotations.*;
+import com.rameses.common.*;
+import com.rameses.services.extended.*;
+import java.rmi.server.UID;
+
+class PrincipalBorrowerService 
+{	
+	@ActiveDB(value='loanapp_borrower')
+	def loanapp_borrower; 
+
+	@Service('LoanAppService')
+	def loanAppService; 	
+
+	@Service('BorrowerService')
+	def borrowerService; 	
+
+	@ProxyMethod 
+	public def open( params ) {
+		if (!params.objid) throw new Exception('Please specify objid'); 
+
+		def data = loanAppService.findByObjid(params);
+		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found'); 
+
+		data.borrower = loanapp_borrower.findPrincipalBorrower([parentid: data.objid]); 
+		return data; 
+	} 
+
+	@ProxyMethod 
+	public def update ( params ) {
+		if (!params.objid) throw new Exception('Please specify objid'); 
+
+		def data = loanAppService.findByObjid(params);
+		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found'); 
+
+		def borrower = params.remove('borrower'); 
+		data.borrower.objid = borrower.objid;
+		data.borrower.name = borrowerService.createFullName(borrower.lastname, borrower.firstname, borrower.middlename);
+		loanAppService.update(data); 
+
+		loanapp_borrower.removePrincipalBorrower([parentid: data.objid]); 
+		borrowerService.update(borrower); 
+
+		def lb = [
+			objid: 		 'LBRWR' + new UID(), 
+			parentid: 	 data.objid, 
+			borrowerid:  borrower.objid, 
+			principalid: borrower.objid, 
+			type: 		 'PRINCIPAL' 
+		];
+		loanapp_borrower.create(lb); 
+		data.borrower = borrower; 
+		return data; 
+	} 
+}
