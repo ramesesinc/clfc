@@ -22,5 +22,11 @@ FROM loanapp_borrower lb
 	INNER JOIN borrower b ON lb.borrowerid=b.objid 
 WHERE lb.parentid=$P{parentid} AND lb.type='COMAKER' 
 
+[getBorrowerNames]
+SELECT b.objid, b.lastname, b.firstname, b.middlename, lb.type
+FROM loanapp_borrower lb 
+	INNER JOIN borrower b ON lb.borrowerid=b.objid 
+WHERE lb.parentid=$P{parentid} AND lb.type IN ('PRINCIPAL','JOINT') 
+
 [removeItems]
 DELETE FROM loanapp_borrower WHERE parentid=$P{parentid} 

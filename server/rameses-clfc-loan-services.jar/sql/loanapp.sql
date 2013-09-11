@@ -23,6 +23,9 @@ DELETE FROM loanapp_borrower_index WHERE loanappid=$P{loanappid}
 DELETE FROM loanapp_borrower_index 
 WHERE loanappid=$P{loanappid} AND borrowerid=$P{borrowerid} 
 
+[findSearchIndex]
+SELECT * FROM loanapp_search_index WHERE objid=$P{objid} 
+
 [removeSearchIndex]
 DELETE FROM loanapp_search_index WHERE objid=$P{objid} 
 

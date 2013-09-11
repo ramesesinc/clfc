@@ -3,6 +3,7 @@
 	<element name="loanapp_borrower" tablename="loanapp_borrower">
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/> 
+		<field name="borrowerid" required="true"/>
 		<field name="principalid" required="true"/>
 		<field name="relaterid"/>
 		<field name="type" required="true"/>

@@ -21,9 +21,14 @@ class PrincipalBorrowerService
 		def data = loanAppService.findByObjid(params);
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found'); 
 
-		data.borrower = loanapp_borrower.findPrincipalBorrower([parentid: data.objid]); 
+		data.borrower = openBorrower([objid: data.borrower.objid]); 
 		return data; 
 	} 
+
+	@ProxyMethod 
+	public def openBorrower( params ) {
+		return borrowerService.open(params);  
+	}
 
 	@ProxyMethod 
 	public def update ( params ) {
@@ -36,9 +41,8 @@ class PrincipalBorrowerService
 		data.borrower.objid = borrower.objid;
 		data.borrower.name = borrowerService.createFullName(borrower.lastname, borrower.firstname, borrower.middlename);
 		loanAppService.update(data); 
-
-		loanapp_borrower.removePrincipalBorrower([parentid: data.objid]); 
 		borrowerService.update(borrower); 
+		loanapp_borrower.removePrincipalBorrower([parentid: data.objid]); 
 
 		def lb = [
 			objid: 		 'LBRWR' + new UID(), 
@@ -48,6 +52,14 @@ class PrincipalBorrowerService
 			type: 		 'PRINCIPAL' 
 		];
 		loanapp_borrower.create(lb); 
+
+		def list = loanapp_borrower.getBorrowerNames([parentid: data.objid]); 
+		for (o in list) {
+			o.borrowerid = o.objid; 
+			o.borrowertype = o.type; 			
+			o.borrowername = borrowerService.createFullName(o.lastname, o.firstname, o.middlename); 
+		}
+		loanAppService.updateBorrowerIndices(data.objid, list);  
 		data.borrower = borrower; 
 		return data; 
 	} 

@@ -1,6 +1,7 @@
 import com.rameses.annotations.*;
 import com.rameses.common.*;
 import com.rameses.services.extended.*;
+import java.rmi.server.UID;
 
 class LoanAppService 
 {	
@@ -12,7 +13,7 @@ class LoanAppService
 
 	@ProxyMethod 
 	public def open( params ) {
-		def data = loanapp.findByObjid(params); 
+		def data = findByObjid(params); 
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found');
 
 		return data;
@@ -25,8 +26,36 @@ class LoanAppService
 		return params;
 	} 
 
+
 	@ProxyMethod(local=true) 
-	public void updatePrincipalBorrower(borrower) { 
-		
+	public def findByObjid( params ) {
+		return loanapp.findByObjid(params); 
+	} 
+
+	@ProxyMethod(local=true) 
+	public void updateBorrowerIndices(loanappid, list) { 
+		def data = findByObjid([objid: loanappid]); 
+		loanapp.removeBorrowerIndices([loanappid: data.objid]); 
+		for (o in list) {
+			o.objid = 'BIDX' + new UID();
+			o.loanappid = data.objid;
+			o.loanappno = data.appno;
+			println 'borrower-index-> ' + o;
+			loanapp.create(o, 'borrower_index'); 
+		}
+
+		data.branchcode = data.branch.code;
+		data.branchname = data.branch.name;
+		data.routecode = data.route?.code;
+		data.fullborrowername = list.collect{ it.borrowername }.join(' AND '); 
+		println 'data-> ' + data;
+		def si = loanapp.findSearchIndex([objid: data.objid]);
+		if (si == null) {
+			data.dtposted = data.dtcreated;
+			data.postedby = data.createdby;
+			loanapp.create(data, 'search_index');
+		} else {
+			loanapp.update(data, 'search_index');
+		}
 	}
 }
