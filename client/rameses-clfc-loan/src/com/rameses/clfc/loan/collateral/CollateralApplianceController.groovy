@@ -8,6 +8,22 @@ import com.rameses.osiris2.common.*;
 class CollateralApplianceController
 {
     def loanapp, mode, beforeSaveHandlers;
+    
+    def selectedAppliance;
+    def applianceHandler = [
+        fetchList: {o->
+            if( !loanapp.collateral.appliances ) loanapp.collateral.appliances = [];
+            loanapp.collateral.appliances.each{ it._filetype = "appliance" }
+            return loanapp.collateral.appliances;
+        },
+        onRemoveItem: {o->
+            return removeChildImpl(o); 
+        },
+        getOpenerParams: {o->
+            return [mode: mode];
+        }
+    ] as EditorListModel;
+    
 
     def addAppliance() {
         def handler = {appliance->
@@ -18,22 +34,17 @@ class CollateralApplianceController
         return InvokerUtil.lookupOpener("appliance:create", [handler:handler]);
     }
     
-    def applianceHandler = [
-        fetchList: {o->
-            if( !loanapp.collateral.appliances ) loanapp.collateral.appliances = [];
-            loanapp.collateral.appliances.each{ it._filetype = "appliance" }
-            return loanapp.collateral.appliances;
-        },
-        onRemoveItem: {o->
-            if( mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this appliance. Continue?")) {
-                loanapp.collateral.appliances.remove(o);
-                return true;
-            }
-            return false;
-        },
-        getOpenerParams: {o->
-            return [mode: mode];
-        }
-    ] as EditorListModel
+    void removeChild() {
+        removeChildImpl(selectedAppliance); 
+    }
+    
+    boolean removeChildImpl(o) {
+        if (mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this child. Continue?")) {
+            loanapp.collateral.appliances.remove(o);
+            return true;
+        } else { 
+            return false; 
+        } 
+    }     
 }

@@ -76,9 +76,6 @@ class LoanAppController
         def saveHandler = handlers.saveHandler; 
         if (saveHandler == null) return; 
         
-        //entity._uitype = selectedMenu.name;
-        //entity._loanappid = loanappid;
-        //service.save(entity);
         saveHandler(); 
         mode = 'read';        
     }

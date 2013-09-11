@@ -9,15 +9,7 @@ class BorrowerSavingsAcctController
 {
     def loanapp, mode;
 
-    def addSavingsAcct() {
-        def handler = {acct->
-            acct.borrowerid = loanapp.borrower?.objid;
-            loanapp.borrower.savingaccts.add(acct);
-            savingsAcctHandler.reload();
-        }
-        return InvokerUtil.lookupOpener("saving:create", [handler:handler]);
-    }
-
+    def selectedSavingAcct;
     def savingsAcctHandler = [
         fetchList: {o->
             if( !loanapp.borrower.savingaccts ) loanapp.borrower.savingaccts = [];
@@ -25,15 +17,33 @@ class BorrowerSavingsAcctController
             return loanapp.borrower.savingaccts;
         },
         onRemoveItem: {o->
-            if( mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this account. Continue?")) {
-                loanapp.borrower.savingaccts.remove(o);
-                return true;
-            }
-            return false;
+            return removeItemImpl(o);
         },
         getOpenerParams: {o->
             return [mode: mode]
         }
-    ] as EditorListModel
+    ] as EditorListModel; 
+    
+    def addSavingAcct() {
+        def handler = {acct->
+            acct.borrowerid = loanapp.borrower?.objid;
+            loanapp.borrower.savingaccts.add(acct);
+            savingsAcctHandler.reload();
+        }
+        return InvokerUtil.lookupOpener("saving:create", [handler:handler]);
+    }    
+    
+    void removeSavingAcct() {
+        removeItemImpl(selectedSavingAcct);
+    }
+            
+    boolean removeItemImpl(o) {
+        if (mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this item. Continue?")) {
+            loanapp.borrower.savingaccts.remove(o);
+            return true;
+        } else { 
+            return false; 
+        } 
+    }      
 }

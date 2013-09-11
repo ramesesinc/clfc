@@ -12,42 +12,48 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" alignment="0" attributes="1">
-                      <Component id="xLabel6" min="-2" pref="91" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="1">
-                      <Component id="xLabel5" min="-2" pref="91" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="xTextField3" max="32767" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="xLabel1" max="32767" attributes="1"/>
-                          <Component id="xLabel2" alignment="0" pref="91" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="xTextField1" max="32767" attributes="1"/>
-                          <Component id="xTextField2" alignment="0" pref="239" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="xLabel4" max="32767" attributes="1"/>
-                          <Component id="xLabel3" alignment="0" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="xNumberField1" min="-2" pref="45" max="-2" attributes="0"/>
-                          <Component id="xNumberField2" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="1">
+                              <Component id="xLabel6" min="-2" pref="91" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="1">
+                              <Component id="xLabel5" min="-2" pref="91" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="xTextField3" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="xLabel1" max="32767" attributes="1"/>
+                                  <Component id="xLabel2" alignment="0" min="-2" pref="91" max="-2" attributes="1"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="xTextField1" max="32767" attributes="1"/>
+                                  <Component id="xTextField2" alignment="0" min="-2" pref="239" max="-2" attributes="1"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="xLabel4" max="32767" attributes="1"/>
+                                  <Component id="xLabel3" alignment="0" min="-2" max="-2" attributes="1"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="xNumberField1" min="-2" pref="45" max="-2" attributes="0"/>
+                                  <Component id="xNumberField2" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
+                  <Component id="xLabel7" alignment="0" pref="579" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -55,6 +61,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="xLabel7" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="xLabel1" min="-2" max="-2" attributes="0"/>
@@ -85,7 +93,7 @@
                   <Component id="xLabel6" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="79" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="171" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -111,12 +119,14 @@
     <Component class="com.rameses.rcp.control.XTextField" name="xTextField1">
       <Properties>
         <Property name="caption" type="java.lang.String" value="Father&apos;s Name"/>
+        <Property name="hint" type="java.lang.String" value="Father&apos;s Name"/>
         <Property name="name" type="java.lang.String" value="entity.fathername"/>
       </Properties>
     </Component>
     <Component class="com.rameses.rcp.control.XTextField" name="xTextField2">
       <Properties>
         <Property name="caption" type="java.lang.String" value="Mother&apos;s Name"/>
+        <Property name="hint" type="java.lang.String" value="Mother&apos;s Name"/>
         <Property name="name" type="java.lang.String" value="entity.mothername"/>
       </Properties>
     </Component>
@@ -173,6 +183,7 @@
     <Component class="com.rameses.rcp.control.XTextField" name="xTextField3">
       <Properties>
         <Property name="caption" type="java.lang.String" value="Address"/>
+        <Property name="hint" type="java.lang.String" value="Address"/>
         <Property name="name" type="java.lang.String" value="entity.address"/>
       </Properties>
     </Component>
@@ -202,5 +213,21 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="com.rameses.rcp.control.XLabel" name="xLabel7">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <PropertyBean type="com.rameses.rcp.control.border.XEtchedBorder">
+            <Property name="hideLeft" type="boolean" value="true"/>
+            <Property name="hideRight" type="boolean" value="true"/>
+            <Property name="hideTop" type="boolean" value="true"/>
+          </PropertyBean>
+        </Property>
+        <Property name="fontStyle" type="java.lang.String" value="font-weight:bold;"/>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="50" green="50" red="50" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Parents Information"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

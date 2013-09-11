@@ -8,8 +8,10 @@ import com.rameses.clfc.borrower.*;
 
 class BorrowerChildrenController 
 {
+    //feed by the caller
     def loanapp, mode;
 
+    def selectedChild;
     def childrenHandler = [
         fetchList: {o->
             if( loanapp.borrower.children == null ) loanapp.borrower.children = []
@@ -17,12 +19,7 @@ class BorrowerChildrenController
             return loanapp.borrower.children;
         },
         onRemoveItem: {o->
-            if( mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this child. Continue?")) {
-                loanapp.borrower.children.remove(o);
-                return true;
-            }
-            return false;
+            return removeChildImpl(o);
         },
         getOpenerParams: {o->
             return [ mode: mode ]
@@ -37,4 +34,18 @@ class BorrowerChildrenController
         }
         return InvokerUtil.lookupOpener("child:create", [handler:handler]);
     }
+    
+    void removeChild() {
+        removeChildImpl(selectedChild); 
+    }
+    
+    boolean removeChildImpl(o) {
+        if (mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this child. Continue?")) {
+            loanapp.borrower.children.remove(o);
+            return true;
+        } else { 
+            return false; 
+        } 
+    } 
 }

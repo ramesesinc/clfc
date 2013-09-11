@@ -23,7 +23,7 @@ class BorrowerGeneralInfoController
             'query.loanappid': loanapp.objid, 
             onselect: {o-> 
                 def borrower = null; 
-                try { borrower = service.open([objid: o.objid]); } catch(Throwable t){;} 
+                try { borrower = service.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
                 
                 if (borrower == null) { 
                     entity.putAll(o); 

@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-collateral:plugin" caption=" Property(ies) " index="-98"/>
+        <invoker type="loanapp-collateral:plugin" caption=" Property(ies)   " index="-98"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.collateral.CollateralPropertyController"/>

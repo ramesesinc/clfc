@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-collateral:plugin" action="init" caption=" Other Collateral(s) " index="-97"/>
+        <invoker type="loanapp-collateral:plugin" action="init" caption=" Other Collateral(s)   " index="-97"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.collateral.CollateralOtherController"/>

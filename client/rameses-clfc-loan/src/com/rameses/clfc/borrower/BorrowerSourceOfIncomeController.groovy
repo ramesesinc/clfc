@@ -7,7 +7,22 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerSourceOfIncomeController
 {
-    def loanapp, mode;
+    def loanapp, mode;   
+
+    def selectedOtherIncome;
+    def otherIncomeHandler = [
+        fetchList: {o->
+            if( !loanapp.borrower.otherincomes ) loanapp.borrower.otherincomes = [];
+            loanapp.borrower.otherincomes.each{ it._filetype = "otherincome"; }
+            return loanapp.borrower.otherincomes;
+        },
+        onRemoveItem: {o->
+            return removeItemImpl(o);
+        },
+        getOpenerParams: {o->
+            return [mode: mode]
+        }
+    ] as EditorListModel;
     
     def addOtherIncome() {
         def handler = {otherincome->
@@ -17,23 +32,18 @@ class BorrowerSourceOfIncomeController
         }
         return InvokerUtil.lookupOpener("otherincome:create", [handler:handler]);
     }
-
-    def otherIncomeHandler = [
-        fetchList: {o->
-            if( !loanapp.borrower.otherincomes ) loanapp.borrower.otherincomes = [];
-            loanapp.borrower.otherincomes.each{ it._filetype = "otherincome"; }
-            return loanapp.borrower.otherincomes;
-        },
-        onRemoveItem: {o->
-            if( mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this source of income. Continue?")) {
-                loanapp.borrower.otherincomes.remove(o);
-                return true;
-            }
-            return false;
-        },
-        getOpenerParams: {o->
-            return [mode: mode]
-        }
-    ] as EditorListModel
+    
+    void removeOtherIncome() {
+        removeItemImpl(selectedOtherIncome);
+    }
+            
+    boolean removeItemImpl(o) {
+        if (mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this item. Continue?")) {
+            loanapp.borrower.otherincomes.remove(o);
+            return true;
+        } else { 
+            return false; 
+        } 
+    }    
 }

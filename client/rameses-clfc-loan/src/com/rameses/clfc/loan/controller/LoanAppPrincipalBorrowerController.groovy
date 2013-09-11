@@ -11,16 +11,18 @@ class LoanAppPrincipalBorrowerController
     //feed by the caller
     def loanapp, caller, handlers;
     
-    @Service('BorrowerService') 
+    @Service('PrincipalBorrowerService') 
     def service;    
     
     def beforeSaveHandlers = [:];
 
     void init() {
-        handlers.saveHandler = { save(); }  
-        if (loanapp.borrower?.objid == null) return;
+        if (loanapp.objid == null) return;
         
-        loanapp.borrower = service.open([objid: loanapp.borrower.objid]); 
+        handlers.saveHandler = { save(); }          
+        def data = service.open([objid: loanapp.objid]); 
+        loanapp.clear();
+        loanapp.putAll(data); 
     }
 
     def createOpenerParams() {
@@ -46,10 +48,10 @@ class LoanAppPrincipalBorrowerController
             if (v != null) v(); 
         }
         
-        def data = loanapp.borrower;
-        data._loanappid = loanapp.objid; 
-        data._loanappno = loanapp.appno;
-        data._datatype = 'principalborrower';
+        def data = [
+            objid: loanapp.objid, 
+            borrower: loanapp.borrower 
+        ]; 
         service.update(data);
     }
 }

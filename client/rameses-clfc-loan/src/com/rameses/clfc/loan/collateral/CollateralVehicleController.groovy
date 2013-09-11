@@ -9,6 +9,21 @@ class CollateralVehicleController
 {
     def loanapp, mode, beforeSaveHandlers;
     
+    def selectedVehicle;
+    def vehicleHandler = [
+        fetchList: {o->
+            if( !loanapp.collateral.vehicles ) loanapp.collateral.vehicles = [];
+            loanapp.collateral.vehicles.each{ it._filetype = "vehicle" }
+            return loanapp.collateral.vehicles;
+        },
+        onRemoveItem: {o->
+            return removeChildImpl(o); 
+        },
+        getOpenerParams: {o->
+            return [mode: mode];
+        }
+    ] as EditorListModel;
+    
     def addVehicle() {
         def handler = {vehicle->
             vehicle.parentid = loanapp.objid;
@@ -18,22 +33,17 @@ class CollateralVehicleController
         return InvokerUtil.lookupOpener("vehicle:create", [handler:handler]);
     }
     
-    def vehicleHandler = [
-        fetchList: {o->
-            if( !loanapp.collateral.vehicles ) loanapp.collateral.vehicles = [];
-            loanapp.collateral.vehicles.each{ it._filetype = "vehicle" }
-            return loanapp.collateral.vehicles;
-        },
-        onRemoveItem: {o->
-            if( mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this vehicle. Continue?")) {
-                loanapp.collateral.vehicles.remove(o);
-                return true;
-            }
-            return false;
-        },
-        getOpenerParams: {o->
-            return [mode: mode];
-        }
-    ] as EditorListModel;
+    void removeChild() {
+        removeChildImpl(selectedVehicle); 
+    }
+    
+    boolean removeChildImpl(o) {
+        if (mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this child. Continue?")) {
+            loanapp.collateral.vehicles.remove(o);
+            return true;
+        } else { 
+            return false; 
+        } 
+    }     
 }

@@ -9,15 +9,7 @@ class BorrowerSiblingsController
 {
     def loanapp, mode;
 
-    def addSibling() {
-        def handler = {sibling->
-            sibling.borrowerid = loanapp.borrower?.objid;
-            loanapp.borrower.siblings.add(sibling);
-            siblingsHandler.reload();
-        }
-        return InvokerUtil.lookupOpener("sibling:create", [handler:handler])
-    }
-
+    def selectedSibling;
     def siblingsHandler = [
         fetchList: {o->
             if( loanapp.borrower.siblings == null ) loanapp.borrower.siblings = [];
@@ -25,15 +17,33 @@ class BorrowerSiblingsController
             return loanapp.borrower.siblings;
         },
         onRemoveItem: {o->
-            if( mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this sibling. Continue?")) {
-                loanapp.borrower.siblings.remove(o);
-                return true;
-            }
-            return false;
+            return removeItemImpl(o);
         },
         getOpenerParams: {o->
             return [mode: mode]
         }
-    ] as EditorListModel
+    ] as EditorListModel;
+    
+    def addSibling() {
+        def handler = {sibling->
+            sibling.borrowerid = loanapp.borrower?.objid;
+            loanapp.borrower.siblings.add(sibling);
+            siblingsHandler.reload();
+        }
+        return InvokerUtil.lookupOpener("sibling:create", [handler:handler])
+    }    
+    
+    void removeSibling() {
+        removeItemImpl(selectedSibling);
+    }
+            
+    boolean removeItemImpl(o) {
+        if (mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this item. Continue?")) {
+            loanapp.borrower.siblings.remove(o);
+            return true;
+        } else { 
+            return false; 
+        } 
+    }    
 }
