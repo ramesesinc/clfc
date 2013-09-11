@@ -1,17 +1,17 @@
-package com.rameses.clfc.loan.controller;
+package com.rameses.clfc.loan.business;
 
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 
-class LoanAppDetailController 
+class LoanAppBusinessController 
 {
     //feed by the caller
     def loanapp, caller, handlers;
     
-    @Service('LoanAppService') 
-    def service;    
+    @Service('LoanAppBusinessService') 
+    def service; 
     
     def entity = [:];
     

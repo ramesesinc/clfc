@@ -1,0 +1,11 @@
+<workunit>
+    <invokers>
+        <invoker type="loanapp-collateral:open" caption="Collateral"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.collateral.LoanAppCollateralController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.collateral.LoanAppCollateralPage"/>
+    </pages>
+</workunit>
