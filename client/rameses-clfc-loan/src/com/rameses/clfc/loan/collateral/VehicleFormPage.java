@@ -4,7 +4,7 @@
  * Created on September 2, 2013, 1:31 PM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.collateral;
 
 import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
-@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
+@StyleSheet
 @Template(OKCancelPage.class)
 public class VehicleFormPage extends javax.swing.JPanel {
     
@@ -94,7 +94,7 @@ public class VehicleFormPage extends javax.swing.JPanel {
 
         xTextField3.setCaption("Body Type");
         xTextField3.setCaptionWidth(135);
-        xTextField3.setName("entity.type");
+        xTextField3.setName("entity.bodytype");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField3.setRequired(true);
         xFormPanel1.add(xTextField3);
@@ -104,28 +104,28 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xComboBox2.setExpression("#{item.value}");
         xComboBox2.setItemKey("value");
         xComboBox2.setItems("uses");
-        xComboBox2.setName("entity.use");
+        xComboBox2.setName("entity.usetype");
         xComboBox2.setPreferredSize(new java.awt.Dimension(120, 19));
         xComboBox2.setRequired(true);
         xFormPanel1.add(xComboBox2);
 
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(135);
-        xDateField1.setName("entity.dateAcquired");
+        xDateField1.setName("entity.dtacquired");
         xDateField1.setPreferredSize(new java.awt.Dimension(100, 19));
         xDateField1.setRequired(true);
         xFormPanel1.add(xDateField1);
 
         xTextField4.setCaption("Acquired From");
         xTextField4.setCaptionWidth(135);
-        xTextField4.setName("entity.acquiredFrom");
+        xTextField4.setName("entity.acquiredfrom");
         xTextField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField4.setRequired(true);
         xFormPanel1.add(xTextField4);
 
         xTextField5.setCaption("Registered Name");
         xTextField5.setCaptionWidth(135);
-        xTextField5.setName("entity.registeredName");
+        xTextField5.setName("entity.registeredname");
         xTextField5.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField5.setRequired(true);
         xFormPanel1.add(xTextField5);
@@ -154,7 +154,8 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xNumberField1.setCaption("Market/Appraisal Value");
         xNumberField1.setCaptionWidth(135);
         xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.appraisedvalue");
+        xNumberField1.setName("entity.marketvalue");
+        xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(100, 19));
         xNumberField1.setRequired(true);
         xFormPanel1.add(xNumberField1);
@@ -165,7 +166,7 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xFormPanel2.setPadding(new java.awt.Insets(3, 0, 0, 0));
         xCheckBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        xCheckBox1.setName("hasORCR");
+        xCheckBox1.setName("orcr");
         xCheckBox1.setOpaque(false);
         xCheckBox1.setPreferredSize(new java.awt.Dimension(53, 19));
         xCheckBox1.setShowCaption(false);
@@ -174,68 +175,77 @@ public class VehicleFormPage extends javax.swing.JPanel {
 
         xTextField9.setCaption("CR No.");
         xTextField9.setCaptionWidth(110);
-        xTextField9.setName("entity.crno");
+        xTextField9.setDepends(new String[] {"orcr"});
+        xTextField9.setName("entity.orcr.crno");
         xTextField9.setPreferredSize(new java.awt.Dimension(0, 19));
-        xTextField9.setRequired(true);
         xFormPanel2.add(xTextField9);
 
         xTextField10.setCaption("Fuel");
         xTextField10.setCaptionWidth(110);
-        xTextField10.setName("entity.fuel");
+        xTextField10.setDepends(new String[] {"orcr"});
+        xTextField10.setName("entity.orcr.fuel");
         xTextField10.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xTextField10);
 
         xTextField11.setCaption("Denomination");
         xTextField11.setCaptionWidth(110);
-        xTextField11.setName("entity.denomination");
+        xTextField11.setDepends(new String[] {"orcr"});
+        xTextField11.setName("entity.orcr.denomination");
         xTextField11.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xTextField11);
 
         xTextField12.setCaption("Series");
         xTextField12.setCaptionWidth(110);
-        xTextField12.setName("entity.series");
+        xTextField12.setDepends(new String[] {"orcr"});
+        xTextField12.setName("entity.orcr.seriesno");
         xTextField12.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xTextField12);
 
         xNumberField7.setCaption("Piston Displacement");
         xNumberField7.setCaptionWidth(110);
+        xNumberField7.setDepends(new String[] {"orcr"});
         xNumberField7.setFieldType(BigDecimal.class);
-        xNumberField7.setName("entity.pistondisplacement");
+        xNumberField7.setName("entity.orcr.pistondisplacement");
         xNumberField7.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField7);
 
         xNumberField2.setCaption("No. of cylinders");
         xNumberField2.setCaptionWidth(110);
+        xNumberField2.setDepends(new String[] {"orcr"});
         xNumberField2.setFieldType(BigDecimal.class);
-        xNumberField2.setName("entity.noofcylinders");
+        xNumberField2.setName("entity.orcr.noofcylinders");
         xNumberField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField2);
 
         xNumberField3.setCaption("Net Wt.");
         xNumberField3.setCaptionWidth(110);
+        xNumberField3.setDepends(new String[] {"orcr"});
         xNumberField3.setFieldType(BigDecimal.class);
-        xNumberField3.setName("entity.netwt");
+        xNumberField3.setName("entity.orcr.netwt");
         xNumberField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField3);
 
         xNumberField4.setCaption("Gross Wt.");
         xNumberField4.setCaptionWidth(110);
+        xNumberField4.setDepends(new String[] {"orcr"});
         xNumberField4.setFieldType(BigDecimal.class);
-        xNumberField4.setName("entity.grosswt");
+        xNumberField4.setName("entity.orcr.grosswt");
         xNumberField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField4);
 
         xNumberField5.setCaption("Net Capacity");
         xNumberField5.setCaptionWidth(110);
+        xNumberField5.setDepends(new String[] {"orcr"});
         xNumberField5.setFieldType(BigDecimal.class);
-        xNumberField5.setName("entity.netcap");
+        xNumberField5.setName("entity.orcr.netcapacity");
         xNumberField5.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField5);
 
         xNumberField6.setCaption("Shipping Wt.");
         xNumberField6.setCaptionWidth(110);
+        xNumberField6.setDepends(new String[] {"orcr"});
         xNumberField6.setFieldType(BigDecimal.class);
-        xNumberField6.setName("entity.shipwt");
+        xNumberField6.setName("entity.orcr.shipwt");
         xNumberField6.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel2.add(xNumberField6);
 

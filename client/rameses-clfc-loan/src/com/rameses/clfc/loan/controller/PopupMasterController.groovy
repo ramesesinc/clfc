@@ -43,8 +43,6 @@ public class PopupMasterController
                 changeLog.undoAll()
                 changeLog.clear()
             }
-            mode = 'read'
-            return null
         }
         return "_close"
     }

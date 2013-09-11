@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="otherlending:create" action="create" caption="Other Lending Form" target="popup"/>
         <invoker type="otherlending:open" caption="Other Lending Form" target="popup"/>
@@ -8,18 +8,15 @@
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
+            import com.rameses.clfc.util.LoanUtil;
             
             class OtherLendingFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                def modesOfPayment = [
-                    [key:'1', value:'DAILY'], 
-                    [key:'2', value:'WEEKLY'], 
-                    [key:'3', value:'MONTHLY']
-                ]
+                def modesOfPayment = LoanUtil.otherLendingModesOfPayment;
             }
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.OtherLendingFormPage"/>
+        <page template="com.rameses.clfc.loan.otherlending.OtherLendingFormPage"/>
     </pages>
 </workunit>

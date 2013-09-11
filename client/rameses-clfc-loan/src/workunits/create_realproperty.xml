@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="realproperty:create" action="create" caption="Real Property Form" target="popup"/>
         <invoker type="realproperty:open" caption="Real Property Form" target="popup"/>
@@ -8,28 +8,17 @@
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
+            import com.rameses.clfc.util.LoanUtil;
             
             class RealPropertyFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                def classifications = [
-                    [key:'1', value:'RESIDENCIAL'], 
-                    [key:'2', value:'AGRICULTURAL']
-                ]
-                def uomList = [
-                    [key:'1', value:'sqm'], 
-                    [key:'2', value:'hectares']
-                ]
-                def modesOfAcquisition = [
-                    [key:'1', value:'INHERETED'], 
-                    [key:'2', value:'SALE'], 
-                    [key:'3', value:'DONATION'], 
-                    [key:'4', value:'GRANTS/AWARDS'], 
-                    [key:'5', value:'OTHERS']
-                ]
+                def classifications = LoanUtil.propertyClassificationTypes;
+                def uomList = LoanUtil.propertyUomTypes;
+                def modesOfAcquisition = LoanUtil.propertyModeOfAcquisitionTypes;
             }
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.RealPropertyFormPage"/>
+        <page template="com.rameses.clfc.loan.collateral.RealPropertyFormPage"/>
     </pages>
 </workunit>

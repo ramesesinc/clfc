@@ -95,7 +95,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Body Type"/>
                 <Property name="captionWidth" type="int" value="135"/>
-                <Property name="name" type="java.lang.String" value="entity.type"/>
+                <Property name="name" type="java.lang.String" value="entity.bodytype"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -109,7 +109,7 @@
                 <Property name="expression" type="java.lang.String" value="#{item.value}"/>
                 <Property name="itemKey" type="java.lang.String" value="value"/>
                 <Property name="items" type="java.lang.String" value="uses"/>
-                <Property name="name" type="java.lang.String" value="entity.use"/>
+                <Property name="name" type="java.lang.String" value="entity.usetype"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[120, 19]"/>
                 </Property>
@@ -120,7 +120,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Date Acquired"/>
                 <Property name="captionWidth" type="int" value="135"/>
-                <Property name="name" type="java.lang.String" value="entity.dateAcquired"/>
+                <Property name="name" type="java.lang.String" value="entity.dtacquired"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[100, 19]"/>
                 </Property>
@@ -131,7 +131,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Acquired From"/>
                 <Property name="captionWidth" type="int" value="135"/>
-                <Property name="name" type="java.lang.String" value="entity.acquiredFrom"/>
+                <Property name="name" type="java.lang.String" value="entity.acquiredfrom"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -142,7 +142,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Registered Name"/>
                 <Property name="captionWidth" type="int" value="135"/>
-                <Property name="name" type="java.lang.String" value="entity.registeredName"/>
+                <Property name="name" type="java.lang.String" value="entity.registeredname"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -189,7 +189,8 @@
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.appraisedvalue"/>
+                <Property name="name" type="java.lang.String" value="entity.marketvalue"/>
+                <Property name="pattern" type="java.lang.String" value="#,##0.00"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[100, 19]"/>
                 </Property>
@@ -220,7 +221,7 @@
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[0, 0, 0, 0]"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="hasORCR"/>
+                <Property name="name" type="java.lang.String" value="orcr"/>
                 <Property name="opaque" type="boolean" value="false"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[53, 19]"/>
@@ -233,18 +234,27 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="CR No."/>
                 <Property name="captionWidth" type="int" value="110"/>
-                <Property name="name" type="java.lang.String" value="entity.crno"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
+                <Property name="name" type="java.lang.String" value="entity.orcr.crno"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
-                <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
             <Component class="com.rameses.rcp.control.XTextField" name="xTextField10">
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Fuel"/>
                 <Property name="captionWidth" type="int" value="110"/>
-                <Property name="name" type="java.lang.String" value="entity.fuel"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
+                <Property name="name" type="java.lang.String" value="entity.orcr.fuel"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -254,7 +264,12 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Denomination"/>
                 <Property name="captionWidth" type="int" value="110"/>
-                <Property name="name" type="java.lang.String" value="entity.denomination"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
+                <Property name="name" type="java.lang.String" value="entity.orcr.denomination"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -264,7 +279,12 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Series"/>
                 <Property name="captionWidth" type="int" value="110"/>
-                <Property name="name" type="java.lang.String" value="entity.series"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
+                <Property name="name" type="java.lang.String" value="entity.orcr.seriesno"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -274,10 +294,15 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Piston Displacement"/>
                 <Property name="captionWidth" type="int" value="110"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.pistondisplacement"/>
+                <Property name="name" type="java.lang.String" value="entity.orcr.pistondisplacement"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -287,10 +312,15 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="No. of cylinders"/>
                 <Property name="captionWidth" type="int" value="110"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.noofcylinders"/>
+                <Property name="name" type="java.lang.String" value="entity.orcr.noofcylinders"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -300,10 +330,15 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Net Wt."/>
                 <Property name="captionWidth" type="int" value="110"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.netwt"/>
+                <Property name="name" type="java.lang.String" value="entity.orcr.netwt"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -313,10 +348,15 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Gross Wt."/>
                 <Property name="captionWidth" type="int" value="110"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.grosswt"/>
+                <Property name="name" type="java.lang.String" value="entity.orcr.grosswt"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -326,10 +366,15 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Net Capacity"/>
                 <Property name="captionWidth" type="int" value="110"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.netcap"/>
+                <Property name="name" type="java.lang.String" value="entity.orcr.netcapacity"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -339,10 +384,15 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Shipping Wt."/>
                 <Property name="captionWidth" type="int" value="110"/>
+                <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="orcr"/>
+                  </StringArray>
+                </Property>
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.shipwt"/>
+                <Property name="name" type="java.lang.String" value="entity.orcr.shipwt"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>

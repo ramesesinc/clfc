@@ -59,7 +59,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Kind of Loan"/>
                 <Property name="captionWidth" type="int" value="130"/>
-                <Property name="name" type="java.lang.String" value="entity.kindofLoan"/>
+                <Property name="name" type="java.lang.String" value="entity.kind"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -69,7 +69,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Name of Lending Inst."/>
                 <Property name="captionWidth" type="int" value="130"/>
-                <Property name="name" type="java.lang.String" value="entity.company"/>
+                <Property name="name" type="java.lang.String" value="entity.name"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -107,7 +107,8 @@
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.loanAmount"/>
+                <Property name="name" type="java.lang.String" value="entity.amount"/>
+                <Property name="pattern" type="java.lang.String" value="#,##0.00"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -134,7 +135,7 @@
                 <Property name="expression" type="java.lang.String" value="#{item.value}"/>
                 <Property name="itemKey" type="java.lang.String" value="value"/>
                 <Property name="items" type="java.lang.String" value="modesOfPayment"/>
-                <Property name="name" type="java.lang.String" value="entity.modeofPayment"/>
+                <Property name="name" type="java.lang.String" value="entity.paymentmode"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[100, 19]"/>
                 </Property>
@@ -147,7 +148,8 @@
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.lendingPayment"/>
+                <Property name="name" type="java.lang.String" value="entity.paymentamount"/>
+                <Property name="pattern" type="java.lang.String" value="#,##0.00"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[120, 19]"/>
                 </Property>
@@ -171,7 +173,7 @@
             <Component class="com.rameses.rcp.control.XDateField" name="xDateField1">
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Date Granted"/>
-                <Property name="name" type="java.lang.String" value="entity.dateGranted"/>
+                <Property name="name" type="java.lang.String" value="entity.dtgranted"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -180,7 +182,7 @@
             <Component class="com.rameses.rcp.control.XDateField" name="xDateField2">
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Maturity Date"/>
-                <Property name="name" type="java.lang.String" value="entity.maturityDate"/>
+                <Property name="name" type="java.lang.String" value="entity.dtmatured"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 19]"/>
                 </Property>
@@ -192,7 +194,7 @@
                 <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="BigDecimal.class" type="code"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.interestRate"/>
+                <Property name="name" type="java.lang.String" value="entity.interest"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[50, 19]"/>
                 </Property>
@@ -262,7 +264,7 @@
           <SubComponents>
             <Component class="com.rameses.rcp.control.XTextArea" name="xTextArea2">
               <Properties>
-                <Property name="name" type="java.lang.String" value="entity.collateralOffered"/>
+                <Property name="name" type="java.lang.String" value="entity.collateral"/>
                 <Property name="textCase" type="com.rameses.rcp.constant.TextCase" editor="com.rameses.beaninfo.editor.TextCasePropertyEditor">
                   <SerializedValue value="-84,-19,0,5,126,114,0,33,99,111,109,46,114,97,109,101,115,101,115,46,114,99,112,46,99,111,110,115,116,97,110,116,46,84,101,120,116,67,97,115,101,0,0,0,0,0,0,0,0,18,0,0,120,114,0,14,106,97,118,97,46,108,97,110,103,46,69,110,117,109,0,0,0,0,0,0,0,0,18,0,0,120,112,116,0,5,85,80,80,69,82"/>
                 </Property>

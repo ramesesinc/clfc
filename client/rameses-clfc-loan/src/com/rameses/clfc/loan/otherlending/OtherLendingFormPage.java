@@ -4,7 +4,7 @@
  * Created on September 2, 2013, 11:25 AM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.otherlending;
 
 import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
-@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
+@StyleSheet
 @Template(OKCancelPage.class)
 public class OtherLendingFormPage extends javax.swing.JPanel {
     
@@ -61,13 +61,13 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
         xTextField1.setCaption("Kind of Loan");
         xTextField1.setCaptionWidth(130);
-        xTextField1.setName("entity.kindofLoan");
+        xTextField1.setName("entity.kind");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("Name of Lending Inst.");
         xTextField2.setCaptionWidth(130);
-        xTextField2.setName("entity.company");
+        xTextField2.setName("entity.name");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
@@ -85,7 +85,8 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xNumberField1.setCaption("Loan Amount");
         xNumberField1.setCaptionWidth(130);
         xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.loanAmount");
+        xNumberField1.setName("entity.amount");
+        xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField1.setRequired(true);
         xFormPanel2.add(xNumberField1);
@@ -102,14 +103,15 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xComboBox1.setExpression("#{item.value}");
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("modesOfPayment");
-        xComboBox1.setName("entity.modeofPayment");
+        xComboBox1.setName("entity.paymentmode");
         xComboBox1.setPreferredSize(new java.awt.Dimension(100, 19));
         xFormPanel2.add(xComboBox1);
 
         xNumberField3.setCaption("Payment");
         xNumberField3.setCaptionWidth(130);
         xNumberField3.setFieldType(BigDecimal.class);
-        xNumberField3.setName("entity.lendingPayment");
+        xNumberField3.setName("entity.paymentamount");
+        xNumberField3.setPattern("#,##0.00");
         xNumberField3.setPreferredSize(new java.awt.Dimension(120, 19));
         xNumberField3.setRequired(true);
         xFormPanel2.add(xNumberField3);
@@ -119,18 +121,18 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
 
         xFormPanel3.setPadding(new java.awt.Insets(7, 0, 0, 0));
         xDateField1.setCaption("Date Granted");
-        xDateField1.setName("entity.dateGranted");
+        xDateField1.setName("entity.dtgranted");
         xDateField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel3.add(xDateField1);
 
         xDateField2.setCaption("Maturity Date");
-        xDateField2.setName("entity.maturityDate");
+        xDateField2.setName("entity.dtmatured");
         xDateField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel3.add(xDateField2);
 
         xNumberField4.setCaption("Interest Rate");
         xNumberField4.setFieldType(BigDecimal.class);
-        xNumberField4.setName("entity.interestRate");
+        xNumberField4.setName("entity.interest");
         xNumberField4.setPreferredSize(new java.awt.Dimension(50, 19));
         xFormPanel3.add(xNumberField4);
 
@@ -154,7 +156,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         jPanel1.add(xLabel2);
         xLabel2.setBounds(10, 260, 110, 20);
 
-        xTextArea2.setName("entity.collateralOffered");
+        xTextArea2.setName("entity.collateral");
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
 

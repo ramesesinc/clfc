@@ -1,35 +1,44 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="vehicle:create" action="create" caption="Vehicle Form" target="popup"/>
-        <invoker type="vehicle:open" caption="Vehicle Form" target="popup"/>
+        <invoker type="vehicle:open" action="open" caption="Vehicle Form" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
             import com.rameses.osirsi2.client.*;
+            import com.rameses.clfc.util.LoanUtil;
             
             class VehicleFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
-                def hasORCR
-                def kinds = [
-                    [key:'1', value:'MOTORCYCLE'], 
-                    [key:'2', value:'PUJ'], 
-                    [key:'3', value:'OTHERS']
-                ]
-                def uses = [
-                    [key:'1', value:'FOR HIRE'], 
-                    [key:'2', value:'PRIVATE']
+                def kinds = LoanUtil.vehicleKinds;
+                def uses = LoanUtil.vehicleUses;
+                def orcr = true
+                
+                @PropertyChangeListener
+                def listener = [
+                    "orcr": {o->
+                        if(o == false) entity.orcr = [:];
+                        binding.refresh('entity.orcr');
+                    }
                 ]
                 
-                public def create() {
-                    hasORCR = true
-                    super.create()
+                public def open() {
+                    if( !entity.orcr?.crno ) orcr = false;
+                    return null;
+                }
+                
+                public def doOk() {
+                    if( orcr && !entity.orcr.crno ) 
+                        throw new Exception("CR No. is required.")
+                        
+                    super.doOk();
                 }
             }
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.VehicleFormPage"/>
+        <page template="com.rameses.clfc.loan.collateral.VehicleFormPage"/>
     </pages>
 </workunit>

@@ -4,7 +4,7 @@
  * Created on September 2, 2013, 11:57 AM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.collateral;
 
 import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
-@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
+@StyleSheet
 @Template(OKCancelPage.class)
 public class RealPropertyFormPage extends javax.swing.JPanel {
     
@@ -80,7 +80,8 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xNumberField1.setCaption("Area");
         xNumberField1.setCaptionWidth(140);
         xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.area");
+        xNumberField1.setName("entity.areavalue");
+        xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(100, 19));
         xNumberField1.setRequired(true);
         xFormPanel2.add(xNumberField1);
@@ -89,7 +90,7 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xComboBox2.setExpression("#{item.value}");
         xComboBox2.setItemKey("value");
         xComboBox2.setItems("uomList");
-        xComboBox2.setName("entity.uom");
+        xComboBox2.setName("entity.areauom");
         xComboBox2.setPreferredSize(new java.awt.Dimension(100, 19));
         xComboBox2.setRequired(true);
         xComboBox2.setShowCaption(false);
@@ -102,19 +103,20 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xNumberField3.setCaption("Zonal Value");
         xNumberField3.setCaptionWidth(140);
         xNumberField3.setFieldType(BigDecimal.class);
-        xNumberField3.setName("entity.zonalValue");
+        xNumberField3.setName("entity.zonalvalue");
+        xNumberField3.setPattern("#,##0.00");
         xNumberField3.setRequired(true);
         xFormPanel3.add(xNumberField3);
 
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(140);
-        xDateField1.setName("entity.dateAcquired");
+        xDateField1.setName("entity.dtacquired");
         xDateField1.setPreferredSize(new java.awt.Dimension(100, 19));
         xFormPanel3.add(xDateField1);
 
         xTextField3.setCaption("Acquired From");
         xTextField3.setCaptionWidth(140);
-        xTextField3.setName("entity.acquiredFrom");
+        xTextField3.setName("entity.acquiredfrom");
         xTextField3.setPreferredSize(new java.awt.Dimension(160, 19));
         xTextField3.setRequired(true);
         xFormPanel3.add(xTextField3);
@@ -124,14 +126,14 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xComboBox3.setExpression("#{item.value}");
         xComboBox3.setItemKey("value");
         xComboBox3.setItems("modesOfAcquisition");
-        xComboBox3.setName("entity.modeOfAcquisition");
+        xComboBox3.setName("entity.modeofacquisition");
         xComboBox3.setPreferredSize(new java.awt.Dimension(150, 19));
         xComboBox3.setRequired(true);
         xFormPanel3.add(xComboBox3);
 
         xTextField4.setCaption("Reigstered Name");
         xTextField4.setCaptionWidth(140);
-        xTextField4.setName("entity.registeredName");
+        xTextField4.setName("entity.registeredname");
         xTextField4.setPreferredSize(new java.awt.Dimension(160, 19));
         xTextField4.setRequired(true);
         xFormPanel3.add(xTextField4);
@@ -139,7 +141,8 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xNumberField2.setCaption("Market/Appraisal Value");
         xNumberField2.setCaptionWidth(140);
         xNumberField2.setFieldType(BigDecimal.class);
-        xNumberField2.setName("entity.appraisedValue");
+        xNumberField2.setName("entity.marketvalue");
+        xNumberField2.setPattern("#,##0.00");
         xNumberField2.setPreferredSize(new java.awt.Dimension(120, 19));
         xNumberField2.setRequired(true);
         xFormPanel3.add(xNumberField2);

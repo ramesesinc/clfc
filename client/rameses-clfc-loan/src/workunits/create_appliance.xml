@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="appliance:create" action="create" caption="Appliance Form" target="popup"/>
         <invoker type="appliance:open" caption="Appliance Form" target="popup"/>
@@ -15,6 +15,6 @@
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.ApplianceFormPage"/>
+        <page template="com.rameses.clfc.loan.collateral.ApplianceFormPage"/>
     </pages>
 </workunit>

@@ -4,7 +4,7 @@
  * Created on September 2, 2013, 10:48 AM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.business;
 
 import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
-@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
+@StyleSheet
 @Template(OKCancelPage.class)
 public class BusinessFormPage extends javax.swing.JPanel {
     
@@ -70,7 +70,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xComboBox1.setCaptionWidth(105);
         xComboBox1.setExpression("#{item.value}");
         xComboBox1.setItemKey("value");
-        xComboBox1.setItems("kinds");
+        xComboBox1.setItems("kindTypes");
         xComboBox1.setName("entity.kind");
         xComboBox1.setPreferredSize(new java.awt.Dimension(120, 19));
         xComboBox1.setRequired(true);
@@ -164,7 +164,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel7.setPadding(new java.awt.Insets(2, 0, 0, 0));
         xDateField1.setCaption("Business Started");
         xDateField1.setCaptionWidth(105);
-        xDateField1.setName("entity.businessStarted");
+        xDateField1.setName("entity.dtstarted");
         xDateField1.setPreferredSize(new java.awt.Dimension(120, 19));
         xDateField1.setRequired(true);
         xFormPanel7.add(xDateField1);
@@ -172,14 +172,15 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xNumberField1.setCaption("Initial Invested");
         xNumberField1.setCaptionWidth(105);
         xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.invested");
+        xNumberField1.setName("entity.capital");
+        xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(130, 19));
         xNumberField1.setRequired(true);
         xFormPanel7.add(xNumberField1);
 
         xTextField5.setCaption("Tel. No.");
         xTextField5.setCaptionWidth(105);
-        xTextField5.setName("entity.telno");
+        xTextField5.setName("entity.contactno");
         xTextField5.setPreferredSize(new java.awt.Dimension(150, 19));
         xFormPanel7.add(xTextField5);
 
@@ -191,9 +192,9 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xComboBox8.setCaptionWidth(160);
         xComboBox8.setExpression("#{item.value}");
         xComboBox8.setItemKey("value");
-        xComboBox8.setItems("ownerships");
+        xComboBox8.setItems("ownershipTypes");
         xComboBox8.setName("entity.ownership");
-        xComboBox8.setPreferredSize(new java.awt.Dimension(120, 19));
+        xComboBox8.setPreferredSize(new java.awt.Dimension(0, 19));
         xComboBox8.setRequired(true);
         xFormPanel11.add(xComboBox8);
 
@@ -211,7 +212,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         jScrollPane3.setPreferredSize(new java.awt.Dimension(0, 40));
         xTextArea3.setCaption("Business Hours");
         xTextArea3.setCaptionWidth(105);
-        xTextArea3.setName("entity.businesshours");
+        xTextArea3.setName("entity.officehours");
         xTextArea3.setPreferredSize(new java.awt.Dimension(100, 38));
         xTextArea3.setRequired(true);
         xTextArea3.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);

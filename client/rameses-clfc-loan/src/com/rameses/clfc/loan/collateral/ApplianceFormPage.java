@@ -4,7 +4,7 @@
  * Created on September 2, 2013, 9:56 AM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.collateral;
 
 import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
-@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
+@StyleSheet
 @Template(OKCancelPage.class)
 public class ApplianceFormPage extends javax.swing.JPanel {
     
@@ -65,7 +65,7 @@ public class ApplianceFormPage extends javax.swing.JPanel {
 
         xTextField4.setCaption("Serial No");
         xTextField4.setCaptionWidth(65);
-        xTextField4.setName("entity.serial");
+        xTextField4.setName("entity.serialno");
         xTextField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField4.setRequired(true);
         xFormPanel1.add(xTextField4);
@@ -73,13 +73,13 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(135);
-        xDateField1.setName("entity.dateAcquired");
+        xDateField1.setName("entity.dtacquired");
         xDateField1.setRequired(true);
         xFormPanel2.add(xDateField1);
 
         xTextField3.setCaption("Model No.");
         xTextField3.setCaptionWidth(135);
-        xTextField3.setName("entity.model");
+        xTextField3.setName("entity.modelno");
         xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField3.setRequired(true);
         xFormPanel2.add(xTextField3);
@@ -87,7 +87,8 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         xNumberField1.setCaption("Market/Appraisal Value");
         xNumberField1.setCaptionWidth(135);
         xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.appraisedValue");
+        xNumberField1.setName("entity.marketvalue");
+        xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField1.setRequired(true);
         xFormPanel2.add(xNumberField1);

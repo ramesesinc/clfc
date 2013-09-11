@@ -17,13 +17,19 @@ class NewLoanApplicationController extends CRUDController
     
     def appTypes = LOV.LOAN_APP_TYPES;
     def clientTypes = LOV.LOAN_CLIENT_TYPES;
-    
+    def customerLookupHandler = InvokerUtil.lookupOpener('customer:lookup', [:]); 
+
     Map createEntity() {
         return [
             branch: [:], 
             borrower: [:], 
             schedule: [:] 
         ]; 
+    }
+
+    public def create() {
+        productTypes = productTypeService.getList([:]); 
+        super.create()
     }
     
     void initOnline() {
@@ -34,17 +40,6 @@ class NewLoanApplicationController extends CRUDController
     def initCapture() {
         create(); 
         entity.mode = 'CAPTURE';
-    }
-    
-    def getProductTypes() {
-        if (productTypes == null) { 
-            productTypes = productTypeService.getList([:]); 
-        } 
-        return productTypes;
-    }
-    
-    def getCustomerLookupHandler() {
-        return InvokerUtil.lookupOpener('customer:lookup', [:]); 
     }
 
     def previousLoansHandler = [

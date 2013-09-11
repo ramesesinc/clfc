@@ -4,37 +4,37 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
-import com.rameses.clfc.loan.controller.*;
 
-class LoanAppPrincipalBorrowerController 
+class LoanCollateralController
 {
     //feed by the caller
     def loanapp, caller, handlers;
     
-    @Service('BorrowerService') 
+    @Service('LoanAppCollateralService') 
     def service;    
     
     def beforeSaveHandlers = [:];
-
+    
     void init() {
         handlers.saveHandler = { save(); }  
-        if (loanapp.borrower?.objid == null) return;
         
-        loanapp.borrower = service.open([objid: loanapp.borrower.objid]); 
+        def data = service.open([objid: loanapp.objid]); 
+        loanapp.clear();
+        loanapp.putAll(data);
     }
 
     def createOpenerParams() {
         return [
             beforeSaveHandlers: beforeSaveHandlers, 
             service: service, 
-            loanapp: loanapp, 
+            loanapp: loanapp,
             mode: caller.mode 
         ]; 
     }
     
     def tabHandler = [
         getOpeners: {
-            return InvokerUtil.lookupOpeners('loanapp-borrower:plugin', createOpenerParams());
+            return InvokerUtil.lookupOpeners('loanapp-collateral:plugin', createOpenerParams());
         },
         getOpenerParams: {
             return createOpenerParams(); 
@@ -46,10 +46,7 @@ class LoanAppPrincipalBorrowerController
             if (v != null) v(); 
         }
         
-        def data = loanapp.borrower;
-        data._loanappid = loanapp.objid; 
-        data._loanappno = loanapp.appno;
-        data._datatype = 'principalborrower';
+        def data = [objid: loanapp.objid, collateral: loanapp.collateral ];
         service.update(data);
     }
 }

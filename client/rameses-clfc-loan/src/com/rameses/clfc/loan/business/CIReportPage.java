@@ -4,9 +4,10 @@
  * Created on September 2, 2013, 2:10 PM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.business;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
@@ -14,7 +15,8 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
-@Template(FormPage.class)
+@StyleSheet
+@Template(OKCancelPage.class)
 public class CIReportPage extends javax.swing.JPanel {
     
     /** Creates new form CIReportPage */
@@ -59,7 +61,7 @@ public class CIReportPage extends javax.swing.JPanel {
         xLabel4.setBounds(10, 10, 100, 20);
 
         xTextArea1.setCaption("Business Evaluation");
-        xTextArea1.setName("entity.businessEvaluation");
+        xTextArea1.setName("entity.evaluation");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -73,7 +75,7 @@ public class CIReportPage extends javax.swing.JPanel {
         xLabel6.setBounds(10, 120, 110, 20);
 
         xTextArea2.setCaption("Physical Outlook");
-        xTextArea2.setName("entity.physicalOutlook");
+        xTextArea2.setName("entity.physicaloutlook");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);

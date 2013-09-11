@@ -40,6 +40,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
         xLookupField1 = new com.rameses.rcp.control.XLookupField();
+        xLabel3 = new com.rameses.rcp.control.XLabel();
 
         setLayout(null);
 
@@ -80,7 +81,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xFormPanel1.add(xNumberField3);
 
         add(xFormPanel1);
-        xFormPanel1.setBounds(270, 10, 250, 100);
+        xFormPanel1.setBounds(270, 40, 250, 100);
 
         xFormPanel2.setCellspacing(4);
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -123,7 +124,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xFormPanel2.add(xNumberField2);
 
         add(xFormPanel2);
-        xFormPanel2.setBounds(10, 10, 250, 100);
+        xFormPanel2.setBounds(10, 40, 250, 100);
 
         xFormPanel3.setCellspacing(4);
         xFormPanel3.setPadding(new java.awt.Insets(3, 0, 0, 0));
@@ -146,7 +147,12 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xFormPanel3.add(xLookupField1);
 
         add(xFormPanel3);
-        xFormPanel3.setBounds(10, 100, 510, 110);
+        xFormPanel3.setBounds(10, 130, 510, 110);
+
+        xLabel3.setFontStyle("font-weight:bold; font-size:12px;");
+        xLabel3.setText("Loan Details");
+        add(xLabel3);
+        xLabel3.setBounds(0, 10, 90, 16);
 
     }// </editor-fold>//GEN-END:initComponents
     
@@ -161,6 +167,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel2;
+    private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLookupField xLookupField1;
     private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XNumberField xNumberField2;
