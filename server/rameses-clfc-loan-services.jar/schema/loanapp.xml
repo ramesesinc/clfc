@@ -25,6 +25,9 @@
 		<field name="schedule_underpaymentpenalty" required="true"/>
 		<field name="schedule_surchargerate" required="true"/>
 		<field name="schedule_absentpenalty" required="true"/>
+		<field name="route_code"/>
+		<field name="route_description"/>
+		<field name="route_area"/>
 	</element>
 
 	<element name="approval" tablename="loanapp">
@@ -35,6 +38,13 @@
 		<field name="approval_absencepolicy" required="true"/>
 		<field name="approval_absenceprovision" required="true"/>
 	</element>	
+
+	<element name="route" tablename="loanapp">
+		<field name="objid" primary="true"/>
+		<field name="route_code" required="true"/>
+		<field name="route_description" required="true"/>
+		<field name="route_area" required="true"/>
+	</element>
 
 	<element name="borrower" tablename="loanapp_borrower">
 		<field name="objid" primary="true"/> 

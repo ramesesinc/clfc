@@ -1,0 +1,9 @@
+"entity.*|route|schedule" [caller.mode != 'edit']{
+    enabled: false; 
+    background-color: rgb(250,250,250);
+}
+"entity.*|route|schedule" [caller.mode == 'edit']{
+    enabled: true;
+    background-color: #fff;
+}
+

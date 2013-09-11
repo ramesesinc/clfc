@@ -6,10 +6,13 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.rcp.ui.annotations.StyleSheet;
+
 /**
  *
  * @author  wflores
  */
+@StyleSheet
 public class LoanAppDetailPage extends javax.swing.JPanel 
 {    
     public LoanAppDetailPage() {
@@ -23,31 +26,146 @@ public class LoanAppDetailPage extends javax.swing.JPanel
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        jLabel1 = new javax.swing.JLabel();
+        xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
+        xDateField1 = new com.rameses.rcp.control.XDateField();
+        xLabel1 = new com.rameses.rcp.control.XLabel();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xNumberField3 = new com.rameses.rcp.control.XNumberField();
+        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
+        xLabel2 = new com.rameses.rcp.control.XLabel();
+        xComboBox3 = new com.rameses.rcp.control.XComboBox();
+        xComboBox4 = new com.rameses.rcp.control.XComboBox();
+        xNumberField2 = new com.rameses.rcp.control.XNumberField();
+        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        xTextArea1 = new com.rameses.rcp.control.XTextArea();
+        xLookupField1 = new com.rameses.rcp.control.XLookupField();
 
-        jLabel1.setText("Loan Details here...");
+        setLayout(null);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(343, Short.MAX_VALUE))
-        );
+        xFormPanel1.setCellspacing(4);
+        xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        xDateField1.setBorder(xLineBorder1);
+        xDateField1.setCaption("Date Filed");
+        xDateField1.setCaptionWidth(100);
+        xDateField1.setName("entity.dtcreated");
+        xDateField1.setPreferredSize(new java.awt.Dimension(120, 19));
+        xDateField1.setReadonly(true);
+        xFormPanel1.add(xDateField1);
+
+        com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
+        xLabel1.setBorder(xLineBorder2);
+        xLabel1.setCaption("Interviewed By");
+        xLabel1.setCaptionWidth(100);
+        xLabel1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xFormPanel1.add(xLabel1);
+
+        xNumberField1.setCaption("Term");
+        xNumberField1.setCaptionWidth(100);
+        xNumberField1.setDepends(new String[] {"loanapp.schedule"});
+        xNumberField1.setFieldType(Integer.class);
+        xNumberField1.setName("entity.schedule.term");
+        xNumberField1.setRequired(true);
+        xFormPanel1.add(xNumberField1);
+
+        xNumberField3.setText("xNumberField3");
+        xNumberField3.setCaption("Loan Count");
+        xNumberField3.setCaptionWidth(100);
+        xNumberField3.setFieldType(Integer.class);
+        xNumberField3.setPreferredSize(new java.awt.Dimension(100, 19));
+        xNumberField3.setReadonly(true);
+        xFormPanel1.add(xNumberField3);
+
+        add(xFormPanel1);
+        xFormPanel1.setBounds(270, 10, 250, 100);
+
+        xFormPanel2.setCellspacing(4);
+        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder3 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder3.setLineColor(new java.awt.Color(204, 204, 204));
+        xLabel2.setBorder(xLineBorder3);
+        xLabel2.setCaption("App Type");
+        xLabel2.setCaptionWidth(110);
+        xLabel2.setExpression("#{entity.apptype}");
+        xLabel2.setPreferredSize(new java.awt.Dimension(150, 18));
+        xFormPanel2.add(xLabel2);
+
+        xComboBox3.setAllowNull(false);
+        xComboBox3.setCaption("Client Type");
+        xComboBox3.setCaptionWidth(110);
+        xComboBox3.setExpression("#{item.value}");
+        xComboBox3.setItemKey("value");
+        xComboBox3.setItems("clientTypes");
+        xComboBox3.setName("entity.clienttype");
+        xComboBox3.setPreferredSize(new java.awt.Dimension(150, 19));
+        xComboBox3.setRequired(true);
+        xFormPanel2.add(xComboBox3);
+
+        xComboBox4.setCaption("Product Type");
+        xComboBox4.setCaptionWidth(110);
+        xComboBox4.setDepends(new String[] {"entity"});
+        xComboBox4.setDynamic(true);
+        xComboBox4.setExpression("#{item.name}");
+        xComboBox4.setImmediate(true);
+        xComboBox4.setItems("productTypes");
+        xComboBox4.setName("schedule");
+        xComboBox4.setPreferredSize(new java.awt.Dimension(150, 19));
+        xComboBox4.setRequired(true);
+        xFormPanel2.add(xComboBox4);
+
+        xNumberField2.setCaption("Amount Applied");
+        xNumberField2.setCaptionWidth(110);
+        xNumberField2.setName("entity.loanamount");
+        xNumberField2.setRequired(true);
+        xFormPanel2.add(xNumberField2);
+
+        add(xFormPanel2);
+        xFormPanel2.setBounds(10, 10, 250, 100);
+
+        xFormPanel3.setCellspacing(4);
+        xFormPanel3.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
+        xTextArea1.setCaption("Purpose of Loan");
+        xTextArea1.setCaptionWidth(110);
+        xTextArea1.setName("entity.purpose");
+        xTextArea1.setRequired(true);
+        jScrollPane1.setViewportView(xTextArea1);
+
+        xFormPanel3.add(jScrollPane1);
+
+        xLookupField1.setCaption("Route");
+        xLookupField1.setCaptionWidth(110);
+        xLookupField1.setDepends(new String[] {"entity"});
+        xLookupField1.setExpression("#{item.code} - #{item.description} #{item.area}");
+        xLookupField1.setHandler("routeLookupHandler");
+        xLookupField1.setName("entity.route");
+        xLookupField1.setPreferredSize(new java.awt.Dimension(250, 20));
+        xFormPanel3.add(xLookupField1);
+
+        add(xFormPanel3);
+        xFormPanel3.setBounds(10, 100, 510, 110);
+
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private com.rameses.rcp.control.XComboBox xComboBox3;
+    private com.rameses.rcp.control.XComboBox xComboBox4;
+    private com.rameses.rcp.control.XDateField xDateField1;
+    private com.rameses.rcp.control.XFormPanel xFormPanel1;
+    private com.rameses.rcp.control.XFormPanel xFormPanel2;
+    private com.rameses.rcp.control.XFormPanel xFormPanel3;
+    private com.rameses.rcp.control.XLabel xLabel1;
+    private com.rameses.rcp.control.XLabel xLabel2;
+    private com.rameses.rcp.control.XLookupField xLookupField1;
+    private com.rameses.rcp.control.XNumberField xNumberField1;
+    private com.rameses.rcp.control.XNumberField xNumberField2;
+    private com.rameses.rcp.control.XNumberField xNumberField3;
+    private com.rameses.rcp.control.XTextArea xTextArea1;
     // End of variables declaration//GEN-END:variables
     
 }
