@@ -47,10 +47,6 @@ class NewLoanApplicationController extends CRUDController
         return InvokerUtil.lookupOpener('customer:lookup', [:]); 
     }
 
-    def getProductTypes() {
-        return prodTypeSvc.getList([:])
-    }
-
     def previousLoansHandler = [
         fetchList: {o->
             return entity.previousloans
