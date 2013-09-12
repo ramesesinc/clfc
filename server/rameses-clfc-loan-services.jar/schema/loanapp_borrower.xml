@@ -10,4 +10,23 @@
 		<field name="relation"/>
 	</element>
 
+	<element name="joint" tablename="loanapp_borrower">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/> 
+		<field name="borrowerid" required="true"/>
+		<field name="principalid" required="true"/>
+		<field name="relaterid" required="true"/>
+		<field name="type" required="true"/>
+		<field name="relation" required="true"/>
+	</element>
+
+	<element name="comaker" tablename="loanapp_borrower">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/> 
+		<field name="borrowerid" required="true"/>
+		<field name="principalid" required="true"/>
+		<field name="relaterid" required="true"/>
+		<field name="type" required="true"/>
+		<field name="relation" required="true"/>
+	</element>
 </schema>

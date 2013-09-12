@@ -17,10 +17,13 @@ WHERE lb.parentid=$P{parentid} AND lb.type='JOINT'
 DELETE FROM loanapp_borrower WHERE parentid=$P{parentid} AND type='JOINT' 
 
 [getComakers]
-SELECT lb.type, b.* 
+SELECT lb.type, lb.relation, b.* 
 FROM loanapp_borrower lb 
 	INNER JOIN borrower b ON lb.borrowerid=b.objid 
 WHERE lb.parentid=$P{parentid} AND lb.type='COMAKER' 
+
+[removeComakers]
+DELETE FROM loanapp_borrower WHERE parentid=$P{parentid} AND type='COMAKER' 
 
 [getBorrowerNames]
 SELECT b.objid, b.lastname, b.firstname, b.middlename, lb.type
