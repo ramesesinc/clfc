@@ -14,7 +14,6 @@ class LoanAppBusinessController
     def service; 
     
     def businesses = [];
-    def selectedBusiness;
     
     void init() {
         handlers.saveHandler = { save(); }  
@@ -34,15 +33,8 @@ class LoanAppBusinessController
         service.update(data); 
     }
 
-    def addBusiness() {
-        def handler = {business->
-            business.parentid = loanapp.objid;
-            businesses.add(business);
-            businessHandler.reload();
-        }
-        return InvokerUtil.lookupOpener("business:create", [handler:handler]);
-    }
 
+    def selectedBusiness;
     def businessHandler = [
         fetchList: {o->
             if( !businesses ) businesses = []
@@ -50,17 +42,35 @@ class LoanAppBusinessController
             return businesses;
         },
         onRemoveItem: {o->
-            if( caller.mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this business. Continue?")) {
-                businesses.remove(o);
-                return true;
-            }
-            return false;
+            return removeChildImpl(o);
         },
         getOpenerParams: {o->
             return [mode: caller.mode]
         }
     ] as EditorListModel;
+    
+    def addBusiness() {
+        def handler = {business->
+            business.parentid = loanapp.objid;
+            businesses.add(business);
+            businessHandler.reload();
+        }
+        return InvokerUtil.lookupOpener("business:create", [handler:handler]);
+    }   
+        
+    void removeChild() {
+        removeChildImpl(selectedBusiness); 
+    }
+    
+    boolean removeChildImpl(o) {
+        if (mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this child. Continue?")) {
+            businesses.remove(o);
+            return true;
+        } else { 
+            return false; 
+        } 
+    }      
 
     def addCiReport() {
         if( !selectedBusiness ) {
