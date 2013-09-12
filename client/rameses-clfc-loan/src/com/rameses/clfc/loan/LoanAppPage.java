@@ -90,7 +90,7 @@ public class LoanAppPage extends javax.swing.JPanel {
         jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         xSubFormPanel1.setDepends(new String[] {"selectedMenu"});
         xSubFormPanel1.setDynamic(true);
-        xSubFormPanel1.setHandler("opener");
+        xSubFormPanel1.setHandler("subFormHandler");
         xSubFormPanel1.setName("opener");
         jPanel5.add(xSubFormPanel1, java.awt.BorderLayout.CENTER);
 

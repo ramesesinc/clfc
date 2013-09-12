@@ -29,47 +29,61 @@ class LoanAppController
         return buffer.toString();
     }
     
+    def menuItems =  [
+        [name:'principalborrower', caption:'Principal Borrower'], 
+        [name:'loandetail', caption:'Loan Details'], 
+        [name:'business', caption:'Business'], 
+        [name:'collateral', caption:'Collateral'], 
+        [name:'otherlending', caption:'Other Lending'], 
+        [name:'jointborrower', caption:'Joint Borrower'],
+        [name:'comaker', caption:'Co-Maker'], 
+        [name:'attachment', caption:'Attachments'], 
+        [name:'comment', caption:'Comments'], 
+        [name:'summary', caption:'Summary'] 
+    ];
+    
     def selectedMenu;
     def listHandler = [
         getDefaultIcon: {
             return 'Tree.closedIcon'; 
         },         
         getItems: { 
-            return [
-                [name:'principalborrower', caption:'Principal Borrower'], 
-                [name:'loandetail', caption:'Loan Details'], 
-                [name:'business', caption:'Business'], 
-                [name:'collateral', caption:'Collateral'], 
-                [name:'otherlending', caption:'Other Lending'], 
-                [name:'jointborrower', caption:'Joint Borrower'],
-                [name:'comaker', caption:'Co-Maker'], 
-                [name:'attachment', caption:'Attachments'], 
-                [name:'comment', caption:'Comments'], 
-                [name:'summary', caption:'Summary'] 
-            ];
+            return menuItems;
         }, 
         onselect: {o->             
             entity = service.open([objid: loanappid, name:o?.name]); 
             handlers = [:];
+            subFormHandler.reload();
         } 
     ] as ListPaneModel;
     
     
-    def getOpener() {
-        if (selectedMenu == null) {
-            return new Opener(outcome:'blankpage'); 
+    def subFormHandler = [
+        getOpener: {
+            if (selectedMenu == null) {
+                return new Opener(outcome:'blankpage'); 
+            }
+
+            def op = selectedMenu.opener;
+            if (op == null) {
+                def invtype = 'loanapp-'+selectedMenu.name+':open'; 
+                op = InvokerUtil.lookupOpener(invtype, [ 
+                    loanapp: entity, 
+                    caller: this, 
+                    handlers: handlers 
+                ]); 
+                selectedMenu.opener = op;
+            } 
+            return op;            
+        }, 
+        getOpenerParams: {
+            
         }
+    ] as SubFormPanelModel;
         
-        def invtype = 'loanapp-'+selectedMenu.name+':open'; 
-        return InvokerUtil.lookupOpener(invtype, [            
-            loanapp: entity, 
-            caller: this,
-            handlers: handlers
-        ]); 
-    } 
-    
     void edit() {
         mode = 'edit';
+        subFormHandler.refresh();
     }
     
     void save() {
@@ -77,10 +91,12 @@ class LoanAppController
         if (saveHandler == null) return; 
         
         saveHandler(); 
-        mode = 'read';        
+        mode = 'read'; 
+        subFormHandler.refresh();
     }
     
     void cancel() {
-        mode = 'read';        
+        mode = 'read'; 
+        subFormHandler.refresh();
     }    
 }

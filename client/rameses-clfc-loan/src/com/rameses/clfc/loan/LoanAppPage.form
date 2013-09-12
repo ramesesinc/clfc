@@ -182,7 +182,7 @@
                   </StringArray>
                 </Property>
                 <Property name="dynamic" type="boolean" value="true"/>
-                <Property name="handler" type="java.lang.String" value="opener"/>
+                <Property name="handler" type="java.lang.String" value="subFormHandler"/>
                 <Property name="name" type="java.lang.String" value="opener"/>
               </Properties>
               <Constraints>
