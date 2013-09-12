@@ -19,11 +19,12 @@ class HtmlBuilder
                                 }
                                 table {
                                     padding-left: 10px;
-                                    width: 700px;
+                                    width: 400px;
                                 }
+                                p { text-alignment: left; }
                             </style>
                         </head>
-                        ${body}
+                        ${htmlbody}
                     </html>
                 """
     }
@@ -218,10 +219,10 @@ class HtmlBuilder
         def htmlbody =  """
                             <body>
                                 <font class="bold">Vehicle Information</font>
-                                /*<table>
+                                <table>
                                     <tbody>
                                         <tr>
-                                            <td>Kind of Vehicle: </td>
+                                            <td width="120px">Kind of Vehicle: </td>
                                             <td>$vehicle.kind</td>
                                         </tr>
                                         <tr>
@@ -265,7 +266,7 @@ class HtmlBuilder
                                             <td>$vehicle.engineno</td>
                                         </tr>
                                         <tr>
-                                            <td>Market/Appraisal Value: </td>
+                                            <td>Market Value: </td>
                                             <td>$vehicle.marketvalue</td>
                                         </tr>
                                         <tr>
@@ -275,7 +276,108 @@ class HtmlBuilder
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>*/
+                                </table>
+                            </body>
+                        """
+        return getHtml(htmlbody);
+    }
+    
+    public def buildAppliance( appliance ) {
+        if( appliance == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Appliance Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="100px">Type: </td>
+                                            <td>$appliance.type</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Brand: </td>
+                                            <td>$appliance.brand</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Date Acquired: </td>
+                                            <td>$appliance.dtacquired</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Model No.: </td>
+                                            <td>$appliance.modelno</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Serial No.: </td>
+                                            <td>$appliance.serialno</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Market Value: </td>
+                                            <td>$appliance.marketvalue</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>$appliance.remarks</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </body>
+                        """
+        
+        return getHtml(htmlbody);
+    }
+    
+    public def buildProperty( property ) {
+        if( property == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Real Property Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="100px">Classification: </td>
+                                            <td>$property.classification</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Location: </td>
+                                            <td>$property.location</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Area: </td>
+                                            <td>$property.areavalue $property.areauom</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Zonal Value: </td>
+                                            <td>$property.zonalvalue</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Date Acquired: </td>
+                                            <td>$property.dtacquired</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Acquired From: </td>
+                                            <td>$property.acquiredfrom</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mode of Acquisition: </td>
+                                            <td>$property.modeofacquisition</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Registered Name: </td>
+                                            <td>$property.registeredname</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Market Value: </td>
+                                            <td>$property.marketvalue</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>$property.remarks</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </body>
                         """
         return getHtml(htmlbody);

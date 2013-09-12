@@ -18,7 +18,7 @@ class CollateralVehicleController
             return loanapp.collateral.vehicles;
         },
         onRemoveItem: {o->
-            return removeChildImpl(o); 
+            return removeVehicleImpl(o); 
         },
         getOpenerParams: {o->
             return [mode: mode];
@@ -34,13 +34,13 @@ class CollateralVehicleController
         return InvokerUtil.lookupOpener("vehicle:create", [handler:handler]);
     }
     
-    void removeChild() {
-        removeChildImpl(selectedVehicle); 
+    void removeVehicle() {
+        removeVehicleImpl(selectedVehicle); 
     }
     
-    boolean removeChildImpl(o) {
+    boolean removeVehicleImpl(o) {
         if (mode == 'read') return false;
-        if (MsgBox.confirm("You are about to remove this child. Continue?")) {
+        if (MsgBox.confirm("You are about to remove this vehicle. Continue?")) {
             loanapp.collateral.vehicles.remove(o);
             return true;
         } else { 
@@ -50,6 +50,6 @@ class CollateralVehicleController
     
     def getHtmlview() {
         HtmlBuilder html=new HtmlBuilder();
-        println html.buildVehicle(selectedVehicle);
+        return html.buildVehicle(selectedVehicle);
     }
 }

@@ -48,6 +48,7 @@ public class CollateralVehiclePage extends javax.swing.JPanel {
         xLabel2.setForeground(new java.awt.Color(80, 80, 80));
         xLabel2.setText("Vehicle(s)");
 
+        xDataTable1.setAutoResize(false);
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "make"}

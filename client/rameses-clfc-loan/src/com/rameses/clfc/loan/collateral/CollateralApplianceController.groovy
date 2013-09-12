@@ -4,6 +4,7 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
+import com.rameses.clfc.util.HtmlBuilder;
 
 class CollateralApplianceController
 {
@@ -17,7 +18,7 @@ class CollateralApplianceController
             return loanapp.collateral.appliances;
         },
         onRemoveItem: {o->
-            return removeChildImpl(o); 
+            return removeApplianceImpl(o); 
         },
         getOpenerParams: {o->
             return [mode: mode];
@@ -34,17 +35,22 @@ class CollateralApplianceController
         return InvokerUtil.lookupOpener("appliance:create", [handler:handler]);
     }
     
-    void removeChild() {
-        removeChildImpl(selectedAppliance); 
+    void removeAppliance() {
+        removeApplianceImpl(selectedAppliance); 
     }
     
-    boolean removeChildImpl(o) {
+    boolean removeApplianceImpl(o) {
         if (mode == 'read') return false;
-        if (MsgBox.confirm("You are about to remove this child. Continue?")) {
+        if (MsgBox.confirm("You are about to remove this appliance. Continue?")) {
             loanapp.collateral.appliances.remove(o);
             return true;
         } else { 
             return false; 
         } 
-    }     
+    }
+    
+    def getHtmlview() {
+        HtmlBuilder html=new HtmlBuilder();
+        return html.buildAppliance(selectedAppliance);
+    }
 }

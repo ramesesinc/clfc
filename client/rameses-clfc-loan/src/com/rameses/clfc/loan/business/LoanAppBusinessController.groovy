@@ -43,7 +43,7 @@ class LoanAppBusinessController
             return businesses;
         },
         onRemoveItem: {o->
-            return removeChildImpl(o);
+            return removeBusinessImpl(o);
         },
         getOpenerParams: {o->
             return [mode: caller.mode]
@@ -59,13 +59,13 @@ class LoanAppBusinessController
         return InvokerUtil.lookupOpener("business:create", [handler:handler]);
     }   
         
-    void removeChild() {
-        removeChildImpl(selectedBusiness); 
+    void removeBusiness() {
+        removeBusinessImpl(selectedBusiness); 
     }
     
-    boolean removeChildImpl(o) {
+    boolean removeBusinessImpl(o) {
         if (mode == 'read') return false;
-        if (MsgBox.confirm("You are about to remove this child. Continue?")) {
+        if (MsgBox.confirm("You are about to remove this business. Continue?")) {
             businesses.remove(o);
             return true;
         } else { 

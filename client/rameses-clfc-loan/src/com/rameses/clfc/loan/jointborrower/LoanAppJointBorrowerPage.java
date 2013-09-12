@@ -39,6 +39,7 @@ public class LoanAppJointBorrowerPage extends javax.swing.JPanel {
 
         xSplitView1.setDividerLocation(170);
         xSplitView1.setOrientation("VERTICAL");
+        xDataTable1.setAutoResize(false);
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "lastname"}

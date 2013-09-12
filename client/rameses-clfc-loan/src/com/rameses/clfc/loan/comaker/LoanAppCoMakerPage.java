@@ -42,6 +42,7 @@ public class LoanAppCoMakerPage extends javax.swing.JPanel {
         xButton1.setName("addCoMaker");
         xButton1.setText("Add");
 
+        xDataTable1.setAutoResize(false);
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "lastname"}
