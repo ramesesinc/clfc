@@ -1,6 +1,8 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-borrower:plugin" caption=" Parents  " index="-95"/>
+        <invoker type="loanapp-borrower:plugin" action="init" caption=" Parents  " index="-95" disableWhen="#{loanapp.borrower == null}"/>
+        <invoker type="loanapp-jointborrower:plugin" action="init" caption=" Parents  " index="-95" disableWhen="#{loanapp.borrower == null}"/>
+        <invoker type="loanapp-comaker:plugin" action="init" caption=" Parents  " index="-95" disableWhen="#{loanapp.borrower == null}"/>
     </invokers>
     
     <code class="com.rameses.clfc.borrower.BorrowerParentsController"/>

@@ -7,14 +7,14 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerEmploymentController
 {
-    def loanapp, mode;    
+    def loanapp, mode, borrower;    
 
     def selectedEmployment;
     def employmentHandler = [
         fetchList: {o->
-            if( !loanapp.borrower.employments ) loanapp.borrower.employments = [];
-            loanapp.borrower.employments.each{ it._filetype = "employment" }
-            return loanapp.borrower.employments;
+            if( !borrower.employments ) borrower.employments = [];
+            borrower.employments.each{ it._filetype = "employment" }
+            return borrower.employments;
         },
         onRemoveItem: {o->
             return removeItemImpl(o);
@@ -26,8 +26,8 @@ class BorrowerEmploymentController
     
     def addEmployment() {
         def handler = {employment->
-            employment.refid = loanapp.borrower?.objid;
-            loanapp.borrower.employments.add(employment);
+            employment.refid = borrower?.objid;
+            borrower.employments.add(employment);
             employmentHandler.reload();
         }
         return InvokerUtil.lookupOpener("employment:create", [handler:handler])
@@ -40,7 +40,7 @@ class BorrowerEmploymentController
     boolean removeItemImpl(o) {
         if (mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            loanapp.borrower.employments.remove(o);
+            borrower.employments.remove(o);
             return true;
         } else { 
             return false; 

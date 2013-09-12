@@ -133,6 +133,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xNumberField4.setCaption("Interest Rate");
         xNumberField4.setFieldType(BigDecimal.class);
         xNumberField4.setName("entity.interest");
+        xNumberField4.setPattern("#,##0.00");
         xNumberField4.setPreferredSize(new java.awt.Dimension(50, 19));
         xFormPanel3.add(xNumberField4);
 

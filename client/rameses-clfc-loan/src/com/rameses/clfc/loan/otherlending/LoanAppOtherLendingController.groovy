@@ -52,7 +52,7 @@ class LoanAppOtherLendingController
             return false;
         },
         getOpenerParams: {o->
-            return [mode: mode];
+            return [mode: caller.mode];
         }
     ] as EditorListModel
 }

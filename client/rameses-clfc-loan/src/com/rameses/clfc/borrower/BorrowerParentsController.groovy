@@ -6,21 +6,16 @@ import java.rmi.server.UID;
 
 class BorrowerParentsController
 {
-    def loanapp, mode, beforeSaveHandlers;
+    def loanapp, mode, beforeSaveHandlers, borrower;
     def entity = [:]
     
-    void setBeforeSaveHandlers( beforeSaveHandlers ) {
-        this.beforeSaveHandlers = beforeSaveHandlers
+    void init() {
+        if( borrower?.parent == null )
+            borrower.parent = [:]
+                    
+        entity = borrower?.parent;
+        entity.objid = borrower?.objid;
         beforeSaveHandlers.parentHandler = { validate(); }
-    }
-
-    void setLoanapp( loanapp ) {
-        this.loanapp = loanapp;
-        if( loanapp.borrower?.parent == null )
-            loanapp.borrower.parent = [:];
-
-        entity = loanapp.borrower.parent;
-        entity.objid = loanapp.borrower.objid;
     }
 
     void validate() {

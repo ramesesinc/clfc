@@ -7,14 +7,14 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerSiblingsController
 {
-    def loanapp, mode;
+    def loanapp, mode, borrower;
 
     def selectedSibling;
     def siblingsHandler = [
         fetchList: {o->
-            if( loanapp.borrower.siblings == null ) loanapp.borrower.siblings = [];
-            loanapp.borrower.siblings.each{ it._filetype = "sibling"; }
-            return loanapp.borrower.siblings;
+            if( !borrower.siblings ) borrower.siblings = [];
+            borrower.siblings.each{ it._filetype = "sibling"; }
+            return borrower.siblings;
         },
         onRemoveItem: {o->
             return removeItemImpl(o);
@@ -26,8 +26,8 @@ class BorrowerSiblingsController
     
     def addSibling() {
         def handler = {sibling->
-            sibling.borrowerid = loanapp.borrower?.objid;
-            loanapp.borrower.siblings.add(sibling);
+            sibling.borrowerid = borrower?.objid;
+            borrower.siblings.add(sibling);
             siblingsHandler.reload();
         }
         return InvokerUtil.lookupOpener("sibling:create", [handler:handler])
@@ -40,7 +40,7 @@ class BorrowerSiblingsController
     boolean removeItemImpl(o) {
         if (mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            loanapp.borrower.siblings.remove(o);
+            borrower.siblings.remove(o);
             return true;
         } else { 
             return false; 

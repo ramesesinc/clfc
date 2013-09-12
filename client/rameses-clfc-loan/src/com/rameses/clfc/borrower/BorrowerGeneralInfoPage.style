@@ -10,3 +10,9 @@
     enabled: true;
     background-color: #fff;
 }
+"entity.relation" [borrower?.type != 'PRINCIPAL'] {
+    visible:true;
+}
+"entity.relation" [borrower?.type == 'PRINCIPAL'] {
+    visible:false;
+}

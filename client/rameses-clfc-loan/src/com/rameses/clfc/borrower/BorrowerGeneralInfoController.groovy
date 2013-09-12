@@ -9,13 +9,12 @@ import com.rameses.clfc.borrower.*;
 class BorrowerGeneralInfoController 
 {
     //feed by the caller
-    def service, loanapp, mode;
+    def service, loanapp, mode, borrower;
     
     def entity = [:];
     
-    void setLoanapp(loanapp) {
-        this.loanapp = loanapp;
-        entity = loanapp.borrower;
+    void init() {
+        entity = borrower;
     }
     
     def getLookupBorrower() {  
