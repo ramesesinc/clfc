@@ -4,6 +4,7 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
+import com.rameses.clfc.util.HtmlBuilder;
 
 class LoanAppBusinessController 
 {
@@ -82,5 +83,10 @@ class LoanAppBusinessController
         }
         if( !selectedBusiness.ci ) selectedBusiness.ci = [ filedby: OsirisContext.env.USERID ]
         return InvokerUtil.lookupOpener("cireport:edit", [handler:handler, entity:selectedBusiness.ci, mode:caller.mode])
+    }
+    
+    def getHtmlview() {
+        HtmlBuilder html=new HtmlBuilder();
+        return html.buildBusiness(selectedBusiness)
     }
 }

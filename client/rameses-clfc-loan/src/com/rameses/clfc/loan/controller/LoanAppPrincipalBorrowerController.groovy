@@ -20,7 +20,8 @@ class LoanAppPrincipalBorrowerController
         if (loanapp.objid == null) return;
         
         handlers.saveHandler = { save(); }          
-        def data = service.open([objid: loanapp.objid]); 
+        def data = service.open([objid: loanapp.objid]);
+        data.borrower.type = 'PRINCIPAL'
         loanapp.clear();
         loanapp.putAll(data); 
     }
@@ -29,7 +30,8 @@ class LoanAppPrincipalBorrowerController
         return [
             beforeSaveHandlers: beforeSaveHandlers, 
             service: service, 
-            loanapp: loanapp, 
+            loanapp: loanapp,
+            borrower: loanapp.borrower,
             mode: caller.mode 
         ]; 
     }

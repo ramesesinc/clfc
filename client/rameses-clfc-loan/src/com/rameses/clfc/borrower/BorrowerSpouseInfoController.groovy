@@ -11,19 +11,18 @@ class BorrowerSpouseInfoController
     def loanapp, mode;
     def entity = [:];
     
-    void setLoanapp(loanapp) {
-        this.loanapp = loanapp;
-        if (loanapp.borrower?.spouse == null) 
+    void init() {
+        if( loanapp.borrower?.spouse == null )
             loanapp.borrower.spouse = [:];
-        
+       
         entity = loanapp.borrower.spouse;
         if (entity != null) {
             def name = entity.lastname + ', ' + entity.firstname;
             if (entity.middlename) name = name + ' ' + entity.middlename;
-            
+            if( entity.lastname == null ) name = ''
             entity.name = name;
         }
-    }
+    }    
     
     def getLookupBorrower() {  
         def params = [

@@ -1,0 +1,12 @@
+<workunit>
+    <invokers>
+        <invoker type="comaker:create" action="init" caption="Co-Maker" target="popup"/>
+        <invoker type="comaker:open" action="init" caption="Co-Maker" target="popup"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.comaker.CoMakerController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.comaker.CoMakerPage"/>
+    </pages>
+</workunit>

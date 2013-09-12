@@ -1,0 +1,6 @@
+"addCoMaker|removeCoMaker" [caller.mode != 'read'] {
+    enabled:true;
+}
+"addCoMaker|removeCoMaker" [caller.mode == 'read'] {
+    enabled:false;
+}

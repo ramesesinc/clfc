@@ -7,14 +7,14 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerSavingsAcctController
 {
-    def loanapp, mode;
+    def loanapp, mode, borrower;
 
     def selectedSavingAcct;
     def savingsAcctHandler = [
         fetchList: {o->
-            if( !loanapp.borrower.savingaccts ) loanapp.borrower.savingaccts = [];
-            loanapp.borrower.savingaccts.each{ it._filetype = "saving"; }
-            return loanapp.borrower.savingaccts;
+            if( !borrower.savingaccts ) borrower.savingaccts = [];
+            borrower.savingaccts.each{ it._filetype = "saving"; }
+            return borrower.savingaccts;
         },
         onRemoveItem: {o->
             return removeItemImpl(o);
@@ -26,8 +26,8 @@ class BorrowerSavingsAcctController
     
     def addSavingAcct() {
         def handler = {acct->
-            acct.borrowerid = loanapp.borrower?.objid;
-            loanapp.borrower.savingaccts.add(acct);
+            acct.borrowerid = borrower?.objid;
+            borrower.savingaccts.add(acct);
             savingsAcctHandler.reload();
         }
         return InvokerUtil.lookupOpener("saving:create", [handler:handler]);
@@ -40,7 +40,7 @@ class BorrowerSavingsAcctController
     boolean removeItemImpl(o) {
         if (mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            loanapp.borrower.savingaccts.remove(o);
+            borrower.savingaccts.remove(o);
             return true;
         } else { 
             return false; 

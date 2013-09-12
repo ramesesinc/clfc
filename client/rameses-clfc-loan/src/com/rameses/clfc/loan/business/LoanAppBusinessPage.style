@@ -1,6 +1,6 @@
-"addBusiness|addCiReport" [caller.mode != 'read'] {
+"addBusiness|removeBusiness|addCiReport" [caller.mode != 'read'] {
     enabled:true;
 }
-"addBusiness" [caller.mode == 'read'] {
+"addBusiness|removeBusiness" [caller.mode == 'read'] {
     enabled:false;
 }

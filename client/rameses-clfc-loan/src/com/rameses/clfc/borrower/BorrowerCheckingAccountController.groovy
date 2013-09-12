@@ -7,14 +7,14 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerCheckingAccountController
 {
-    def loanapp, mode;
+    def loanapp, mode, borrower;
 
     def selectedCheckingAcct;
     def checkingAcctHandler = [
         fetchList: {o->
-            if( !loanapp.borrower.checkingaccts ) loanapp.borrower.checkingaccts = [];
-            loanapp.borrower.checkingaccts.each{ it._filetype = "checking"; }
-            return loanapp.borrower.checkingaccts;
+            if( !borrower.checkingaccts ) borrower.checkingaccts = [];
+            borrower.checkingaccts.each{ it._filetype = "checking"; }
+            return borrower.checkingaccts;
         },
         onRemoveItem: {o->
             return removeItemImpl(o);
@@ -26,8 +26,8 @@ class BorrowerCheckingAccountController
     
     def addCheckingAcct() {
         def handler = {acct->
-            acct.borrowerid = loanapp.borrower?.objid;
-            loanapp.borrower.checkingaccts.add(acct);
+            acct.borrowerid = borrower?.objid;
+            borrower.checkingaccts.add(acct);
             checkingAcctHandler.reload();
         }
         return InvokerUtil.lookupOpener("checking:create", [handler:handler]);
@@ -40,7 +40,7 @@ class BorrowerCheckingAccountController
     boolean removeItemImpl(o) {
         if (mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            loanapp.borrower.checkingaccts.remove(o);
+            borrower.checkingaccts.remove(o);
             return true;
         } else { 
             return false; 

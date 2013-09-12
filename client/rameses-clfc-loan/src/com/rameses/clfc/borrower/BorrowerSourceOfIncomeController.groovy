@@ -7,14 +7,14 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerSourceOfIncomeController
 {
-    def loanapp, mode;   
+    def loanapp, mode, borrower;   
 
     def selectedOtherIncome;
     def otherIncomeHandler = [
         fetchList: {o->
-            if( !loanapp.borrower.otherincomes ) loanapp.borrower.otherincomes = [];
-            loanapp.borrower.otherincomes.each{ it._filetype = "otherincome"; }
-            return loanapp.borrower.otherincomes;
+            if( !borrower.otherincomes ) borrower.otherincomes = [];
+            borrower.otherincomes.each{ it._filetype = "otherincome"; }
+            return borrower.otherincomes;
         },
         onRemoveItem: {o->
             return removeItemImpl(o);
@@ -26,8 +26,8 @@ class BorrowerSourceOfIncomeController
     
     def addOtherIncome() {
         def handler = {otherincome->
-            otherincome.refid = loanapp.borrower?.objid;
-            loanapp.borrower.otherincomes.add(otherincome);
+            otherincome.refid = borrower?.objid;
+            borrower.otherincomes.add(otherincome);
             otherIncomeHandler.reload();
         }
         return InvokerUtil.lookupOpener("otherincome:create", [handler:handler]);
@@ -40,7 +40,7 @@ class BorrowerSourceOfIncomeController
     boolean removeItemImpl(o) {
         if (mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            loanapp.borrower.otherincomes.remove(o);
+            borrower.otherincomes.remove(o);
             return true;
         } else { 
             return false; 
