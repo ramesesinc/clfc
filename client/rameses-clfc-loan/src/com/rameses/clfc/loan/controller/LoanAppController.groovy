@@ -71,17 +71,14 @@ class LoanAppController
             if (op == null) {
                 def invtype = 'loanapp-'+selectedMenu.name+':open'; 
                 op = InvokerUtil.lookupOpener(invtype, [ 
-                    loanapp: entity, 
                     caller: this, 
+                    loanapp: entity, 
                     handlers: handlers 
                 ]); 
                 selectedMenu.opener = op;
             } 
-            return op;            
-        }, 
-        getOpenerParams: {
-            
-        }
+            return op; 
+        } 
     ] as SubFormPanelModel;
         
     void edit() {
@@ -99,7 +96,9 @@ class LoanAppController
     }
     
     void cancel() {
+        if (!MsgBox.confirm('Are you sure you want to cancel all the changes made?')) return;
+        
         mode = 'read'; 
-        subFormHandler.refresh();
+        selectedMenu.opener = null;
     }    
 }

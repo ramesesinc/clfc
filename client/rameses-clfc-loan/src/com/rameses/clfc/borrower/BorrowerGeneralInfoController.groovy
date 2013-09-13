@@ -8,7 +8,10 @@ import com.rameses.clfc.borrower.*;
 
 class BorrowerGeneralInfoController 
 {
+    //feed by the caller
     def borrowerContext;
+    
+    //local variables 
     def entity = [:];
     
     void init() {
@@ -17,10 +20,10 @@ class BorrowerGeneralInfoController
     
     def getLookupBorrower() {  
         def params = [
-            'query.loanappid': borrowerContext.loanapp.objid, 
+            'query.loanappid': borrowerContext.loanappid, 
             onselect: {o-> 
                 def borrower = null; 
-                try { borrower = borrowerContext.service.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
+                try { borrower = borrowerContext.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
                 
                 if (borrower == null) { 
                     entity.putAll(o); 
@@ -28,11 +31,11 @@ class BorrowerGeneralInfoController
                     entity.clear(); 
                     entity.putAll(borrower);
                 } 
-                borrowerContext.caller.tabHandler.refresh(); 
+                borrowerContext.refresh(); 
             }, 
             onempty: { 
                 entity.clear(); 
-                borrowerContext.caller.tabHandler.refresh(); 
+                borrowerContext.refresh(); 
             }
         ];
         return InvokerUtil.lookupOpener('customer:lookup', params);

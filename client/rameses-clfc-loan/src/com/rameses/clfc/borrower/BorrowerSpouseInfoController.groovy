@@ -8,29 +8,23 @@ import com.rameses.clfc.borrower.*;
 
 class BorrowerSpouseInfoController 
 {
+    //feed by the caller
     def borrowerContext;
+    
+    //declare variables
     def entity = [:];
     
-    void init() {
-        if( borrowerContext.loanapp.borrower?.spouse == null )
-            borrowerContext.loanapp.borrower.spouse = [:];
-       
-        entity = borrowerContext.loanapp.borrower.spouse;
-        if (entity != null) {
-            def name = entity.lastname + ', ' + entity.firstname;
-            if (entity.middlename) name = name + ' ' + entity.middlename;
-            if( entity.lastname == null ) name = ''
-            entity.name = name;
-        }
-    }    
+    void init() {        
+        entity = borrowerContext.spouse;
+    } 
     
-    def getLookupBorrower() {  
-        def params = [
+    def getLookupBorrower() { 
+        def params = [ 
             'query.loanappid': borrowerContext.loanapp.objid, 
             onselect: {o-> 
                 entity.putAll(o); 
-            }
-        ];
-        return InvokerUtil.lookupOpener('customer:lookup', params);
-    }
+            } 
+        ]; 
+        return InvokerUtil.lookupOpener('customer:lookup', params); 
+    } 
 }
