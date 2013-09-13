@@ -163,22 +163,26 @@ class HtmlBuilder
                                         <tr>
                                             <td colspan="2">
                                                 <br/><font class="bold">Credit Investigation Report</font>
-                                                <table width="100%">
+                                                <table>
                                                     <tbody>
                                                         <tr>
-                                                            <td>Business Evaluation: </td>
-                                                            <td>
+                                                            <td style="width:50px;">Business Evaluation: </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 0px 0px 0px 10px;">
                                                                 <p>${ifNull(business.ci?.evaluation, '-')}</p>
-                                                            </td>                                                    
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Physical Outlook: </td>
-                                                            <td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 0px 0px 0px 10px;">
                                                                 <p>${ifNull(business.ci?.physicaloutlook, '-')}</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="2">
+                                                            <td>
                                                                 Cash Count<br/>
                                                                 <table>
                                                                     <tbody>
@@ -352,7 +356,7 @@ class HtmlBuilder
                                         </tr>
                                         <tr>
                                             <td>Date Acquired: </td>
-                                            <td>$property.dtacquired</td>
+                                            <td>${ifNull(property.dtacquired, '-')}</td>
                                         </tr>
                                         <tr>
                                             <td>Acquired From: </td>

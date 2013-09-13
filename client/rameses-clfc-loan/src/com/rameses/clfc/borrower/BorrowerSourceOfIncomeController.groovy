@@ -8,6 +8,9 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerSourceOfIncomeController
 {
+    @Binding
+    def binding;
+    
     def borrowerContext;
     def selectedOtherIncome;
     def otherIncomeHandler = [
@@ -20,7 +23,7 @@ class BorrowerSourceOfIncomeController
             return removeOtherIncomeImpl(o);
         },
         getOpenerParams: {o->
-            return [mode: mode]
+            return [mode: borrowerContext.mode, caller:this]
         }
     ] as EditorListModel;
     
@@ -38,7 +41,7 @@ class BorrowerSourceOfIncomeController
     }
             
     boolean removeOtherIncomeImpl(o) {
-        if (mode == 'read') return false;
+        if (borrowerContext.mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this item. Continue?")) {
             borrowerContext.borrower.otherincomes.remove(o);
             return true;

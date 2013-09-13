@@ -9,6 +9,9 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerChildrenController 
 {
+    @Binding
+    def binding;
+    
     def borrowerContext;
     def selectedChild;
     def childrenHandler = [
@@ -21,10 +24,10 @@ class BorrowerChildrenController
             return removeChildImpl(o);
         },
         getOpenerParams: {o->
-            return [ mode: borrowerContext.mode ]
+            return [ mode: borrowerContext.mode, caller: this ]
         }
     ] as EditorListModel
-
+            
     def addChild() {
         def handler = {child->
             child.borrowerid = borrowerContext.borrower?.objid;

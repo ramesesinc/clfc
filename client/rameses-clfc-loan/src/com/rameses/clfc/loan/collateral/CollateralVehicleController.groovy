@@ -8,6 +8,8 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class CollateralVehicleController
 {
+    @Binding
+    def binding;
     def loanapp, mode, beforeSaveHandlers;
     
     def selectedVehicle;
@@ -21,7 +23,7 @@ class CollateralVehicleController
             return removeVehicleImpl(o); 
         },
         getOpenerParams: {o->
-            return [mode: mode];
+            return [mode: mode, caller:this];
         }
     ] as EditorListModel;
     

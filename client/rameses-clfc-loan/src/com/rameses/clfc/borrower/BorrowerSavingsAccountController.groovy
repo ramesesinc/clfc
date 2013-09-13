@@ -8,6 +8,9 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerSavingsAcctController
 {
+    @Binding
+    def binding;
+            
     def borrowerContext;
     def selectedSavingAcct;
     def savingsAcctHandler = [
@@ -20,7 +23,7 @@ class BorrowerSavingsAcctController
             return removeSavingAcctImpl(o);
         },
         getOpenerParams: {o->
-            return [mode: borrowerContext.mode]
+            return [mode: borrowerContext.mode, caller:this]
         }
     ] as EditorListModel; 
     

@@ -10,6 +10,9 @@ class LoanAppOtherLendingController
     //feed by the caller
     def loanapp, caller, handlers;
     
+    @Binding
+    def binding;
+    
     @Service('LoanAppOtherLendingService') 
     def service; 
     
@@ -48,7 +51,7 @@ class LoanAppOtherLendingController
             return removeOtherLendingImpl(o);
         },
         getOpenerParams: {o->
-            return [mode: caller.mode];
+            return [mode: caller.mode, caller:this];
         }
     ] as EditorListModel
             

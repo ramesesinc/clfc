@@ -8,6 +8,9 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerSiblingsController
 {
+    @Binding
+    def binding;
+    
     def borrowerContext;
     def selectedSibling;
     def siblingsHandler = [
@@ -20,7 +23,7 @@ class BorrowerSiblingsController
             return removeSiblingImpl(o);
         },
         getOpenerParams: {o->
-            return [mode: borrowerContext.mode]
+            return [mode: borrowerContext.mode, caller:this]
         }
     ] as EditorListModel;
     

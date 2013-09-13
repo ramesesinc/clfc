@@ -50,14 +50,14 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xTextArea4 = new com.rameses.rcp.control.XTextArea();
         xFormPanel7 = new com.rameses.rcp.control.XFormPanel();
         xDateField1 = new com.rameses.rcp.control.XDateField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
-        xTextField5 = new com.rameses.rcp.control.XTextField();
+        xTextField10 = new com.rameses.rcp.control.XTextField();
         xFormPanel11 = new com.rameses.rcp.control.XFormPanel();
         xComboBox8 = new com.rameses.rcp.control.XComboBox();
-        xTextField10 = new com.rameses.rcp.control.XTextField();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
         xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         xTextArea3 = new com.rameses.rcp.control.XTextArea();
+        xTextField5 = new com.rameses.rcp.control.XTextField();
 
         jPanel1.setLayout(null);
 
@@ -67,7 +67,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
 
         xFormPanel3.setPadding(new java.awt.Insets(4, 0, 0, 0));
         xComboBox1.setCaption("Kind of Business");
-        xComboBox1.setCaptionWidth(105);
+        xComboBox1.setCaptionWidth(125);
         xComboBox1.setExpression("#{item.value}");
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("kindTypes");
@@ -92,14 +92,14 @@ public class BusinessFormPage extends javax.swing.JPanel {
 
         xFormPanel1.setPadding(new java.awt.Insets(5, 0, 0, 0));
         xTextField1.setCaption("Firm/Trade Name");
-        xTextField1.setCaptionWidth(105);
+        xTextField1.setCaptionWidth(125);
         xTextField1.setName("entity.tradename");
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("Address");
-        xTextField2.setCaptionWidth(105);
+        xTextField2.setCaptionWidth(125);
         xTextField2.setName("entity.address");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xTextField2.setRequired(true);
@@ -110,7 +110,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
 
         xFormPanel12.setPadding(new java.awt.Insets(7, 0, 0, 0));
         xComboBox9.setCaption("Occupancy");
-        xComboBox9.setCaptionWidth(105);
+        xComboBox9.setCaptionWidth(125);
         xComboBox9.setExpression("#{item.value}");
         xComboBox9.setItemKey("value");
         xComboBox9.setItems("occupancyTypes");
@@ -124,7 +124,8 @@ public class BusinessFormPage extends javax.swing.JPanel {
 
         xFormPanel13.setPadding(new java.awt.Insets(8, 0, 0, 0));
         xComboBox10.setCaption("Rent Type");
-        xComboBox10.setCaptionWidth(105);
+        xComboBox10.setCaptionWidth(125);
+        xComboBox10.setDepends(new String[] {"entity.occupancy.type"});
         xComboBox10.setExpression("#{item.value}");
         xComboBox10.setItemKey("value");
         xComboBox10.setItems("rentTypes");
@@ -138,6 +139,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel10.setPadding(new java.awt.Insets(8, 5, 0, 0));
         xNumberField2.setCaption("Rent Amount");
         xNumberField2.setCaptionWidth(160);
+        xNumberField2.setDepends(new String[] {"entity.occupancy.type"});
         xNumberField2.setFieldType(BigDecimal.class);
         xNumberField2.setName("entity.occupancy.rentamount");
         xNumberField2.setPreferredSize(new java.awt.Dimension(0, 19));
@@ -149,7 +151,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel8.setPadding(new java.awt.Insets(0, 0, 0, 0));
         jScrollPane4.setPreferredSize(new java.awt.Dimension(0, 40));
         xTextArea4.setCaption("Remarks");
-        xTextArea4.setCaptionWidth(105);
+        xTextArea4.setCaptionWidth(125);
         xTextArea4.setName("entity.occupancy.remarks");
         xTextArea4.setPreferredSize(new java.awt.Dimension(100, 38));
         xTextArea4.setRequired(true);
@@ -163,29 +165,21 @@ public class BusinessFormPage extends javax.swing.JPanel {
 
         xFormPanel7.setPadding(new java.awt.Insets(2, 0, 0, 0));
         xDateField1.setCaption("Business Started");
-        xDateField1.setCaptionWidth(105);
+        xDateField1.setCaptionWidth(125);
         xDateField1.setName("entity.dtstarted");
         xDateField1.setPreferredSize(new java.awt.Dimension(120, 19));
         xDateField1.setRequired(true);
         xFormPanel7.add(xDateField1);
 
-        xNumberField1.setCaption("Initial Invested");
-        xNumberField1.setCaptionWidth(105);
-        xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.capital");
-        xNumberField1.setPattern("#,##0.00");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(130, 19));
-        xNumberField1.setRequired(true);
-        xFormPanel7.add(xNumberField1);
-
-        xTextField5.setCaption("Tel. No.");
-        xTextField5.setCaptionWidth(105);
-        xTextField5.setName("entity.contactno");
-        xTextField5.setPreferredSize(new java.awt.Dimension(150, 19));
-        xFormPanel7.add(xTextField5);
+        xTextField10.setCaption("Estimated Daily Sales");
+        xTextField10.setCaptionWidth(125);
+        xTextField10.setName("entity.avgsales");
+        xTextField10.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField10.setRequired(true);
+        xFormPanel7.add(xTextField10);
 
         jPanel1.add(xFormPanel7);
-        xFormPanel7.setBounds(10, 170, 280, 70);
+        xFormPanel7.setBounds(10, 170, 280, 50);
 
         xFormPanel11.setPadding(new java.awt.Insets(2, 5, 0, 0));
         xComboBox8.setCaption("Ownership");
@@ -198,12 +192,14 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xComboBox8.setRequired(true);
         xFormPanel11.add(xComboBox8);
 
-        xTextField10.setCaption("Estimated Daily Sales");
-        xTextField10.setCaptionWidth(160);
-        xTextField10.setName("entity.avgsales");
-        xTextField10.setPreferredSize(new java.awt.Dimension(0, 19));
-        xTextField10.setRequired(true);
-        xFormPanel11.add(xTextField10);
+        xNumberField1.setCaption("Initial Invested");
+        xNumberField1.setCaptionWidth(160);
+        xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setName("entity.capital");
+        xNumberField1.setPattern("#,##0.00");
+        xNumberField1.setPreferredSize(new java.awt.Dimension(130, 19));
+        xNumberField1.setRequired(true);
+        xFormPanel11.add(xNumberField1);
 
         jPanel1.add(xFormPanel11);
         xFormPanel11.setBounds(290, 170, 310, 50);
@@ -211,7 +207,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel5.setPadding(new java.awt.Insets(5, 0, 0, 0));
         jScrollPane3.setPreferredSize(new java.awt.Dimension(0, 40));
         xTextArea3.setCaption("Business Hours");
-        xTextArea3.setCaptionWidth(105);
+        xTextArea3.setCaptionWidth(125);
         xTextArea3.setName("entity.officehours");
         xTextArea3.setPreferredSize(new java.awt.Dimension(100, 38));
         xTextArea3.setRequired(true);
@@ -220,8 +216,14 @@ public class BusinessFormPage extends javax.swing.JPanel {
 
         xFormPanel5.add(jScrollPane3);
 
+        xTextField5.setCaption("Tel. No.");
+        xTextField5.setCaptionWidth(125);
+        xTextField5.setName("entity.contactno");
+        xTextField5.setPreferredSize(new java.awt.Dimension(150, 19));
+        xFormPanel5.add(xTextField5);
+
         jPanel1.add(xFormPanel5);
-        xFormPanel5.setBounds(10, 230, 590, 50);
+        xFormPanel5.setBounds(10, 210, 590, 80);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -236,7 +238,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

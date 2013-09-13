@@ -15,6 +15,7 @@ public class PopupMasterController
     def entity
     def handler
     def mode
+    def caller
 
     public def createEntity() {
         return [:]
@@ -32,6 +33,7 @@ public class PopupMasterController
     
     public def doOk() {
         if( handler ) handler(entity)
+        if( caller ) caller.binding.refresh('htmlview');
         return "_close"
     }
 

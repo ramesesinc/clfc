@@ -47,7 +47,7 @@ class LoanAppJointBorrowerController
                 mode: caller.mode, 
                 service: service, 
                 handlers: handlers, 
-                beforeSaveHandlers:beforeSaveHandlers
+                beforeSaveHandlers: beforeSaveHandlers
         ]
     }
     
@@ -58,7 +58,7 @@ class LoanAppJointBorrowerController
             return borrowers;
         },
         onRemoveItem: {o->
-            return removeItemImpl(o);
+            return removeJointBorrowerImpl(o);
         },
         getOpenerParams: {o->
             def params = createOpenerParams()
@@ -68,12 +68,12 @@ class LoanAppJointBorrowerController
     ] as EditorListModel;
         
     void removeJointBorrower() {
-        removeItemImpl(selectedJointBorrower);
+        removeJointBorrowerImpl(selectedJointBorrower);
     }
             
-    boolean removeItemImpl(o) {
+    boolean removeJointBorrowerImpl(o) {
         if (caller.mode == 'read') return false;
-        if (MsgBox.confirm("You are about to remove this item. Continue?")) {
+        if (MsgBox.confirm("You are about to remove this joint borrower. Continue?")) {
             borrowers.remove(o);
             return true;
         } else { 

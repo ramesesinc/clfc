@@ -7,6 +7,8 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class CollateralPropertyController
 {
+    @Binding
+    def binding;
     def loanapp, mode, beforeSaveHandlers;
     
     def selectedProperty;
@@ -20,7 +22,7 @@ class CollateralPropertyController
             return removeChildImpl(o); 
         },
         getOpenerParams: {o->
-            return [mode: mode];
+            return [mode: mode, caller:this];
         }
     ] as EditorListModel;
     

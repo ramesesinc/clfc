@@ -7,7 +7,7 @@ import com.rameses.osiris2.common.*;
 
 class CoMakerController 
 {
-    def loanapp, mode, handlers, service, beforeSaveHandlers, callBackHandler;  
+    def loanapp, mode, handlers, service, beforeSaveHandlers, callBackHandler, caller;  
 
     @ChangeLog
     def changeLog
@@ -15,9 +15,11 @@ class CoMakerController
     void init() {
         if (loanapp.borrower?.objid == null) return;
 
-        def relation = loanapp.borrower.relation
+        def filetype = loanapp.borrower._filetype;
+        def relation = loanapp.borrower.relation;
         def data = service.openBorrower([objid: loanapp.borrower.objid]);
         data.type = 'COMAKER';
+        data._filetype = filetype;
         data.relation = relation;
         loanapp.borrower.clear();
         loanapp.borrower.putAll(data); 

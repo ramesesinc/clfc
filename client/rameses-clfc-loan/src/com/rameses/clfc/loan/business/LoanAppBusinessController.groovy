@@ -11,6 +11,9 @@ class LoanAppBusinessController
     //feed by the caller
     def loanapp, caller, handlers;
     
+    @Binding
+    def binding;
+    
     @Service('LoanAppBusinessService') 
     def service; 
     
@@ -47,7 +50,7 @@ class LoanAppBusinessController
             return removeBusinessImpl(o);
         },
         getOpenerParams: {o->
-            return [mode: caller.mode]
+            return [mode: caller.mode, caller:this]
         }
     ] as EditorListModel;
     

@@ -8,6 +8,9 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerEmploymentController
 {   
+    @Binding
+    def binding;
+    
     def borrowerContext;
     def selectedEmployment;
     def employmentHandler = [
@@ -20,7 +23,7 @@ class BorrowerEmploymentController
             return removeItemImpl(o);
         },
         getOpenerParams: {o->
-            return [mode: borrowerContext.mode]
+            return [mode: borrowerContext.mode, caller:this]
         }
     ] as EditorListModel; 
     

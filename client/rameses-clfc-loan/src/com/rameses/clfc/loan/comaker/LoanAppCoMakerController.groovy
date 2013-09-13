@@ -42,13 +42,12 @@ class LoanAppCoMakerController
     }
     
     def createOpenerParams() {
-        if( selectedCoMaker == null ) selectedCoMaker = [:];
         return [
-                loanapp: [borrower: selectedCoMaker],
+                loanapp: [:],
                 mode: caller.mode, 
                 service: service, 
                 handlers: handlers, 
-                beforeSaveHandlers:beforeSaveHandlers
+                beforeSaveHandlers: beforeSaveHandlers
         ]
     }
     
@@ -62,7 +61,9 @@ class LoanAppCoMakerController
             return removeCoMakerImpl(o);
         },
         getOpenerParams: {o->
-            return createOpenerParams()
+            def params = createOpenerParams()
+            params.loanapp.borrower = o;
+            return params;
         }
     ] as EditorListModel;
         
@@ -81,7 +82,7 @@ class LoanAppCoMakerController
     }
     
     def getHtmlview() {
-        HtmlBuilder html=new HtmlBuilder();
+        def html=new HtmlBuilder();
         return html.buildBorrower(selectedCoMaker);
     }
 }

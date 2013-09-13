@@ -121,6 +121,7 @@ public class CIReportPage extends javax.swing.JPanel {
         xNumberField1.setCaption("Amount");
         xNumberField1.setFieldType(BigDecimal.class);
         xNumberField1.setName("entity.amount");
+        xNumberField1.setPattern("#,##0.00");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField1.setRequired(true);
         xFormPanel4.add(xNumberField1);

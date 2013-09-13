@@ -8,6 +8,8 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class CollateralApplianceController
 {
+    @Binding
+    def binding;
     def loanapp, mode, beforeSaveHandlers;
     
     def selectedAppliance;
@@ -21,7 +23,7 @@ class CollateralApplianceController
             return removeApplianceImpl(o); 
         },
         getOpenerParams: {o->
-            return [mode: mode];
+            return [mode: mode, caller:this];
         }
     ] as EditorListModel;
     

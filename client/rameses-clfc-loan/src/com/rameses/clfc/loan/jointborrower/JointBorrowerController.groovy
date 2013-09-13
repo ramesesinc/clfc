@@ -8,18 +8,19 @@ import com.rameses.osiris2.common.*;
 class JointBorrowerController 
 {
     //feed by the caller
-    def loanapp, mode, handlers, service, beforeSaveHandlers, callBackHandler;  
+    def loanapp, mode, handlers, service, beforeSaveHandlers, callBackHandler, caller;  
 
     @ChangeLog
-    def changeLog
-    
+    def changeLog    
     
     void init() {
         if (loanapp.borrower?.objid == null) return;
 
-        def relation = loanapp.borrower.relation
+        def filetype = loanapp.borrower._filetype;
+        def relation = loanapp.borrower.relation;
         def data = service.openBorrower([objid: loanapp.borrower.objid]);
         data.type = 'JOINT';
+        data._filetype = filetype;
         data.relation = relation;
         loanapp.borrower.clear();
         loanapp.borrower.putAll(data); 
