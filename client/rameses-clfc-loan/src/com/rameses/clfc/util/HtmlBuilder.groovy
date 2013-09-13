@@ -168,35 +168,35 @@ class HtmlBuilder
                                                         <tr>
                                                             <td>Business Evaluation: </td>
                                                             <td>
-                                                                <p>$business.ci.evaluation</p>
+                                                                <p>${ifNull(business.ci?.evaluation, '-')}</p>
                                                             </td>                                                    
                                                         </tr>
                                                         <tr>
                                                             <td>Physical Outlook: </td>
                                                             <td>
-                                                                <p>$business.ci.physicaloutlook
+                                                                <p>${ifNull(business.ci?.physicaloutlook, '-')}</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>
+                                                            <td colspan="2">
                                                                 Cash Count<br/>
-                                                                <table width="100%">
+                                                                <table>
                                                                     <tbody>
                                                                         <tr>
                                                                             <td width="80px">Filed By: </td>
-                                                                            <td>$business.ci.filedby</td>
+                                                                            <td>${ifNull(business.ci?.filedby, '-')}</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>Date: </td>
-                                                                            <td>$business.ci.dtfiled</td>
+                                                                            <td>${ifNull(business.ci.dtfiled, '-')}</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>Time: </td>
-                                                                            <td>$business.ci.timefiled</td>
+                                                                            <td>${ifNull(business.ci.timefiled, '-')}</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>Amount: </td>
-                                                                            <td>$business.ci.amount</td>
+                                                                            <td>${ifNull(business.ci.amount, '-')}</td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -381,5 +381,161 @@ class HtmlBuilder
                             </body>
                         """
         return getHtml(htmlbody);
+    }
+    
+    public def buildOtherLending( otherlending ) {
+        if( otherlending == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Other Lending Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="120px">Kind of Loan: </td>
+                                            <td>${ifNull(otherlending.kind, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name of Lending Inst.: </td>
+                                            <td>$otherlending.name</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address: </td>
+                                            <td>${ifNull(otherlending.address, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Loan Amount: </td>
+                                            <td>$otherlending.amount</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Date Granted: </td>
+                                            <td>${ifNull(otherlending.dtgranted, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Maturity Date: </td>
+                                            <td>${ifNull(otherlending.dtmatured, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Term: </td>
+                                            <td>${ifNull(otherlending.term, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Interest Rate: </td>
+                                            <td>${ifNull(otherlending.interest, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mode of Payment: </td>
+                                            <td>${ifNull(otherlending.paymentmode, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Payment: </td>
+                                            <td>$otherlending.paymentamount</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Collateral(s): </td>
+                                            <td>
+                                                <p>${ifNull(otherlending.collateral, '-')}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>${ifNull(otherlending.remarks, '-')}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </body>
+                        """
+        return getHtml(htmlbody);
+    }
+    
+    public def buildBankAccount( bankacct ) {
+        if( bankacct == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Checking Account Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="80px">Bank Name: </td>
+                                            <td>$bankacct.bankname</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>${ifNull(bankacct.remarks, '-')}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </body>
+                        """
+         return getHtml(htmlbody);
+    }
+    
+    public def buildChild( child ) {
+        if( child == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Child Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="120px">Name: </td>
+                                            <td>$child.name</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Age: </td>
+                                            <td>$child.age</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Educational Attainment: </td>
+                                            <td>
+                                                <p>${ifNull(child.education, '-')}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>${ifNull(child.remarks, '-')}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table><br/>
+                                <font class="bold">Employments</font>
+                                <table>
+                                    <tbody>
+                                    ${getEmploymentList(child.employments)}                    
+                                    </tbody>
+                                </table><br/>
+                                <font class="bold">Other Sources of Income</font>
+                                <table>
+                                    <tbody>
+                                    ${getOtherIncome(child.employments)}                    
+                                    </tbody>
+                                </table><br/>
+                            </body>
+                        """
+        return getHtml(htmlbody);
+    }
+    
+    private def getEmploymentList( list ) {
+        if( list.isEmpty() ) return ''
+        def html = "";
+        list.each{
+            html +=  """
+                        <tr>
+                            <td width="80px">Employer: </td>
+                            <td>it.employer</td>
+                        </tr>
+                        <tr>
+                            <td>Remarks: </td>
+                            <td>
+                                <p>it.remarks</p>
+                            </td>
+                        </tr>
+                    """
+        }
+        return html
     }
 }

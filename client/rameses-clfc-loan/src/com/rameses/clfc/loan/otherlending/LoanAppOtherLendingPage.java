@@ -49,8 +49,8 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
         xLabel2.setText("Other Lending(s)");
 
         xButton2.setDepends(new String[] {"selectedOtherLending"});
-        xButton2.setDisableWhen("#{selectedOtherLending == null || mode=='read'}");
-        xButton2.setName("removeAppliance");
+        xButton2.setDisableWhen("#{selectedOtherLending == null || caller.mode=='read'}");
+        xButton2.setName("removeOtherLending");
         xButton2.setText("Remove");
 
         xDataTable1.setAutoResize(false);
@@ -122,6 +122,7 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
             })
         });
         xDataTable1.setHandler("otherLendingHandler");
+        xDataTable1.setImmediate(true);
         xDataTable1.setName("selectedOtherLending");
 
         xButton1.setDepends(new String[] {"selectedOtherLending"});
@@ -158,7 +159,7 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
         );
         xSplitView1.add(jPanel1);
 
-        xHtmlView1.setDepends(new String[] {"selectedAppliance"});
+        xHtmlView1.setDepends(new String[] {"selectedOtherLending"});
         xHtmlView1.setName("htmlview");
         jScrollPane1.setViewportView(xHtmlView1);
 
