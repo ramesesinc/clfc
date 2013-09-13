@@ -4,7 +4,7 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class LoanAppBusinessController 
 {
@@ -14,6 +14,7 @@ class LoanAppBusinessController
     @Service('LoanAppBusinessService') 
     def service; 
     
+    def htmlBuilder = new HtmlBuilder(); 
     def businesses = [];
     
     void init() {
@@ -85,8 +86,13 @@ class LoanAppBusinessController
         return InvokerUtil.lookupOpener("cireport:edit", [handler:handler, entity:selectedBusiness.ci, mode:caller.mode])
     }
     
-    def getHtmlview() {
-        HtmlBuilder html=new HtmlBuilder();
-        return html.buildBusiness(selectedBusiness)
-    }
+    def getHtmlview() { 
+        try { 
+            return htmlBuilder.buildBusiness(selectedBusiness); 
+        } catch(e) {
+            println 'selectedBusiness-> ' + selectedBusiness;
+            e.printStackTrace();
+            throw e; 
+        }
+    } 
 }
