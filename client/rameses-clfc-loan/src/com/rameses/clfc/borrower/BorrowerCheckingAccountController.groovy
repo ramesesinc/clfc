@@ -4,46 +4,51 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
+import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerCheckingAccountController
 {
-    def loanapp, mode, borrower;
-
+    def borrowerContext;
     def selectedCheckingAcct;
     def checkingAcctHandler = [
         fetchList: {o->
-            if( !borrower.checkingaccts ) borrower.checkingaccts = [];
-            borrower.checkingaccts.each{ it._filetype = "checking"; }
-            return borrower.checkingaccts;
+            if( !borrowerContext.borrower.checkingaccts ) borrowerContext.borrower.checkingaccts = [];
+            borrowerContext.borrower.checkingaccts.each{ it._filetype = "checking"; }
+            return borrowerContext.borrower.checkingaccts;
         },
         onRemoveItem: {o->
-            return removeItemImpl(o);
+            return removeCheckingAcctImpl(o);
         },
         getOpenerParams: {o->
-            return [ mode: mode ]
+            return [ mode: borrowerContext.mode ]
         }
     ] as EditorListModel; 
     
     def addCheckingAcct() {
         def handler = {acct->
-            acct.borrowerid = borrower?.objid;
-            borrower.checkingaccts.add(acct);
+            acct.borrowerid = borrowerContext.borrower?.objid;
+            borrowerContext.borrower.checkingaccts.add(acct);
             checkingAcctHandler.reload();
         }
         return InvokerUtil.lookupOpener("checking:create", [handler:handler]);
     }
     
-    void removeEducation() {
-        removeItemImpl(selectedCheckingAcct);
+    void removeCheckingAcct() {
+        removeCheckingAcctImpl(selectedCheckingAcct);
     }
             
-    boolean removeItemImpl(o) {
-        if (mode == 'read') return false;
-        if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            borrower.checkingaccts.remove(o);
+    boolean removeCheckingAcctImpl(o) {
+        if (borrowerContext.mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this account. Continue?")) {
+            borrowerContext.borrower.checkingaccts.remove(o);
             return true;
         } else { 
             return false; 
         } 
-    }      
+    }
+    
+    def getHtmlview() {
+        def html=new HtmlBuilder();
+        return html.buildBankAccount(selectedCheckingAcct);
+    }
 }

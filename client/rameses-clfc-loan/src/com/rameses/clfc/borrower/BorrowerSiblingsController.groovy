@@ -7,40 +7,39 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerSiblingsController
 {
-    def loanapp, mode, borrower;
-
+    def borrowerContext;
     def selectedSibling;
     def siblingsHandler = [
         fetchList: {o->
-            if( !borrower.siblings ) borrower.siblings = [];
-            borrower.siblings.each{ it._filetype = "sibling"; }
-            return borrower.siblings;
+            if( !borrowerContext.borrower.siblings ) borrowerContext.borrower.siblings = [];
+            borrowerContext.borrower.siblings.each{ it._filetype = "sibling"; }
+            return borrowerContext.borrower.siblings;
         },
         onRemoveItem: {o->
-            return removeItemImpl(o);
+            return removeSiblingImpl(o);
         },
         getOpenerParams: {o->
-            return [mode: mode]
+            return [mode: borrowerContext.mode]
         }
     ] as EditorListModel;
     
     def addSibling() {
         def handler = {sibling->
-            sibling.borrowerid = borrower?.objid;
-            borrower.siblings.add(sibling);
+            sibling.borrowerid = borrowerContext.borrower?.objid;
+            borrowerContext.borrower.siblings.add(sibling);
             siblingsHandler.reload();
         }
         return InvokerUtil.lookupOpener("sibling:create", [handler:handler])
     }    
     
     void removeSibling() {
-        removeItemImpl(selectedSibling);
+        removeSiblingImpl(selectedSibling);
     }
             
-    boolean removeItemImpl(o) {
-        if (mode == 'read') return false;
-        if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            borrower.siblings.remove(o);
+    boolean removeSiblingImpl(o) {
+        if (borrowerContext.mode == 'read') return false;
+        if (MsgBox.confirm("You are about to remove this sibling. Continue?")) {
+            borrowerContext.borrower.siblings.remove(o);
             return true;
         } else { 
             return false; 

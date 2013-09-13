@@ -8,28 +8,27 @@ import com.rameses.clfc.borrower.*;
 
 class BorrowerGeneralInfoController 
 {
-    //feed by the caller
-    def service, loanapp, mode, borrower;
-    
+    def borrowerContext;
     def entity = [:];
     
     void init() {
-        entity = borrower;
+        entity = borrowerContext.borrower;
     }
     
     def getLookupBorrower() {  
         def params = [
-            'query.loanappid': loanapp.objid, 
+            'query.loanappid': borrowerContext.loanapp.objid, 
             onselect: {o-> 
                 def borrower = null; 
-                try { borrower = service.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
+                try { borrower = borrowerContext.service.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
                 
                 if (borrower == null) { 
                     entity.putAll(o); 
                 } else {
                     entity.clear(); 
                     entity.putAll(borrower);
-                }                    
+                }
+                borrowerContext.caller.tabHandler.refresh();
             }
         ];
         return InvokerUtil.lookupOpener('customer:lookup', params);

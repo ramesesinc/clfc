@@ -1,6 +1,6 @@
-"addChild|removeChild" [mode != 'edit']{
+"addChild|removeChild" [borrowerContext.mode != 'edit']{
     enabled: false; 
 }
-"addChild|removeChild" [mode == 'edit']{
+"addChild|removeChild" [borrowerContext.mode == 'edit']{
     enabled: true; 
 }

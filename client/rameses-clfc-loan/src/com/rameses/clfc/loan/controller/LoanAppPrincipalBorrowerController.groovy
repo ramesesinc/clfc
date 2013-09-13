@@ -5,6 +5,7 @@ import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 import com.rameses.clfc.loan.controller.*;
+import com.rameses.clfc.borrower.BorrowerContext;
 
 class LoanAppPrincipalBorrowerController 
 {
@@ -27,13 +28,14 @@ class LoanAppPrincipalBorrowerController
     }
 
     def createOpenerParams() {
-        return [
-            beforeSaveHandlers: beforeSaveHandlers, 
-            service: service, 
-            loanapp: loanapp,
-            borrower: loanapp.borrower,
-            mode: caller.mode 
-        ]; 
+        def borrowerContext=new BorrowerContext();
+        borrowerContext.beforeSaveHandlers = beforeSaveHandlers;
+        borrowerContext.service = service;
+        borrowerContext.loanapp = loanapp;
+        borrowerContext.borrower = loanapp.borrower;
+        borrowerContext.mode = caller.mode;
+        borrowerContext.caller = this;
+        return [borrowerContext:borrowerContext]; 
     }
     
     def tabHandler = [

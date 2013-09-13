@@ -6,15 +6,15 @@ import java.rmi.server.UID;
 
 class BorrowerOtherAccountController
 {
-    def loanapp, mode, borrower;
+    def borrowerContext;
     def entity = [:];
     
     void init() {
-        if( borrower?.otheracct == null )
-            borrower.otheracct = [:]
+        if( borrowerContext.borrower?.otheracct == null )
+            borrowerContext.borrower.otheracct = [:]
         
-        entity = borrower?.otheracct
-        entity.borrowerid = borrower?.objid;
+        entity = borrowerContext.borrower?.otheracct
+        entity.borrowerid = borrowerContext.borrower?.objid;
         entity.objid = 'BOA'+new UID();
     }
 }
