@@ -15,7 +15,8 @@ class LoanAppPrincipalBorrowerController
     @Service('PrincipalBorrowerService') 
     def service; 
     
-    def beforeSaveHandlers = [:];
+    private def beforeSaveHandlers = [:];
+    private def dataChangeHandlers = [:];
 
     void init() {
         if (loanapp.objid == null) return;
@@ -29,6 +30,8 @@ class LoanAppPrincipalBorrowerController
 
     def createOpenerParams() {
         def ctx = new BorrowerContext(caller, this, service, loanapp);
+        ctx.beforeSaveHandlers = beforeSaveHandlers;
+        ctx.dataChangeHandlers = dataChangeHandlers;
         return [ borrowerContext: ctx ]; 
     }
     

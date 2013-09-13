@@ -8,10 +8,18 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerEducationController
 {
+    //feed by the caller
+    def borrowerContext;
+    
     @Binding
     def binding;
     
-    def borrowerContext;
+    void init() {
+        borrowerContext.addDataChangeHandler('education', {
+            educationHandler.reload(); 
+        });
+    }    
+    
     def selectedEducation;
     def educationHandler = [
         fetchList: {o->

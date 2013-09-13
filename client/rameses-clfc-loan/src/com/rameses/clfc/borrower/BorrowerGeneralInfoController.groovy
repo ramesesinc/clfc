@@ -31,6 +31,9 @@ class BorrowerGeneralInfoController
                     entity.clear(); 
                     entity.putAll(borrower);
                 } 
+                borrowerContext.dataChangeHandlers.each{k,v-> 
+                    if (v != null) v(); 
+                } 
                 borrowerContext.refresh(); 
             }, 
             onempty: { 

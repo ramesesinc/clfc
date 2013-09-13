@@ -8,10 +8,12 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerCheckingAccountController
 {
+    //feed by the caller
+    def borrowerContext;
+
     @Binding
     def binding;
     
-    def borrowerContext;
     def selectedCheckingAcct;
     def checkingAcctHandler = [
         fetchList: {o->

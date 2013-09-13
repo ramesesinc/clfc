@@ -15,8 +15,17 @@ class BorrowerSpouseInfoController
     def entity = [:];
     
     void init() {        
-        entity = borrowerContext.spouse;
+        initEntity();
+        borrowerContext.addDataChangeHandler('spouseinfo', { initEntity() });
     } 
+    
+    void initEntity() {
+        entity = borrowerContext.borrower.spouse;
+        if (entity == null) {
+            borrowerContext.borrower.spouse = [:]; 
+            entity = borrowerContext.borrower.spouse;
+        }
+    }
     
     def getLookupBorrower() { 
         def params = [ 

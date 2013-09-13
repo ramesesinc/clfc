@@ -2,8 +2,9 @@ package com.rameses.clfc.borrower;
 
 class BorrowerContext
 {
-    private def dataChangeHandlers = [:];
-    private def beforeSaveHandlers = [:]; 
+    Map dataChangeHandlers = [:];
+    Map beforeSaveHandlers = [:]; 
+    
     private def parentCodeBean;
     private def codeBean;
     private def service;
@@ -16,29 +17,19 @@ class BorrowerContext
         this.loanapp = loanapp;
     }
 
-    public def getDataChangeHandlers() { return dataChangeHandlers; } 
-    public def getBeforeSaveHandlers() { return beforeSaveHandlers; }     
+    public void addDataChangeHandler(name, handler) {
+        if (handler != null) dataChangeHandlers.put(name, handler);
+    }
+    
+    public void addBeforeSaveHandler(name, handler) {
+        if (handler != null) beforeSaveHandlers.put(name, handler);
+    }
     
     public def getCaller() { return codeBean; }
     public def getService() { return service; } 
     public def getLoanapp() { return loanapp; } 
     public def getMode() { return parentCodeBean.mode; } 
     public def getBorrower() { return loanapp.borrower; } 
-
-    public def getSpouse() {
-        def borrower = loanapp.borrower;
-        if (borrower == null) {
-            loanapp.borrower = [:]; 
-            borrower = loanapp.borrower;
-        }
-        
-        def spouse = borrower.spouse;
-        if (spouse == null) {
-            borrower.spouse = [:];
-            spouse = borrower.spouse;
-        }
-        return spouse; 
-    }
     
     public def getLoanappid() { 
         return loanapp.objid; 

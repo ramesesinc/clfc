@@ -6,15 +6,22 @@ import java.rmi.server.UID;
 
 class BorrowerOtherAccountController
 {
-    def borrowerContext;
+    //feed by the caller
+    def borrowerContext;    
+    
     def entity = [:];
     
     void init() {
+        initEntity();
+        borrowerContext.addDataChangeHandler('otheracct', { initEntity() });
+    }
+    
+    void initEntity() { 
         if( borrowerContext.borrower?.otheracct == null )
             borrowerContext.borrower.otheracct = [:]
         
         entity = borrowerContext.borrower?.otheracct
         entity.borrowerid = borrowerContext.borrower?.objid;
-        entity.objid = 'BOA'+new UID();
+        entity.objid = 'BOA'+new UID();        
     }
 }

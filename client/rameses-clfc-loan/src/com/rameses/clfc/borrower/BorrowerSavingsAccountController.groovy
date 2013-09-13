@@ -8,10 +8,18 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerSavingsAcctController
 {
+    //feed by the caller
+    def borrowerContext;
+    
     @Binding
     def binding;
             
-    def borrowerContext;
+    void init() {
+        borrowerContext.addDataChangeHandler('savingacct', {
+            savingsAcctHandler.reload(); 
+        });
+    }    
+    
     def selectedSavingAcct;
     def savingsAcctHandler = [
         fetchList: {o->

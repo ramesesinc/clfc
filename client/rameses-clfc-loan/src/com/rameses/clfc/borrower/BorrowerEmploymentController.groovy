@@ -8,10 +8,18 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerEmploymentController
 {   
+    //feed by the caller
+    def borrowerContext;
+    
     @Binding
     def binding;
     
-    def borrowerContext;
+    void init() {
+        borrowerContext.addDataChangeHandler('employment', {
+            employmentHandler.reload(); 
+        });
+    }    
+    
     def selectedEmployment;
     def employmentHandler = [
         fetchList: {o->

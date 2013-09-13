@@ -8,10 +8,18 @@ import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerSourceOfIncomeController
 {
+    //feed by the caller
+    def borrowerContext;
+    
     @Binding
     def binding;
     
-    def borrowerContext;
+    void init() {
+        borrowerContext.addDataChangeHandler('otherincome', {
+            otherIncomeHandler.reload(); 
+        });
+    }    
+    
     def selectedOtherIncome;
     def otherIncomeHandler = [
         fetchList: {o->
