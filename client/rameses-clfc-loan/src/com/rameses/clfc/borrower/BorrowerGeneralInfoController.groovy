@@ -30,6 +30,9 @@ class BorrowerGeneralInfoController
                     entity.clear(); 
                     entity.putAll(borrower);
                 }                    
+            }, 
+            onempty: { 
+                entity.clear(); 
             }
         ];
         return InvokerUtil.lookupOpener('customer:lookup', params);
