@@ -5,31 +5,30 @@ import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 import com.rameses.clfc.borrower.*;
+import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerChildrenController 
 {
-    //feed by the caller
-    def loanapp, mode, borrower;
-
+    def borrowerContext;
     def selectedChild;
     def childrenHandler = [
         fetchList: {o->
-            if( !borrower.children ) borrower.children = []
-            borrower.children.each{ it._filetype = "child" }
-            return borrower.children;
+            if( !borrowerContext.borrower.children ) borrowerContext.borrower.children = []
+            borrowerContext.borrower.children.each{ it._filetype = "child" }
+            return borrowerContext.borrower.children;
         },
         onRemoveItem: {o->
             return removeChildImpl(o);
         },
         getOpenerParams: {o->
-            return [ mode: mode ]
+            return [ mode: borrowerContext.mode ]
         }
     ] as EditorListModel
 
     def addChild() {
         def handler = {child->
-            child.borrowerid = borrower?.objid;
-            borrower.children.add(child);
+            child.borrowerid = borrowerContext.borrower?.objid;
+            borrowerContext.borrower.children.add(child);
             childrenHandler.reload();
         }
         return InvokerUtil.lookupOpener("child:create", [handler:handler]);
@@ -40,12 +39,17 @@ class BorrowerChildrenController
     }
     
     boolean removeChildImpl(o) {
-        if (mode == 'read') return false;
+        if (borrowerContext.mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this child. Continue?")) {
-            borrower.children.remove(o);
+            borrowerContext.borrower.children.remove(o);
             return true;
         } else { 
             return false; 
         } 
-    } 
+    }
+    
+    def getHtmlview() {
+        def html=new HtmlBuilder();
+        return html.buildChild(selectedChild);
+    }
 }

@@ -6,16 +6,16 @@ import java.rmi.server.UID;
 
 class BorrowerParentsController
 {
-    def loanapp, mode, beforeSaveHandlers, borrower;
+    def borrowerContext;
     def entity = [:]
     
     void init() {
-        if( borrower?.parent == null )
-            borrower.parent = [:]
+        if( borrowerContext.borrower?.parent == null )
+            borrowerContext.borrower.parent = [:]
                     
-        entity = borrower?.parent;
-        entity.objid = borrower?.objid;
-        beforeSaveHandlers.parentHandler = { validate(); }
+        entity = borrowerContext.borrower?.parent;
+        entity.objid = borrowerContext.borrower?.objid;
+        borrowerContext.beforeSaveHandlers.parentHandler = { validate(); }
     }
 
     void validate() {

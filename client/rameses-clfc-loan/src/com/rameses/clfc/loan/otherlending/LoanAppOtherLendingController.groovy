@@ -3,6 +3,7 @@ package com.rameses.clfc.loan.otherlending;
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
+import com.rameses.clfc.util.HtmlBuilder;
 
 class LoanAppOtherLendingController
 {
@@ -44,15 +45,28 @@ class LoanAppOtherLendingController
             return otherlendings;
         },
         onRemoveItem: {o->
-            if( mode == 'edit' ) return false;
-            if(MsgBox.confirm("You are about to remove this lending. Continue?")) {
-                otherlendings.remove(o);
-                return true;
-            }
-            return false;
+            return removeOtherLendingImpl(o);
         },
         getOpenerParams: {o->
             return [mode: caller.mode];
         }
     ] as EditorListModel
+            
+    void removeOtherLending() {
+        removeOtherLendingImpl(selectedOtherLending);
+    }
+    
+    boolean removeOtherLendingImpl(o) {
+        if(caller.mode == 'read') return false;
+        if(MsgBox.confirm("You are about to remove this lending. Continue?")) {
+            otherlendings.remove(o);
+            return true;
+        }
+        return false;
+    }
+            
+    def getHtmlview() {
+        def html=new HtmlBuilder();
+        return html.buildOtherLending(selectedOtherLending);
+    }
 }

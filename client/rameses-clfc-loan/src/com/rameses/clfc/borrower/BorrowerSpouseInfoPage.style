@@ -1,12 +1,12 @@
-"entity.*" [mode != 'edit']{
+"entity.*" [borrowerContext.mode != 'edit']{
     enabled: false; 
     background-color: rgb(250,250,250);
 }
-"borrower" [mode != 'edit']{
+"borrower" [borrowerContext.mode != 'edit']{
     enabled: false; 
     background-color: rgb(250,250,250);
 }
-"borrower" [mode == 'edit']{
+"borrower" [borrowerContext.mode == 'edit']{
     enabled: true;
     background-color: #fff;
 }

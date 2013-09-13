@@ -8,14 +8,14 @@ import com.rameses.clfc.borrower.*;
 
 class BorrowerSpouseInfoController 
 {
-    def loanapp, mode;
+    def borrowerContext;
     def entity = [:];
     
     void init() {
-        if( loanapp.borrower?.spouse == null )
-            loanapp.borrower.spouse = [:];
+        if( borrowerContext.loanapp.borrower?.spouse == null )
+            borrowerContext.loanapp.borrower.spouse = [:];
        
-        entity = loanapp.borrower.spouse;
+        entity = borrowerContext.loanapp.borrower.spouse;
         if (entity != null) {
             def name = entity.lastname + ', ' + entity.firstname;
             if (entity.middlename) name = name + ' ' + entity.middlename;
@@ -26,7 +26,7 @@ class BorrowerSpouseInfoController
     
     def getLookupBorrower() {  
         def params = [
-            'query.loanappid': loanapp.objid, 
+            'query.loanappid': borrowerContext.loanapp.objid, 
             onselect: {o-> 
                 entity.putAll(o); 
             }

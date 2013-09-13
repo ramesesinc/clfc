@@ -7,28 +7,26 @@ import com.rameses.osiris2.common.*;
 
 class BorrowerEducationController
 {
-    //feed by the caller
-    def loanapp, mode, borrower;
-
+    def borrowerContext;
     def selectedEducation;
     def educationHandler = [
         fetchList: {o->
-            if( !borrower.educations ) borrower.educations = []
-            borrower.educations.each{ it._filetype = "education" }
-            return borrower.educations;
+            if( !borrowerContext.borrower.educations ) borrowerContext.borrower.educations = []
+            borrowerContext.borrower.educations.each{ it._filetype = "education" }
+            return borrowerContext.borrower.educations;
         },
         onRemoveItem: {o->
             return removeItemImpl(o); 
         },
         getOpenerParams: {o->
-            return [ mode: mode ]
+            return [ mode: borrowerContext.mode ]
         }
     ] as EditorListModel;
     
     def addEducation() {
         def handler = {education->
-            education.borrowerid = borrower?.objid;
-            borrower.educations.add(education);
+            education.borrowerid = borrowerContext.borrower?.objid;
+            borrowerContext.borrower.educations.add(education);
             educationHandler.reload();
         }
         return InvokerUtil.lookupOpener("education:create", [handler:handler]);
@@ -39,9 +37,9 @@ class BorrowerEducationController
     }
             
     boolean removeItemImpl(o) {
-        if (mode == 'read') return false;
+        if (borrowerContext.mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this item. Continue?")) {
-            borrower.educations.remove(o);
+            borrowerContext.borrower.educations.remove(o);
             return true;
         } else { 
             return false; 
