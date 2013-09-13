@@ -42,6 +42,11 @@ class LoanAppPrincipalBorrowerController
         },
         getOpenerParams: {
             return createOpenerParams(); 
+        },
+        beforeSelect: {item,index-> 
+            if (caller?.mode == 'read' || index == 0) return true; 
+        
+            return (loanapp.borrower?.objid != null); 
         }
     ] as TabbedPaneModel 
     
