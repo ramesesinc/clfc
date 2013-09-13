@@ -40,7 +40,7 @@ class LoanUtil
     public static def getRentTypes() {
         if( rentTypes == null ) {
             rentTypes = [
-                [key:'W_CONTRACT', value:'W/CONTRACT'], 
+                [key:'W_CONTRACT', value:'W/ CONTRACT'], 
                 [key:'WO_CONTRACT', value:'W/O CONTRACT']
             ]
         }

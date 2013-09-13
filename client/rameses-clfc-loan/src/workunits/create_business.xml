@@ -13,6 +13,17 @@
             
             class BusinessFormController extends com.rameses.clfc.loan.controller.PopupMasterController
             {
+                @PropertyChangeListener
+                def listener = [
+                    "entity.occupancy.type": {o->
+                        if( o != 'RENTED' ) {
+                            entity.occupancy.renttype = null;
+                            entity.occupancy.rentamount = null;
+                            binding.refresh('entity.occupancy.rent.*');
+                        }
+                    }
+                ];
+                
                 def kindTypes = LoanUtil.kindTypes;
                 def occupancyTypes = LoanUtil.occupancyTypes;
                 def rentTypes = LoanUtil.rentTypes;
@@ -27,6 +38,7 @@
                         if( !entity.occupancy.renttype ) throw new Exception("Rent Type is required.")
                         if( !entity.occupancy.rentamount ) throw new Exception("Rent Amount is required.")
                     }
+                    
                     return super.doOk()
                 }
             }

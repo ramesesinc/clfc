@@ -142,6 +142,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xNumberField2.setDepends(new String[] {"entity.occupancy.type"});
         xNumberField2.setFieldType(BigDecimal.class);
         xNumberField2.setName("entity.occupancy.rentamount");
+        xNumberField2.setPattern("#,##0.00");
         xNumberField2.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel10.add(xNumberField2);
 
