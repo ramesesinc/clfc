@@ -26,12 +26,13 @@ class JointBorrowerController
     }
     
     def createOpenerParams() {
-        return [
+        def borrowerContext = [
             beforeSaveHandlers: beforeSaveHandlers,
             loanapp: loanapp,
             borrower: loanapp.borrower,
             mode: mode 
         ]; 
+        return [borrowerContext: borrowerContext];
     }
     
     def tabHandler = [

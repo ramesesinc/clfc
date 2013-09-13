@@ -59,7 +59,7 @@ class LoanAppCoMakerController
             return borrowers;
         },
         onRemoveItem: {o->
-            return removeItemImpl(o);
+            return removeCoMakerImpl(o);
         },
         getOpenerParams: {o->
             return createOpenerParams()
@@ -67,12 +67,12 @@ class LoanAppCoMakerController
     ] as EditorListModel;
         
     void removeCoMaker() {
-        removeItemImpl(selectedCoMaker);
+        removeCoMakerImpl(selectedCoMaker);
     }
             
-    boolean removeItemImpl(o) {
+    boolean removeCoMakerImpl(o) {
         if (caller.mode == 'read') return false;
-        if (MsgBox.confirm("You are about to remove this item. Continue?")) {
+        if (MsgBox.confirm("You are about to remove this co-maker. Continue?")) {
             borrowers.remove(o);
             return true;
         } else { 

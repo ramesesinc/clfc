@@ -1,13 +1,12 @@
-package com.rameses.clfc.loan.jointborrower;
+package com.rameses.clfc.loan.comaker;
 
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 
-class JointBorrowerController 
+class CoMakerController 
 {
-    //feed by the caller
     def loanapp, mode, handlers, service, beforeSaveHandlers, callBackHandler;  
 
     @ChangeLog
@@ -25,12 +24,13 @@ class JointBorrowerController
     }
     
     def createOpenerParams() {
-        return [
+        def borrowerContext = [
             beforeSaveHandlers: beforeSaveHandlers,
             loanapp: loanapp,
             borrower: loanapp.borrower,
             mode: mode 
         ]; 
+        return [borrowerContext: borrowerContext];
     }
     
     def tabHandler = [
