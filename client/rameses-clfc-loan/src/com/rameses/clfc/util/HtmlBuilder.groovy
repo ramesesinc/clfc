@@ -511,7 +511,7 @@ class HtmlBuilder
                                 <font class="bold">Other Sources of Income</font>
                                 <table>
                                     <tbody>
-                                    ${getOtherIncome(child.employments)}                    
+                                    ${getOtherIncomeList(child.otherincomes)}                    
                                     </tbody>
                                 </table><br/>
                             </body>
@@ -526,16 +526,174 @@ class HtmlBuilder
             html +=  """
                         <tr>
                             <td width="80px">Employer: </td>
-                            <td>it.employer</td>
+                            <td>$it.employer</td>
                         </tr>
                         <tr>
                             <td>Remarks: </td>
                             <td>
-                                <p>it.remarks</p>
+                                <p>$it.remarks</p>
                             </td>
                         </tr>
                     """
         }
         return html
+    }
+    
+    private def getOtherIncomeList( list ) {
+        if( list.isEmpty() ) return ''
+        def html = "";
+        list.each{
+            html +=  """
+                        <tr>
+                            <td width="100px">Source of Income: </td>
+                            <td>$it.name</td>
+                        </tr>
+                        <tr>
+                            <td>Remarks: </td>
+                            <td>
+                                <p>${ifNull(it.remarks, '-')}</p>
+                            </td>
+                        </tr>
+                    """
+        }
+        return html
+    }
+    
+    public def buildSibling( sibling ) {
+        if( sibling == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Sibling Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="100px">Name: </td>
+                                            <td>$sibling.name</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Age: </td>
+                                            <td>$sibling.age</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address: </td>
+                                            <td>$sibling.address</td>
+                                        </tr>
+                                    </tbody>
+                                </table><br/>
+                                <font class="bold">Employments</font>
+                                <table>
+                                    <tbody>
+                                        ${getEmploymentList(sibling.employments)}
+                                    </tbody>
+                                </table><br/>
+                                <font class="bold">Other Sources of Income</font>
+                                <table>
+                                    <tbody>
+                                        ${getOtherIncomeList(sibling.otherincomes)}
+                                    </tbody>
+                                </table>
+                            </body>
+                        """
+        return getHtml(htmlbody);
+    }
+    
+    public def buildEmployment( employment ) {
+        if( employment == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Employment Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="80px">Empoyer: </td>
+                                            <td>$employment.employer</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tel. No.: </td>
+                                            <td>${ifNull(employment.contactno, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address: </td>
+                                            <td>${ifNull(employment.address, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Position: </td>
+                                            <td>${ifNull(employment.position, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Salary: </td>
+                                            <td>${ifNull(employment.salary, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Length of Service: </td>
+                                            <td>${ifNull(employment.lengthofservice, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Status: </td>
+                                            <td>${ifNull(employment.status, '-')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>$employment.remarks</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </body>
+                        """
+        return getHtml(htmlbody);
+    }
+    
+    public def buildOtherIncome( otherincome ) {
+        if( otherincome == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Other Source of Income Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="100px">Source of Income: </td>
+                                            <td>$otherincome.name</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>${ifNull(otherincome.remarks, '-')}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </body>
+                        """
+        return getHtml(htmlbody);
+    }
+    
+    public def buildEducation( education ) {
+        if( education == null ) return '';
+        def htmlbody =  """
+                            <body>
+                                <font class="bold">Educational Background Information</font>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td width="120px">Education Attainment: </td>
+                                            <td>$education.attainment</td>
+                                        </tr>
+                                        <tr>
+                                            <td>School: </td>
+                                            <td>$education.school</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks: </td>
+                                            <td>
+                                                <p>${ifNull(education.remarks, '-')}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </body>
+                        """
+        return getHtml(htmlbody);
     }
 }

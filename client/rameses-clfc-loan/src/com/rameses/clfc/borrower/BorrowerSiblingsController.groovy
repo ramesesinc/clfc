@@ -4,6 +4,7 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
+import com.rameses.clfc.util.HtmlBuilder;
 
 class BorrowerSiblingsController
 {
@@ -44,5 +45,10 @@ class BorrowerSiblingsController
         } else { 
             return false; 
         } 
-    }    
+    }
+    
+    def getHtmlview() {
+        def html=new HtmlBuilder();
+        return html.buildSibling(selectedSibling);
+    }
 }

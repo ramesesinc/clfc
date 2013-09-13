@@ -7,7 +7,7 @@ import com.rameses.osiris2.common.*;
 import com.rameses.clfc.loan.controller.*;
 import com.rameses.clfc.borrower.BorrowerContext;
 
-class LoanAppPrincipalBorrowerController 
+class LoanAppPrincipalBorrowerController   
 {
     //feed by the caller
     def loanapp, caller, handlers;

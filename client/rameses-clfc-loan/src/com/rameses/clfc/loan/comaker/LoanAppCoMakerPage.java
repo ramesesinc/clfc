@@ -123,6 +123,8 @@ public class LoanAppCoMakerPage extends javax.swing.JPanel {
         xLabel2.setForeground(new java.awt.Color(80, 80, 80));
         xLabel2.setText("Co-Maker(s)");
 
+        xButton2.setDepends(new String[] {"selectedCoMaker"});
+        xButton2.setDisableWhen("#{selectedCoMaker == null || caller.mode == 'read'}");
         xButton2.setName("removeCoMaker");
         xButton2.setText("Remove");
 
