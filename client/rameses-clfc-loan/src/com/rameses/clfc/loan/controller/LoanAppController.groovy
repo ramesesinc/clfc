@@ -49,6 +49,9 @@ class LoanAppController
         },         
         getItems: { 
             return menuItems;
+        },
+        beforeSelect: {o-> 
+            return (mode == 'read'); 
         }, 
         onselect: {o->             
             entity = service.open([objid: loanappid, name:o?.name]); 
