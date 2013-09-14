@@ -15,10 +15,11 @@ class BorrowerChildrenController
     @Binding
     def binding;
     
+    def htmlBuilder;
+    
     void init() {
-        borrowerContext.addDataChangeHandler('children', {
-            childrenHandler.reload(); 
-        });
+        borrowerContext.addDataChangeHandler('children', { childrenHandler.reload() });
+        htmlBuilder = new HtmlBuilder();
     }
         
     def selectedChild;
@@ -59,8 +60,7 @@ class BorrowerChildrenController
         } 
     }
     
-    def getHtmlview() {
-        def html=new HtmlBuilder();
-        return html.buildChild(selectedChild);
+    def getHtmlview() {        
+        return htmlBuilder.buildChild(selectedChild);
     }
 }

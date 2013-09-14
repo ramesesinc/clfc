@@ -13,7 +13,7 @@ class BorrowerParentsController
     
     void init() { 
         initEntity();
-        borrowerContext.addChangeDataHandler('parents', { initEntity() });
+        borrowerContext.addDataChangeHandler('parents', { initEntity() });
         borrowerContext.addBeforeSaveHandler('parents', { validate() });        
     }
     

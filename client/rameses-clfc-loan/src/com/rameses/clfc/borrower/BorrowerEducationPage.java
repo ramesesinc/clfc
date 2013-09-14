@@ -47,7 +47,7 @@ public class BorrowerEducationPage extends javax.swing.JPanel {
         xLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
         xLabel2.setFontStyle("font-weight:bold;");
         xLabel2.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel2.setText("Educational Background");
+        xLabel2.setText("Educational Background(s)");
         jPanel1.add(xLabel2, java.awt.BorderLayout.NORTH);
 
         xDataTable1.setAutoResize(false);
@@ -136,7 +136,7 @@ public class BorrowerEducationPage extends javax.swing.JPanel {
 
         xLabel1.setFontStyle("font-weight:bold;");
         xLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel1.setText("Quick Preview");
+        xLabel1.setText("Quick Info");
         jPanel3.add(xLabel1, java.awt.BorderLayout.NORTH);
 
         xSplitView1.add(jPanel3);

@@ -123,7 +123,7 @@ public class BorrowerCheckingAccountPage extends javax.swing.JPanel {
 
         xLabel1.setFontStyle("font-weight:bold;");
         xLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel1.setText("Quick Preview");
+        xLabel1.setText("Quick Info");
         jPanel3.add(xLabel1, java.awt.BorderLayout.NORTH);
 
         xSplitView1.add(jPanel3);
