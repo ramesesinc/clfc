@@ -4,7 +4,7 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class BorrowerEmploymentController
 {   
@@ -13,11 +13,13 @@ class BorrowerEmploymentController
     
     @Binding
     def binding;
+    def htmlbuilder
     
     void init() {
         borrowerContext.addDataChangeHandler('employment', {
             employmentHandler.reload(); 
         });
+        htmlbuilder = new BorrowerInfoHtmlBuilder();
     }    
     
     def selectedEmployment;
@@ -59,7 +61,6 @@ class BorrowerEmploymentController
     }
     
     def getHtmlview() {
-        def html=new HtmlBuilder();
-        return html.buildEmployment(selectedEmployment);
+        return htmlbuilder.buildEmployment(selectedEmployment);
     }
 }

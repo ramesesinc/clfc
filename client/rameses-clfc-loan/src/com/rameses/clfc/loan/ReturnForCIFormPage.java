@@ -6,18 +6,18 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
  * @author  Rameses
  */
-@Template(FormPage.class)
-public class SendBackFormPage extends javax.swing.JPanel {
+@Template(OKCancelPage.class)
+public class ReturnForCIFormPage extends javax.swing.JPanel {
     
     /** Creates new form SendBackFormPage */
-    public SendBackFormPage() {
+    public ReturnForCIFormPage() {
         initComponents();
     }
     
@@ -47,7 +47,7 @@ public class SendBackFormPage extends javax.swing.JPanel {
         xLabel1.setBounds(10, 10, 113, 19);
 
         xTextArea1.setCaption("Remarks");
-        xTextArea1.setName("entity.remarks");
+        xTextArea1.setName("data.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);

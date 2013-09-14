@@ -3,7 +3,7 @@ package com.rameses.clfc.loan.otherlending;
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class LoanAppOtherLendingController
 {
@@ -16,6 +16,7 @@ class LoanAppOtherLendingController
     @Service('LoanAppOtherLendingService') 
     def service; 
     
+    def htmlbuilder = new OtherLendingHtmlBuilder();
     def otherlendings = [];
     def selectedOtherLending;
     
@@ -69,7 +70,6 @@ class LoanAppOtherLendingController
     }
             
     def getHtmlview() {
-        def html=new HtmlBuilder();
-        return html.buildOtherLending(selectedOtherLending);
+        return htmlbuilder.buildOtherLending(selectedOtherLending);
     }
 }

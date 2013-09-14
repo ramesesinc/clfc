@@ -134,6 +134,7 @@ public class LoanAppBusinessPage extends javax.swing.JPanel {
 
         xButton2.setName("addCiReport");
         xButton2.setText("CI Report");
+        xButton2.setVisibleWhen("#{loanapp.state == 'FOR_INSPECTION'}");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

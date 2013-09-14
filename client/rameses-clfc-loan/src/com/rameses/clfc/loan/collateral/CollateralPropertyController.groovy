@@ -3,7 +3,7 @@ package com.rameses.clfc.loan.collateral;
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class CollateralPropertyController
 {
@@ -50,7 +50,7 @@ class CollateralPropertyController
     }
     
     def getHtmlview() {
-        HtmlBuilder html=new HtmlBuilder();
-        return html.buildProperty(selectedProperty);
+        def htmlbuilder=new CollateralHtmlBuilder();
+        return htmlbuilder.buildProperty(selectedProperty);
     }
 }

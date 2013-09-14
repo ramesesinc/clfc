@@ -4,7 +4,7 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class BorrowerCheckingAccountController
 {
@@ -53,7 +53,7 @@ class BorrowerCheckingAccountController
     }
     
     def getHtmlview() {
-        def html=new HtmlBuilder();
-        return html.buildBankAccount(selectedCheckingAcct);
+        def htmlbuilder=new BorrowerInfoHtmlBuilder();
+        return htmlbuilder.buildBankAccount(selectedCheckingAcct);
     }
 }

@@ -1,0 +1,7 @@
+<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
+    entityName="loanapp" tag="for_crecom">
+    
+    <invokers>
+        <invoker folderid="/explorer/loan" caption="For CRECOM" permission="system" index="3"/>
+   </invokers>
+</workunit>

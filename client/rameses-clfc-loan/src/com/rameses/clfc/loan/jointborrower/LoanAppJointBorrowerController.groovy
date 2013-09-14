@@ -4,14 +4,15 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class LoanAppJointBorrowerController 
 {
     //feed by the caller
     def loanapp, caller, handlers;
     
-    def beforeSaveHandlers = [:];
+    private def beforeSaveHandlers = [:];
+    private def dataChangeHandlers = [:];
     
     @Service('JointBorrowerService') 
     def service; 
@@ -44,10 +45,10 @@ class LoanAppJointBorrowerController
     def createOpenerParams() {
         return [
                 loanapp: [:],
-                mode: caller.mode, 
+                caller: caller, 
                 service: service, 
-                handlers: handlers, 
-                beforeSaveHandlers: beforeSaveHandlers
+                beforeSaveHandlers: beforeSaveHandlers,
+                dataChangeHandlers: dataChangeHandlers
         ]
     }
     
@@ -82,7 +83,7 @@ class LoanAppJointBorrowerController
     } 
     
     def getHtmlview() {
-        HtmlBuilder html=new HtmlBuilder();
-        return html.buildBorrower(selectedJointBorrower)
+        def htmlbuilder=new BorrowerInfoHtmlBuilder();
+        return htmlbuilder.buildBorrower(selectedJointBorrower)
     }
 }

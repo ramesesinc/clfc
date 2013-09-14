@@ -6,7 +6,7 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.Template;
 import java.math.BigDecimal;
 
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  *
  * @author  Rameses
  */
-@Template(FormPage.class)
+@Template(OKCancelPage.class)
 public class SubmitForApprovalPage extends javax.swing.JPanel {
     
     /** Creates new form SubmitForApprovalPage */
@@ -84,7 +84,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         xTextArea1.setCaption("Recommendations");
-        xTextArea1.setName("entity.crecom");
+        xTextArea1.setName("data.crecomremarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -99,7 +99,8 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xNumberField6.setCaption("Marketer");
         xNumberField6.setCaptionWidth(70);
         xNumberField6.setFieldType(BigDecimal.class);
-        xNumberField6.setName("entity.marketerRecomAmt");
+        xNumberField6.setName("data.marketeramount");
+        xNumberField6.setPattern("#,##0.00");
         xNumberField6.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField6.setRequired(true);
         xFormPanel4.add(xNumberField6);
@@ -107,7 +108,8 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xNumberField7.setCaption("CI");
         xNumberField7.setCaptionWidth(70);
         xNumberField7.setFieldType(BigDecimal.class);
-        xNumberField7.setName("entity.ciRecomAmt");
+        xNumberField7.setName("data.ciamount");
+        xNumberField7.setPattern("#,##0.00");
         xNumberField7.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField7.setRequired(true);
         xFormPanel4.add(xNumberField7);
@@ -115,7 +117,8 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xNumberField8.setCaption("FCA");
         xNumberField8.setCaptionWidth(70);
         xNumberField8.setFieldType(BigDecimal.class);
-        xNumberField8.setName("entity.fcaRecomAmt");
+        xNumberField8.setName("data.fcaamount");
+        xNumberField8.setPattern("#,##0.00");
         xNumberField8.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField8.setRequired(true);
         xFormPanel4.add(xNumberField8);
@@ -128,7 +131,8 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xNumberField4.setCaption("CAO");
         xNumberField4.setCaptionWidth(50);
         xNumberField4.setFieldType(BigDecimal.class);
-        xNumberField4.setName("entity.caoRecomAmt");
+        xNumberField4.setName("data.caoamount");
+        xNumberField4.setPattern("#,##0.00");
         xNumberField4.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField4.setRequired(true);
         xFormPanel2.add(xNumberField4);
@@ -136,7 +140,8 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xNumberField5.setCaption("BCOH");
         xNumberField5.setCaptionWidth(50);
         xNumberField5.setFieldType(BigDecimal.class);
-        xNumberField5.setName("entity.bcohRecomAmt");
+        xNumberField5.setName("data.bcohamount");
+        xNumberField5.setPattern("#,##0.00");
         xNumberField5.setPreferredSize(new java.awt.Dimension(0, 19));
         xNumberField5.setRequired(true);
         xFormPanel2.add(xNumberField5);
@@ -171,7 +176,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel3.setLayout(new java.awt.BorderLayout());
 
         xTextArea2.setCaption("Remarks");
-        xTextArea2.setName("entity.comment");
+        xTextArea2.setName("data.remarks");
         xTextArea2.setRequired(true);
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);

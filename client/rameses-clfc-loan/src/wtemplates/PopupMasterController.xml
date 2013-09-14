@@ -1,9 +1,0 @@
-<workunit>
-    <invokers>
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true" visibleWhen="#{mode != 'read'}"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O" visibleWhen="#{mode != 'read'}"/>
-        
-        <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl C" visibleWhen="#{mode == 'read'}"/>
-        <invoker type="formActions" action="edit" caption="Edit" mnemonic="e" shortcut="ctrl E" visibleWhen="#{mode == 'read'}"/>
-    </invokers>
-</workunit>

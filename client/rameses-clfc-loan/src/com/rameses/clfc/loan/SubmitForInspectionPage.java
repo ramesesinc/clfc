@@ -6,14 +6,14 @@
 
 package com.rameses.clfc.loan;
 
-import com.rameses.osiris2.themes.FormPage;
+import com.rameses.osiris2.themes.OKCancelPage;
 import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
  * @author  Rameses
  */
-@Template(FormPage.class)
+@Template(OKCancelPage.class)
 public class SubmitForInspectionPage extends javax.swing.JPanel {
     
     /** Creates new form SubmitForInspectionPage */
@@ -70,7 +70,7 @@ public class SubmitForInspectionPage extends javax.swing.JPanel {
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         xTextArea1.setCaption("Remarks");
-        xTextArea1.setName("entity.remarks");
+        xTextArea1.setName("data.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);

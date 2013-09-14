@@ -17,7 +17,7 @@ class LoanAppBusinessController
     @Service('LoanAppBusinessService') 
     def service; 
     
-    def htmlBuilder = new HtmlBuilder(); 
+    def htmlBuilder = new BusinessHtmlBuilder(); 
     def businesses = [];
     
     void init() {
@@ -35,7 +35,7 @@ class LoanAppBusinessController
         }
 
         def data = [ objid: loanapp.objid, businesses: businesses ]
-        service.update(data); 
+        loanapp.state = service.update(data).state;
     }
 
 
@@ -68,7 +68,7 @@ class LoanAppBusinessController
     }
     
     boolean removeBusinessImpl(o) {
-        if (mode == 'read') return false;
+        if (caller.mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this business. Continue?")) {
             businesses.remove(o);
             return true;

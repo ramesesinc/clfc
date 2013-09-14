@@ -5,7 +5,7 @@ import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 import com.rameses.clfc.borrower.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class BorrowerChildrenController 
 {
@@ -19,7 +19,7 @@ class BorrowerChildrenController
     
     void init() {
         borrowerContext.addDataChangeHandler('children', { childrenHandler.reload() });
-        htmlBuilder = new HtmlBuilder();
+        htmlBuilder = new BorrowerInfoHtmlBuilder();
     }
         
     def selectedChild;

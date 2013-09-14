@@ -1,9 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="application-forapproval:create" action="init" caption="Submit For Approval" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
+        <invoker type="application-forapproval:create" caption="Submit For Approval" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
@@ -13,22 +10,17 @@
             
             class SubmitForApprovalController
             {
-                String title = "Submit For Approval"
-                def entity
+                def data = [:]
                 def handler
                 
-                def init() {
-                    entity = [:]
-                }
-                
-                def approve() {
+                def doOk() {
                     if(MsgBox.confirm("You are about to submit this application. Do you want to continue?")) {
-                        if( handler ) handler(entity)
+                        if( handler ) handler(data)
                         return "_close"
                     }
                 }
                 
-                def cancel() {
+                def doCancel() {
                     return "_close"
                 }
             }

@@ -1,34 +1,27 @@
 <workunit>
     <invokers>
-        <invoker type="application-forcrecom:create" action="init" caption="Submit For CRECOM" target="popup"/>
-        
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C" immediate="true"/>
-        <invoker type="formActions" action="approve" caption="Ok" mnemonic="o" shortcut="ctrl O"/>
+        <invoker type="application-forcrecom:create" caption="Submit For CRECOM" target="popup"/>
     </invokers>
     <code>
         <![CDATA[
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
+            import java.rmi.server.UID;
             
             class SubmitForCrecomController
             {
-                String title = "Submit For CRECOM"
-                def entity
+                def data = [:]
                 def handler
                 
-                def init() {
-                    entity = [:]
-                }
-                
-                def approve() {
+                def doOk() {
                     if(MsgBox.confirm("You are about to submit this application. Do you want to continue?")) {
-                        if( handler ) handler(entity)
+                        if( handler ) handler(data)
                         return "_close"
                     }
                 }
                 
-                def cancel() {
+                def doCancel() {
                     return "_close"
                 }
             }

@@ -137,6 +137,7 @@
                   <Properties>
                     <Property name="name" type="java.lang.String" value="addCiReport"/>
                     <Property name="text" type="java.lang.String" value="CI Report"/>
+                    <Property name="visibleWhen" type="java.lang.String" value="#{loanapp.state == &apos;FOR_INSPECTION&apos;}"/>
                   </Properties>
                 </Component>
               </SubComponents>

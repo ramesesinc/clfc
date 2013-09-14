@@ -10,6 +10,9 @@ class LoanAppController
     @Service('LoanAppService')
     def service;
     
+    @Binding
+    def binding;
+    
     def loanappid;
     def entity = [:];
     def handlers = [:];
@@ -92,6 +95,7 @@ class LoanAppController
         
         saveHandler(); 
         mode = 'read'; 
+        binding.refresh('title');
         subFormHandler.refresh();
     }
     
@@ -100,5 +104,56 @@ class LoanAppController
         
         mode = 'read'; 
         selectedMenu.opener = null;
-    }    
+    }
+    
+    boolean getIsPending() {
+        if(entity.state == 'PENDING') return true;
+        return false;
+    }
+    
+    def submitForInspection() {
+        def handler = {o->
+            o.objid = loanappid;
+            entity.state = service.submitForInspection(o).state;
+            binding.refresh('title|formActions');
+        }
+        return InvokerUtil.lookupOpener("application-forinspection:create", [handler:handler])
+    }
+    
+    boolean getIsForInspection() {
+        if(entity.state == 'FOR_INSPECTION') return true;
+        return false;
+    }
+    
+    def submitForCrecom() {
+        def handler = {o->
+            o.objid = loanappid;
+            entity.state = service.submitForCrecom(o).state;
+            binding.refresh('title|formActions');
+        } 
+        return InvokerUtil.lookupOpener("application-forcrecom:create", [handler:handler]);
+    }
+    
+    boolean getIsForCrecom() {
+        if(entity.state == 'FOR_CRECOM') return true;
+        return false;
+    }
+    
+    def submitForApproval() {
+        def handler = {o->
+            o.objid = loanappid;
+            entity.state = service.submitForApproval(o).state;
+            binding.refresh('title|formActions');
+        }
+        return InvokerUtil.lookupOpener("application-forapproval:create", [handler:handler]);
+    }
+    
+    def returnForCi() {
+        def handler = {o->
+            o.objid = loanappid;
+            entity.state = service.returnForCI(o).state;
+            binding.refresh('title|formActions');
+        }
+        return InvokerUtil.lookupOpener("application-returnforci:create", [handler:handler]);
+    }
 }

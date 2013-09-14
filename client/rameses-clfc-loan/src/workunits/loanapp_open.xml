@@ -5,6 +5,17 @@
         <invoker type="formActions" caption="Edit" action="edit" visibleWhen="#{mode=='read'}" immediate="true"/>
         <invoker type="formActions" caption="Cancel" action="cancel" visibleWhen="#{mode=='edit'}" immediate="true"/>
         <invoker type="formActions" caption="Save" action="save" visibleWhen="#{mode=='edit'}"/> 
+        
+        <invoker type="formActions" caption="Submit" action="submitForInspection" tooltip="Submit For Inspection"
+                    icon="images/toolbars/approve.png" visibleWhen="#{isPending}"/>
+        
+        <invoker type="formActions" caption="Submit" action="submitForCrecom" tooltip="Submit For CRECOM"
+                    icon="images/toolbars/approve.png" visibleWhen="#{isForInspection}"/>
+                    
+        <invoker type="formActions" caption="Submit" action="submitForApproval" tooltip="Submit For Approval"
+                    icon="images/toolbars/approve.png" visibleWhen="#{isForCrecom}"/>
+        <invoker type="formActions" caption="Return For CI" action="returnForCi" tooltip="Return For CI"
+                    icon="images/toolbars/approve.png" visibleWhen="#{isForCrecom}"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.controller.LoanAppController"/>

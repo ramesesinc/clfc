@@ -4,10 +4,11 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
+import com.rameses.clfc.borrower.BorrowerContext;
 
 class CoMakerController 
 {
-    def loanapp, mode, handlers, service, beforeSaveHandlers, callBackHandler, caller;  
+    def loanapp, service, beforeSaveHandlers, callBackHandler, caller, dataChangeHandlers;  
 
     @ChangeLog
     def changeLog
@@ -26,13 +27,10 @@ class CoMakerController
     }
     
     def createOpenerParams() {
-        def borrowerContext = [
-            beforeSaveHandlers: beforeSaveHandlers,
-            loanapp: loanapp,
-            borrower: loanapp.borrower,
-            mode: mode 
-        ]; 
-        return [borrowerContext: borrowerContext];
+        def ctx = new BorrowerContext(caller, this, service, loanapp);
+        ctx.beforeSaveHandlers = beforeSaveHandlers;
+        ctx.dataChangeHandlers = dataChangeHandlers;
+        return [borrowerContext: ctx];
     }
     
     def tabHandler = [
@@ -50,7 +48,7 @@ class CoMakerController
     }
     
     def doCancel() {
-        if( mode == 'edit' ) {
+        if( caller.mode == 'edit' ) {
             if( !MsgBox.confirm("Changes will be discarded. Continue?") ) return null
 
             if( changeLog.hasChanges() ) {

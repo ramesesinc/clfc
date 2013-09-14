@@ -4,7 +4,7 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
-import com.rameses.clfc.util.HtmlBuilder;
+import com.rameses.clfc.util.*;
 
 class CollateralApplianceController
 {
@@ -52,7 +52,7 @@ class CollateralApplianceController
     }
     
     def getHtmlview() {
-        HtmlBuilder html=new HtmlBuilder();
-        return html.buildAppliance(selectedAppliance);
+        def htmlbuilder=new CollateralHtmlBuilder();
+        return htmlbuilder.buildAppliance(selectedAppliance);
     }
 }

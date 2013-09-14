@@ -1,0 +1,7 @@
+<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
+    entityName="loanapp" tag="pending">
+    
+    <invokers>
+        <invoker folderid="/explorer/loan" caption="Pending Applications" permission="system" index="1"/>
+   </invokers>
+</workunit>
