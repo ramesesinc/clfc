@@ -60,7 +60,7 @@ class PrincipalBorrowerService
 			o.borrowername = borrowerService.createFullName(o.lastname, o.firstname, o.middlename); 
 		}
 		loanAppService.updateBorrowerIndices(data.objid, list);  
-		data.borrower = borrower; 
+		data.borrower = borrower;  
 		return data; 
 	} 
 }

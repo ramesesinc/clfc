@@ -1,6 +1,9 @@
 [findByObjid]
 SELECT * FROM loanapp WHERE objid=$P{objid} 
 
+[changeState]
+UPDATE loanapp SET state=$P{state} WHERE objid=$P{objid} 
+
 [getBorrowers] 
 SELECT 
 	lb.borrowerid, lb.type as borrowertype,  
@@ -55,3 +58,12 @@ WHERE lb.parentid=$P{parentid} AND lb.type=$P{type}
 UPDATE loanapp_search_index SET 
 	fullborrowername=$P{fullborrowername} 
 WHERE objid=$P{objid} 
+
+[getBusinesses]
+SELECT * FROM loanapp_business WHERE parentid=$P{parentid} 
+
+[findRecommendation] 
+SELECT * FROM loanapp_recommendation WHERE objid=$P{objid}  
+
+[removeRecommendation]
+DELETE FROM loanapp_recommendation WHERE objid=$P{objid}  

@@ -41,9 +41,15 @@ class LoanAppBusinessService
 			o.parentid = data.objid; 
 			if (o.ci != null) {
 				o.ci.filedby = env.USERID; 
-			}
+			} 
 			business.create(o); 
 		} 
-		return data;  
+
+		if (data.businesses.isEmpty()) {
+			loanapp.changeState([objid: data.objid, state:'INCOMPLETE']); 
+		} else if (data.state == 'INCOMPLETE') {
+			loanapp.changeState([objid: data.objid, state:'PENDING']); 
+		} 
+		return loanapp.findByObjid(params); 
 	} 
-}
+} 
