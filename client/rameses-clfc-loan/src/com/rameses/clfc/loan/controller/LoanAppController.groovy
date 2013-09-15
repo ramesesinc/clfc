@@ -18,6 +18,12 @@ class LoanAppController
     def handlers = [:];
     def mode = 'read';
     
+    @FormTitle
+    @FormId
+    def getFormId() { 
+        return 'LOAN-'+entity.appno;
+    }
+    
     void open() {
         loanappid = entity.objid;
     }

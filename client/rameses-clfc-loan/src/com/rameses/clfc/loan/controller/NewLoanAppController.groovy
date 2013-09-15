@@ -4,44 +4,79 @@ import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
-import com.rameses.clfc.loan.*;
+import com.rameses.clfc.util.*;
+import java.rmi.server.UID;
 
-class NewLoanApplicationController extends CRUDController
+class NewLoanApplicationController 
 {
-    String serviceName = 'NewLoanAppService';
-    String prefixId = 'LOAN';
-
-    @Service('LoanProductTypeService')
-    def productTypeService;
-    def productTypes;
+    @Binding 
+    def binding;
     
-    def appTypes = LOV.LOAN_APP_TYPES;
-    def clientTypes = LOV.LOAN_CLIENT_TYPES;
-    def customerLookupHandler = InvokerUtil.lookupOpener('customer:lookup', [:]); 
+    @Service('NewLoanAppService')
+    def service; 
 
-    Map createEntity() {
-        return [
-            branch: [:], 
-            borrower: [:], 
-            schedule: [:] 
-        ]; 
-    }
-
-    public def create() {
-        productTypes = productTypeService.getList([:]); 
-        super.create()
-    }
+    def mode = 'create';
+    def entity;
+    def productTypes = [];
+    def clientTypes = LoanUtil.clientTypes;
     
     void initOnline() {
-        create(); 
-        entity.mode = 'ONLINE';
+        entity = service.initEntity();
+        entity.mode = 'ONLINE'; 
+        entity.apptype = 'NEW';
+        productTypes = entity.productTypes;
     }
-
+    
     def initCapture() {
-        create(); 
+        entity = service.initEntity();
         entity.mode = 'CAPTURE';
+        entity.apptype = 'NEW';
+        productTypes = entity.productTypes;
     }
 
+    def getTitle() {
+        return 'New Loan Application: ' + entity.mode;
+    }
+    
+    def customerLookupHandler = InvokerUtil.lookupOpener('customer:lookup', [:]); 
+    
+    def save() {
+        if (!MsgBox.confirm('Ensure that all information is correct. Continue?')) return;
+        
+        entity = service.create(entity); 
+        mode = 'read';
+        return 'successpage'; 
+    }
+    
+    def cancel() {
+        if (MsgBox.confirm('You are about to close this window. Continue?')) 
+            return '_close'; 
+        else 
+            return null; 
+    }
+    
+    def close() {
+        return '_close';
+    }
+    
+    def create() {
+        if (entity.mode == 'CAPTURE') {
+            initCapture(); 
+        } else {
+            initOnline(); 
+        }       
+        mode = 'create';
+        return 'default';
+    } 
+    
+    def edit() {
+        def opener = InvokerUtil.lookupOpener('loanapp:open', [entity: entity]);
+        opener.caption = 'LOAN-'+entity.appno;
+        opener.target = 'window';
+        binding.fireNavigation(opener); 
+        return '_close'; 
+    }
+    
     def previousLoansHandler = [
         fetchList: {o->
             return entity.previousloans
@@ -60,5 +95,5 @@ class NewLoanApplicationController extends CRUDController
             def item = entity.previousloans.find{ it == o }
             if( item ) item = o
         }
-    ] as EditorListModel
+    ] as EditorListModel;   
 }
