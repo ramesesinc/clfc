@@ -1,9 +1,11 @@
+[findSeries]
+SELECT * FROM sys_sequence WHERE objid=$P{objid} 
+
 [getCurrentSeries]
-SELECT nextSeries AS currentSeries FROM sys_sequence WHERE objid = $P{objid} 
+SELECT nextseries AS currentseries FROM sys_sequence WHERE objid = $P{objid} 
 
 [incrementNextSeries]
-UPDATE sys_sequence SET nextSeries = nextSeries + 1 WHERE objid = $P{objid} 
+UPDATE sys_sequence SET nextseries = nextseries + 1 WHERE objid = $P{objid} 
 
 [updateNextSeries]
-UPDATE sys_sequence SET nextSeries = $P{nextSeries} WHERE objid = $P{objid} 
-
+UPDATE sys_sequence SET nextseries = $P{nextseries} WHERE objid = $P{objid} 
