@@ -1,88 +1,87 @@
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.controller;
 
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
+import com.rameses.clfc.loan.controller.*;
 import com.rameses.clfc.borrower.*;
-import com.rameses.clfc.util.*;
 
-class LoanAppPrincipalBorrower
+class LoanAppPrincipalBorrowerController   
 {
     //feed by the caller
-    def caller, handlers, loanapp;
+    def caller, handlers, loanapp; 
     
-    @Binding
-    def binding;
+    @Service('PrincipalBorrowerService') 
+    def service; 
     
-    @Service('PrincipalBorrowerService')
-    def service;
-    
-    //local variables 
-    def borrower;
-    def entity = [:];
-    def occupancyTypes = LoanUtil.borrowerOccupancyTypes;
-    def rentTypes = LoanUtil.rentTypes;
-    
-    @PropertyChangeListener
-    def listener = [
-        "entity.residency.type": {o->
-            if(o != 'RENTED') {
-                entity.residency.renttype = null
-                entity.residency.rentamount = null
-            }
-        },
-        "entity.occupancy.type": {o->
-            if(o != 'RENTED') {
-                entity.occupancy.renttype = null
-                entity.occupancy.rentamount = null
-            }
-        }
+    private def beforeSaveHandlers = [:];
+    private def dataChangeHandlers = [:];
+    def menuItems =  [
+        [name:'generalinfo', caption:'General Information'], 
+        [name:'spouseinfo', caption:'Spouse Information'], 
+        [name:'children', caption:'Children'], 
+        /*[name:'collateral', caption:'Collateral'], 
+        [name:'otherlending', caption:'Other Lending'], 
+        [name:'jointborrower', caption:'Joint Borrower'],
+        [name:'comaker', caption:'Co-Maker'], 
+        [name:'attachment', caption:'Attachments'], 
+        [name:'comment', caption:'Comments'], 
+        [name:'summary', caption:'Summary'] */
     ];
-    
+    def opener;
+
     void init() {
         if (loanapp.objid == null) return;
-
-        def newloanapp = service.open([objid: loanapp.objid]);
+        
+        handlers.saveHandler = { save(); }          
+        def data = service.open([objid: loanapp.objid]);
+        data.borrower.type = 'PRINCIPAL'
         loanapp.clear();
-        loanapp.putAll(newloanapp);
-        entity = loanapp.borrower;        
-        handlers.saveHandler = { save() }
-        /*borrowerContext.addBeforeSaveHandler('borrower', {
-            if(!entity.residency.since) throw new Exception('Residency: Since is required.');
-            if(entity.residency.type == 'RENTED') {
-                if(!entity.residency.renttype) throw new Exception('Residency: Rent Type is required.');
-                if(!entity.residency.rentamount) throw new Exception('Residency: Rent Amount is required.');
-            }
-            if(!entity.occupancy.since) throw new Exception('Lot Occupancy: Since is required.'); 
-            if(entity.occupancy.type == 'RENTED') {
-                if(!entity.occupancy.renttype) throw new Exception('Lot Occupancy: Rent Type is required.');
-                if(!entity.occupancy.rentamount) throw new Exception('Lot Occupancy: Rent Amount is required.');
-            }
-        })*/
+        loanapp.putAll(data); 
+    }
+
+    def createOpenerParams() {
+        def ctx = new BorrowerContext(caller, this, service, loanapp);
+        ctx.beforeSaveHandlers = beforeSaveHandlers;
+        ctx.dataChangeHandlers = dataChangeHandlers;
+        return [ borrowerContext: ctx ]; 
     }
     
-    def getLookupBorrower() {  
-        def params = [
-            onselect: {o-> 
-                def borrower = null; 
-                try { borrower = service.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
-                
-                if (borrower == null) { 
-                    entity.putAll(o); 
-                } else {
-                    entity.clear(); 
-                    entity.putAll(borrower);
-                } 
-                binding.refresh();
-            }, 
-            onempty: { 
-                entity.clear();
-                entity.occupancy = [:];
-                entity.residency = [:];
-                binding.refresh();
-            }
-        ];
-        return InvokerUtil.lookupOpener('customer:search', params);
+    def tabHandler = [
+        getItems: {
+            return menuItems;
+        },
+        beforeSelect: {item,index-> 
+            if (caller?.mode == 'read' || index == 0) return true; 
+            
+            return (loanapp.borrower?.objid != null);   
+        },
+        onselect: {item->
+            def invtype = 'borrower-'+item.name+':open'; 
+            def op = InvokerUtil.lookupOpener(invtype, [ 
+                caller: this, 
+                loanapp: entity, 
+                handlers: handlers 
+            ]); 
+            opener = op;
+            subFormHandler.refresh();
+        }
+    ] as TabbedPaneModel 
+                 
+    def subFormHandler = [
+        getOpener: { return opener; } 
+    ] as SubFormPanelModel;
+    
+    void save() {
+        beforeSaveHandlers.each{k,v-> 
+            if (v != null) v(); 
+        }
+
+        def data = [
+            objid: loanapp.objid, 
+            borrower: loanapp.borrower 
+        ]; 
+        service.update(data);
     }
 }
