@@ -1,4 +1,4 @@
-package com.rameses.clfc.borrower;
+package com.rameses.clfc.loan;
 
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
@@ -7,12 +7,16 @@ import com.rameses.osiris2.common.*;
 import com.rameses.clfc.borrower.*;
 import com.rameses.clfc.util.*;
 
-class BorrowerGeneralInfoController 
+class LoanAppPrincipalBorrower
 {
     //feed by the caller
-    def borrowerContext;
+    def caller, handlers, loanapp;
+    
+    @Service('PrincipalBorrowerService')
+    def service;
     
     //local variables 
+    def borrower;
     def entity = [:];
     def occupancyTypes = LoanUtil.borrowerOccupancyTypes;
     def rentTypes = LoanUtil.rentTypes;
@@ -34,8 +38,14 @@ class BorrowerGeneralInfoController
     ];
     
     void init() {
-        entity = borrowerContext.borrower;
-        borrowerContext.addBeforeSaveHandler('borrower', {
+        if (loanapp.objid == null) return;
+
+        def newloanapp = service.open([objid: loanapp.objid]);
+        loanapp.clear();
+        loanapp.putAll(newloanapp);
+        entity = loanapp.borrower;        
+        handlers.saveHandler = { save() }
+        /*borrowerContext.addBeforeSaveHandler('borrower', {
             if(!entity.residency.since) throw new Exception('Residency: Since is required.');
             if(entity.residency.type == 'RENTED') {
                 if(!entity.residency.renttype) throw new Exception('Residency: Rent Type is required.');
@@ -46,15 +56,14 @@ class BorrowerGeneralInfoController
                 if(!entity.occupancy.renttype) throw new Exception('Lot Occupancy: Rent Type is required.');
                 if(!entity.occupancy.rentamount) throw new Exception('Lot Occupancy: Rent Amount is required.');
             }
-        })
+        })*/
     }
     
     def getLookupBorrower() {  
         def params = [
-            'query.loanappid': borrowerContext.loanappid, 
             onselect: {o-> 
                 def borrower = null; 
-                try { borrower = borrowerContext.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
+                try { borrower = service.openBorrower([objid: o.objid]); } catch(Throwable t){;} 
                 
                 if (borrower == null) { 
                     entity.putAll(o); 
@@ -62,16 +71,11 @@ class BorrowerGeneralInfoController
                     entity.clear(); 
                     entity.putAll(borrower);
                 } 
-                borrowerContext.dataChangeHandlers.each{k,v-> 
-                    if (v != null) v(); 
-                } 
-                borrowerContext.refresh(); 
             }, 
             onempty: { 
                 entity.clear();
                 entity.occupancy = [:];
                 entity.residency = [:];
-                borrowerContext.refresh(); 
             }
         ];
         return InvokerUtil.lookupOpener('customer:lookup', params);

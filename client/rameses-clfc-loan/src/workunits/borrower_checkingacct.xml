@@ -1,8 +1,8 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-borrower:plugin" caption=" Checking Account  " index="-91" disableWhen="#{loanapp.borrower == null}"/>
-        <invoker type="loanapp-jointborrower:plugin" caption=" Checking Account  " index="-91" disableWhen="#{loanapp.borrower == null}"/>
-        <invoker type="loanapp-comaker:plugin" caption=" Checking Account  " index="-91" disableWhen="#{loanapp.borrower == null}"/>
+        <invoker type="loanapp-borrower:plugin" caption=" Checking Account  " index="-91" disableWhen="#{loanapp.borrower.objid == null}"/>
+        <invoker type="loanapp-jointborrower:plugin" caption=" Checking Account  " index="-91" disableWhen="#{loanapp.borrower.objid == null}"/>
+        <invoker type="loanapp-comaker:plugin" caption=" Checking Account  " index="-91" disableWhen="#{loanapp.borrower.objid == null}"/>
     </invokers>
     
     <code class="com.rameses.clfc.borrower.BorrowerCheckingAccountController"/>

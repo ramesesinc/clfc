@@ -27,11 +27,16 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
+        xLabel1 = new com.rameses.rcp.control.XLabel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xLookupField1 = new com.rameses.rcp.control.XLookupField();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
-        xLabel1 = new com.rameses.rcp.control.XLabel();
+        xFormPanel8 = new com.rameses.rcp.control.XFormPanel();
+        xTextField9 = new com.rameses.rcp.control.XTextField();
+        xTextField10 = new com.rameses.rcp.control.XTextField();
+        xTextField11 = new com.rameses.rcp.control.XTextField();
+        xDateField1 = new com.rameses.rcp.control.XDateField();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
@@ -52,13 +57,17 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xNumberField2 = new com.rameses.rcp.control.XNumberField();
         jScrollPane3 = new javax.swing.JScrollPane();
         xTextArea3 = new com.rameses.rcp.control.XTextArea();
-        xFormPanel8 = new com.rameses.rcp.control.XFormPanel();
-        xTextField9 = new com.rameses.rcp.control.XTextField();
-        xTextField10 = new com.rameses.rcp.control.XTextField();
-        xTextField11 = new com.rameses.rcp.control.XTextField();
-        xDateField1 = new com.rameses.rcp.control.XDateField();
         xFormPanel9 = new com.rameses.rcp.control.XFormPanel();
         xTextField1 = new com.rameses.rcp.control.XTextField();
+
+        com.rameses.rcp.control.border.XEtchedBorder xEtchedBorder1 = new com.rameses.rcp.control.border.XEtchedBorder();
+        xEtchedBorder1.setHideLeft(true);
+        xEtchedBorder1.setHideRight(true);
+        xEtchedBorder1.setHideTop(true);
+        xLabel1.setBorder(xEtchedBorder1);
+        xLabel1.setFontStyle("font-weight:bold;");
+        xLabel1.setForeground(new java.awt.Color(80, 80, 80));
+        xLabel1.setText("Personal Information");
 
         xLookupField1.setCaption("Name");
         xLookupField1.setCaptionWidth(100);
@@ -73,20 +82,44 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xTextArea1.setBackground(new java.awt.Color(250, 250, 250));
         xTextArea1.setCaption("Address");
         xTextArea1.setCaptionWidth(100);
+        xTextArea1.setDepends(new String[] {"borrower"});
         xTextArea1.setEnabled(false);
         xTextArea1.setName("entity.address");
         jScrollPane1.setViewportView(xTextArea1);
 
         xFormPanel1.add(jScrollPane1);
 
-        com.rameses.rcp.control.border.XEtchedBorder xEtchedBorder1 = new com.rameses.rcp.control.border.XEtchedBorder();
-        xEtchedBorder1.setHideLeft(true);
-        xEtchedBorder1.setHideRight(true);
-        xEtchedBorder1.setHideTop(true);
-        xLabel1.setBorder(xEtchedBorder1);
-        xLabel1.setFontStyle("font-weight:bold;");
-        xLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel1.setText("Personal Information");
+        xTextField9.setBackground(new java.awt.Color(250, 250, 250));
+        xTextField9.setCaption("Marital Status");
+        xTextField9.setCaptionWidth(100);
+        xTextField9.setDepends(new String[] {"borrower"});
+        xTextField9.setEnabled(false);
+        xTextField9.setName("entity.civilstatus");
+        xFormPanel8.add(xTextField9);
+
+        xTextField10.setBackground(new java.awt.Color(250, 250, 250));
+        xTextField10.setCaption("Citizenship");
+        xTextField10.setCaptionWidth(100);
+        xTextField10.setDepends(new String[] {"borrower"});
+        xTextField10.setEnabled(false);
+        xTextField10.setName("entity.citizenship");
+        xFormPanel8.add(xTextField10);
+
+        xTextField11.setBackground(new java.awt.Color(250, 250, 250));
+        xTextField11.setCaption("Contact No.");
+        xTextField11.setCaptionWidth(100);
+        xTextField11.setDepends(new String[] {"borrower"});
+        xTextField11.setEnabled(false);
+        xTextField11.setName("entity.contactno");
+        xFormPanel8.add(xTextField11);
+
+        xDateField1.setBackground(new java.awt.Color(250, 250, 250));
+        xDateField1.setCaption("Birth Date");
+        xDateField1.setCaptionWidth(100);
+        xDateField1.setDepends(new String[] {"borrower"});
+        xDateField1.setEnabled(false);
+        xDateField1.setName("entity.birthdate");
+        xFormPanel8.add(xDateField1);
 
         com.rameses.rcp.control.border.XEtchedBorder xEtchedBorder2 = new com.rameses.rcp.control.border.XEtchedBorder();
         xEtchedBorder2.setHideLeft(true);
@@ -227,34 +260,6 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         jScrollPane3.setViewportView(xTextArea3);
 
         xFormPanel5.add(jScrollPane3);
-
-        xTextField9.setBackground(new java.awt.Color(250, 250, 250));
-        xTextField9.setCaption("Marital Status");
-        xTextField9.setCaptionWidth(100);
-        xTextField9.setEnabled(false);
-        xTextField9.setName("entity.civilstatus");
-        xFormPanel8.add(xTextField9);
-
-        xTextField10.setBackground(new java.awt.Color(250, 250, 250));
-        xTextField10.setCaption("Citizenship");
-        xTextField10.setCaptionWidth(100);
-        xTextField10.setEnabled(false);
-        xTextField10.setName("entity.citizenship");
-        xFormPanel8.add(xTextField10);
-
-        xTextField11.setBackground(new java.awt.Color(250, 250, 250));
-        xTextField11.setCaption("Contact No.");
-        xTextField11.setCaptionWidth(100);
-        xTextField11.setEnabled(false);
-        xTextField11.setName("entity.contactno");
-        xFormPanel8.add(xTextField11);
-
-        xDateField1.setBackground(new java.awt.Color(250, 250, 250));
-        xDateField1.setCaption("Birth Date");
-        xDateField1.setCaptionWidth(100);
-        xDateField1.setEnabled(false);
-        xDateField1.setName("entity.birthdate");
-        xFormPanel8.add(xDateField1);
 
         xTextField1.setCaption("Relationship to the Principal Borrower");
         xTextField1.setCaptionWidth(210);

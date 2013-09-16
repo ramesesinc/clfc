@@ -15,7 +15,11 @@ class JointBorrowerController
     def changeLog    
     
     void init() {
-        if (loanapp.borrower?.objid == null) return;
+        if (loanapp.borrower?.objid == null) {
+            if(!loanapp.borrower?.residency) loanapp.borrower.residency = [:];
+            if(!loanapp.borrower?.occupancy) loanapp.borrower.occupancy = [:];
+            return;
+        }
 
         def filetype = loanapp.borrower._filetype;
         def relation = loanapp.borrower.relation;
@@ -44,6 +48,10 @@ class JointBorrowerController
     ] as TabbedPaneModel 
             
     def doOk() {
+        beforeSaveHandlers.each{k,v-> 
+            if (v != null) v(); 
+        }
+
         if( callBackHandler ) callBackHandler(loanapp.borrower);
         return "_close";
     }

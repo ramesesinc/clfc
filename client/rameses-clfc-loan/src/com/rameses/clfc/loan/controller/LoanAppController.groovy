@@ -18,14 +18,15 @@ class LoanAppController
     def handlers = [:];
     def mode = 'read';
     
-    @FormTitle
     @FormId
-    def getFormId() { 
+    @FormTitle    
+    def getAppNo() { 
         return 'LOAN-'+entity.appno;
     }
     
     void open() {
         loanappid = entity.objid;
+        entity.searchindex = true;
     }
     
     def getTitle() {
@@ -64,6 +65,7 @@ class LoanAppController
         }, 
         onselect: {o->             
             entity = service.open([objid: loanappid, name:o?.name]); 
+            println 'onselect entity-> '+entity;
             subFormHandler.reload();
         } 
     ] as ListPaneModel;
@@ -71,7 +73,7 @@ class LoanAppController
     
     def subFormHandler = [
         getOpener: {
-            if (selectedMenu == null) {
+            if (selectedMenu == null || entity.searchindex == true) {
                 return new Opener(outcome:'blankpage'); 
             }
 

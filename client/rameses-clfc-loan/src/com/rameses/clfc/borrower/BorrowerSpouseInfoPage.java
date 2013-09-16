@@ -64,13 +64,13 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xLookupField1.setHandler("lookupBorrower");
         xLookupField1.setName("borrower");
         xLookupField1.setPreferredSize(new java.awt.Dimension(150, 20));
-        xLookupField1.setRequired(true);
         xFormPanel1.add(xLookupField1);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(150, 70));
         xTextArea1.setBackground(new java.awt.Color(250, 250, 250));
         xTextArea1.setCaption("Address");
         xTextArea1.setCaptionWidth(100);
+        xTextArea1.setDepends(new String[] {"borrower"});
         xTextArea1.setEnabled(false);
         xTextArea1.setName("entity.address");
         jScrollPane1.setViewportView(xTextArea1);
@@ -223,6 +223,7 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xTextField9.setBackground(new java.awt.Color(250, 250, 250));
         xTextField9.setCaption("Marital Status");
         xTextField9.setCaptionWidth(100);
+        xTextField9.setDepends(new String[] {"borrower"});
         xTextField9.setEnabled(false);
         xTextField9.setName("entity.civilstatus");
         xFormPanel8.add(xTextField9);
@@ -230,6 +231,7 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xTextField10.setBackground(new java.awt.Color(250, 250, 250));
         xTextField10.setCaption("Citizenship");
         xTextField10.setCaptionWidth(100);
+        xTextField10.setDepends(new String[] {"borrower"});
         xTextField10.setEnabled(false);
         xTextField10.setName("entity.citizenship");
         xFormPanel8.add(xTextField10);
@@ -237,6 +239,7 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xTextField11.setBackground(new java.awt.Color(250, 250, 250));
         xTextField11.setCaption("Contact No.");
         xTextField11.setCaptionWidth(100);
+        xTextField11.setDepends(new String[] {"borrower"});
         xTextField11.setEnabled(false);
         xTextField11.setName("entity.contactno");
         xFormPanel8.add(xTextField11);
@@ -244,6 +247,7 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xDateField1.setBackground(new java.awt.Color(250, 250, 250));
         xDateField1.setCaption("Birth Date");
         xDateField1.setCaptionWidth(100);
+        xDateField1.setDepends(new String[] {"borrower"});
         xDateField1.setEnabled(false);
         xDateField1.setName("entity.birthdate");
         xFormPanel8.add(xDateField1);

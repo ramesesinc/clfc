@@ -14,7 +14,10 @@ class CoMakerController
     def changeLog
         
     void init() {
-        if (loanapp.borrower?.objid == null) return;
+        if (loanapp.borrower?.objid == null) {
+            loanapp.borrower = [residency:[:], occupancy:[:]];
+            return;
+        }
 
         def filetype = loanapp.borrower._filetype;
         def relation = loanapp.borrower.relation;
@@ -43,6 +46,10 @@ class CoMakerController
     ] as TabbedPaneModel 
             
     def doOk() {
+        beforeSaveHandlers.each{k,v-> 
+            if (v != null) v(); 
+        }
+
         if( callBackHandler ) callBackHandler(loanapp.borrower);
         return "_close";
     }
