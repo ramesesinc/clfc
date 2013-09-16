@@ -40,7 +40,7 @@ class PrincipalBorrowerService
 		def borrower = params.remove('borrower'); 
 		data.borrower.objid = borrower.objid;
 		data.borrower.name = borrowerService.createFullName(borrower.lastname, borrower.firstname, borrower.middlename);
-		loanAppService.update(data); 
+		loanAppService.em.update(data); 
 		borrowerService.update(borrower); 
 		loanapp_borrower.removePrincipalBorrower([parentid: data.objid]); 
 
