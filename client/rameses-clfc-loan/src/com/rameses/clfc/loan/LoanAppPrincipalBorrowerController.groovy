@@ -29,8 +29,9 @@ class LoanAppPrincipalBorrowerController
         [name:'comment', caption:'Comments'], 
         [name:'summary', caption:'Summary'] */
     ];
+    
     def opener;
-
+    
     void init() {
         if (loanapp.objid == null) return;
         
@@ -39,6 +40,7 @@ class LoanAppPrincipalBorrowerController
         data.borrower.type = 'PRINCIPAL'
         loanapp.clear();
         loanapp.putAll(data); 
+        
     }
 
     def createOpenerParams() {
@@ -49,7 +51,7 @@ class LoanAppPrincipalBorrowerController
     }
     
     def tabHandler = [
-        getItems: {
+        getList: {
             return menuItems;
         },
         beforeSelect: {item,index-> 
@@ -59,15 +61,10 @@ class LoanAppPrincipalBorrowerController
         },
         onselect: {item->
             def invtype = 'borrower-'+item.name+':open'; 
-            def op = InvokerUtil.lookupOpener(invtype, [ 
-                caller: this, 
-                loanapp: entity, 
-                handlers: handlers 
-            ]); 
-            opener = op;
+            opener = InvokerUtil.lookupOpener(invtype, createOpenerParams()); 
             subFormHandler.refresh();
         }
-    ] as TabbedPaneModel 
+    ] as TabbedListModel 
                  
     def subFormHandler = [
         getOpener: { return opener; } 
