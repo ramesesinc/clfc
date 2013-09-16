@@ -26,6 +26,7 @@ class LoanAppPrincipalBorrowerController
         data.borrower.type = 'PRINCIPAL'
         loanapp.clear();
         loanapp.putAll(data); 
+        println 'attached handlers-> ' + handlers;
     }
 
     def createOpenerParams() {
@@ -50,18 +51,14 @@ class LoanAppPrincipalBorrowerController
     ] as TabbedPaneModel 
     
     void save() {
-        try {
-            println 'before save handlers-> '+beforeSaveHandlers
-            beforeSaveHandlers.each{k,v-> 
-                if (v != null) v(); 
-            }
-
-            def data = [
-                objid: loanapp.objid, 
-                borrower: loanapp.borrower 
-            ]; 
-            service.update(data);
+        beforeSaveHandlers.each{k,v-> 
+            if (v != null) v(); 
         }
-        catch (e) { e.printStackTrace(); }
+
+        def data = [
+            objid: loanapp.objid, 
+            borrower: loanapp.borrower 
+        ]; 
+        service.update(data);
     }
 }
