@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 /**
  *
- * @author  wflores
+ * @author  louie
  */
 @StyleSheet
 @Template(FormPage.class) 
@@ -41,8 +41,10 @@ public class NewLoanAppPage extends javax.swing.JPanel {
         xLabel17 = new com.rameses.rcp.control.XLabel();
         jPanel2 = new javax.swing.JPanel();
         xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
+        xComboBox3 = new com.rameses.rcp.control.XComboBox();
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
         xTextField1 = new com.rameses.rcp.control.XTextField();
+        xTextField2 = new com.rameses.rcp.control.XTextField();
         xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
         xComboBox2 = new com.rameses.rcp.control.XComboBox();
         xNumberField1 = new com.rameses.rcp.control.XNumberField();
@@ -135,7 +137,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
         );
@@ -153,6 +155,16 @@ public class NewLoanAppPage extends javax.swing.JPanel {
         jPanel2.setBorder(xTitledBorder2);
 
         xFormPanel4.setPadding(new java.awt.Insets(5, 3, 0, 0));
+        xComboBox3.setCaption("App. Type");
+        xComboBox3.setCaptionWidth(100);
+        xComboBox3.setEnabled(false);
+        xComboBox3.setExpression("#{item.value}");
+        xComboBox3.setItemKey("value");
+        xComboBox3.setItems("appTypes");
+        xComboBox3.setName("entity.apptype");
+        xComboBox3.setPreferredSize(new java.awt.Dimension(210, 20));
+        xFormPanel4.add(xComboBox3);
+
         xComboBox1.setAllowNull(false);
         xComboBox1.setCaption("Client Type");
         xComboBox1.setCaptionWidth(100);
@@ -161,7 +173,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("clientTypes");
         xComboBox1.setName("entity.clienttype");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(210, 22));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(210, 20));
         xComboBox1.setRequired(true);
         xFormPanel4.add(xComboBox1);
 
@@ -172,13 +184,19 @@ public class NewLoanAppPage extends javax.swing.JPanel {
         xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel4.add(xTextField1);
 
+        xTextField2.setCaption("Mode");
+        xTextField2.setCaptionWidth(100);
+        xTextField2.setEnabled(false);
+        xTextField2.setName("entity.mode");
+        xFormPanel4.add(xTextField2);
+
         xFormPanel5.setPadding(new java.awt.Insets(5, 5, 0, 0));
         xComboBox2.setCaption("Product Type");
         xComboBox2.setCaptionWidth(110);
         xComboBox2.setExpression("#{item.name}");
         xComboBox2.setItems("productTypes");
         xComboBox2.setName("entity.schedule");
-        xComboBox2.setPreferredSize(new java.awt.Dimension(210, 22));
+        xComboBox2.setPreferredSize(new java.awt.Dimension(210, 20));
         xComboBox2.setRequired(true);
         xFormPanel5.add(xComboBox2);
 
@@ -196,7 +214,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
         xNumberField2.setFieldType(BigDecimal.class);
         xNumberField2.setHint("0.00");
         xNumberField2.setName("entity.loanamount");
-        xNumberField2.setPattern("0.00");
+        xNumberField2.setPattern("#,##0.00");
         xNumberField2.setPreferredSize(new java.awt.Dimension(0, 20));
         xNumberField2.setRequired(true);
         xFormPanel5.add(xNumberField2);
@@ -225,21 +243,21 @@ public class NewLoanAppPage extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(xFormPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(xFormPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(xLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE))
-                .addGap(28, 28, 28))
+                    .addComponent(xLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(xFormPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                    .addComponent(xFormPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(xFormPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(xFormPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(xLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -253,10 +271,10 @@ public class NewLoanAppPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, 615, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,7 +283,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -276,6 +294,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane3;
     private com.rameses.rcp.control.XComboBox xComboBox1;
     private com.rameses.rcp.control.XComboBox xComboBox2;
+    private com.rameses.rcp.control.XComboBox xComboBox3;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel4;
@@ -291,6 +310,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XNumberField xNumberField2;
     private com.rameses.rcp.control.XTextArea xTextArea3;
     private com.rameses.rcp.control.XTextField xTextField1;
+    private com.rameses.rcp.control.XTextField xTextField2;
     // End of variables declaration//GEN-END:variables
     
 }

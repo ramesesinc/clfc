@@ -12,9 +12,9 @@ import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
- * @author  Rameses
+ * @author  louie
  */
-@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
+@StyleSheet
 @Template(OKCancelPage.class)
 public class BankAccountsFormPage extends javax.swing.JPanel {
     

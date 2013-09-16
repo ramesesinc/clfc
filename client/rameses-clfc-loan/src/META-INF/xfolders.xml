@@ -21,4 +21,9 @@
             <folder id="clfc" caption="CLFC"/>
         </folder>
     </folder>
+    <folder id="menu">
+        <folder id="txn">
+            <folder id="loan" caption="Loan"/>
+        </folder>
+    </folder>
 </folders>

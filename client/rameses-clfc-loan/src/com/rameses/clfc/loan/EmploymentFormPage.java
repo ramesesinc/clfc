@@ -13,9 +13,9 @@ import java.math.BigDecimal;
 
 /**
  *
- * @author  Rameses
+ * @author  louie
  */
-@StyleSheet("com/rameses/clfc/loan/DefaultPopupMaster.style")
+@StyleSheet
 @Template(OKCancelPage.class)
 public class EmploymentFormPage extends javax.swing.JPanel {
     

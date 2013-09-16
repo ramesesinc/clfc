@@ -13,6 +13,7 @@ class LoanUtil
     private static def propertyUomTypes;
     private static def propertyModeOfAcquisitionTypes;
     private static def otherLendingModesOfPayment;
+    private static def borrowerOccupancyTypes;
 
     public static def getClientTypes() {
         if (clientTypes == null) {
@@ -132,5 +133,21 @@ class LoanUtil
             ]
         }
         return otherLendingModesOfPayment;
+    }
+    
+    public static def getBorrowerOccupancyTypes() {
+        if( borrowerOccupancyTypes == null ) {
+            borrowerOccupancyTypes = [
+                [key:'OWNED', value:'OWNED'],
+                [key:'LIVING_WTIH', value:'LIVING WITH'],
+                [key:'COMPANY_OWNED', value:'COMPANY OWNED'],
+                [key:'RENTED', value:'RENTED'],
+                [key:'FREE_USE', value:'FREE USE'],
+                [key:'MORTGAGE_BANK', value:'MORTGAGE BANK'],
+                [key:'RIGHTS', value:'RIGHTS'],
+                [key:'SQUATTERS', value:'SQUATTERS']
+            ]
+        }
+        return borrowerOccupancyTypes;
     }
 }

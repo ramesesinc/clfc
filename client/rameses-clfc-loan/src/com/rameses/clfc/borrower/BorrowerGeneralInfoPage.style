@@ -2,6 +2,10 @@
     enabled: false; 
     background-color: rgb(250,250,250);
 }
+"entity.residency.*|entity.occupancy.*" [borrowerContext.mode == 'edit']{
+    enabled: true;
+    background-color: #fff;
+}
 "borrower" [borrowerContext.mode != 'edit']{
     enabled: false; 
     background-color: rgb(250,250,250);
@@ -15,4 +19,16 @@
 }
 "entity.relation" [borrowerContext.borrower?.type == 'PRINCIPAL'] {
     visible:false;
+}
+"entity.residency.rent.*" [borrowerContext.mode == 'edit' && entity.residency.type == 'RENTED' ] {
+    enabled:true;
+}
+"entity.residency.rent.*" [borrowerContext.mode == 'edit' && entity.residency.type != 'RENTED' ] {
+    enabled:false;
+}
+"entity.occupancy.rent.*" [borrowerContext.mode == 'edit' && entity.occupancy.type == 'RENTED' ] {
+    enabled:true;
+}
+"entity.occupancy.rent.*" [borrowerContext.mode == 'edit' && entity.occupancy.type != 'RENTED' ] {
+    enabled:false;
 }
