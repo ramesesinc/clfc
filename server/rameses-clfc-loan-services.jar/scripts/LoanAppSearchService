@@ -29,7 +29,9 @@ class LoanAppSearchService
 		for (o in searchTypes) {
 			params.putAll(o); 
 			def list = em.getList(params);
-			if (!list.isEmpty()) return list;  
+			if (list.isEmpty()) continue;
+
+			return list;  
 		} 
 		return [];
 	}

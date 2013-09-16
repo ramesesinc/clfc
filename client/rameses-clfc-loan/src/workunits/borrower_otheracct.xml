@@ -1,11 +1,11 @@
 <workunit>
     <invokers>
         <invoker type="loanapp-borrower:plugin" action="init" caption=" Other Account  " 
-            index="-90" disableWhen="#{loanapp.borrower == null}"/>
+            index="-90" disableWhen="#{loanapp.borrower.objid == null}"/>
         <invoker type="loanapp-jointborrower:plugin" action="init" caption=" Other Account  " 
-            index="-90" disableWhen="#{loanapp.borrower == null}"/>
+            index="-90" disableWhen="#{loanapp.borrower.objid == null}"/>
         <invoker type="loanapp-comaker:plugin" action="init" caption=" Other Account  " 
-            index="-90" disableWhen="#{loanapp.borrower == null}"/>
+            index="-90" disableWhen="#{loanapp.borrower.objid == null}"/>
     </invokers>
     
     <code class="com.rameses.clfc.borrower.BorrowerOtherAccountController"/>

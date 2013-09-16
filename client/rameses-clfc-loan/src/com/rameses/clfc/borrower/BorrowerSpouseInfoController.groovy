@@ -9,6 +9,9 @@ import com.rameses.clfc.util.*;
 
 class BorrowerSpouseInfoController 
 {
+    @Binding
+    def binding;
+    
     //feed by the caller
     def borrowerContext;
     
@@ -16,11 +19,12 @@ class BorrowerSpouseInfoController
     def entity = [:];
     def occupancyTypes = LoanUtil.borrowerOccupancyTypes;
     def rentTypes = LoanUtil.rentTypes;
-    
+        
     void init() {        
         initEntity();
         borrowerContext.addDataChangeHandler('spouseinfo', { initEntity() });
         borrowerContext.addBeforeSaveHandler('spouseinfo', {
+            println 'entity.objid != null = '+(entity.objid != null);
             if(entity.objid != null) {
                 if(!entity.residency.since) throw new Exception('Residency: Since is required.');
                 if(entity.residency.type == 'RENTED') {
@@ -33,7 +37,6 @@ class BorrowerSpouseInfoController
                     if(!entity.occupancy.rentamount) throw new Exception('Lot Occupancy: Rent Amount is required.');
                 }
             }
-            else entity = [:]
         });
     } 
     
@@ -50,7 +53,14 @@ class BorrowerSpouseInfoController
             'query.loanappid': borrowerContext.loanapp.objid, 
             onselect: {o-> 
                 entity.putAll(o); 
-            } 
+                binding.refresh('entity.residency.*|entity.occupancy.*');
+            },
+            onempty: {
+                entity.clear();
+                entity.occupancy = [:];
+                entity.residency = [:];
+                binding.refresh('entity.residency.*|entity.occupancy.*');
+            }
         ]; 
         return InvokerUtil.lookupOpener('customer:lookup', params); 
     } 
