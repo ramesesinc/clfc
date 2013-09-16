@@ -1,22 +1,19 @@
-<workunit extends="wtemplates/ListController.xml">
+<workunit>
     <invokers>
-        <invoker type="quick_launcher" caption="Search Customer" code="SC"/>
-        <invoker type="customer:search" caption="Search Customer"/>
+        <invoker type="customer:search" caption="Search Customer" action="init"/>
+        
+        <invoker type="navActions" caption="" action="moveFirstPage" icon="images/navbar/first.png" immediate="true"/>
+        <invoker type="navActions" caption="" action="moveBackPage" icon="images/navbar/previous.png" immediate="true"/>
+        <invoker type="navActions" caption="" action="moveNextPage" icon="images/navbar/next.png" immediate="true"/>
+        <invoker type="navActions" caption="" action="moveLastPage" icon="images/navbar/last.png" immediate="true"/>
+        
+        <invoker type="formActions" caption="View" action="view" immediate="true"/>
+        <invoker type="formActions" caption="Select" action="select" immediate="true"/>        
    </invokers>
    
-   <code>
-   <![CDATA[ 
-        import com.rameses.rcp.annotations.*;
-        import com.rameses.rcp.common.*;
-        import com.rameses.osiris2.client.*;
-        import com.rameses.osiris2.common.*;
-
-        public class CustomerSearchController extends ListController {
-        
-            String serviceName = 'CustomerService';
-            String entityName = 'customer';
-            String title = 'Search Customer';
-        } 
-   ]]>
-   </code>
+   <code class="com.rameses.clfc.customer.CustomerSearchController"/> 
+   
+   <pages>
+       <page template="com.rameses.clfc.customer.CustomerSearchPage"/> 
+   </pages>
 </workunit>
