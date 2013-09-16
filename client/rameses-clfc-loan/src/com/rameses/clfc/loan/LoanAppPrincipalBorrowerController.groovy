@@ -12,6 +12,9 @@ class LoanAppPrincipalBorrower
     //feed by the caller
     def caller, handlers, loanapp;
     
+    @Binding
+    def binding;
+    
     @Service('PrincipalBorrowerService')
     def service;
     
@@ -71,13 +74,15 @@ class LoanAppPrincipalBorrower
                     entity.clear(); 
                     entity.putAll(borrower);
                 } 
+                binding.refresh();
             }, 
             onempty: { 
                 entity.clear();
                 entity.occupancy = [:];
                 entity.residency = [:];
+                binding.refresh();
             }
         ];
-        return InvokerUtil.lookupOpener('customer:lookup', params);
+        return InvokerUtil.lookupOpener('customer:search', params);
     }
 }
