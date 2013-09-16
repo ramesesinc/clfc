@@ -19,6 +19,15 @@ class NewLoanApplicationController
     def entity;
     def productTypes = [];
     def clientTypes = LoanUtil.clientTypes;
+    def appTypes = LOV.LOAN_APP_TYPES;
+    
+    @PropertyChangeListener
+    def listener = [
+        "entity.clienttype": {o->
+            if(o != 'MARKETED') entity.marketedby = null
+            binding.refresh('entity.marketedby');
+        }
+    ]
     
     void initOnline() {
         entity = service.initEntity();
@@ -30,19 +39,22 @@ class NewLoanApplicationController
     def initCapture() {
         entity = service.initEntity();
         entity.mode = 'CAPTURE';
-        entity.apptype = 'NEW';
         productTypes = entity.productTypes;
+        return "capturepage";
     }
 
     def getTitle() {
-        return 'New Loan Application: ' + entity.mode;
+        return 'Loan Application: ' + entity.mode;
     }
     
     def customerLookupHandler = InvokerUtil.lookupOpener('customer:lookup', [:]); 
     
     def save() {
-        if (!MsgBox.confirm('Ensure that all information is correct. Continue?')) return;
+        if (entity.clienttype == 'MARKETED') {
+            if(!entity.marketedby) throw new Exception('Interviewed by is required.');
+        }
         
+        if (!MsgBox.confirm('Ensure that all information is correct. Continue?')) return;
         entity = service.create(entity); 
         mode = 'read';
         return 'successpage'; 
@@ -60,13 +72,13 @@ class NewLoanApplicationController
     }
     
     def create() {
+        mode = 'create';
         if (entity.mode == 'CAPTURE') {
-            initCapture(); 
+            return initCapture(); 
         } else {
             initOnline(); 
-        }       
-        mode = 'create';
-        return 'default';
+            return 'default';
+        }
     } 
     
     def edit() {

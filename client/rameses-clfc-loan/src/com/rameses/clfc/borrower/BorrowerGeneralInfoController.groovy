@@ -5,6 +5,7 @@ import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 import com.rameses.clfc.borrower.*;
+import com.rameses.clfc.util.*;
 
 class BorrowerGeneralInfoController 
 {
@@ -13,9 +14,39 @@ class BorrowerGeneralInfoController
     
     //local variables 
     def entity = [:];
+    def occupancyTypes = LoanUtil.borrowerOccupancyTypes;
+    def rentTypes = LoanUtil.rentTypes;
+    
+    @PropertyChangeListener
+    def listener = [
+        "entity.residency.type": {o->
+            if(o != 'RENTED') {
+                entity.residency.renttype = null
+                entity.residency.rentamount = null
+            }
+        },
+        "entity.occupancy.type": {o->
+            if(o != 'RENTED') {
+                entity.occupancy.renttype = null
+                entity.occupancy.rentamount = null
+            }
+        }
+    ];
     
     void init() {
         entity = borrowerContext.borrower;
+        borrowerContext.addBeforeSaveHandler('borrower', {
+            if(!entity.residency.since) throw new Exception('Residency: Since is required.');
+            if(entity.residency.type == 'RENTED') {
+                if(!entity.residency.renttype) throw new Exception('Residency: Rent Type is required.');
+                if(!entity.residency.rentamount) throw new Exception('Residency: Rent Amount is required.');
+            }
+            if(!entity.occupancy.since) throw new Exception('Lot Occupancy: Since is required.'); 
+            if(entity.occupancy.type == 'RENTED') {
+                if(!entity.occupancy.renttype) throw new Exception('Lot Occupancy: Rent Type is required.');
+                if(!entity.occupancy.rentamount) throw new Exception('Lot Occupancy: Rent Amount is required.');
+            }
+        })
     }
     
     def getLookupBorrower() {  

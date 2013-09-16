@@ -1,5 +1,7 @@
 <workunit>
     <invokers>
+        <invoker folderid="/menu/txn/loan" caption="New Application" action="initOnline"/>
+        <invoker folderid="/menu/txn/loan" caption="Capture Application" action="initCapture"/>
         <invoker type="loanapp:create" caption="Loan Application" action="initOnline"/>
         
         <invoker type="formActions" action="cancel" visibleWhen="#{mode=='create'}" immediate="true"/> 
@@ -15,5 +17,6 @@
     <pages>
         <page template="com.rameses.clfc.loan.NewLoanAppPage"/>
         <page template="com.rameses.clfc.loan.NewLoanAppSuccessPage" name="successpage"/>
+        <page template="com.rameses.clfc.loan.CaptureLoanAppPage" name="capturepage"/>
     </pages>
 </workunit>

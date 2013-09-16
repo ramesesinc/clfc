@@ -50,14 +50,18 @@ class LoanAppPrincipalBorrowerController
     ] as TabbedPaneModel 
     
     void save() {
-        beforeSaveHandlers.each{k,v-> 
-            if (v != null) v(); 
+        try {
+            println 'before save handlers-> '+beforeSaveHandlers
+            beforeSaveHandlers.each{k,v-> 
+                if (v != null) v(); 
+            }
+
+            def data = [
+                objid: loanapp.objid, 
+                borrower: loanapp.borrower 
+            ]; 
+            service.update(data);
         }
-        
-        def data = [
-            objid: loanapp.objid, 
-            borrower: loanapp.borrower 
-        ]; 
-        service.update(data);
+        catch (e) { e.printStackTrace(); }
     }
 }

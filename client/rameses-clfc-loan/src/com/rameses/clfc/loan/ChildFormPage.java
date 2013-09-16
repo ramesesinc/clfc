@@ -12,7 +12,7 @@ import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
- * @author  Rameses
+ * @author  louie
  */
 @StyleSheet
 @Template(OKCancelPage.class)
