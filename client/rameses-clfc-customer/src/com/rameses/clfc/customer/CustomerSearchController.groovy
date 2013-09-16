@@ -12,6 +12,8 @@ class CustomerSearchController extends BasicLookupModel
     @Service('CustomerService')
     def service;
     
+    def opener;
+    
     void init() { 
         
     } 
@@ -55,6 +57,10 @@ class CustomerSearchController extends BasicLookupModel
     } 
     
     void moveLastPage() {}     
+    
+    def create() {
+        
+    }
     
     void view() {
         

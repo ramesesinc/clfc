@@ -1,5 +1,6 @@
 <workunit>
     <invokers>
+        <invoker type="quick_launcher" code="SC" caption="Search Customer" action="init"/>
         <invoker type="customer:search" caption="Search Customer" action="init"/>
         
         <invoker type="navActions" caption="" action="moveFirstPage" icon="images/navbar/first.png" immediate="true"/>
@@ -15,5 +16,6 @@
    
    <pages>
        <page template="com.rameses.clfc.customer.CustomerSearchPage"/> 
+       <page template="com.rameses.clfc.customer.CustomerSearchHandlerPage" name="handlerpage"/> 
    </pages>
 </workunit>
