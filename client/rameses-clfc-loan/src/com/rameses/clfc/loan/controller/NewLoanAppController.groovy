@@ -47,7 +47,7 @@ class NewLoanApplicationController
         return 'Loan Application: ' + entity.mode;
     }
     
-    def customerLookupHandler = InvokerUtil.lookupOpener('customer:lookup', [:]); 
+    def customerLookupHandler = InvokerUtil.lookupOpener('customer:search', [:]); 
     
     def save() {
         if (entity.clienttype == 'MARKETED') {

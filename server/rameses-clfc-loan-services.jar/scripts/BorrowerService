@@ -16,8 +16,10 @@ class BorrowerService
 		o.name = createFullName(o.lastname, o.firstname, o.middlename);
 
 		if (o.spouse == null) o.spouse = [:];
-		o.spouse.name = createFullName(o.spouse.lastname, o.spouse.firstname, o.spouse.middlename); 
-
+		if (o.spouse.objid != null) {
+			o.spouse.name = createFullName(o.spouse.lastname, o.spouse.firstname, o.spouse.middlename); 
+		}
+		
 		o.children = em.getChildren([borrowerid: o.objid]); 
 		for (item in o.children) {
 			item.employments = em.getEmployments([refid: item.objid]); 
