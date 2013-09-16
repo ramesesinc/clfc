@@ -64,7 +64,6 @@ class LoanAppController
         }, 
         onselect: {o->             
             entity = service.open([objid: loanappid, name:o?.name]); 
-            handlers = [:];
             subFormHandler.reload();
         } 
     ] as ListPaneModel;
