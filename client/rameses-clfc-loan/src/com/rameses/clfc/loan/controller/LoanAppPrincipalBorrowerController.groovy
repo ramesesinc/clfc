@@ -26,7 +26,6 @@ class LoanAppPrincipalBorrowerController
         data.borrower.type = 'PRINCIPAL'
         loanapp.clear();
         loanapp.putAll(data); 
-        println 'attached handlers-> ' + handlers;
     }
 
     def createOpenerParams() {

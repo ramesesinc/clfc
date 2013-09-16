@@ -142,6 +142,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xNumberField1.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
         xNumberField1.setDepends(new String[] {"entity.residency.type"});
         xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setHint("0.00");
         xNumberField1.setName("entity.residency.rentamount");
         xNumberField1.setPattern("#,##0.00");
         xFormPanel4.add(xNumberField1);
@@ -211,6 +212,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xNumberField2.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
         xNumberField2.setDepends(new String[] {"entity.occupancy.type"});
         xNumberField2.setFieldType(BigDecimal.class);
+        xNumberField2.setHint("0.00");
         xNumberField2.setName("entity.occupancy.rentamount");
         xNumberField2.setPattern("#,##0.00");
         xFormPanel7.add(xNumberField2);

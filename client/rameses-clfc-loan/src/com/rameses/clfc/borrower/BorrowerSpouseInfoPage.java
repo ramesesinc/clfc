@@ -7,6 +7,7 @@
 package com.rameses.clfc.borrower;
 
 import com.rameses.rcp.ui.annotations.StyleSheet;
+import java.math.BigDecimal;
 
 /**
  *
@@ -34,21 +35,21 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
-        xTextField5 = new com.rameses.rcp.control.XTextField();
+        xComboBox1 = new com.rameses.rcp.control.XComboBox();
         xDateField2 = new com.rameses.rcp.control.XDateField();
         xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
-        xTextField6 = new com.rameses.rcp.control.XTextField();
-        xDateField3 = new com.rameses.rcp.control.XDateField();
+        xComboBox2 = new com.rameses.rcp.control.XComboBox();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
         jScrollPane2 = new javax.swing.JScrollPane();
         xTextArea2 = new com.rameses.rcp.control.XTextArea();
         xLabel3 = new com.rameses.rcp.control.XLabel();
         xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
         xFormPanel6 = new com.rameses.rcp.control.XFormPanel();
-        xTextField7 = new com.rameses.rcp.control.XTextField();
+        xComboBox3 = new com.rameses.rcp.control.XComboBox();
         xDateField4 = new com.rameses.rcp.control.XDateField();
         xFormPanel7 = new com.rameses.rcp.control.XFormPanel();
-        xTextField8 = new com.rameses.rcp.control.XTextField();
-        xDateField5 = new com.rameses.rcp.control.XDateField();
+        xComboBox4 = new com.rameses.rcp.control.XComboBox();
+        xNumberField2 = new com.rameses.rcp.control.XNumberField();
         jScrollPane3 = new javax.swing.JScrollPane();
         xTextArea3 = new com.rameses.rcp.control.XTextArea();
         xFormPanel8 = new com.rameses.rcp.control.XFormPanel();
@@ -98,19 +99,20 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel3.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel3.setShowCaption(false);
-        xTextField5.setBackground(new java.awt.Color(250, 250, 250));
-        xTextField5.setCaption("Type");
-        xTextField5.setCaptionWidth(100);
-        xTextField5.setEnabled(false);
-        xTextField5.setName("entity.residency.type");
-        xTextField5.setPreferredSize(new java.awt.Dimension(150, 20));
-        xFormPanel3.add(xTextField5);
+        xComboBox1.setCaption("Type");
+        xComboBox1.setCaptionWidth(100);
+        xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("occupancyTypes");
+        xComboBox1.setName("entity.residency.type");
+        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 20));
+        xComboBox1.setRequired(true);
+        xFormPanel3.add(xComboBox1);
 
         xDateField2.setBackground(new java.awt.Color(250, 250, 250));
         xDateField2.setCaption("Since");
         xDateField2.setCaptionWidth(100);
         xDateField2.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
-        xDateField2.setEnabled(false);
         xDateField2.setName("entity.residency.since");
         xFormPanel3.add(xDateField2);
 
@@ -120,21 +122,25 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel4.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel4.setShowCaption(false);
-        xTextField6.setBackground(new java.awt.Color(250, 250, 250));
-        xTextField6.setCaption("Rent Type");
-        xTextField6.setCaptionWidth(100);
-        xTextField6.setEnabled(false);
-        xTextField6.setName("entity.residency.renttype");
-        xTextField6.setPreferredSize(new java.awt.Dimension(150, 20));
-        xFormPanel4.add(xTextField6);
+        xComboBox2.setCaption("Rent Type");
+        xComboBox2.setCaptionWidth(100);
+        xComboBox2.setDepends(new String[] {"entity.residency.type"});
+        xComboBox2.setExpression("#{item.value}");
+        xComboBox2.setItemKey("value");
+        xComboBox2.setItems("rentTypes");
+        xComboBox2.setName("entity.residency.renttype");
+        xComboBox2.setPreferredSize(new java.awt.Dimension(150, 20));
+        xFormPanel4.add(xComboBox2);
 
-        xDateField3.setBackground(new java.awt.Color(250, 250, 250));
-        xDateField3.setCaption("Rent Amount");
-        xDateField3.setCaptionWidth(100);
-        xDateField3.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
-        xDateField3.setEnabled(false);
-        xDateField3.setName("entity.residency.since");
-        xFormPanel4.add(xDateField3);
+        xNumberField1.setCaption("Rent Amount");
+        xNumberField1.setCaptionWidth(100);
+        xNumberField1.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
+        xNumberField1.setDepends(new String[] {"entity.residency.type"});
+        xNumberField1.setFieldType(BigDecimal.class);
+        xNumberField1.setHint("0.00");
+        xNumberField1.setName("entity.residency.rentamount");
+        xNumberField1.setPattern("#,##0.00");
+        xFormPanel4.add(xNumberField1);
 
         xFormPanel2.add(xFormPanel4);
 
@@ -142,7 +148,6 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xTextArea2.setBackground(new java.awt.Color(250, 250, 250));
         xTextArea2.setCaption("Remarks");
         xTextArea2.setCaptionWidth(100);
-        xTextArea2.setEnabled(false);
         xTextArea2.setName("entity.residency.remarks");
         jScrollPane2.setViewportView(xTextArea2);
 
@@ -161,19 +166,20 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xFormPanel6.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel6.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel6.setShowCaption(false);
-        xTextField7.setBackground(new java.awt.Color(250, 250, 250));
-        xTextField7.setCaption("Type");
-        xTextField7.setCaptionWidth(100);
-        xTextField7.setEnabled(false);
-        xTextField7.setName("entity.occupancy.type");
-        xTextField7.setPreferredSize(new java.awt.Dimension(150, 20));
-        xFormPanel6.add(xTextField7);
+        xComboBox3.setCaption("Type");
+        xComboBox3.setCaptionWidth(100);
+        xComboBox3.setExpression("#{item.value}");
+        xComboBox3.setItemKey("value");
+        xComboBox3.setItems("occupancyTypes");
+        xComboBox3.setName("entity.occupancy.type");
+        xComboBox3.setPreferredSize(new java.awt.Dimension(150, 20));
+        xComboBox3.setRequired(true);
+        xFormPanel6.add(xComboBox3);
 
         xDateField4.setBackground(new java.awt.Color(250, 250, 250));
         xDateField4.setCaption("Since");
         xDateField4.setCaptionWidth(100);
         xDateField4.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
-        xDateField4.setEnabled(false);
         xDateField4.setName("entity.occupancy.since");
         xFormPanel6.add(xDateField4);
 
@@ -183,21 +189,25 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xFormPanel7.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel7.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel7.setShowCaption(false);
-        xTextField8.setBackground(new java.awt.Color(250, 250, 250));
-        xTextField8.setCaption("Rent Type");
-        xTextField8.setCaptionWidth(100);
-        xTextField8.setEnabled(false);
-        xTextField8.setName("entity.occupancy.renttype");
-        xTextField8.setPreferredSize(new java.awt.Dimension(150, 20));
-        xFormPanel7.add(xTextField8);
+        xComboBox4.setCaption("Rent Type");
+        xComboBox4.setCaptionWidth(100);
+        xComboBox4.setDepends(new String[] {"entity.occupancy.type"});
+        xComboBox4.setExpression("#{item.value}");
+        xComboBox4.setItemKey("value");
+        xComboBox4.setItems("rentTypes");
+        xComboBox4.setName("entity.occupancy.renttype");
+        xComboBox4.setPreferredSize(new java.awt.Dimension(150, 20));
+        xFormPanel7.add(xComboBox4);
 
-        xDateField5.setBackground(new java.awt.Color(250, 250, 250));
-        xDateField5.setCaption("Rent Amount");
-        xDateField5.setCaptionWidth(100);
-        xDateField5.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
-        xDateField5.setEnabled(false);
-        xDateField5.setName("entity.occupancy.since");
-        xFormPanel7.add(xDateField5);
+        xNumberField2.setCaption("Rent Amount");
+        xNumberField2.setCaptionWidth(100);
+        xNumberField2.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
+        xNumberField2.setDepends(new String[] {"entity.occupancy.type"});
+        xNumberField2.setFieldType(BigDecimal.class);
+        xNumberField2.setHint("0.00");
+        xNumberField2.setName("entity.occupancy.rentamount");
+        xNumberField2.setPattern("#,##0.00");
+        xFormPanel7.add(xNumberField2);
 
         xFormPanel5.add(xFormPanel7);
 
@@ -205,7 +215,6 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xTextArea3.setBackground(new java.awt.Color(250, 250, 250));
         xTextArea3.setCaption("Remarks");
         xTextArea3.setCaptionWidth(100);
-        xTextArea3.setEnabled(false);
         xTextArea3.setName("entity.occupancy.remarks");
         jScrollPane3.setViewportView(xTextArea3);
 
@@ -283,11 +292,13 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private com.rameses.rcp.control.XComboBox xComboBox1;
+    private com.rameses.rcp.control.XComboBox xComboBox2;
+    private com.rameses.rcp.control.XComboBox xComboBox3;
+    private com.rameses.rcp.control.XComboBox xComboBox4;
     private com.rameses.rcp.control.XDateField xDateField1;
     private com.rameses.rcp.control.XDateField xDateField2;
-    private com.rameses.rcp.control.XDateField xDateField3;
     private com.rameses.rcp.control.XDateField xDateField4;
-    private com.rameses.rcp.control.XDateField xDateField5;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
@@ -300,15 +311,13 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLookupField xLookupField1;
+    private com.rameses.rcp.control.XNumberField xNumberField1;
+    private com.rameses.rcp.control.XNumberField xNumberField2;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextArea xTextArea2;
     private com.rameses.rcp.control.XTextArea xTextArea3;
     private com.rameses.rcp.control.XTextField xTextField10;
     private com.rameses.rcp.control.XTextField xTextField11;
-    private com.rameses.rcp.control.XTextField xTextField5;
-    private com.rameses.rcp.control.XTextField xTextField6;
-    private com.rameses.rcp.control.XTextField xTextField7;
-    private com.rameses.rcp.control.XTextField xTextField8;
     private com.rameses.rcp.control.XTextField xTextField9;
     // End of variables declaration//GEN-END:variables
     
