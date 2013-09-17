@@ -50,6 +50,12 @@ class LoanAppBusinessService
 		} else if (data.state == 'INCOMPLETE') {
 			loanapp.changeState([objid: data.objid, state:'PENDING']); 
 		} 
+
+		data = loanapp.findByObjid(params);
+		def o = loanapp.findSearchIndex(data); 
+		o.state = data.state; 
+		loanapp.update(o, 'search_index'); 
+		
 		return loanapp.findByObjid(params); 
 	} 
 } 

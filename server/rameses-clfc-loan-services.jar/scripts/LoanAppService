@@ -8,6 +8,9 @@ class LoanAppService
 	@ActiveDB(value='loanapp')
 	def loanapp;
 
+	@ActiveDB(value='loanapp_business')
+	def business;
+
 	@Service('DateService') 
 	def dateService;
 
@@ -31,7 +34,8 @@ class LoanAppService
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found');
 
 		loanapp.update(params);
-		loanapp.update(params, 'route')
+		if(params.route) loanapp.update(params, 'route');
+
 		return params;
 	} 
 
@@ -207,5 +211,12 @@ class LoanAppService
 		]; 
 		loanapp.create(o, 'log'); 
 		return data; 
-	}		
+	}
+
+	@ProxyMethod
+	public def getBusinesses(params) {
+		if(!params.objid) throw new Exception('please specify objid');
+		return business.getList([parentid: params.objid]);
+	}
+
 } 
