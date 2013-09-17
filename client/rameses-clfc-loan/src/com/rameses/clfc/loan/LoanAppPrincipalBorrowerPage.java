@@ -6,8 +6,6 @@
 
 package com.rameses.clfc.loan;
 
-import java.math.BigDecimal;
-
 /**
  *
  * @author  wflores
@@ -25,36 +23,25 @@ public class LoanAppPrincipalBorrowerPage extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        xTabbedList1 = new com.rameses.rcp.control.XTabbedList();
-        xSubFormPanel1 = new com.rameses.rcp.control.XSubFormPanel();
+        xTabbedPane1 = new com.rameses.rcp.control.XTabbedPane();
 
-        setLayout(new java.awt.BorderLayout());
+        xTabbedPane1.setName("tabHandler");
 
-        xTabbedList1.setName("tabHandler");
-        xTabbedList1.setPreferredSize(new java.awt.Dimension(100, 30));
-        add(xTabbedList1, java.awt.BorderLayout.NORTH);
-
-        xSubFormPanel1.setDynamic(true);
-        xSubFormPanel1.setHandler("subFormHandler");
-        xSubFormPanel1.setName("opener");
-        javax.swing.GroupLayout xSubFormPanel1Layout = new javax.swing.GroupLayout(xSubFormPanel1);
-        xSubFormPanel1.setLayout(xSubFormPanel1Layout);
-        xSubFormPanel1Layout.setHorizontalGroup(
-            xSubFormPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(xTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
-        xSubFormPanel1Layout.setVerticalGroup(
-            xSubFormPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(xTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
-        add(xSubFormPanel1, java.awt.BorderLayout.CENTER);
-
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.rameses.rcp.control.XSubFormPanel xSubFormPanel1;
-    private com.rameses.rcp.control.XTabbedList xTabbedList1;
+    private com.rameses.rcp.control.XTabbedPane xTabbedPane1;
     // End of variables declaration//GEN-END:variables
     
 }

@@ -26,12 +26,10 @@ class BorrowerSpouseInfoController
         borrowerContext.addBeforeSaveHandler('spouseinfo', {
             println 'entity.objid != null = '+(entity.objid != null);
             if(entity.objid != null) {
-                if(!entity.residency.since) throw new Exception('Residency: Since is required.');
                 if(entity.residency.type == 'RENTED') {
                     if(!entity.residency.renttype) throw new Exception('Residency: Rent Type is required.');
-                    if(!entity.residenct.rentamount) throw new Exception('Residenct: Rent Amount is required.');
+                    if(!entity.residency.rentamount) throw new Exception('Residency: Rent Amount is required.');
                 }
-                if(!entity.occupancy.since) throw new Exception('Lot Occupancy: Since is required.');
                 if(entity.occupancy.type == 'RENTED') {
                     if(!entity.occupancy.renttype) throw new Exception('Lot Occupancy: Rent Type is required.');
                     if(!entity.occupancy.rentamount) throw new Exception('Lot Occupancy: Rent Amount is required.');

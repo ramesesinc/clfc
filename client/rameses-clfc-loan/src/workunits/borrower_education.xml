@@ -1,11 +1,11 @@
 <workunit>
     <invokers>
         <invoker type="loanapp-borrower:plugin" caption=" Education  " 
-            action="init" index="-97" disableWhen="#{loanapp.borrower.objid == null}"/>
+            action="init" index="-97"/>
         <invoker type="loanapp-jointborrower:plugin" caption=" Education  " 
-            action="init" index="-97" disableWhen="#{loanapp.borrower.objid == null}"/>
+            action="init" index="-97"/>
         <invoker type="loanapp-comaker:plugin" caption=" Education  " 
-            action="init" index="-97" disableWhen="#{loanapp.borrower.objid == null}"/>        
+            action="init" index="-97"/>        
     </invokers>
     
     <code class="com.rameses.clfc.borrower.BorrowerEducationController"/>

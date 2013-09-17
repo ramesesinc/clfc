@@ -39,12 +39,12 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xNumberField1 = new com.rameses.rcp.control.XNumberField();
         xComboBox2 = new com.rameses.rcp.control.XComboBox();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
-        xNumberField3 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xDateField1 = new com.rameses.rcp.control.XDateField();
         xTextField3 = new com.rameses.rcp.control.XTextField();
         xComboBox3 = new com.rameses.rcp.control.XComboBox();
         xTextField4 = new com.rameses.rcp.control.XTextField();
-        xNumberField2 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
 
@@ -100,13 +100,11 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xFormPanel2.setBounds(10, 60, 380, 30);
 
         xFormPanel3.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xNumberField3.setCaption("Zonal Value");
-        xNumberField3.setCaptionWidth(140);
-        xNumberField3.setFieldType(BigDecimal.class);
-        xNumberField3.setName("entity.zonalvalue");
-        xNumberField3.setPattern("#,##0.00");
-        xNumberField3.setRequired(true);
-        xFormPanel3.add(xNumberField3);
+        xDecimalField1.setCaption("Zonal Value");
+        xDecimalField1.setCaptionWidth(140);
+        xDecimalField1.setName("entity.zonalvalue");
+        xDecimalField1.setRequired(true);
+        xFormPanel3.add(xDecimalField1);
 
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(140);
@@ -138,18 +136,17 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xTextField4.setRequired(true);
         xFormPanel3.add(xTextField4);
 
-        xNumberField2.setCaption("Market/Appraisal Value");
-        xNumberField2.setCaptionWidth(140);
-        xNumberField2.setFieldType(BigDecimal.class);
-        xNumberField2.setName("entity.marketvalue");
-        xNumberField2.setPattern("#,##0.00");
-        xNumberField2.setPreferredSize(new java.awt.Dimension(120, 19));
-        xNumberField2.setRequired(true);
-        xFormPanel3.add(xNumberField2);
+        xDecimalField2.setCaption("Market/Appraisal Value");
+        xDecimalField2.setCaptionWidth(140);
+        xDecimalField2.setName("entity.marketvalue");
+        xDecimalField2.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDecimalField2.setRequired(true);
+        xFormPanel3.add(xDecimalField2);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
         xTextArea1.setCaption("Remarks");
         xTextArea1.setCaptionWidth(140);
+        xTextArea1.setHint("Specify remarks here");
         xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
@@ -186,12 +183,12 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XComboBox xComboBox2;
     private com.rameses.rcp.control.XComboBox xComboBox3;
     private com.rameses.rcp.control.XDateField xDateField1;
+    private com.rameses.rcp.control.XDecimalField xDecimalField1;
+    private com.rameses.rcp.control.XDecimalField xDecimalField2;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
     private com.rameses.rcp.control.XNumberField xNumberField1;
-    private com.rameses.rcp.control.XNumberField xNumberField2;
-    private com.rameses.rcp.control.XNumberField xNumberField3;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField3;

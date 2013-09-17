@@ -17,6 +17,9 @@ class BorrowerGeneralInfoController
     def occupancyTypes = LoanUtil.borrowerOccupancyTypes;
     def rentTypes = LoanUtil.rentTypes;
     
+    @ChangeLog
+    def changeLog;
+    
     @PropertyChangeListener
     def listener = [
         "entity.residency.type": {o->
@@ -36,19 +39,17 @@ class BorrowerGeneralInfoController
     void init() {
         entity = borrowerContext.borrower;
         borrowerContext.addBeforeSaveHandler('borrower', {
-            if(!entity.residency.since) throw new Exception('Residency: Since is required.');
             if(entity.residency.type == 'RENTED') {
                 if(!entity.residency.renttype) throw new Exception('Residency: Rent Type is required.');
                 if(!entity.residency.rentamount) throw new Exception('Residency: Rent Amount is required.');
             }
-            if(!entity.occupancy.since) throw new Exception('Lot Occupancy: Since is required.'); 
             if(entity.occupancy.type == 'RENTED') {
                 if(!entity.occupancy.renttype) throw new Exception('Lot Occupancy: Rent Type is required.');
                 if(!entity.occupancy.rentamount) throw new Exception('Lot Occupancy: Rent Amount is required.');
             }
-        })
+        });
     }
-    
+        
     def getLookupBorrower() {  
         def params = [
             'query.loanappid': borrowerContext.loanappid, 
@@ -64,7 +65,7 @@ class BorrowerGeneralInfoController
                 } 
                 borrowerContext.dataChangeHandlers.each{k,v-> 
                     if (v != null) v(); 
-                } 
+                }
                 borrowerContext.refresh(); 
             }, 
             onempty: { 

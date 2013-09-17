@@ -32,12 +32,12 @@ public class ProductTypePage extends javax.swing.JPanel {
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xTextField1 = new com.rameses.rcp.control.XTextField();
         xTextField2 = new com.rameses.rcp.control.XTextField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
-        xNumberField2 = new com.rameses.rcp.control.XNumberField();
-        xNumberField3 = new com.rameses.rcp.control.XNumberField();
-        xNumberField4 = new com.rameses.rcp.control.XNumberField();
-        xNumberField5 = new com.rameses.rcp.control.XNumberField();
-        xNumberField6 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
+        xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
+        xDecimalField3 = new com.rameses.rcp.control.XDecimalField();
+        xDecimalField4 = new com.rameses.rcp.control.XDecimalField();
+        xDecimalField5 = new com.rameses.rcp.control.XDecimalField();
+        xDecimalField6 = new com.rameses.rcp.control.XDecimalField();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setTitle("Product Type Information");
@@ -56,47 +56,43 @@ public class ProductTypePage extends javax.swing.JPanel {
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xNumberField1.setCaption("Term");
-        xNumberField1.setCaptionWidth(135);
-        xNumberField1.setFieldType(Integer.class);
-        xNumberField1.setName("entity.term");
-        xNumberField1.setRequired(true);
-        xFormPanel1.add(xNumberField1);
+        xDecimalField1.setCaption("Term");
+        xDecimalField1.setCaptionWidth(135);
+        xDecimalField1.setName("entity.term");
+        xDecimalField1.setPattern("#,##0");
+        xDecimalField1.setRequired(true);
+        xDecimalField1.setScale(0);
+        xFormPanel1.add(xDecimalField1);
 
-        xNumberField2.setCaption("Interest Rate");
-        xNumberField2.setCaptionWidth(135);
-        xNumberField2.setFieldType(BigDecimal.class);
-        xNumberField2.setName("entity.interestrate");
-        xNumberField2.setRequired(true);
-        xFormPanel1.add(xNumberField2);
+        xDecimalField2.setCaption("Interest Rate");
+        xDecimalField2.setCaptionWidth(135);
+        xDecimalField2.setName("entity.interestrate");
+        xDecimalField2.setRequired(true);
+        xFormPanel1.add(xDecimalField2);
 
-        xNumberField3.setCaption("Past Due Rate");
-        xNumberField3.setCaptionWidth(135);
-        xNumberField3.setFieldType(BigDecimal.class);
-        xNumberField3.setName("entity.pastduerate");
-        xNumberField3.setRequired(true);
-        xFormPanel1.add(xNumberField3);
+        xDecimalField3.setCaption("Past Due Rate");
+        xDecimalField3.setCaptionWidth(135);
+        xDecimalField3.setName("entity.pastduerate");
+        xDecimalField3.setRequired(true);
+        xFormPanel1.add(xDecimalField3);
 
-        xNumberField4.setCaption("Underpayment Penalty");
-        xNumberField4.setCaptionWidth(135);
-        xNumberField4.setFieldType(BigDecimal.class);
-        xNumberField4.setName("entity.underpaymentpenalty");
-        xNumberField4.setRequired(true);
-        xFormPanel1.add(xNumberField4);
+        xDecimalField4.setCaption("Underpayment Penalty");
+        xDecimalField4.setCaptionWidth(135);
+        xDecimalField4.setName("entity.underpaymentpenalty");
+        xDecimalField4.setRequired(true);
+        xFormPanel1.add(xDecimalField4);
 
-        xNumberField5.setCaption("Surcharge Rate");
-        xNumberField5.setCaptionWidth(135);
-        xNumberField5.setFieldType(BigDecimal.class);
-        xNumberField5.setName("entity.surchargerate");
-        xNumberField5.setRequired(true);
-        xFormPanel1.add(xNumberField5);
+        xDecimalField5.setCaption("Surcharge Rate");
+        xDecimalField5.setCaptionWidth(135);
+        xDecimalField5.setName("entity.surchargerate");
+        xDecimalField5.setRequired(true);
+        xFormPanel1.add(xDecimalField5);
 
-        xNumberField6.setCaption("Absent Penalty");
-        xNumberField6.setCaptionWidth(135);
-        xNumberField6.setFieldType(BigDecimal.class);
-        xNumberField6.setName("entity.absentpenalty");
-        xNumberField6.setRequired(true);
-        xFormPanel1.add(xNumberField6);
+        xDecimalField6.setCaption("Absent Penalty");
+        xDecimalField6.setCaptionWidth(135);
+        xDecimalField6.setName("entity.absentpenalty");
+        xDecimalField6.setRequired(true);
+        xFormPanel1.add(xDecimalField6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -118,13 +114,13 @@ public class ProductTypePage extends javax.swing.JPanel {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.rameses.rcp.control.XDecimalField xDecimalField1;
+    private com.rameses.rcp.control.XDecimalField xDecimalField2;
+    private com.rameses.rcp.control.XDecimalField xDecimalField3;
+    private com.rameses.rcp.control.XDecimalField xDecimalField4;
+    private com.rameses.rcp.control.XDecimalField xDecimalField5;
+    private com.rameses.rcp.control.XDecimalField xDecimalField6;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
-    private com.rameses.rcp.control.XNumberField xNumberField2;
-    private com.rameses.rcp.control.XNumberField xNumberField3;
-    private com.rameses.rcp.control.XNumberField xNumberField4;
-    private com.rameses.rcp.control.XNumberField xNumberField5;
-    private com.rameses.rcp.control.XNumberField xNumberField6;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField2;
     // End of variables declaration//GEN-END:variables

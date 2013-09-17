@@ -3,7 +3,7 @@ package com.rameses.clfc.borrower;
 class BorrowerContext
 {
     Map dataChangeHandlers = [:];
-    Map beforeSaveHandlers = [:]; 
+    Map beforeSaveHandlers = [:];
     
     private def parentCodeBean;
     private def codeBean;

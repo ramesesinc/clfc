@@ -35,12 +35,10 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xTextField1 = new com.rameses.rcp.control.XTextField();
         xTextField2 = new com.rameses.rcp.control.XTextField();
-        xTextField4 = new com.rameses.rcp.control.XTextField();
-        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xDateField1 = new com.rameses.rcp.control.XDateField();
         xTextField3 = new com.rameses.rcp.control.XTextField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
-        xLabel1 = new com.rameses.rcp.control.XLabel();
+        xTextField4 = new com.rameses.rcp.control.XTextField();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
 
@@ -48,86 +46,72 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         xTitledBorder1.setTitle("Appliance Information");
         jPanel1.setBorder(xTitledBorder1);
 
-        xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
         xTextField1.setCaption("Type");
-        xTextField1.setCaptionWidth(65);
+        xTextField1.setCaptionWidth(135);
         xTextField1.setName("entity.type");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField1.setPreferredSize(new java.awt.Dimension(170, 20));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("Brand");
-        xTextField2.setCaptionWidth(65);
+        xTextField2.setCaptionWidth(135);
         xTextField2.setName("entity.brand");
-        xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField2.setPreferredSize(new java.awt.Dimension(250, 20));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xTextField4.setCaption("Serial No");
-        xTextField4.setCaptionWidth(65);
-        xTextField4.setName("entity.serialno");
-        xTextField4.setPreferredSize(new java.awt.Dimension(0, 19));
-        xTextField4.setRequired(true);
-        xFormPanel1.add(xTextField4);
-
-        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(135);
         xDateField1.setName("entity.dtacquired");
+        xDateField1.setPreferredSize(new java.awt.Dimension(120, 20));
         xDateField1.setRequired(true);
-        xFormPanel2.add(xDateField1);
+        xFormPanel1.add(xDateField1);
 
         xTextField3.setCaption("Model No.");
         xTextField3.setCaptionWidth(135);
         xTextField3.setName("entity.modelno");
-        xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField3.setPreferredSize(new java.awt.Dimension(150, 20));
         xTextField3.setRequired(true);
-        xFormPanel2.add(xTextField3);
+        xFormPanel1.add(xTextField3);
 
-        xNumberField1.setCaption("Market/Appraisal Value");
-        xNumberField1.setCaptionWidth(135);
-        xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.marketvalue");
-        xNumberField1.setPattern("#,##0.00");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(0, 19));
-        xNumberField1.setRequired(true);
-        xFormPanel2.add(xNumberField1);
+        xTextField4.setCaption("Serial No");
+        xTextField4.setCaptionWidth(135);
+        xTextField4.setName("entity.serialno");
+        xTextField4.setPreferredSize(new java.awt.Dimension(150, 20));
+        xTextField4.setRequired(true);
+        xFormPanel1.add(xTextField4);
 
-        xLabel1.setPadding(new java.awt.Insets(1, 0, 1, 1));
-        xLabel1.setText("Remarks");
+        xDecimalField1.setCaption("Market/Appraisal Value");
+        xDecimalField1.setCaptionWidth(135);
+        xDecimalField1.setName("entity.marketvalue");
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDecimalField1.setRequired(true);
+        xFormPanel1.add(xDecimalField1);
 
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 100));
         xTextArea1.setCaption("Remarks");
+        xTextArea1.setCaptionWidth(135);
+        xTextArea1.setHint("Specify remarks here.");
         xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
-        xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
+
+        xFormPanel1.add(jScrollPane1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(xLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(19, 19, 19)
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(xFormPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(xFormPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(xLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -145,7 +129,7 @@ public class ApplianceFormPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -154,10 +138,8 @@ public class ApplianceFormPage extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private com.rameses.rcp.control.XDateField xDateField1;
+    private com.rameses.rcp.control.XDecimalField xDecimalField1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
-    private com.rameses.rcp.control.XFormPanel xFormPanel2;
-    private com.rameses.rcp.control.XLabel xLabel1;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField2;

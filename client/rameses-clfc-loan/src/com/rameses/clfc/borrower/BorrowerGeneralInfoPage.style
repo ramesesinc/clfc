@@ -18,10 +18,10 @@
     enabled: true;
     background-color: #fff;
 }
-"entity.relation" [borrowerContext.borrower?.type != 'PRINCIPAL'] {
+"relation" [borrowerContext.borrower?.type != 'PRINCIPAL'] {
     visible:true;
 }
-"entity.relation" [borrowerContext.borrower?.type == 'PRINCIPAL'] {
+"relation" [borrowerContext.borrower?.type == 'PRINCIPAL'] {
     visible:false;
 }
 "entity.residency.rent.*" [borrowerContext.mode == 'edit' && entity.residency?.type == 'RENTED' ] {

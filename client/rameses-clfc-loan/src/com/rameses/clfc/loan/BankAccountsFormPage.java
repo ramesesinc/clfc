@@ -40,7 +40,7 @@ public class BankAccountsFormPage extends javax.swing.JPanel {
         xFormPanel1.setBorder(xTitledBorder1);
         xTextField1.setCaption("Bank Name");
         xTextField1.setName("entity.bankname");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 

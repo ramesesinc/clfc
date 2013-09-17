@@ -36,7 +36,7 @@ public class EmploymentFormPage extends javax.swing.JPanel {
         xTextField2 = new com.rameses.rcp.control.XTextField();
         xTextField3 = new com.rameses.rcp.control.XTextField();
         xTextField4 = new com.rameses.rcp.control.XTextField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xTextField5 = new com.rameses.rcp.control.XTextField();
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -48,40 +48,37 @@ public class EmploymentFormPage extends javax.swing.JPanel {
         xTextField1.setCaption("Employer");
         xTextField1.setCaptionWidth(100);
         xTextField1.setName("entity.employer");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("Tel. No.");
         xTextField2.setCaptionWidth(100);
         xTextField2.setName("entity.contactno");
-        xTextField2.setPreferredSize(new java.awt.Dimension(100, 19));
         xFormPanel1.add(xTextField2);
 
         xTextField3.setCaption("Address");
         xTextField3.setCaptionWidth(100);
         xTextField3.setName("entity.address");
-        xTextField3.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField3.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel1.add(xTextField3);
 
         xTextField4.setCaption("Position");
         xTextField4.setCaptionWidth(100);
         xTextField4.setName("entity.position");
-        xTextField4.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField4.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel1.add(xTextField4);
 
-        xNumberField1.setCaption("Salary");
-        xNumberField1.setCaptionWidth(100);
-        xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.salary");
-        xNumberField1.setPattern("#,##0.00");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(130, 19));
-        xFormPanel1.add(xNumberField1);
+        xDecimalField1.setCaption("Salary");
+        xDecimalField1.setCaptionWidth(100);
+        xDecimalField1.setName("entity.salary");
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(130, 20));
+        xFormPanel1.add(xDecimalField1);
 
         xTextField5.setCaption("Length of Service");
         xTextField5.setCaptionWidth(100);
         xTextField5.setName("entity.lengthofservice");
-        xTextField5.setPreferredSize(new java.awt.Dimension(130, 19));
+        xTextField5.setPreferredSize(new java.awt.Dimension(130, 20));
         xFormPanel1.add(xTextField5);
 
         xComboBox1.setCaption("Status");
@@ -90,7 +87,7 @@ public class EmploymentFormPage extends javax.swing.JPanel {
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("statusList");
         xComboBox1.setName("entity.status");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 22));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel1.add(xComboBox1);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
@@ -125,8 +122,8 @@ public class EmploymentFormPage extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private com.rameses.rcp.control.XComboBox xComboBox1;
+    private com.rameses.rcp.control.XDecimalField xDecimalField1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField2;

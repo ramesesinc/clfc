@@ -43,14 +43,14 @@ public class EducationalBackgroundFormPage extends javax.swing.JPanel {
         xTextField1.setCaption("Educational Attainment");
         xTextField1.setCaptionWidth(140);
         xTextField1.setName("entity.attainment");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("School Attended");
         xTextField2.setCaptionWidth(140);
         xTextField2.setName("entity.school");
-        xTextField2.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField2.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 

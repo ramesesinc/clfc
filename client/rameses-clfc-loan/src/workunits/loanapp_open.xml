@@ -2,7 +2,7 @@
     <invokers>
         <invoker type="loanapp:open" caption="Loan Application" action="open" target="window"/>
         
-        <invoker type="formActions" caption="Edit" action="edit" visibleWhen="#{mode=='read'}" immediate="true"/>
+        <invoker type="formActions" caption="Edit" action="edit" visibleWhen="#{isEditable}" immediate="true"/>
         <invoker type="formActions" caption="Cancel" action="cancel" visibleWhen="#{mode=='edit'}" immediate="true"/>
         <invoker type="formActions" caption="Save" action="save" visibleWhen="#{mode=='edit'}"/> 
         

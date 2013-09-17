@@ -33,7 +33,7 @@ public class ChildFormPage extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xTextField1 = new com.rameses.rcp.control.XTextField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xSeparator2 = new com.rameses.rcp.control.XSeparator();
@@ -67,17 +67,17 @@ public class ChildFormPage extends javax.swing.JPanel {
         xTextField1.setCaption("Name");
         xTextField1.setCaptionWidth(70);
         xTextField1.setName("entity.name");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xNumberField1.setCaption("Age");
-        xNumberField1.setCaptionWidth(70);
-        xNumberField1.setFieldType(Integer.class);
-        xNumberField1.setName("entity.age");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(50, 19));
-        xNumberField1.setRequired(true);
-        xFormPanel1.add(xNumberField1);
+        xDecimalField1.setCaption("Age");
+        xDecimalField1.setCaptionWidth(70);
+        xDecimalField1.setName("entity.age");
+        xDecimalField1.setPattern("#,##0");
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(50, 20));
+        xDecimalField1.setRequired(true);
+        xFormPanel1.add(xDecimalField1);
 
         jPanel1.add(xFormPanel1);
         xFormPanel1.setBounds(10, 20, 410, 50);
@@ -322,6 +322,7 @@ public class ChildFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XButton xButton2;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable2;
+    private com.rameses.rcp.control.XDecimalField xDecimalField1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
@@ -331,7 +332,6 @@ public class ChildFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLabel xLabel4;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XSeparator xSeparator1;
     private com.rameses.rcp.control.XSeparator xSeparator2;
     private com.rameses.rcp.control.XSeparator xSeparator3;

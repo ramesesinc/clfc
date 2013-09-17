@@ -38,7 +38,6 @@ class LoanAppBusinessController
         loanapp.state = service.update(data).state;
     }
 
-
     def selectedBusiness;
     def businessHandler = [
         fetchList: {o->
@@ -85,17 +84,10 @@ class LoanAppBusinessController
         def handler = {ci->
             selectedBusiness.ci = ci;
         }
-        if( !selectedBusiness.ci ) selectedBusiness.ci = [ filedby: OsirisContext.env.USERID ]
-        return InvokerUtil.lookupOpener("cireport:edit", [handler:handler, entity:selectedBusiness.ci, mode:caller.mode])
+        return InvokerUtil.lookupOpener("cireport:edit", [handler:handler, entity:[ filedby: OsirisContext.env.USER ], mode:caller.mode])
     }
     
     def getHtmlview() { 
-        try { 
-            return htmlBuilder.buildBusiness(selectedBusiness); 
-        } catch(e) {
-            println 'selectedBusiness-> ' + selectedBusiness;
-            e.printStackTrace();
-            throw e; 
-        }
+        return htmlBuilder.buildBusiness(selectedBusiness);
     } 
 }

@@ -34,7 +34,7 @@ public class SiblingsFormPage extends javax.swing.JPanel {
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xTextField1 = new com.rameses.rcp.control.XTextField();
         xTextField2 = new com.rameses.rcp.control.XTextField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xLabel1 = new com.rameses.rcp.control.XLabel();
         xSeparator1 = new com.rameses.rcp.control.XSeparator();
@@ -67,13 +67,13 @@ public class SiblingsFormPage extends javax.swing.JPanel {
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xNumberField1.setCaption("Age");
-        xNumberField1.setCaptionWidth(70);
-        xNumberField1.setFieldType(Integer.class);
-        xNumberField1.setName("entity.age");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(50, 19));
-        xNumberField1.setRequired(true);
-        xFormPanel1.add(xNumberField1);
+        xDecimalField1.setCaption("Age");
+        xDecimalField1.setCaptionWidth(70);
+        xDecimalField1.setName("entity.age");
+        xDecimalField1.setPattern("#,##0");
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(50, 20));
+        xDecimalField1.setRequired(true);
+        xFormPanel1.add(xDecimalField1);
 
         jPanel1.add(xFormPanel1);
         xFormPanel1.setBounds(10, 20, 410, 70);
@@ -242,12 +242,12 @@ public class SiblingsFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XButton xButton2;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable2;
+    private com.rameses.rcp.control.XDecimalField xDecimalField1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel4;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel3;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XSeparator xSeparator1;
     private com.rameses.rcp.control.XSeparator xSeparator3;
     private com.rameses.rcp.control.XTextField xTextField1;

@@ -13,10 +13,11 @@ class LoanAppDetailController
     @Service('LoanAppService') 
     def service;
 
-    @Service('LoanProductTypeService')
-    def productTypeService;
+    @Service('NewLoanAppService')
+    def newLoanAppService;
 
-    def schedule;
+    def schedule = [:];
+    def clienttype;
     def productTypes;
     def clientTypes = LOV.LOAN_CLIENT_TYPES;
     
@@ -26,21 +27,32 @@ class LoanAppDetailController
     @PropertyChangeListener
     def listener = [
         "schedule": {o->
+            if(o == null) return;
             entity.schedule = o
+        },
+        "clienttype": {o->
+            if(o == null) return;
+            if(o.value != 'MARKETED') entity.marketedby = null;
+            entity.clienttype = o.value;
         }
     ]
 
     void init() {
         handlers.saveHandler = { save(); } 
         entity = service.open([objid: loanapp.objid]);
-        productTypes = productTypeService.getList([:]);
+        productTypes = newLoanAppService.initEntity().productTypes;
         schedule = productTypes.find{ it.name == entity.schedule.name }
+        clienttype = clientTypes.find{ it.value == entity.clienttype }
     }
-        
+    
     void save() {
-        if( loanapp.state == 'FOR_INSPECTION' && !entity.route ) 
+        if(entity.clienttype == 'MARKETED' && !entity.marketedby) 
+            throw new Exception('Interviewed by is required.');
+        
+        if(loanapp.state == 'FOR_INSPECTION' && !entity.route) 
             throw new Exception("Route is required.")
-
+        
+        loanapp.putAll(entity);
         service.update(entity); 
     }
 }

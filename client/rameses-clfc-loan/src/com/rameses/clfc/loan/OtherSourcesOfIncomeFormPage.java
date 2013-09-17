@@ -41,7 +41,7 @@ public class OtherSourcesOfIncomeFormPage extends javax.swing.JPanel {
         xTextField1.setCaption("Sources of Income");
         xTextField1.setCaptionWidth(120);
         xTextField1.setName("entity.name");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 

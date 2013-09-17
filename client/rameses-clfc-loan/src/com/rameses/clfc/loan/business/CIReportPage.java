@@ -98,6 +98,7 @@ public class CIReportPage extends javax.swing.JPanel {
         xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
         xLabel5.setBorder(xLineBorder2);
         xLabel5.setCaption("Filed By");
+        xLabel5.setExpression("#{entity.filedby}");
         xLabel5.setName("entity.filedby");
         xLabel5.setPreferredSize(new java.awt.Dimension(0, 19));
         xFormPanel5.add(xLabel5);

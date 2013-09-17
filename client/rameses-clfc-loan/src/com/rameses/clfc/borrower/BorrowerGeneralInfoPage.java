@@ -44,7 +44,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xDateField2 = new com.rameses.rcp.control.XDateField();
         xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
         xComboBox2 = new com.rameses.rcp.control.XComboBox();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         jScrollPane2 = new javax.swing.JScrollPane();
         xTextArea2 = new com.rameses.rcp.control.XTextArea();
         xLabel3 = new com.rameses.rcp.control.XLabel();
@@ -54,7 +54,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xDateField4 = new com.rameses.rcp.control.XDateField();
         xFormPanel7 = new com.rameses.rcp.control.XFormPanel();
         xComboBox4 = new com.rameses.rcp.control.XComboBox();
-        xNumberField2 = new com.rameses.rcp.control.XNumberField();
+        xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
         jScrollPane3 = new javax.swing.JScrollPane();
         xTextArea3 = new com.rameses.rcp.control.XTextArea();
         xFormPanel9 = new com.rameses.rcp.control.XFormPanel();
@@ -143,7 +143,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("occupancyTypes");
         xComboBox1.setName("entity.residency.type");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 19));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 20));
         xComboBox1.setRequired(true);
         xFormPanel3.add(xComboBox1);
 
@@ -152,6 +152,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xDateField2.setCaptionWidth(100);
         xDateField2.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
         xDateField2.setName("entity.residency.since");
+        xDateField2.setRequired(true);
         xFormPanel3.add(xDateField2);
 
         xFormPanel2.add(xFormPanel3);
@@ -167,18 +168,17 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xComboBox2.setItemKey("value");
         xComboBox2.setItems("rentTypes");
         xComboBox2.setName("entity.residency.renttype");
-        xComboBox2.setPreferredSize(new java.awt.Dimension(150, 19));
+        xComboBox2.setPreferredSize(new java.awt.Dimension(150, 20));
+        xComboBox2.setRequired(true);
         xFormPanel4.add(xComboBox2);
 
-        xNumberField1.setCaption("Rent Amount");
-        xNumberField1.setCaptionWidth(100);
-        xNumberField1.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
-        xNumberField1.setDepends(new String[] {"entity.residency.type"});
-        xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setHint("0.00");
-        xNumberField1.setName("entity.residency.rentamount");
-        xNumberField1.setPattern("#,##0.00");
-        xFormPanel4.add(xNumberField1);
+        xDecimalField1.setCaption("Rent Amount");
+        xDecimalField1.setCaptionWidth(100);
+        xDecimalField1.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
+        xDecimalField1.setDepends(new String[] {"entity.residency.type"});
+        xDecimalField1.setName("entity.residency.rentamount");
+        xDecimalField1.setRequired(true);
+        xFormPanel4.add(xDecimalField1);
 
         xFormPanel2.add(xFormPanel4);
 
@@ -213,7 +213,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xComboBox3.setItemKey("value");
         xComboBox3.setItems("occupancyTypes");
         xComboBox3.setName("entity.occupancy.type");
-        xComboBox3.setPreferredSize(new java.awt.Dimension(150, 19));
+        xComboBox3.setPreferredSize(new java.awt.Dimension(150, 20));
         xComboBox3.setRequired(true);
         xFormPanel6.add(xComboBox3);
 
@@ -222,6 +222,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xDateField4.setCaptionWidth(100);
         xDateField4.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
         xDateField4.setName("entity.occupancy.since");
+        xDateField4.setRequired(true);
         xFormPanel6.add(xDateField4);
 
         xFormPanel5.add(xFormPanel6);
@@ -237,18 +238,17 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
         xComboBox4.setItemKey("value");
         xComboBox4.setItems("rentTypes");
         xComboBox4.setName("entity.occupancy.renttype");
-        xComboBox4.setPreferredSize(new java.awt.Dimension(150, 19));
+        xComboBox4.setPreferredSize(new java.awt.Dimension(150, 20));
+        xComboBox4.setRequired(true);
         xFormPanel7.add(xComboBox4);
 
-        xNumberField2.setCaption("Rent Amount");
-        xNumberField2.setCaptionWidth(100);
-        xNumberField2.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
-        xNumberField2.setDepends(new String[] {"entity.occupancy.type"});
-        xNumberField2.setFieldType(BigDecimal.class);
-        xNumberField2.setHint("0.00");
-        xNumberField2.setName("entity.occupancy.rentamount");
-        xNumberField2.setPattern("#,##0.00");
-        xFormPanel7.add(xNumberField2);
+        xDecimalField2.setCaption("Rent Amount");
+        xDecimalField2.setCaptionWidth(100);
+        xDecimalField2.setCellPadding(new java.awt.Insets(0, 15, 0, 0));
+        xDecimalField2.setDepends(new String[] {"entity.occupancy.type"});
+        xDecimalField2.setName("entity.occupancy.rentamount");
+        xDecimalField2.setRequired(true);
+        xFormPanel7.add(xDecimalField2);
 
         xFormPanel5.add(xFormPanel7);
 
@@ -261,6 +261,7 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
 
         xFormPanel5.add(jScrollPane3);
 
+        xFormPanel9.setName("relation");
         xTextField1.setCaption("Relationship to the Principal Borrower");
         xTextField1.setCaptionWidth(210);
         xTextField1.setDepends(new String[] {"borrower"});
@@ -323,6 +324,8 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDateField xDateField1;
     private com.rameses.rcp.control.XDateField xDateField2;
     private com.rameses.rcp.control.XDateField xDateField4;
+    private com.rameses.rcp.control.XDecimalField xDecimalField1;
+    private com.rameses.rcp.control.XDecimalField xDecimalField2;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
@@ -336,8 +339,6 @@ public class BorrowerGeneralInfoPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLookupField xLookupField1;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
-    private com.rameses.rcp.control.XNumberField xNumberField2;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextArea xTextArea2;
     private com.rameses.rcp.control.XTextArea xTextArea3;

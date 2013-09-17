@@ -109,7 +109,7 @@ public class LoanAppBusinessPage extends javax.swing.JPanel {
                 , new Object[]{"nullWhenEmpty", true}
                 , new Object[]{"editable", false}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.DecimalColumnHandler("#,##0.00", -1.0, -1.0, false)}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.DecimalColumnHandler("#,##0.00", -1.0, -1.0, false, 0)}
             })
         });
         xDataTable1.setHandler("businessHandler");
@@ -134,7 +134,6 @@ public class LoanAppBusinessPage extends javax.swing.JPanel {
 
         xButton2.setName("addCiReport");
         xButton2.setText("CI Report");
-        xButton2.setVisibleWhen("#{loanapp.state == 'FOR_INSPECTION'}");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

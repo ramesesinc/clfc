@@ -18,15 +18,14 @@ class LoanAppController
     def handlers = [:];
     def mode = 'read';
     
+    @FormTitle
     @FormId
-    @FormTitle    
-    def getAppNo() { 
+    def getFormId() { 
         return 'LOAN-'+entity.appno;
     }
     
     void open() {
         loanappid = entity.objid;
-        entity.searchindex = true;
     }
     
     def getTitle() {
@@ -48,7 +47,8 @@ class LoanAppController
         [name:'jointborrower', caption:'Joint Borrower'],
         [name:'comaker', caption:'Co-Maker'], 
         [name:'attachment', caption:'Attachments'], 
-        [name:'comment', caption:'Comments'], 
+        [name:'comment', caption:'Comments'],
+        [name:'recommendation', caption:'Recommendations'],
         [name:'summary', caption:'Summary'] 
     ];
     
@@ -65,7 +65,6 @@ class LoanAppController
         }, 
         onselect: {o->             
             entity = service.open([objid: loanappid, name:o?.name]); 
-            println 'onselect entity-> '+entity;
             subFormHandler.reload();
         } 
     ] as ListPaneModel;
@@ -73,7 +72,7 @@ class LoanAppController
     
     def subFormHandler = [
         getOpener: {
-            if (selectedMenu == null || entity.searchindex == true) {
+            if (selectedMenu == null) {
                 return new Opener(outcome:'blankpage'); 
             }
 
@@ -90,7 +89,12 @@ class LoanAppController
             return op; 
         } 
     ] as SubFormPanelModel;
-        
+
+    boolean getIsEditable() {
+        if((entity.state.matches('INCOMPLETE|PENDING|FOR_INSPECTION')) && mode == 'read') return true;
+        return false;
+    }
+    
     void edit() {
         mode = 'edit';
         subFormHandler.refresh();
@@ -114,7 +118,7 @@ class LoanAppController
     }
     
     boolean getIsPending() {
-        if(entity.state == 'PENDING') return true;
+        if(entity.state == 'PENDING' && mode == 'read') return true;
         return false;
     }
     
@@ -122,27 +126,34 @@ class LoanAppController
         def handler = {o->
             o.objid = loanappid;
             entity.state = service.submitForInspection(o).state;
-            binding.refresh('title|formActions');
+            binding.refresh('title|formActions|opener');
         }
         return InvokerUtil.lookupOpener("application-forinspection:create", [handler:handler])
     }
     
     boolean getIsForInspection() {
-        if(entity.state == 'FOR_INSPECTION') return true;
+        if(entity.state == 'FOR_INSPECTION' && mode == 'read') return true;
         return false;
     }
     
     def submitForCrecom() {
+        println entity.route
+        if(!entity.route.code) throw new Exception('Route for loan application is required.');
+        if(!entity.businesses) 
+            entity.businesses = service.getBusinesses([objid: entity.objid]);
+        entity.businesses.each{business->
+            if(!business.ci?.evaluation) throw new Exception("CI Report for business $business.tradename is required.");
+        }
         def handler = {o->
             o.objid = loanappid;
             entity.state = service.submitForCrecom(o).state;
-            binding.refresh('title|formActions');
+            binding.refresh('title|formActions|opener');
         } 
         return InvokerUtil.lookupOpener("application-forcrecom:create", [handler:handler]);
     }
     
     boolean getIsForCrecom() {
-        if(entity.state == 'FOR_CRECOM') return true;
+        if(entity.state == 'FOR_CRECOM' && mode == 'read') return true;
         return false;
     }
     
@@ -159,7 +170,7 @@ class LoanAppController
         def handler = {o->
             o.objid = loanappid;
             entity.state = service.returnForCI(o).state;
-            binding.refresh('title|formActions');
+            binding.refresh('title|formActions|opener');
         }
         return InvokerUtil.lookupOpener("application-returnforci:create", [handler:handler]);
     }

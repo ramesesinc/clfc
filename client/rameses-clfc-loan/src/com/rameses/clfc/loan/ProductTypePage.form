@@ -61,68 +61,52 @@
             <Property name="required" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField1">
+        <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField1">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Term"/>
             <Property name="captionWidth" type="int" value="135"/>
-            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Integer.class" type="code"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="entity.term"/>
+            <Property name="pattern" type="java.lang.String" value="#,##0"/>
             <Property name="required" type="boolean" value="true"/>
+            <Property name="scale" type="int" value="0"/>
           </Properties>
         </Component>
-        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField2">
+        <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField2">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Interest Rate"/>
             <Property name="captionWidth" type="int" value="135"/>
-            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="BigDecimal.class" type="code"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="entity.interestrate"/>
             <Property name="required" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField3">
+        <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField3">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Past Due Rate"/>
             <Property name="captionWidth" type="int" value="135"/>
-            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="BigDecimal.class" type="code"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="entity.pastduerate"/>
             <Property name="required" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField4">
+        <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField4">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Underpayment Penalty"/>
             <Property name="captionWidth" type="int" value="135"/>
-            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="BigDecimal.class" type="code"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="entity.underpaymentpenalty"/>
             <Property name="required" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField5">
+        <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField5">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Surcharge Rate"/>
             <Property name="captionWidth" type="int" value="135"/>
-            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="BigDecimal.class" type="code"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="entity.surchargerate"/>
             <Property name="required" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="com.rameses.rcp.control.XNumberField" name="xNumberField6">
+        <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField6">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Absent Penalty"/>
             <Property name="captionWidth" type="int" value="135"/>
-            <Property name="fieldType" type="java.lang.Class" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="BigDecimal.class" type="code"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="entity.absentpenalty"/>
             <Property name="required" type="boolean" value="true"/>
           </Properties>
