@@ -135,6 +135,12 @@
                 </Component>
                 <Component class="com.rameses.rcp.control.XButton" name="xButton2">
                   <Properties>
+                    <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                      <StringArray count="1">
+                        <StringItem index="0" value="selectedBusiness"/>
+                      </StringArray>
+                    </Property>
+                    <Property name="disableWhen" type="java.lang.String" value="#{loanapp.state != &apos;FOR_INSPECTION&apos; || selectedBusiness == null || caller.mode == &apos;read&apos;}"/>
                     <Property name="name" type="java.lang.String" value="addCiReport"/>
                     <Property name="text" type="java.lang.String" value="CI Report"/>
                   </Properties>

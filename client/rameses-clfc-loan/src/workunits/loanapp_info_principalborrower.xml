@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-principalborrower:open" caption="Loan Application" action="init"/>
+        <invoker type="loanapp-principalborrower:open" caption="Loan Application" action="init" key="principalborrower"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.controller.LoanAppPrincipalBorrowerController"/>

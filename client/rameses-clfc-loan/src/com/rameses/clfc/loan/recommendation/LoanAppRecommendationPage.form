@@ -184,6 +184,7 @@
             </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField1">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="data.marketeramount"/>
                 <Property name="readonly" type="boolean" value="true"/>
               </Properties>
@@ -195,6 +196,7 @@
             </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField2">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="data.ciamount"/>
                 <Property name="readonly" type="boolean" value="true"/>
               </Properties>
@@ -206,6 +208,7 @@
             </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField3">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="data.fcaamount"/>
                 <Property name="readonly" type="boolean" value="true"/>
               </Properties>
@@ -217,6 +220,7 @@
             </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField4">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="data.caoamount"/>
                 <Property name="readonly" type="boolean" value="true"/>
               </Properties>
@@ -228,6 +232,7 @@
             </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField5">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="data.bcohamount"/>
                 <Property name="readonly" type="boolean" value="true"/>
               </Properties>

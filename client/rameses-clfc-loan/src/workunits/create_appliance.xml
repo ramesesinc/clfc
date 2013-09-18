@@ -3,17 +3,9 @@
         <invoker type="appliance:create" action="create" caption="Appliance Form" target="popup"/>
         <invoker type="appliance:open" caption="Appliance Form" target="popup"/>
     </invokers>
-    <code>
-        <![CDATA[
-            import com.rameses.rcp.common.*;
-            import com.rameses.rcp.annotations.*;
-            import com.rameses.osiris2.client.*;
-            
-            class ApplianceFormController extends com.rameses.clfc.loan.controller.PopupMasterController
-            {
-            }
-        ]]>
-    </code>
+    
+    <code class="com.rameses.clfc.loan.collateral.ApplianceFormController"/>
+    
     <pages>
         <page template="com.rameses.clfc.loan.collateral.ApplianceFormPage"/>
     </pages>

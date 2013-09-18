@@ -47,7 +47,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
         xTextField2 = new com.rameses.rcp.control.XTextField();
         xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
         xComboBox2 = new com.rameses.rcp.control.XComboBox();
-        xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         jScrollPane3 = new javax.swing.JScrollPane();
         xTextArea3 = new com.rameses.rcp.control.XTextArea();
@@ -200,15 +200,15 @@ public class NewLoanAppPage extends javax.swing.JPanel {
         xComboBox2.setRequired(true);
         xFormPanel5.add(xComboBox2);
 
-        xDecimalField2.setCaption("Term");
-        xDecimalField2.setCaptionWidth(100);
-        xDecimalField2.setDepends(new String[] {"entity.schedule"});
-        xDecimalField2.setName("entity.schedule.term");
-        xDecimalField2.setPattern("#,##0");
-        xDecimalField2.setPreferredSize(new java.awt.Dimension(0, 20));
-        xDecimalField2.setRequired(true);
-        xDecimalField2.setScale(0);
-        xFormPanel5.add(xDecimalField2);
+        xNumberField1.setCaption("Term");
+        xNumberField1.setCaptionWidth(100);
+        xNumberField1.setDepends(new String[] {"entity.schedule"});
+        xNumberField1.setFieldType(Integer.class);
+        xNumberField1.setName("entity.schedule.term");
+        xNumberField1.setPattern("#,##0");
+        xNumberField1.setPreferredSize(new java.awt.Dimension(0, 20));
+        xNumberField1.setRequired(true);
+        xFormPanel5.add(xNumberField1);
 
         xDecimalField1.setCaption("Amount Applied");
         xDecimalField1.setCaptionWidth(100);
@@ -294,7 +294,6 @@ public class NewLoanAppPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XComboBox xComboBox2;
     private com.rameses.rcp.control.XComboBox xComboBox3;
     private com.rameses.rcp.control.XDecimalField xDecimalField1;
-    private com.rameses.rcp.control.XDecimalField xDecimalField2;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel4;
@@ -306,6 +305,7 @@ public class NewLoanAppPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel17;
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLookupField xLookupField1;
+    private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XTextArea xTextArea3;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField2;

@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="employment:create" action="create" caption="Employment Form" target="popup"/>
         <invoker type="employment:open" caption="Employment Form" target="popup"/>        

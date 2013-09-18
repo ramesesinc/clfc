@@ -72,26 +72,31 @@ public class LoanAppRecommendationPage extends javax.swing.JPanel {
         jPanel3.setPreferredSize(new java.awt.Dimension(100, 30));
         xLabel1.setText("Marketer:");
 
+        xDecimalField1.setEnabled(false);
         xDecimalField1.setName("data.marketeramount");
         xDecimalField1.setReadonly(true);
 
         xLabel2.setText("C:I");
 
+        xDecimalField2.setEnabled(false);
         xDecimalField2.setName("data.ciamount");
         xDecimalField2.setReadonly(true);
 
         xLabel3.setText("FCA:");
 
+        xDecimalField3.setEnabled(false);
         xDecimalField3.setName("data.fcaamount");
         xDecimalField3.setReadonly(true);
 
         xLabel4.setText("CAO:");
 
+        xDecimalField4.setEnabled(false);
         xDecimalField4.setName("data.caoamount");
         xDecimalField4.setReadonly(true);
 
         xLabel5.setText("BCOH:");
 
+        xDecimalField5.setEnabled(false);
         xDecimalField5.setName("data.bcohamount");
         xDecimalField5.setReadonly(true);
 

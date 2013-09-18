@@ -5,7 +5,7 @@ import com.rameses.rcp.annotations.*;
 class LoanAppCommentController
 {
     //feed by the caller
-    def caller, handlers, loanapp; 
+    def caller, selectedMenu, loanapp; 
     
     @Service('LoanAppCommentService')
     def service;

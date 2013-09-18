@@ -9,7 +9,7 @@ import com.rameses.clfc.util.*;
 class LoanAppCoMakerController 
 {
     //feed by the caller
-    def loanapp, caller, handlers;
+    def loanapp, caller, selectedMenu;
     
     private def beforeSaveHandlers = [:];
     private def dataChangeHandlers = [:];
@@ -21,7 +21,7 @@ class LoanAppCoMakerController
     def selectedCoMaker;
     
     void init() {
-        handlers.saveHandler = { save(); }  
+        selectedMenu.saveHandler = { save(); }  
         def data = service.open([objid: loanapp.objid]);
         loanapp.clear();
         loanapp.putAll(data);

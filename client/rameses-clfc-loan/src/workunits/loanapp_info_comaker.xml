@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-comaker:open" caption="Co-Maker" action="init"/>
+        <invoker type="loanapp-comaker:open" caption="Co-Maker" action="init" key="comaker"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.comaker.LoanAppCoMakerController"/>

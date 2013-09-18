@@ -8,7 +8,7 @@ import com.rameses.osiris2.common.*;
 class LoanCollateralController
 {
     //feed by the caller
-    def loanapp, caller, handlers;
+    def loanapp, caller, selectedMenu;
     
     @Service('LoanAppCollateralService') 
     def service;    
@@ -16,7 +16,7 @@ class LoanCollateralController
     def beforeSaveHandlers = [:];
     
     void init() {
-        handlers.saveHandler = { save(); }  
+        selectedMenu.saveHandler = { save(); }  
         
         def data = service.open([objid: loanapp.objid]); 
         loanapp.clear();

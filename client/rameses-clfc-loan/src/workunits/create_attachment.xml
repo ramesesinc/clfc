@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="attachment:create" action="init" caption="Attachment Form" target="popup"/>
         <invoker type="attachment:open" caption="Attachment Form" target="popup"/>
@@ -8,8 +8,9 @@
             import com.rameses.rcp.common.*;
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
+            import com.rameses.clfc.loan.controller.*;
             
-            class AttachmentFormController extends com.rameses.clfc.loan.controller.PopupMasterController
+            class AttachmentFormController extends PopupMasterController
             {
             }
         ]]>

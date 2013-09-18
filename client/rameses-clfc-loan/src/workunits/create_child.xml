@@ -1,80 +1,11 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="child:create" action="create" caption="Child Form" target="popup"/>
-        <invoker type="child:open" caption="Child Form" target="popup"/>
+        <invoker type="child:open" action="open" caption="Child Form" target="popup"/>
     </invokers>
-    <code>
-        <![CDATA[
-            import com.rameses.rcp.common.*;
-            import com.rameses.rcp.annotations.*;
-            import com.rameses.osiris2.client.*;
-            import com.rameses.osiris2.common.*;
-            import java.rmi.server.UID;
-            
-            class ChildInformationFormController extends com.rameses.clfc.loan.controller.PopupMasterController
-            {
-                public def createEntity() {
-                    return [ objid:'BCH'+new UID() ];
-                }
-                
-                def addEmployment() {
-                    def handler = {employment->
-                        employment.refid = entity.objid;
-                        entity.employments.add(employment);
-                        employmentHandler.reload();
-                    }
-                    return InvokerUtil.lookupOpener("employment:create", [handler:handler]);
-                }
-                
-                def employmentHandler = [
-                    fetchList: {o->
-                        if( !entity.employments ) entity.employments = []
-                        entity.employments.each{ it._filetype = 'employment' }
-                        return entity.employments;
-                    },
-                    onRemoveItem: {o->
-                        if( mode == 'edit' ) return false;
-                        if(MsgBox.confirm("You are about to remove this employment. Continue?")) {
-                            entity.employments.remove(o);
-                            return true;
-                        }
-                        return false;
-                    },
-                    getOpenerParams: {o->
-                        return [mode: mode]
-                    }
-                ] as EditorListModel
-                
-                def addOtherIncome() {
-                    def handler = {otherincome->
-                        otherincome.refid = entity.objid;
-                        entity.otherincomes.add(otherincome);
-                        otherIncomeHandler.reload();
-                    }
-                    return InvokerUtil.lookupOpener("otherincome:create", [handler:handler]);
-                }
-                
-                def otherIncomeHandler = [
-                    fetchList: {o->
-                        if( !entity.otherincomes ) entity.otherincomes = []
-                        entity.otherincomes.each{ it._filetype = "otherincome" }
-                        return entity.otherincomes
-                    },
-                    onRemoveItem: {o->
-                        if( mode == 'edit' ) return false;
-                        if(MsgBox.confirm("You are about to remove this source of income. Continue?")) {
-                            entity.otherincomes.remove(o)
-                            return true
-                        }
-                        return false
-                    },
-                    getOpenerParams: {o->
-                        return [mode: mode]
-                    }
-                ] as EditorListModel
-            }
-        ]]>
-    </code>
+    
+    <code class="com.rameses.clfc.loan.ChildFormController"/>
+        
     <pages>
         <page template="com.rameses.clfc.loan.ChildFormPage"/>
     </pages>

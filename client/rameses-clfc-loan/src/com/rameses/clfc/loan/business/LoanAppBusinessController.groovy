@@ -9,7 +9,7 @@ import com.rameses.clfc.util.*;
 class LoanAppBusinessController 
 {
     //feed by the caller
-    def loanapp, caller, handlers;
+    def loanapp, caller, selectedMenu;
     
     @Binding
     def binding;
@@ -19,23 +19,26 @@ class LoanAppBusinessController
     
     def htmlBuilder = new BusinessHtmlBuilder(); 
     def businesses = [];
-    
+        
     void init() {
-        handlers.saveHandler = { save(); }  
+        println 'business init'
+        selectedMenu.saveHandler = { save(); }  
         def data = service.open([objid: loanapp.objid]);
         loanapp.clear();
         loanapp.putAll(data);
         businesses = loanapp.businesses;
     }
-        
+    
     void save() {
-        if( loanapp.state == 'FOR_INSPECTION' ) {
-            def business = businesses.find{ it.ci == null }
+        if(loanapp.state == 'FOR_INSPECTION') {
+            def business = businesses.find{ it.ci?.evaluation == null }
             if( business ) throw new Exception("CI Report for business $business.tradename is required.");
         }
-
-        def data = [ objid: loanapp.objid, businesses: businesses ]
+        
+        println 'state 1 = '+loanapp.state;
+        def data = [objid: loanapp.objid, businesses: businesses]
         loanapp.state = service.update(data).state;
+        println 'state 2 = '+loanapp.state;
     }
 
     def selectedBusiness;
@@ -81,10 +84,14 @@ class LoanAppBusinessController
             MsgBox.alert("No business selected.");
             return null;
         }
-        def handler = {ci->
-            selectedBusiness.ci = ci;
-        }
-        return InvokerUtil.lookupOpener("cireport:edit", [handler:handler, entity:[ filedby: OsirisContext.env.USER ], mode:caller.mode])
+        def params = [
+            handler: { selectedBusiness.ci = it },
+            mode: caller.mode,
+            entity: [ filedby: OsirisContext.env.USER ],
+            caller: this
+        ]
+        if(selectedBusiness.ci?.evaluation) params.entity = selectedBusiness.ci;
+        return InvokerUtil.lookupOpener("cireport:edit", params);
     }
     
     def getHtmlview() { 

@@ -33,7 +33,7 @@ public class ChildFormPage extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xTextField1 = new com.rameses.rcp.control.XTextField();
-        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xSeparator2 = new com.rameses.rcp.control.XSeparator();
@@ -56,6 +56,8 @@ public class ChildFormPage extends javax.swing.JPanel {
         xSeparator3 = new com.rameses.rcp.control.XSeparator();
         xDataTable1 = new com.rameses.rcp.control.XDataTable();
         xButton2 = new com.rameses.rcp.control.XButton();
+        xButton3 = new com.rameses.rcp.control.XButton();
+        xButton4 = new com.rameses.rcp.control.XButton();
 
         jPanel1.setLayout(null);
 
@@ -71,13 +73,14 @@ public class ChildFormPage extends javax.swing.JPanel {
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
-        xDecimalField1.setCaption("Age");
-        xDecimalField1.setCaptionWidth(70);
-        xDecimalField1.setName("entity.age");
-        xDecimalField1.setPattern("#,##0");
-        xDecimalField1.setPreferredSize(new java.awt.Dimension(50, 20));
-        xDecimalField1.setRequired(true);
-        xFormPanel1.add(xDecimalField1);
+        xNumberField1.setCaption("Age");
+        xNumberField1.setCaptionWidth(70);
+        xNumberField1.setFieldType(Integer.class);
+        xNumberField1.setName("entity.age");
+        xNumberField1.setPattern("#,##0");
+        xNumberField1.setPreferredSize(new java.awt.Dimension(50, 20));
+        xNumberField1.setRequired(true);
+        xFormPanel1.add(xNumberField1);
 
         jPanel1.add(xFormPanel1);
         xFormPanel1.setBounds(10, 20, 410, 50);
@@ -293,6 +296,22 @@ public class ChildFormPage extends javax.swing.JPanel {
         jPanel1.add(xButton2);
         xButton2.setBounds(10, 420, 51, 23);
 
+        xButton3.setDepends(new String[] {"selectedEmployment"});
+        xButton3.setDisableWhen("#{selectedEmployment == null || mode == 'read'}");
+        xButton3.setImmediate(true);
+        xButton3.setName("removeEmployment");
+        xButton3.setText("Remove");
+        jPanel1.add(xButton3);
+        xButton3.setBounds(70, 280, 80, 23);
+
+        xButton4.setDepends(new String[] {"selectedOtherIncome"});
+        xButton4.setDisableWhen("#{selectedOtherIncome == null || mode == 'read'}");
+        xButton4.setImmediate(true);
+        xButton4.setName("removeOtherIncome");
+        xButton4.setText("Remove");
+        jPanel1.add(xButton4);
+        xButton4.setBounds(70, 420, 80, 23);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -320,9 +339,10 @@ public class ChildFormPage extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private com.rameses.rcp.control.XButton xButton1;
     private com.rameses.rcp.control.XButton xButton2;
+    private com.rameses.rcp.control.XButton xButton3;
+    private com.rameses.rcp.control.XButton xButton4;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable2;
-    private com.rameses.rcp.control.XDecimalField xDecimalField1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
@@ -332,6 +352,7 @@ public class ChildFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLabel xLabel4;
+    private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XSeparator xSeparator1;
     private com.rameses.rcp.control.XSeparator xSeparator2;
     private com.rameses.rcp.control.XSeparator xSeparator3;

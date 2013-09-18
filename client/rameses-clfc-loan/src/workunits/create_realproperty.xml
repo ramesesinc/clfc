@@ -3,21 +3,9 @@
         <invoker type="realproperty:create" action="create" caption="Real Property Form" target="popup"/>
         <invoker type="realproperty:open" caption="Real Property Form" target="popup"/>
     </invokers>
-    <code>
-        <![CDATA[
-            import com.rameses.rcp.common.*;
-            import com.rameses.rcp.annotations.*;
-            import com.rameses.osiris2.client.*;
-            import com.rameses.clfc.util.LoanUtil;
-            
-            class RealPropertyFormController extends com.rameses.clfc.loan.controller.PopupMasterController
-            {
-                def classifications = LoanUtil.propertyClassificationTypes;
-                def uomList = LoanUtil.propertyUomTypes;
-                def modesOfAcquisition = LoanUtil.propertyModeOfAcquisitionTypes;
-            }
-        ]]>
-    </code>
+    
+    <code class="com.rameses.clfc.loan.collateral.RealPropertyFormController"/>
+    
     <pages>
         <page template="com.rameses.clfc.loan.collateral.RealPropertyFormPage"/>
     </pages>

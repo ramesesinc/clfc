@@ -10,7 +10,7 @@ import com.rameses.clfc.borrower.*;
 class LoanAppPrincipalBorrowerController   
 {
     //feed by the caller
-    def caller, handlers, loanapp; 
+    def caller, selectedMenu, loanapp; 
     
     @Service('PrincipalBorrowerService') 
     def service; 
@@ -21,7 +21,7 @@ class LoanAppPrincipalBorrowerController
     void init() {
         if (loanapp.objid == null) return;
         
-        handlers.saveHandler = { save(); }          
+        selectedMenu.saveHandler = { save(); }          
         def data = service.open([objid: loanapp.objid]);
         data.borrower.type = 'PRINCIPAL'
         loanapp.clear();

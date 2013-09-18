@@ -131,6 +131,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xComboBox10.setItems("rentTypes");
         xComboBox10.setName("entity.occupancy.renttype");
         xComboBox10.setPreferredSize(new java.awt.Dimension(120, 20));
+        xComboBox10.setRequired(true);
         xFormPanel13.add(xComboBox10);
 
         jPanel1.add(xFormPanel13);
@@ -139,8 +140,10 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel10.setPadding(new java.awt.Insets(2, 5, 0, 0));
         xDecimalField1.setCaption("Rent Amount");
         xDecimalField1.setCaptionWidth(160);
+        xDecimalField1.setDepends(new String[] {"entity.occupancy.type"});
         xDecimalField1.setName("entity.occupancy.rentamount");
         xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
+        xDecimalField1.setRequired(true);
         xFormPanel10.add(xDecimalField1);
 
         jPanel1.add(xFormPanel10);

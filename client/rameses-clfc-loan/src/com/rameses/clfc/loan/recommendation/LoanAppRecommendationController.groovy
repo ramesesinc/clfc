@@ -4,7 +4,7 @@ import com.rameses.rcp.annotations.*;
 
 class LoanAppRecommendationController
 {
-    def loanapp, caller, handlers;
+    def loanapp, caller, selectedMenu;
     
     @Service('LoanAppRecommendationService')
     def service;

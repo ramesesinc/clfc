@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-collateral:open" action="init" caption="Collateral"/>
+        <invoker type="loanapp-collateral:open" action="init" caption="Collateral" key="collateral"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.controller.LoanAppCollateralController"/>

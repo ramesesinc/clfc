@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="saving:create" action="create" caption="Savings Account Form" target="popup"/>
         <invoker type="saving:open" caption="Savings Account Form" target="popup"/>    
@@ -9,8 +9,9 @@
             import com.rameses.rcp.annotations.*;
             import com.rameses.osiris2.client.*;
             import java.rmi.server.UID;
+            import com.rameses.clfc.loan.controller.*;
             
-            class SavingsAccountFormController extends com.rameses.clfc.loan.controller.PopupMasterController
+            class SavingsAccountFormController extends PopupMasterController
             {
                 def createEntity() {
                     return [ objid:'BSA'+new UID() ]

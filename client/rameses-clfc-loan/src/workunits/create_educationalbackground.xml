@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/PopupMasterController.xml">
+<workunit>
     <invokers>
         <invoker type="education:create" action="create" caption="Educational Background Form" target="popup"/>
         <invoker type="education:open" caption="Educational Background Form" target="popup"/>

@@ -1,9 +1,6 @@
-"addBusiness|removeBusiness" [caller.mode != 'read'] {
+"addBusiness" [caller.mode != 'read'] {
     enabled:true;
 }
-"addBusiness|removeBusiness|addCiReport" [caller.mode == 'read'] {
+"addBusiness" [caller.mode == 'read'] {
     enabled:false;
-}
-"addCiReport" [loanapp.state == 'FOR_INSPECTION' && caller.mode != 'read'] {
-    enabled:true;
 }

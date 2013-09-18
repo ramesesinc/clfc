@@ -174,6 +174,7 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xTextField9.setDepends(new String[] {"orcr"});
         xTextField9.setName("entity.orcr.crno");
         xTextField9.setPreferredSize(new java.awt.Dimension(0, 20));
+        xTextField9.setRequired(true);
         xFormPanel2.add(xTextField9);
 
         xTextField10.setCaption("Fuel");

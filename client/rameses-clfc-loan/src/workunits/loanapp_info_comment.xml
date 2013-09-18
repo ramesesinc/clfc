@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-comment:open" caption="Comments"/>
+        <invoker type="loanapp-comment:open" caption="Comments" key="comment"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.controller.LoanAppCommentController"/>

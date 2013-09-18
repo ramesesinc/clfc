@@ -167,7 +167,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xLookupField1.setCaption("Route");
         xLookupField1.setCaptionWidth(110);
         xLookupField1.setDepends(new String[] {"entity"});
-        xLookupField1.setExpression("#{item.code} - #{item.description} #{item.area}");
+        xLookupField1.setExpression("#{item.name}");
         xLookupField1.setHandler("routeLookupHandler");
         xLookupField1.setName("entity.route");
         xLookupField1.setPreferredSize(new java.awt.Dimension(250, 20));

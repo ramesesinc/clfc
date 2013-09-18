@@ -132,6 +132,8 @@ public class LoanAppBusinessPage extends javax.swing.JPanel {
         xButton3.setName("removeBusiness");
         xButton3.setText("Remove");
 
+        xButton2.setDepends(new String[] {"selectedBusiness"});
+        xButton2.setDisableWhen("#{loanapp.state != 'FOR_INSPECTION' || selectedBusiness == null || caller.mode == 'read'}");
         xButton2.setName("addCiReport");
         xButton2.setText("CI Report");
 

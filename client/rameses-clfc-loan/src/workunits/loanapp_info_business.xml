@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-business:open" action="init" caption="Business"/>
+        <invoker type="loanapp-business:open" action="init" caption="Business" key="business"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.business.LoanAppBusinessController"/>

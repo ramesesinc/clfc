@@ -14,8 +14,8 @@ class LoanAppController
     def binding;
     
     def loanappid;
+    def source = [:];
     def entity = [:];
-    def handlers = [:];
     def mode = 'read';
     
     @FormTitle
@@ -24,11 +24,22 @@ class LoanAppController
         return 'LOAN-'+entity.appno;
     }
     
+    @PropertyChangeListener
+    def listener = [
+        "entity.state": {o->
+            println 'state = '+o
+        }
+    ]
+    
     void open() {
+        source = entity;
+        entity = [:];
+        entity.putAll(source);
         loanappid = entity.objid;
     }
     
     def getTitle() {
+        println 'getting title: state '+entity.state;
         def buffer = new StringBuffer();
         buffer.append('<html><body>');
         buffer.append('<font color="#483d8b" size="5">'+entity.appno+' - </font>');
@@ -49,6 +60,8 @@ class LoanAppController
         [name:'attachment', caption:'Attachments'], 
         [name:'comment', caption:'Comments'],
         [name:'recommendation', caption:'Recommendations'],
+        [name:'fla', caption:'FLA'],
+        [name:'prevfla', caption:'Previous FLA'],
         [name:'summary', caption:'Summary'] 
     ];
     
@@ -65,6 +78,7 @@ class LoanAppController
         }, 
         onselect: {o->             
             entity = service.open([objid: loanappid, name:o?.name]); 
+        
             subFormHandler.reload();
         } 
     ] as ListPaneModel;
@@ -82,16 +96,16 @@ class LoanAppController
                 op = InvokerUtil.lookupOpener(invtype, [ 
                     caller: this, 
                     loanapp: entity, 
-                    handlers: handlers 
+                    selectedMenu: selectedMenu
                 ]); 
                 selectedMenu.opener = op;
-            } 
+            }
             return op; 
         } 
     ] as SubFormPanelModel;
 
     boolean getIsEditable() {
-        if((entity.state.matches('INCOMPLETE|PENDING|FOR_INSPECTION')) && mode == 'read') return true;
+        if(entity.state.matches('INCOMPLETE|PENDING|FOR_INSPECTION') && mode == 'read') return true;
         return false;
     }
     
@@ -101,10 +115,11 @@ class LoanAppController
     }
     
     void save() {
-        def saveHandler = handlers.saveHandler; 
-        if (saveHandler == null) return; 
+        //println selectedMenu.opener.getHandle().getSaveHandler();
+        /*def saveHandler = selectedMenu.opener.handle.saveHandler//handlers.saveHandler; 
+        if (saveHandler == null) return; */
         
-        saveHandler(); 
+        selectedMenu.saveHandler(); 
         mode = 'read'; 
         binding.refresh('title');
         subFormHandler.refresh();
@@ -137,17 +152,19 @@ class LoanAppController
     }
     
     def submitForCrecom() {
-        println entity.route
         if(!entity.route.code) throw new Exception('Route for loan application is required.');
         if(!entity.businesses) 
             entity.businesses = service.getBusinesses([objid: entity.objid]);
-        entity.businesses.each{business->
-            if(!business.ci?.evaluation) throw new Exception("CI Report for business $business.tradename is required.");
-        }
+        def business = entity.businesses.find{ it.ci?.evaluation == null }
+        if(business) throw new Exception("CI Report for business $business.tradename is required.");
         def handler = {o->
             o.objid = loanappid;
             entity.state = service.submitForCrecom(o).state;
             binding.refresh('title|formActions|opener');
+            if(selectedMenu.opener.properties.key.matches('recommendation')) {
+                selectedMenu.opener = null;
+                subFormHandler.refresh();
+            }
         } 
         return InvokerUtil.lookupOpener("application-forcrecom:create", [handler:handler]);
     }
@@ -162,6 +179,10 @@ class LoanAppController
             o.objid = loanappid;
             entity.state = service.submitForApproval(o).state;
             binding.refresh('title|formActions');
+            if(selectedMenu.opener.properties.key.matches('recommendation|comment')) {
+                selectedMenu.opener = null;
+                subFormHandler.refresh();
+            }
         }
         return InvokerUtil.lookupOpener("application-forapproval:create", [handler:handler]);
     }
@@ -171,6 +192,10 @@ class LoanAppController
             o.objid = loanappid;
             entity.state = service.returnForCI(o).state;
             binding.refresh('title|formActions|opener');
+            if(selectedMenu.opener.properties.key == 'comment') {
+                selectedMenu.opener = null;
+                subFormHandler.refresh();
+            }
         }
         return InvokerUtil.lookupOpener("application-returnforci:create", [handler:handler]);
     }
