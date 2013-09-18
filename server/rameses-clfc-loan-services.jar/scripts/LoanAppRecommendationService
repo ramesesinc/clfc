@@ -6,4 +6,8 @@ class LoanAppRecommendationService extends ActiveCrudService
 {	
 	@ActiveDB(value='loanapp_recommendation')
 	def em;
+
+	public void afterOpen(data) {
+		if(data == null) data._item = null;
+	}
 }
