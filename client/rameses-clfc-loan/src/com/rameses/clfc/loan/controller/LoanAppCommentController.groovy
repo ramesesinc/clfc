@@ -1,6 +1,7 @@
 package com.rameses.clfc.loan.controller;
 
 import com.rameses.rcp.annotations.*;
+import com.rameses.clfc.util.*;
 
 class LoanAppCommentController
 {
@@ -9,8 +10,10 @@ class LoanAppCommentController
     
     @Service('LoanAppCommentService')
     def service;
+    def htmlbuilder = new CommentHtmlBuilder();
     
     def getHtmlview() {
-        return service.getComments([loanappid: loanapp.objid]);
+        def comments = service.getComments([loanappid: loanapp.objid]);
+        return htmlbuilder.buildComments(comments);
     }
 }

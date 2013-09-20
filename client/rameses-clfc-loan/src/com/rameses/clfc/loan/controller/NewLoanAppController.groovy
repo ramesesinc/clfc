@@ -39,6 +39,7 @@ class NewLoanApplicationController
     def initCapture() {
         entity = service.initEntity();
         entity.mode = 'CAPTURE';
+        entity.previousloans = [];
         productTypes = entity.productTypes;
         return "capturepage";
     }

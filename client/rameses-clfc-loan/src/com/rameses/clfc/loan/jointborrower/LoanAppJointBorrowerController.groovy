@@ -25,7 +25,7 @@ class LoanAppJointBorrowerController
         def data = service.open([objid: loanapp.objid]);
         loanapp.clear();
         loanapp.putAll(data);
-        borrowers = loanapp.borrowers;
+        borrowers = loanapp.jointborrowers;
     }
         
     void save() {

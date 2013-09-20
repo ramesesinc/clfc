@@ -13,13 +13,12 @@ class BorrowerSavingsAcctController
     
     @Binding
     def binding;
-    def htmlbuilder
+    def htmlbuilder = new BorrowerInfoHtmlBuilder();
             
     void init() {
         borrowerContext.addDataChangeHandler('savingacct', {
             savingsAcctHandler.reload(); 
         });
-        htmlbuilder = new BorrowerInfoHtmlBuilder();
     }    
     
     def selectedSavingAcct;

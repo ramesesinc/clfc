@@ -95,6 +95,7 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         xTextArea1.setHint("Specify remarks here.");
         xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
+        xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
         xFormPanel1.add(jScrollPane1);

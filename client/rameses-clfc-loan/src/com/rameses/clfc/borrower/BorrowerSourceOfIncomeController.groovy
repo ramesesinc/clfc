@@ -13,13 +13,12 @@ class BorrowerSourceOfIncomeController
     
     @Binding
     def binding;
-    def htmlbuilder;
+    def htmlbuilder = new BorrowerInfoHtmlBuilder();
     
     void init() {
         borrowerContext.addDataChangeHandler('otherincome', {
             otherIncomeHandler.reload(); 
         });
-        htmlbuilder = new BorrowerInfoHtmlBuilder();
     }    
     
     def selectedOtherIncome;

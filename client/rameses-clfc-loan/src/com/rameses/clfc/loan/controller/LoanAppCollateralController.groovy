@@ -14,6 +14,7 @@ class LoanCollateralController
     def service;    
     
     def beforeSaveHandlers = [:];
+    def collateral = [];
     
     void init() {
         selectedMenu.saveHandler = { save(); }  
@@ -21,13 +22,15 @@ class LoanCollateralController
         def data = service.open([objid: loanapp.objid]); 
         loanapp.clear();
         loanapp.putAll(data);
+        collateral = loanapp.collateral;
     }
 
     def createOpenerParams() {
         return [
             beforeSaveHandlers: beforeSaveHandlers, 
             service: service, 
-            loanapp: loanapp,
+            loanappid: loanapp.objid,
+            collateral: collateral,
             mode: caller.mode 
         ]; 
     }
@@ -46,7 +49,7 @@ class LoanCollateralController
             if (v != null) v(); 
         }
         
-        def data = [objid: loanapp.objid, collateral: loanapp.collateral ];
+        def data = [objid: loanapp.objid, collateral: collateral];
         service.update(data);
     }
 }

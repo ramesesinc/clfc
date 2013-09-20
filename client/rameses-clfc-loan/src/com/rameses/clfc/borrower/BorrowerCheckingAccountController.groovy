@@ -14,6 +14,7 @@ class BorrowerCheckingAccountController
     @Binding
     def binding;
     
+    def htmlbuilder = new BorrowerInfoHtmlBuilder();
     def selectedCheckingAcct;
     def checkingAcctHandler = [
         fetchList: {o->
@@ -53,7 +54,6 @@ class BorrowerCheckingAccountController
     }
     
     def getHtmlview() {
-        def htmlbuilder=new BorrowerInfoHtmlBuilder();
         return htmlbuilder.buildBankAccount(selectedCheckingAcct);
     }
 }

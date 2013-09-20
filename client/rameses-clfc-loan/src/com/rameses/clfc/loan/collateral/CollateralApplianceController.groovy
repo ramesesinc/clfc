@@ -10,14 +10,16 @@ class CollateralApplianceController
 {
     @Binding
     def binding;
-    def loanapp, mode, beforeSaveHandlers;
+    def loanappid, collateral, mode, beforeSaveHandlers;
     
+    
+    def htmlbuilder=new CollateralHtmlBuilder();
     def selectedAppliance;
     def applianceHandler = [
         fetchList: {o->
-            if( !loanapp.collateral.appliances ) loanapp.collateral.appliances = [];
-            loanapp.collateral.appliances.each{ it._filetype = "appliance" }
-            return loanapp.collateral.appliances;
+            if( !collateral?.appliances ) collateral.appliances = [];
+            collateral.appliances.each{ it._filetype = "appliance" }
+            return collateral.appliances;
         },
         onRemoveItem: {o->
             return removeApplianceImpl(o); 
@@ -30,8 +32,8 @@ class CollateralApplianceController
 
     def addAppliance() {
         def handler = {appliance->
-            appliance.parentid = loanapp.objid;
-            loanapp.collateral.appliances.add(appliance);
+            appliance.parentid = loanappid;
+            collateral.appliances.add(appliance);
             applianceHandler.reload();
         }
         return InvokerUtil.lookupOpener("appliance:create", [handler:handler]);
@@ -44,7 +46,7 @@ class CollateralApplianceController
     boolean removeApplianceImpl(o) {
         if (mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this appliance. Continue?")) {
-            loanapp.collateral.appliances.remove(o);
+            collateral.appliances.remove(o);
             return true;
         } else { 
             return false; 
@@ -52,7 +54,6 @@ class CollateralApplianceController
     }
     
     def getHtmlview() {
-        def htmlbuilder=new CollateralHtmlBuilder();
         return htmlbuilder.buildAppliance(selectedAppliance);
     }
 }

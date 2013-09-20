@@ -21,49 +21,56 @@ class LoanAppDetailController
     def productTypes;
     def clientTypes = LOV.LOAN_CLIENT_TYPES;
     
-    def entity = [:];
+    def data = [:];
     
     @PropertyChangeListener
     def listener = [
         "schedule": {o->
             if(o == null) return;
-            entity.schedule = o
+            data.schedule = o
         },
         "clienttype": {o->
             if(o == null) return;
-            if(o.value != 'MARKETED') entity.marketedby = null;
-            entity.clienttype = o.value;
+            if(o.value != 'MARKETED') data.marketedby = null;
+            data.clienttype = o.value;
         }
     ]
 
     void init() {
-        selectedMenu.saveHandler = { save(); } 
-        entity = service.open([objid: loanapp.objid]);
+        selectedMenu.saveHandler = { save(); }
+        selectedMenu.dataChangeHandler = { dataChange(); }
+        data = service.open([objid: loanapp.objid]);
+        loanapp.clear();
+        loanapp.putAll(data);
+        dataChange();
         productTypes = newLoanAppService.initEntity().productTypes;
-        schedule = productTypes.find{ it.name == entity.schedule.name }
-        clienttype = clientTypes.find{ it.value == entity.clienttype }
-        if(entity.route.code != null ) {
-            def route = entity.route;
-            route.name = "$route.code-$route.description $route.area";
-        }
-        else entity.route.name = ''
+        schedule = productTypes.find{ it.name == data.schedule.name }
+        clienttype = clientTypes.find{ it.value == data.clienttype }
     }
     
     void save() {
-        if(entity.clienttype == 'MARKETED' && !entity.marketedby) 
+        if(data.clienttype == 'MARKETED' && !data.marketedby) 
             throw new Exception('Interviewed by is required.');
         
-        if(loanapp.state == 'FOR_INSPECTION' && !entity.route?.code) 
+        if(loanapp.state == 'FOR_INSPECTION' && !data.route?.code) 
             throw new Exception("Route is required.")
         
-        loanapp.putAll(entity);
-        service.update(entity); 
+        service.update(data);
+    }
+    
+    void dataChange() {
+        data = loanapp;
+        if(data.route.code != null ) {
+            def route = data.route;
+            route.name = "$route.code - $route.description $route.area";
+        }
+        else data.route.name = ''    
     }
     
     def getRouteLookupHandler() {
         def handler = {route->
-            route.name = "$route.code-$route.description $route.area"
-            entity.route = route;
+            route.name = "$route.code - $route.description $route.area"
+            data.route = route;
         }
         return InvokerUtil.lookupOpener("route:lookup", [onselect:handler])
     }

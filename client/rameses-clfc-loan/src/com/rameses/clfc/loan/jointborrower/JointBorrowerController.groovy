@@ -45,7 +45,6 @@ class JointBorrowerController
         def ctx = new BorrowerContext(caller, this, service, loanapp);
         ctx.beforeSaveHandlers = beforeSaveHandlers;
         ctx.dataChangeHandlers = dataChangeHandlers;
-        ctx.cancelHandlers = cancelHandlers;
         return [borrowerContext: ctx];
     }
     

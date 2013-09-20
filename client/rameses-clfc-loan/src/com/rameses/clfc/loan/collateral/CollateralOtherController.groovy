@@ -7,16 +7,16 @@ import com.rameses.osiris2.common.*;
 
 class CollateralOtherController
 {
-    def loanapp, mode, beforeSaveHandlers;
+    def loanappid, collateral, mode, beforeSaveHandlers;
     def entity = [:];
     
     void init() {
-        if( loanapp.collateral.other ) entity = loanapp.collateral.other;
+        if( collateral?.other ) entity = collateral.other;
         beforeSaveHandlers.otherCollateralSaveHandler = { validate(); }
     }
     
     void validate() {
-        if( !loanapp.collateral.other ) 
-            loanapp.collateral.other = entity
+        if( !collateral?.other ) 
+            collateral.other = entity
     }
 }

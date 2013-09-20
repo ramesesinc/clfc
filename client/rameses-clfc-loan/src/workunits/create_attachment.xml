@@ -16,6 +16,6 @@
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.AttachmentFormPage"/>
+        <page template="com.rameses.clfc.loan.attachment.AttachmentFormPage"/>
     </pages>
 </workunit>

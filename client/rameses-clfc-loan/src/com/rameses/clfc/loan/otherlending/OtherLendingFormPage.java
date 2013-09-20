@@ -38,13 +38,13 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xTextField3 = new com.rameses.rcp.control.XTextField();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
-        xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
-        xComboBox1 = new com.rameses.rcp.control.XComboBox();
-        xDecimalField3 = new com.rameses.rcp.control.XDecimalField();
-        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         xDateField1 = new com.rameses.rcp.control.XDateField();
         xDateField2 = new com.rameses.rcp.control.XDateField();
+        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         xDecimalField4 = new com.rameses.rcp.control.XDecimalField();
+        xComboBox1 = new com.rameses.rcp.control.XComboBox();
+        xDecimalField3 = new com.rameses.rcp.control.XDecimalField();
         xLabel1 = new com.rameses.rcp.control.XLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         xTextArea2 = new com.rameses.rcp.control.XTextArea();
@@ -79,7 +79,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xFormPanel1.add(xTextField3);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 20, 450, 70);
+        xFormPanel1.setBounds(10, 20, 480, 70);
 
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDecimalField1.setCaption("Loan Amount");
@@ -89,50 +89,53 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xDecimalField1.setRequired(true);
         xFormPanel2.add(xDecimalField1);
 
-        xDecimalField2.setCaption("Term");
-        xDecimalField2.setCaptionWidth(130);
-        xDecimalField2.setName("entity.term");
-        xDecimalField2.setPattern("#,##0");
-        xDecimalField2.setPreferredSize(new java.awt.Dimension(70, 20));
-        xFormPanel2.add(xDecimalField2);
+        xDateField1.setCaption("Date Granted");
+        xDateField1.setCaptionWidth(130);
+        xDateField1.setName("entity.dtgranted");
+        xDateField1.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel2.add(xDateField1);
 
-        xComboBox1.setCaption("Mode of Payment");
-        xComboBox1.setCaptionWidth(130);
-        xComboBox1.setExpression("#{item.value}");
-        xComboBox1.setItemKey("value");
-        xComboBox1.setItems("modesOfPayment");
-        xComboBox1.setName("entity.paymentmode");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(100, 20));
-        xFormPanel2.add(xComboBox1);
+        xDateField2.setCaption("Maturity Date");
+        xDateField2.setCaptionWidth(130);
+        xDateField2.setName("entity.dtmatured");
+        xDateField2.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel2.add(xDateField2);
 
-        xDecimalField3.setCaption("Payment");
-        xDecimalField3.setCaptionWidth(130);
-        xDecimalField3.setName("entity.paymentamount");
-        xDecimalField3.setPreferredSize(new java.awt.Dimension(120, 20));
-        xDecimalField3.setRequired(true);
-        xFormPanel2.add(xDecimalField3);
+        xNumberField1.setCaption("Term");
+        xNumberField1.setCaptionWidth(130);
+        xNumberField1.setFieldType(Integer.class);
+        xNumberField1.setName("entity.term");
+        xNumberField1.setPattern("#,##0");
+        xNumberField1.setPreferredSize(new java.awt.Dimension(70, 20));
+        xFormPanel2.add(xNumberField1);
 
         jPanel1.add(xFormPanel2);
         xFormPanel2.setBounds(10, 90, 250, 90);
 
         xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xDateField1.setCaption("Date Granted");
-        xDateField1.setName("entity.dtgranted");
-        xDateField1.setPreferredSize(new java.awt.Dimension(0, 20));
-        xFormPanel3.add(xDateField1);
-
-        xDateField2.setCaption("Maturity Date");
-        xDateField2.setName("entity.dtmatured");
-        xDateField2.setPreferredSize(new java.awt.Dimension(0, 20));
-        xFormPanel3.add(xDateField2);
-
         xDecimalField4.setCaption("Interest Rate");
+        xDecimalField4.setCaptionWidth(100);
         xDecimalField4.setName("entity.interest");
-        xDecimalField4.setPreferredSize(new java.awt.Dimension(50, 20));
         xFormPanel3.add(xDecimalField4);
 
+        xComboBox1.setCaption("Mode of Payment");
+        xComboBox1.setCaptionWidth(100);
+        xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("modesOfPayment");
+        xComboBox1.setName("entity.paymentmode");
+        xComboBox1.setPreferredSize(new java.awt.Dimension(100, 20));
+        xFormPanel3.add(xComboBox1);
+
+        xDecimalField3.setCaption("Payment");
+        xDecimalField3.setCaptionWidth(100);
+        xDecimalField3.setName("entity.paymentamount");
+        xDecimalField3.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDecimalField3.setRequired(true);
+        xFormPanel3.add(xDecimalField3);
+
         jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(270, 90, 190, 90);
+        xFormPanel3.setBounds(270, 90, 220, 90);
 
         xLabel1.setPadding(new java.awt.Insets(5, 0, 1, 1));
         xLabel1.setText("Collateral(s) Offered:");
@@ -144,7 +147,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         jScrollPane2.setViewportView(xTextArea2);
 
         jPanel1.add(jScrollPane2);
-        jScrollPane2.setBounds(10, 200, 450, 70);
+        jScrollPane2.setBounds(10, 200, 480, 70);
 
         xLabel2.setPadding(new java.awt.Insets(5, 0, 1, 1));
         xLabel2.setText("Remarks:");
@@ -156,7 +159,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         jScrollPane1.setViewportView(xTextArea1);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 290, 450, 70);
+        jScrollPane1.setBounds(10, 290, 480, 70);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -164,8 +167,8 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +188,6 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDateField xDateField1;
     private com.rameses.rcp.control.XDateField xDateField2;
     private com.rameses.rcp.control.XDecimalField xDecimalField1;
-    private com.rameses.rcp.control.XDecimalField xDecimalField2;
     private com.rameses.rcp.control.XDecimalField xDecimalField3;
     private com.rameses.rcp.control.XDecimalField xDecimalField4;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
@@ -193,6 +195,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel2;
+    private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextArea xTextArea2;
     private com.rameses.rcp.control.XTextField xTextField1;

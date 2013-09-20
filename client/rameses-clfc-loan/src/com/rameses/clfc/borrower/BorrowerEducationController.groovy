@@ -14,11 +14,10 @@ class BorrowerEducationController
     @Binding
     def binding;
     
-    def htmlBuilder;
+    def htmlBuilder = new BorrowerInfoHtmlBuilder(); 
     
     void init() {
         borrowerContext.addDataChangeHandler('education', {educationHandler.reload()});
-        htmlBuilder = new BorrowerInfoHtmlBuilder(); 
     }    
     
     def selectedEducation;

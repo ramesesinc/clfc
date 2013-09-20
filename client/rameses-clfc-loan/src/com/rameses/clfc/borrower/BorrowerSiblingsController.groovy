@@ -13,13 +13,12 @@ class BorrowerSiblingsController
     
     @Binding
     def binding;
-    def htmlbuilder;
+    def htmlbuilder = new BorrowerInfoHtmlBuilder();
     
     void init() {
         borrowerContext.addDataChangeHandler('siblings', {
             siblingsHandler.reload(); 
         });
-        htmlbuilder = new BorrowerInfoHtmlBuilder();
     }    
     
     def selectedSibling;

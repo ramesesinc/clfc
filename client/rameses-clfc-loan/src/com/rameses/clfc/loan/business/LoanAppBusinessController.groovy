@@ -21,8 +21,8 @@ class LoanAppBusinessController
     def businesses = [];
         
     void init() {
-        println 'business init'
-        selectedMenu.saveHandler = { save(); }  
+        selectedMenu.saveHandler = { save(); }
+        selectedMenu.dataChangeHandler = { dataChange(); }
         def data = service.open([objid: loanapp.objid]);
         loanapp.clear();
         loanapp.putAll(data);
@@ -35,12 +35,14 @@ class LoanAppBusinessController
             if( business ) throw new Exception("CI Report for business $business.tradename is required.");
         }
         
-        println 'state 1 = '+loanapp.state;
         def data = [objid: loanapp.objid, businesses: businesses]
         loanapp.state = service.update(data).state;
-        println 'state 2 = '+loanapp.state;
     }
 
+    void dataChange() {
+        loanapp.businesses = businesses;
+    }
+    
     def selectedBusiness;
     def businessHandler = [
         fetchList: {o->

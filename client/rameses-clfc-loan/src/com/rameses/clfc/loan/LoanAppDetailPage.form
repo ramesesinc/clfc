@@ -114,7 +114,7 @@
                 </Property>
                 <Property name="caption" type="java.lang.String" value="App Type"/>
                 <Property name="captionWidth" type="int" value="110"/>
-                <Property name="expression" type="java.lang.String" value="#{entity.apptype}"/>
+                <Property name="expression" type="java.lang.String" value="#{data.apptype}"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[150, 20]"/>
                 </Property>
@@ -152,7 +152,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Amount Applied"/>
                 <Property name="captionWidth" type="int" value="110"/>
-                <Property name="name" type="java.lang.String" value="entity.loanamount"/>
+                <Property name="name" type="java.lang.String" value="data.loanamount"/>
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
@@ -177,7 +177,7 @@
                 </Property>
                 <Property name="caption" type="java.lang.String" value="Date Filed"/>
                 <Property name="captionWidth" type="int" value="100"/>
-                <Property name="name" type="java.lang.String" value="entity.dtcreated"/>
+                <Property name="name" type="java.lang.String" value="data.dtcreated"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 20]"/>
                 </Property>
@@ -193,7 +193,7 @@
                     <StringItem index="0" value="clienttype"/>
                   </StringArray>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.marketedby"/>
+                <Property name="name" type="java.lang.String" value="data.marketedby"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 20]"/>
                 </Property>
@@ -209,7 +209,7 @@
                     <StringItem index="0" value="schedule"/>
                   </StringArray>
                 </Property>
-                <Property name="name" type="java.lang.String" value="entity.schedule.term"/>
+                <Property name="name" type="java.lang.String" value="data.schedule.term"/>
                 <Property name="pattern" type="java.lang.String" value="#,##0"/>
                 <Property name="required" type="boolean" value="true"/>
                 <Property name="scale" type="int" value="0"/>
@@ -269,7 +269,7 @@
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Purpose of Loan"/>
                 <Property name="captionWidth" type="int" value="110"/>
-                <Property name="name" type="java.lang.String" value="entity.purpose"/>
+                <Property name="name" type="java.lang.String" value="data.purpose"/>
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>
@@ -286,7 +286,7 @@
             </Property>
             <Property name="expression" type="java.lang.String" value="#{item.name}"/>
             <Property name="handler" type="java.lang.String" value="routeLookupHandler"/>
-            <Property name="name" type="java.lang.String" value="entity.route"/>
+            <Property name="name" type="java.lang.String" value="data.route"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[250, 20]"/>
             </Property>

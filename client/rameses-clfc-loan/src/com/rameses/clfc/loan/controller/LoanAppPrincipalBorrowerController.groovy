@@ -21,18 +21,16 @@ class LoanAppPrincipalBorrowerController
     void init() {
         if (loanapp.objid == null) return;
         
-        selectedMenu.saveHandler = { save(); }          
-        def data = service.open([objid: loanapp.objid]);
-        data.borrower.type = 'PRINCIPAL'
-        loanapp.clear();
-        loanapp.putAll(data); 
+        selectedMenu.saveHandler = { save(); }
+        selectedMenu.dataChangeHandler = { dataChange(); }
+        dataChange();
     }
 
     def createOpenerParams() {
         def ctx = new BorrowerContext(caller, this, service, loanapp);
         ctx.beforeSaveHandlers = beforeSaveHandlers;
         ctx.dataChangeHandlers = dataChangeHandlers;
-        return [ borrowerContext: ctx ]; 
+        return [borrowerContext: ctx]; 
     }
     
     def tabHandler = [
@@ -54,10 +52,14 @@ class LoanAppPrincipalBorrowerController
             if (v != null) v(); 
         }
 
-        def data = [
-            objid: loanapp.objid, 
-            borrower: loanapp.borrower 
-        ]; 
+        def data = [objid: loanapp.objid, borrower: loanapp.borrower]; 
         service.update(data);
+    }
+    
+    void dataChange() {
+        def data = service.open([objid: loanapp.objid]);
+        data.borrower.type = 'PRINCIPAL'
+        loanapp.clear();
+        loanapp.putAll(data); 
     }
 }

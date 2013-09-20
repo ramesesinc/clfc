@@ -25,7 +25,7 @@ class LoanAppCoMakerController
         def data = service.open([objid: loanapp.objid]);
         loanapp.clear();
         loanapp.putAll(data);
-        borrowers = loanapp.borrowers;
+        borrowers = loanapp.comakers;
     }
         
     void save() {

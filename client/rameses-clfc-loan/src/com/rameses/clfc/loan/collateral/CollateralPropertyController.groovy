@@ -9,14 +9,15 @@ class CollateralPropertyController
 {
     @Binding
     def binding;
-    def loanapp, mode, beforeSaveHandlers;
+    def loanappid, collateral, mode, beforeSaveHandlers;
     
+    def htmlbuilder=new CollateralHtmlBuilder();
     def selectedProperty;
     def propertyHandler = [
         fetchList: {o->
-            if( !loanapp.collateral.properties ) loanapp.collateral.properties = [];
-            loanapp.collateral.properties.each{ it._filetype = "realproperty" }
-            return loanapp.collateral.properties;
+            if( !collateral?.properties ) collateral.properties = [];
+            collateral.properties.each{ it._filetype = "realproperty" }
+            return collateral.properties;
         },
         onRemoveItem: {o->
             return removeChildImpl(o); 
@@ -28,8 +29,8 @@ class CollateralPropertyController
     
     def addProperty() {
         def handler = {property->
-            property.parentid = loanapp.objid;
-            loanapp.collateral.properties.add(property);
+            property.parentid = loanappid;
+            collateral.properties.add(property);
             propertyHandler.reload();
         }
         return InvokerUtil.lookupOpener("realproperty:create", [handler:handler]);
@@ -42,7 +43,7 @@ class CollateralPropertyController
     boolean removeChildImpl(o) {
         if (mode == 'read') return false;
         if (MsgBox.confirm("You are about to remove this child. Continue?")) {
-            loanapp.collateral.properties.remove(o);
+            collateral.properties.remove(o);
             return true;
         } else { 
             return false; 
@@ -50,7 +51,6 @@ class CollateralPropertyController
     }
     
     def getHtmlview() {
-        def htmlbuilder=new CollateralHtmlBuilder();
         return htmlbuilder.buildProperty(selectedProperty);
     }
 }

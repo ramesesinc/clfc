@@ -60,7 +60,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xLabel2.setBorder(xLineBorder1);
         xLabel2.setCaption("App Type");
         xLabel2.setCaptionWidth(110);
-        xLabel2.setExpression("#{entity.apptype}");
+        xLabel2.setExpression("#{data.apptype}");
         xLabel2.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel2.add(xLabel2);
 
@@ -86,7 +86,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
 
         xDecimalField1.setCaption("Amount Applied");
         xDecimalField1.setCaptionWidth(110);
-        xDecimalField1.setName("entity.loanamount");
+        xDecimalField1.setName("data.loanamount");
         xDecimalField1.setRequired(true);
         xFormPanel2.add(xDecimalField1);
 
@@ -97,7 +97,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xDateField1.setBorder(xLineBorder2);
         xDateField1.setCaption("Date Filed");
         xDateField1.setCaptionWidth(100);
-        xDateField1.setName("entity.dtcreated");
+        xDateField1.setName("data.dtcreated");
         xDateField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xDateField1.setReadonly(true);
         xFormPanel1.add(xDateField1);
@@ -105,7 +105,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xTextField2.setCaption("Interviewed by");
         xTextField2.setCaptionWidth(100);
         xTextField2.setDepends(new String[] {"clienttype"});
-        xTextField2.setName("entity.marketedby");
+        xTextField2.setName("data.marketedby");
         xTextField2.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
@@ -113,7 +113,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xDecimalField2.setCaption("Term");
         xDecimalField2.setCaptionWidth(100);
         xDecimalField2.setDepends(new String[] {"schedule"});
-        xDecimalField2.setName("entity.schedule.term");
+        xDecimalField2.setName("data.schedule.term");
         xDecimalField2.setPattern("#,##0");
         xDecimalField2.setRequired(true);
         xDecimalField2.setScale(0);
@@ -158,7 +158,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
         xTextArea1.setCaption("Purpose of Loan");
         xTextArea1.setCaptionWidth(110);
-        xTextArea1.setName("entity.purpose");
+        xTextArea1.setName("data.purpose");
         xTextArea1.setRequired(true);
         jScrollPane1.setViewportView(xTextArea1);
 
@@ -169,7 +169,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xLookupField1.setDepends(new String[] {"entity"});
         xLookupField1.setExpression("#{item.name}");
         xLookupField1.setHandler("routeLookupHandler");
-        xLookupField1.setName("entity.route");
+        xLookupField1.setName("data.route");
         xLookupField1.setPreferredSize(new java.awt.Dimension(250, 20));
         xLookupField1.setRequired(true);
         xFormPanel3.add(xLookupField1);

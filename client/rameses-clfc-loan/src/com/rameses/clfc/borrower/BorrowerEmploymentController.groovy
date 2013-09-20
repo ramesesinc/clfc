@@ -13,13 +13,12 @@ class BorrowerEmploymentController
     
     @Binding
     def binding;
-    def htmlbuilder
+    def htmlbuilder = new BorrowerInfoHtmlBuilder();
     
     void init() {
         borrowerContext.addDataChangeHandler('employment', {
             employmentHandler.reload(); 
         });
-        htmlbuilder = new BorrowerInfoHtmlBuilder();
     }    
     
     def selectedEmployment;
