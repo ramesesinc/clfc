@@ -16,6 +16,11 @@
                     icon="images/toolbars/approve.png" visibleWhen="#{isForCrecom}"/>
         <invoker type="formActions" caption="Return For CI" action="returnForCi" tooltip="Return For CI"
                     icon="images/toolbars/approve.png" visibleWhen="#{isForCrecom}"/>
+                    
+        <invoker type="formActions" caption="Back Out" action="backOut" tooltip="Back Out"
+                    icon="images/toolbars/cancel.png" visibleWhen="#{isApproved}"/>
+        <invoker type="formActions" caption="Submit" action="submitForRelease" tooltip="Submit For Release"
+                    icon="images/toolbars/approved.png" visibleWhen="#{isApproved}"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.controller.LoanAppController"/>

@@ -73,10 +73,7 @@ class LoanAppController
             return menuItems;
         },
         beforeSelect: {o-> 
-            if(o.name.matches('recommendation|fla|prevfla')) {
-                if(!entity.state.matches('INCOMPLETE|PENDING')) return true;
-            }
-            else return (mode == 'read');
+            return (mode == 'read');
         }, 
         onselect: {o->
             def data = service.open([objid: loanappid, name:o?.name]);
@@ -194,5 +191,18 @@ class LoanAppController
             binding.refresh('title|formActions|opener');
         }
         return InvokerUtil.lookupOpener("application-returnforci:create", [handler:handler]);
+    }
+    
+    boolean getIsApproved() {
+        if(entity.state == 'APPROVED' && mode == 'read') return true;
+        return false;
+    }
+    
+    def backOut() {
+        
+    }
+    
+    def submitForRelease() {
+        
     }
 }
