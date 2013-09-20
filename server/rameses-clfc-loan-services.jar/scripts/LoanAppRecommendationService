@@ -7,10 +7,10 @@ class LoanAppRecommendationService extends ActiveCrudService
 	@ActiveDB(value='loanapp_recommendation')
 	def em;
 
-	public void afterOpen(Object data) {
-		if(data == null) {
-			data = new HashMap();
-			data.put("item", "");
-		}
-	} 
+	
+	public Object open(Object params) {
+		def data = em.read(params);
+		if(data == null) data = [:];
+		return data;
+	}
 }
