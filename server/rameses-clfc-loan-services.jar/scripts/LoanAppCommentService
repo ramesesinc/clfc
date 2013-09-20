@@ -9,62 +9,7 @@ class LoanAppCommentService
 	public def getComments(params) {
 		if(!params.loanappid) throw new Exception('Please specify loanappid');
 
-		def comments = log.getList(params);
-		def htmlbody = 	"""
-							<font class="bold">Comments</font><br/><br/>
-							<table>
-								<tbody>
-						"""
-		comments.each{
-			htmlbody += """
-							<tr>
-								<td width="5px">>></td>
-								<td class="commenthead">posted by $it.postedby @ $it.dtposted</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td>
-									<p>$it.remarks</p>
-								</td>
-							</tr>
-						"""
-		}
-		htmlbody += """
-				</tbody>
-			</table>
-		"""
-		
-		return getHtml(htmlbody);
+		return log.getList(params);
 	}
-
-	private def getHtml(htmlbody) {
-		return 	"""
-					<html>
-						<head>
-							<style type='text/css'>
-								.bold { font-weight: bold; }
-								.title { 
-									font-weight: bold; 
-									color:#808080;
-								}
-								table {
-									width: 400px;
-									padding-left: 10px;
-								}
-								body {
-									font-family: tahoma;
-									font-size: 10px;
-								}
-								p {
-									padding: 0px 10px 0px 0px;
-									text-align: left;
-								}
-							</style>
-						</head>
-						<body>
-							${htmlbody}
-						</body>
-					</html>
-				"""
-	}
+	
 }

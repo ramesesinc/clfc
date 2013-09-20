@@ -14,6 +14,9 @@ class LoanAppService
 	@Service('DateService') 
 	def dateService;
 
+	@Service('BorrowerService')
+	def borrowerService;
+
 	@Env 
 	def env;
 
@@ -24,7 +27,7 @@ class LoanAppService
 	public def open( params ) {
 		def data = findByObjid(params); 
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found');
-
+		
 		return data;
 	}
 
@@ -33,6 +36,8 @@ class LoanAppService
 		def data = findByObjid(params); 
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found');
 
+		//println 'params -> '+params;
+		//throw new Exception('stopping');
 		loanapp.update(params);
 		if(params.route) loanapp.update(params, 'route');
 
