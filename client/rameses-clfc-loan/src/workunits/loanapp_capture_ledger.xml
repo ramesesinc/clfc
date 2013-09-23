@@ -1,0 +1,19 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/txn/loan" action="init" caption="Capture Ledger" index="2"/>
+        <invoker type="captureledger:create" action="init" caption="Capture Ledger"/>
+        
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" visibleWhen="#{mode == 'init'}"/>
+        <invoker type="formActions" action="next" caption="Next" mnemonic="n" icon="images/navbar/next.png" visibleWhen="#{mode == 'init'}"/>
+        
+        <invoker type="formActions" action="back" caption="Back" mnemonic="b" icon="images/navbar/previous.png" visibleWhen="#{mode == 'create'}"/>
+        <invoker type="formActions" action="save" caption="Save" mnemonic="s" visibleWhen="#{mode == 'create'}"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.capture.CaptureLoanAppLedgerController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.capture.CaptureLoanAppInitLedgerPage"/>
+        <page template="com.rameses.clfc.loan.capture.CaptureLoanAppLedgerPage" name="main"/>
+    </pages>
+</workunit>

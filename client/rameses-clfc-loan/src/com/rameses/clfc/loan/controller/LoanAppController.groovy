@@ -105,8 +105,13 @@ class LoanAppController
         } 
     ] as SubFormPanelModel;
 
+    boolean getIsForEdit() {
+        if(entity.state.matches('INCOMPLETE|PENDING|FOR_INSPECTION') && mode == 'read' && entity.mode != 'CAPTURE') return true;
+        return false;
+    }
+    
     boolean getIsEditable() {
-        if(entity.state.matches('INCOMPLETE|PENDING|FOR_INSPECTION') && mode == 'read') return true;
+        if(mode == 'edit' && entity.mode != 'CAPTURE') return true;
         return false;
     }
     
@@ -130,7 +135,7 @@ class LoanAppController
     }
     
     boolean getIsPending() {
-        if(entity.state == 'PENDING' && mode == 'read') return true;
+        if(entity.state == 'PENDING' && mode == 'read' && entity.mode != 'CAPTURE') return true;
         return false;
     }
     
@@ -144,7 +149,7 @@ class LoanAppController
     }
     
     boolean getIsForInspection() {
-        if(entity.state == 'FOR_INSPECTION' && mode == 'read') return true;
+        if(entity.state == 'FOR_INSPECTION' && mode == 'read' && entity.mode != 'CAPTURE') return true;
         return false;
     }
     
@@ -167,7 +172,7 @@ class LoanAppController
     }
     
     boolean getIsForCrecom() {
-        if(entity.state == 'FOR_CRECOM' && mode == 'read') return true;
+        if(entity.state == 'FOR_CRECOM' && mode == 'read' && entity.mode != 'CAPTURE') return true;
         return false;
     }
     
@@ -194,15 +199,19 @@ class LoanAppController
     }
     
     boolean getIsApproved() {
-        if(entity.state == 'APPROVED' && mode == 'read') return true;
+        return true;
+        if(entity.state == 'APPROVED' && mode == 'read' && entity.mode != 'CAPTURE') return true;
         return false;
     }
     
     def backOut() {
-        
+        def handler = {o->
+            println o
+        }
+        return InvokerUtil.lookupOpener("backout:create", [handler:handler]);
     }
     
     def submitForRelease() {
-        
+        println 'submit for release'
     }
 }
