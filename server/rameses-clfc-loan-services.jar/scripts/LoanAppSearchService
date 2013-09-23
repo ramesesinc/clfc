@@ -4,7 +4,7 @@ import com.rameses.services.extended.*;
 
 class LoanAppSearchService 
 {	
-	@ActiveDB(value='loanapp_search_index')
+	@ActiveDB(value='loanapp_search')
 	def em;
 
 	@ProxyMethod 

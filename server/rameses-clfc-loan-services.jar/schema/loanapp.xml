@@ -2,33 +2,34 @@
 
 	<element name="loanapp" tablename="loanapp">
 		<field name="objid" primary="true"/>
-		<field name="state" required="true"/>
-		<field name="mode" required="true"/>
-		<field name="dtcreated" required="true"/>
-		<field name="createdby" required="true"/>
-		<field name="appno" required="true"/>
-		<field name="apptype" required="true"/>
-		<field name="version" required="true"/>
-		<field name="loanno" required="true"/>
-		<field name="loanamount" required="true"/>
-		<field name="clienttype" required="true"/>
-		<field name="marketedby" />
-		<field name="purpose" required="true"/>
-		<field name="branch_code" required="true"/>
-		<field name="branch_name" required="true"/>
-		<field name="borrower_objid" required="true"/>
-		<field name="borrower_name" required="true"/>
-		<field name="schedule_name" required="true"/>
-		<field name="schedule_term" required="true"/>
-		<field name="schedule_interestrate" required="true"/>
-		<field name="schedule_pastduerate" required="true"/>
-		<field name="schedule_underpaymentpenalty" required="true"/>
-		<field name="schedule_surchargerate" required="true"/>
-		<field name="schedule_absentpenalty" required="true"/>
-		<field name="route_code"/>
-		<field name="route_description"/>
-		<field name="route_area"/>
+		<field name="state" required="true"/> 
+		<field name="appno" required="true"/> 
+		<field name="apptype" required="true"/> 
+		<field name="appmode" required="true"/> 
+		<field name="dtcreated" required="true"/> 
+		<field name="createdby" required="true"/> 
+		<field name="loanamount" required="true"/> 
+		<field name="branch_code" required="true"/> 
+		<field name="branch_name" required="true"/> 
+		<field name="borrower_objid" required="true"/> 
+		<field name="borrower_name" required="true"/> 
+		<field name="producttype_name" required="true"/> 
+		<field name="producttype_term" required="true"/> 
+		<field name="remarks" required="true"/> 
+		<field name="route_code"/> 
 	</element>
+
+	<element name="loanapp_capture" tablename="loanapp_capture">
+		<field name="objid" primary="true"/>
+		<field name="version" required="true"/> 
+		<field name="loanno" required="true"/> 
+		<field name="loanamount" required="true"/> 
+		<field name="clienttype" required="true"/> 
+		<field name="marketedby"/> 
+		<field name="purpose" required="true"/> 
+		<field name="producttype_name" required="true"/> 
+		<field name="producttype_term" required="true"/> 
+	</element>	
 
 	<element name="route" tablename="loanapp">
 		<field name="objid" primary="true"/>
@@ -71,7 +72,7 @@
 		<field name="postedby" required="true"/>		
 	</element> 
 
-	<element name="borrower_index" tablename="loanapp_borrower_index">
+	<element name="borrower_index" tablename="loanapp_search_borrower">
 		<field name="objid" primary="true"/> 
 		<field name="loanappid" required="true"/> 
 		<field name="loanappno" required="true"/> 
