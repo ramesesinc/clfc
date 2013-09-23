@@ -15,7 +15,7 @@ class NewLoanApplicationController extends AbstractLoanAppController
     
     void init() {
         entity = service.initEntity();
-        entity.mode = 'ONLINE'; 
+        entity.appmode = 'ONLINE'; 
         entity.apptype = 'NEW';
         productTypes = entity.productTypes;
     }

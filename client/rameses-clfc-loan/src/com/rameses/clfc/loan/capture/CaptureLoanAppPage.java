@@ -190,7 +190,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xTextField2.setCaption("Mode");
         xTextField2.setCaptionWidth(100);
         xTextField2.setEnabled(false);
-        xTextField2.setName("entity.mode");
+        xTextField2.setName("entity.appmode");
         xFormPanel4.add(xTextField2);
 
         xFormPanel5.setPadding(new java.awt.Insets(5, 5, 0, 0));

@@ -13,7 +13,7 @@ class CaptureLoanAppController extends AbstractLoanAppController
     
     void init() {
         entity = service.initEntity();
-        entity.mode = 'CAPTURE';
+        entity.appmode = 'CAPTURE';
         entity.previousloans = [];
         productTypes = entity.productTypes;
     }
