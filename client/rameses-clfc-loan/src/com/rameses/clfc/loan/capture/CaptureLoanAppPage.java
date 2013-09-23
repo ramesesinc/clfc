@@ -4,7 +4,7 @@
  * Created on August 31, 2013, 3:10 PM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.loan.capture;
 
 import com.rameses.osiris2.themes.FormPage;
 import com.rameses.rcp.ui.annotations.StyleSheet;
@@ -190,7 +190,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xTextField2.setCaption("Mode");
         xTextField2.setCaptionWidth(100);
         xTextField2.setEnabled(false);
-        xTextField2.setName("entity.mode");
+        xTextField2.setName("entity.appmode");
         xFormPanel4.add(xTextField2);
 
         xFormPanel5.setPadding(new java.awt.Insets(5, 5, 0, 0));
@@ -198,16 +198,16 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xComboBox2.setCaptionWidth(100);
         xComboBox2.setExpression("#{item.name}");
         xComboBox2.setItems("productTypes");
-        xComboBox2.setName("entity.schedule");
+        xComboBox2.setName("entity.producttype");
         xComboBox2.setPreferredSize(new java.awt.Dimension(210, 20));
         xComboBox2.setRequired(true);
         xFormPanel5.add(xComboBox2);
 
         xNumberField1.setCaption("Term");
         xNumberField1.setCaptionWidth(100);
-        xNumberField1.setDepends(new String[] {"entity.schedule"});
+        xNumberField1.setDepends(new String[] {"entity.producttype"});
         xNumberField1.setFieldType(Integer.class);
-        xNumberField1.setName("entity.schedule.term");
+        xNumberField1.setName("entity.producttype.term");
         xNumberField1.setPattern("#,##0");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xNumberField1.setRequired(true);
@@ -320,17 +320,13 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(xDataTable1, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -341,8 +337,8 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, 0, 607, Short.MAX_VALUE))
+                    .addComponent(jPanel1, 0, 607, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

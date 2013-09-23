@@ -1,0 +1,7 @@
+<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
+    entityName="loanapp" tag="disqualified_out">
+    
+    <invokers>
+        <invoker folderid="/explorer/afterfla" caption="Disqualified Out" permission="system" index="4"/>
+   </invokers>
+</workunit>

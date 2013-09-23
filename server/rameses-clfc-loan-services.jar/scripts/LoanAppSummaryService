@@ -18,6 +18,9 @@ class LoanAppSummaryService
 	@Service('BorrowerService')
 	def borrowerService;
 
+	@Service('LoanAppRecommendationService')
+	def recommendationService;
+
 
 	@ProxyMethod
 	public def open( params ) {
@@ -35,6 +38,7 @@ class LoanAppSummaryService
 			properties: collateral.getProperties([parentid: data.objid]),
 			other: collateral.findOtherCollateral([objid: data.objid])
 		]
+		data.recommendation = recommendationService.open([objid: data.objid]);
 		return data;
 	}
 }

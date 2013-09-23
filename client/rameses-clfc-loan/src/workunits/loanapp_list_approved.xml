@@ -1,0 +1,7 @@
+<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
+    entityName="loanapp" tag="approved">
+    
+    <invokers>
+        <invoker folderid="/explorer/afterfla" caption="Approved" permission="system" index="0"/>
+   </invokers>
+</workunit>

@@ -1,0 +1,7 @@
+<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
+    entityName="loanapp" tag="back_out">
+    
+    <invokers>
+        <invoker folderid="/explorer/afterfla" caption="Back Out" permission="system" index="6"/>
+   </invokers>
+</workunit>

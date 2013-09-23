@@ -1,22 +1,12 @@
-<workunit>
+<workunit extends="wtemplates/LoanAppController.xml">
     <invokers>
-        <invoker folderid="/menu/txn/loan" caption="New Application" action="initOnline"/>
-        <invoker folderid="/menu/txn/loan" caption="Capture Application" action="initCapture"/>
-        <invoker type="loanapp:create" caption="Loan Application" action="initOnline"/>
-        
-        <invoker type="formActions" action="cancel" visibleWhen="#{mode=='create'}" immediate="true"/> 
-        <invoker type="formActions" action="save" visibleWhen="#{mode=='create'}"/> 
-        
-        <invoker type="formActions" action="close" visibleWhen="#{mode!='create'}" immediate="true"/> 
-        <invoker type="formActions" action="create" visibleWhen="#{mode!='create'}" immediate="true" caption="Create Another"/> 
-        <invoker type="formActions" action="edit" visibleWhen="#{mode!='create'}" immediate="true" caption="Continue Editing"/> 
+        <invoker folderid="/menu/txn/loan" caption="New Application" action="init"/>
+        <invoker type="loanapp:create" caption="Loan Application" action="init"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.controller.NewLoanAppController"/>
     
     <pages>
         <page template="com.rameses.clfc.loan.NewLoanAppPage"/>
-        <page template="com.rameses.clfc.loan.NewLoanAppSuccessPage" name="successpage"/>
-        <page template="com.rameses.clfc.loan.CaptureLoanAppPage" name="capturepage"/>
     </pages>
 </workunit>
