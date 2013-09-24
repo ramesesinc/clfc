@@ -43,38 +43,46 @@ class CaptureLoanAppService
 		if (data.clienttype == 'MARKETED' && !data.marketedby) 
 			throw new Exception('Please specify marketedby'); 
 
-		if (data.previousloans == null) data.previousloans = [];
-
 		data.branch = [code: env.ORGID, name: env.ORGNAME];
 		data.dtcreated = dateSvc.serverDate.toString();
-		data.createdby = env.USERID; 
+		data.createdby = env.USER; 
+		
+		createPreviousLoans(data); 
 		data.state = 'RELEASED'; 
-		data.appmode = 'CAPTURE';		
 		data.version = data.previousloans.size()+1;
-		data.remarks = data.purpose;
 
-		def seqno = seqSvc.getNextSeries('loan'); 
-		data.loanno = data.branch.code + addLeadingChars(seqno,'0',8); 
-		data.appno = data.loanno + addLeadingChars(data.version,'0',2); 
+		//def seqno = seqSvc.getNextSeries('loan'); 
+		//data.loanno = data.branch.code + addLeadingChars(seqno,'0',8); 
+		//data.appno = data.loanno + addLeadingChars(data.version,'0',2); 
+		data.appno = data.loanno; 
+		data.appmode = 'CAPTURE'; 
+		data.remarks = data.purpose;
 		data = loanapp.create(data); 
 		data = loanapp.create(data, 'loanapp_capture'); 
-
-		//buildSearchIndex(data); 
 		buildBorrower(data);
 		return data; 
 	} 
 
-	private void buildSearchIndex(data) { 
-		def name = new StringBuffer();
-		name.append(data.borrower.lastname + ', ' + data.borrower.firstname); 
-		if (data.borrower.middlename) name.append(' ' + data.borrower.middlename);
+	private void createPreviousLoans(data) { 
+		if (data.previousloans == null) data.previousloans = []; 
 
-		data.fullborrowername = name.toString();
-		data.dtposted = data.dtcreated; 
-		data.postedby = data.createdby;
-		data.branchcode = data.branch.code;
-		data.branchname = data.branch.name;
-		loanapp.create(data, 'search_index'); 
+		int versionno = 1;
+		for (o in data.previousloans) { 
+			println 'saving previous loan-> version='+versionno;
+			o.objid = 'LOANPRV' + new UID(); 
+			o.state = 'CLOSED'; 
+			o.appno = o.loanno; 
+			o.apptype = 'CAPTURE';
+			o.appmode = 'CAPTURE'; 
+			o.dtcreated = data.dtcreated;
+			o.createdby = data.createdby;
+			o.borrower = data.borrower;
+			loanapp.create(o, 'loanapp_previous');
+
+			o.version = versionno; 
+			loanapp.create(o, 'loanapp_previous_capture'); 
+			versionno++; 
+		} 
 	}
 
 	private void buildBorrower(data) { 
@@ -104,7 +112,7 @@ class CaptureLoanAppService
 			borrowertype: 'PRINCIPAL' 
 		];
 		loanapp.create(o, 'borrower_index'); 
-	}	
+	} 
 
 	private String addLeadingChars(value, schar, length) {
 		def buffer = new StringBuffer();

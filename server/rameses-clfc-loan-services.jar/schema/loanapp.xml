@@ -17,18 +17,39 @@
 		<field name="producttype_term" required="true"/> 
 		<field name="remarks" required="true"/> 
 		<field name="route_code"/> 
+	</element> 
+
+	<element name="loanapp_previous" tablename="loanapp">
+		<field name="objid" primary="true"/> 
+		<field name="state" required="true"/> 
+		<field name="appno" required="true"/> 
+		<field name="apptype" required="true"/> 
+		<field name="appmode" required="true"/> 
+		<field name="dtcreated" required="true"/> 
+		<field name="createdby" required="true"/> 
+		<field name="loanamount" required="true"/> 
+		<field name="borrower_objid" required="true"/> 
+		<field name="borrower_name" required="true"/> 
+		<field name="remarks" required="true"/> 
+	</element>
+
+	<element name="loanapp_previous_capture" tablename="loanapp_capture">
+		<field name="objid" primary="true"/>
+		<field name="version" required="true"/> 
+		<field name="loanno" required="true"/> 
+		<field name="dtreleased" required="true"/> 
 	</element>
 
 	<element name="loanapp_capture" tablename="loanapp_capture">
 		<field name="objid" primary="true"/>
 		<field name="version" required="true"/> 
 		<field name="loanno" required="true"/> 
-		<field name="loanamount" required="true"/> 
 		<field name="clienttype" required="true"/> 
 		<field name="marketedby"/> 
 		<field name="purpose" required="true"/> 
 		<field name="producttype_name" required="true"/> 
 		<field name="producttype_term" required="true"/> 
+		<field name="dtreleased" required="true"/> 
 	</element>	
 
 	<element name="route" tablename="loanapp">
