@@ -27,9 +27,11 @@
 		<module file="shared/rameses-enterprise-accounts.jar" />
 		<module file="shared/rameses-enterprise-admin.jar" />
 		<module file="shared/rameses-enterprise-entity.jar" />
+		<module file="shared/rameses-enterprise-inventory.jar" />
 		<module file="shared/rameses-enterprise-treasury.jar" />
 
-		<!-- plugins -->
+		<!-- main-app -->
+		<module file="shared/rameses-clfc-main.jar" />
     </modules>
 </app>
 
