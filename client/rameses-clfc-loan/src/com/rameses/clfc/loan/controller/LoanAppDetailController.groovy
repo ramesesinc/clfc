@@ -16,7 +16,7 @@ class LoanAppDetailController
     @Service('NewLoanAppService')
     def newLoanAppService;
 
-    def schedule = [:];
+    def producttype = [:];
     def clienttype;
     def productTypes;
     def clientTypes = LOV.LOAN_CLIENT_TYPES;
@@ -25,9 +25,9 @@ class LoanAppDetailController
     
     @PropertyChangeListener
     def listener = [
-        "schedule": {o->
+        "producttype": {o->
             if(o == null) return;
-            data.schedule = o
+            data.producttype = o
         },
         "clienttype": {o->
             if(o == null) return;
@@ -44,7 +44,7 @@ class LoanAppDetailController
         loanapp.putAll(data);
         dataChange();
         productTypes = newLoanAppService.initEntity().productTypes;
-        schedule = productTypes.find{ it.name == data.schedule.name }
+        producttype = productTypes.find{ it.name == data.producttype.name }
         clienttype = clientTypes.find{ it.value == data.clienttype }
     }
     

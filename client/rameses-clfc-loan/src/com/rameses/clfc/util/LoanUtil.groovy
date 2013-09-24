@@ -14,6 +14,7 @@ class LoanUtil
     private static def propertyModeOfAcquisitionTypes;
     private static def otherLendingModesOfPayment;
     private static def borrowerOccupancyTypes;
+    private static def paymentTypes;
 
     public static def getClientTypes() {
         if (clientTypes == null) {
@@ -149,5 +150,15 @@ class LoanUtil
             ]
         }
         return borrowerOccupancyTypes;
+    }
+    
+    public static def getPaymentTypes() {
+        if(paymentTypes == null) {
+            paymentTypes = [
+                [name:'Schedule/Advance', value:'advance'],
+                [name:'Overpayment', value:'over']
+            ]
+        }
+        return paymentTypes;
     }
 }

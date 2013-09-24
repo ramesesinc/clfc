@@ -5,22 +5,26 @@ import com.rameses.rcp.annotations.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 import java.rmi.server.UID;
+import com.rameses.clfc.util.*;
 
 class LoanAppCaptureLedgerController
 {
+    @Binding
+    def binding;
+    
+    @Service('LoanLedgerService')
+    def service;
+    
     def application;
     def entity;
-    def mode = 'init';
-    def paymentTypes = [
-        [name:'Schedule/Advance', value:'advance'],
-        [name:'Overpayment', value:'over']
-    ]
-    
+    def mode = 'read';
+    def paymentTypes = LoanUtil.paymentTypes;
+      
     void init() {
         mode = 'init';
         entity = [
             objid: 'LEDGER'+new UID(),
-            payments: [],
+            payments: []
         ]
     }
     
@@ -34,12 +38,31 @@ class LoanAppCaptureLedgerController
         return 'default';
     }
     
+    def save() {
+        entity.acctid = entity.borrower.objid;
+        entity.acctname = entity.borrower.name;
+        
+        entity = service.create(entity);
+        mode = 'read';
+        init();
+        return 'default';
+    }
+    
+    def cancel() {
+        if(MsgBox.confirm("You are about to close this window. Continue?")) {
+            return '_close';
+        }
+    }
+    
     def getAppLookupHandler() {
         def handler = {o->
             entity.appno = o.appno;
+            entity.loanamount = o.loanamount;
+            entity.appid = o.objid;
             entity.borrower = o.borrower;
+            entity.producttypeid = o.producttype?.name;
             entity.interestrate = o.producttype?.interestrate;
-            entity.overduerate = o.producttype?.pastduerate;
+            entity.overduerate = o.producttype?.overduerate;
             entity.underpaymentrate = o.producttype?.underpaymentpenalty;
             entity.term = o.producttype?.term;
             entity.route = o.route;
@@ -52,8 +75,11 @@ class LoanAppCaptureLedgerController
             if(!entity.payments) entity.payments = [];
             return entity.payments;
         },
-        onCreateItem: {
+        createItem: {
             return [objid: 'PYMNT'+new UID()]
+        },
+        onAddItem: {o->
+            entity.payments.add(o);
         },
         onRemoveItem: {
             if(MsgBox.confirm("You are about to remove this payment. Continue?")) {
@@ -61,9 +87,6 @@ class LoanAppCaptureLedgerController
                 return true;
             }
             return false;
-        },
-        onCommitItem: {o->
-            println o
         }
     ] as EditorListModel;
 }

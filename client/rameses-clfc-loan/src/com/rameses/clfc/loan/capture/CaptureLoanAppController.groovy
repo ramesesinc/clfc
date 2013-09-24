@@ -11,11 +11,28 @@ class CaptureLoanAppController extends AbstractLoanAppController
     @Service('CaptureLoanAppService')
     def service; 
     
+    @PropertyChangeListener
+    def listener = [
+        "entity.apptype": {o->
+            if(o == 'NEW') {
+                entity.previousloans
+                previousLoansHandler.reload();
+            }
+        }
+    ]
+    
     void init() {
         entity = service.initEntity();
         entity.appmode = 'CAPTURE';
         entity.previousloans = [];
         productTypes = entity.productTypes;
+    }
+    
+    def save() {
+        if(entity.apptype != 'NEW' && entity.previousloans.isEmpty())
+            throw new Exception('Previous Loans are required.');
+        
+        return super.save();
     }
     
     def getTitle() { return 'Capture Loan Application'; }
@@ -25,6 +42,9 @@ class CaptureLoanAppController extends AbstractLoanAppController
         fetchList: {o->
             if(!entity.previousloans) entity.previousloans = [];
             return entity.previousloans
+        },
+        createItem: {
+            return [loancount: entity.previousloans.size()+1];
         },
         onAddItem: {o->
             entity.previousloans.add(o)

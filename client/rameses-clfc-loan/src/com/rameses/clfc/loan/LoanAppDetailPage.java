@@ -79,7 +79,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xComboBox4.setExpression("#{item.name}");
         xComboBox4.setImmediate(true);
         xComboBox4.setItems("productTypes");
-        xComboBox4.setName("schedule");
+        xComboBox4.setName("producttype");
         xComboBox4.setPreferredSize(new java.awt.Dimension(150, 20));
         xComboBox4.setRequired(true);
         xFormPanel2.add(xComboBox4);
@@ -113,16 +113,17 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xDecimalField2.setCaption("Term");
         xDecimalField2.setCaptionWidth(100);
         xDecimalField2.setDepends(new String[] {"schedule"});
-        xDecimalField2.setName("data.schedule.term");
+        xDecimalField2.setName("data.producttype.term");
         xDecimalField2.setPattern("#,##0");
         xDecimalField2.setRequired(true);
         xDecimalField2.setScale(0);
         xFormPanel1.add(xDecimalField2);
 
-        xNumberField3.setText("xNumberField3");
         xNumberField3.setCaption("Loan Count");
         xNumberField3.setCaptionWidth(100);
         xNumberField3.setFieldType(Integer.class);
+        xNumberField3.setName("data.loancount");
+        xNumberField3.setPattern("#,##0");
         xNumberField3.setReadonly(true);
         xFormPanel1.add(xNumberField3);
 
