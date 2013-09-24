@@ -1,6 +1,6 @@
 <schema>
 
-	<element name="loanapp" tablename="loanapp">
+	<element name="loan_ledger" tablename="loan_ledger">
 		<field name="objid" primary="true"/>
 		<field name="acctid" required="true"/> 
 		<field name="acctname" required="true"/> 
@@ -17,6 +17,22 @@
 		<field name="compromiseid" required="true"/> 
 		<field name="dtstarted" required="true"/> 
 		<field name="dtmatured" required="true"/> 
+	</element> 
+
+	<element name="detail" tablename="loan_ledger_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/> 
+		<field name="amtdue" required="true"/> 
+		<field name="interestdue" required="true"/> 
+		<field name="penaltydue" required="true"/> 
+		<field name="amtpaid" required="true"/> 
+		<field name="interestpaid" required="true"/> 
+		<field name="penaltypaid" required="true"/> 
+		<field name="amtbal" required="true"/> 
+		<field name="interestbal" required="true"/> 
+		<field name="penaltybal" required="true"/> 
+		<field name="dtpaid" required="true"/> 
+		<field name="orno" required="true"/> 
 	</element> 
 
 </schema>
