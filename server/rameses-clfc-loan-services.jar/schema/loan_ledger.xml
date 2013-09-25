@@ -14,7 +14,7 @@
 		<field name="absentpenalty" required="true"/> 
 		<field name="totalprincipal" required="true"/> 
 		<field name="totaldue"/> 
-		<field name="compromiseid" required="true"/> 
+		<field name="compromiseid"/> 
 		<field name="dtstarted" required="true"/> 
 		<field name="dtmatured" required="true"/> 
 	</element> 
