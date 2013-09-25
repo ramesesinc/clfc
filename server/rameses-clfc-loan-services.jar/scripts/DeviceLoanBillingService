@@ -1,0 +1,48 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+
+class DeviceLoanBillingService
+{
+	@ActiveDB(value="loan_route")
+	def route;
+
+	@ActiveDB(value="loan_ledger")
+	def ledger;
+
+	@Service('DateService')
+	def dateService;
+
+	@ProxyMethod
+	public def getRoutes(params) {
+		def result = route.getList();
+		def list = [];
+		list.addAll(result)
+		return list;
+	}
+
+
+	@ProxyMethod
+	public def getCollectionsheets(params) {
+		if(!params.route_code) throw new Exception('Please specify route code');
+		def result = ledger.getCollectionsheets(params);
+		def list = [];
+		def currentDate = dateService.parseCurrentDate();
+		def days;
+		result.each{
+			def dtlastpaid = dateService.parseDate(it.dtlastpaid, null);
+			days = dateService.getDaysDiff(dtlastpaid.date, currentDate.date)-1;
+			println 'days = '+days;
+			it.amountdue = it.dailydue*days;
+			list.add(it);
+		}
+		return list;
+	}
+
+	@ProxyMethod
+	public def uploadPayments(params) {
+		if(!params.payments) throw new Exception('Payments are required');
+		params.payments.each{ println it }
+		def response = "Successfully uploaded payments!";
+		return response;
+	}
+}

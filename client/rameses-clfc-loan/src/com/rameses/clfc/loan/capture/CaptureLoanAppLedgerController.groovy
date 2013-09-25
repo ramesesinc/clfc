@@ -41,7 +41,7 @@ class LoanAppCaptureLedgerController
     def save() {
         entity.acctid = entity.borrower.objid;
         entity.acctname = entity.borrower.name;
-        
+        println 'payments = '+entity.payments;
         entity = service.create(entity);
         mode = 'read';
         init();
@@ -81,7 +81,7 @@ class LoanAppCaptureLedgerController
         onAddItem: {o->
             entity.payments.add(o);
         },
-        onRemoveItem: {
+        onRemoveItem: {o->
             if(MsgBox.confirm("You are about to remove this payment. Continue?")) {
                 entity.payments.remove(o);
                 return true;
