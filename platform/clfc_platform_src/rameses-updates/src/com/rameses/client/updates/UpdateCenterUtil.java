@@ -91,8 +91,6 @@ public final class UpdateCenterUtil {
                 }
                 fos.flush();
             }
-            //impt to set the file timestamp
-            f.setLastModified( lastModified );
         } catch(Exception e) {
             throw e;
         } finally {
@@ -102,6 +100,8 @@ public final class UpdateCenterUtil {
             closeURLConnection(uc);
         }
        
+        //impt to set the file timestamp
+        if (lastModified > 0) f.setLastModified( lastModified );
     }
     
     private static void closeURLConnection(URLConnection uc) {
@@ -142,11 +142,31 @@ public final class UpdateCenterUtil {
     
     public static List<String> getExistingFiles(String modulePath) {
         List<String> list = new ArrayList();
-        File f = new File(modulePath);
-        for(String s: f.list() ) {
-            if(s.endsWith(".jar")) list.add(s);
-        }
+        File dir = new File(modulePath);
+        String dirPath = dir.getAbsolutePath().replace('\\', '/');
+        loadExistingFiles(list, dirPath, dir); 
         return list;
+    }
+    
+    private static void loadExistingFiles(List<String> list, String modulePath, File dir) {
+        if (!dir.isDirectory()) return;
+        
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                loadExistingFiles(list, modulePath, file); 
+            } else { 
+                String s = file.getName();
+                if (!s.endsWith(".jar")) continue; 
+                
+                String sname = file.getAbsolutePath().replace('\\', '/');
+                sname = sname.replaceFirst(modulePath, "");
+                if (sname.startsWith("/")) 
+                    sname = (sname.length() > 1? sname.substring(1): ""); 
+                
+                list.add(sname);
+            } 
+        } 
     }
     
     public static void download(String hostPath, ModuleEntry me) throws Exception {
