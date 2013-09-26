@@ -75,6 +75,6 @@ class BorrowerGeneralInfoController
                 borrowerContext.refresh(); 
             }
         ];
-        return InvokerUtil.lookupOpener('customer:lookup', params);
+        return InvokerUtil.lookupOpener('customer:search', params);
     }
 }

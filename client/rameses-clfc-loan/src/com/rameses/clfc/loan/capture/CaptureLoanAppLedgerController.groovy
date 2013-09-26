@@ -14,11 +14,12 @@ class LoanAppCaptureLedgerController
     
     @Service('LoanLedgerService')
     def service;
-    
+
+    def paymentTypes = LoanUtil.paymentTypes;    
     def application;
     def entity;
     def mode = 'read';
-    def paymentTypes = LoanUtil.paymentTypes;
+    def title = 'Capture Ledger';
       
     void init() {
         mode = 'init';

@@ -15,7 +15,8 @@ public abstract class AbstractLoanAppController
     def entity;
     def productTypes = [];
     def clientTypes = LoanUtil.clientTypes;
-    def appTypes = LOV.LOAN_APP_TYPES;
+    def appTypes = LoanUtil.appTypes;
+    
     protected abstract def getService();
     
     @PropertyChangeListener

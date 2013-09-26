@@ -2,7 +2,8 @@ package com.rameses.clfc.util;
 
 class LoanUtil
 {
-    private static def clientTypes;
+    private static def appTypes;
+    private static def clientTypes;    
     private static def kindTypes;
     private static def occupancyTypes;
     private static def rentTypes;
@@ -16,6 +17,16 @@ class LoanUtil
     private static def borrowerOccupancyTypes;
     private static def paymentTypes;
 
+    public static def getAppTypes() {
+        if (appTypes == null) {
+            appTypes = [
+                [key:'NEW', value:'NEW'], 
+                [key:'RENEW', value:'RENEW']
+            ]
+        }
+        return appTypes;
+    }
+    
     public static def getClientTypes() {
         if (clientTypes == null) {
             clientTypes = [
