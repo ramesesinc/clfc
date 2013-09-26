@@ -55,7 +55,9 @@ class EntityService extends AbstractCrudListService {
 		if (!entity.objid) throw new Exception('Please specify objid'); 
 		if (!entity.type) throw new Exception('Please specify type'); 
 
-		entity.entityno = seqSvc.getNextFormattedSeries( "ENTITY" ); 
+		if (entity.entityno == null) {
+			entity.entityno = seqSvc.getNextFormattedSeries( "ENTITY" ); 
+		} 
 		if ("individual".equalsIgnoreCase(entity.type)) { 
 			entity.name = entity.lastname+', '+entity.firstname; 
 			if (entity.middlename) entity.name += ' '+entity.middlename; 
