@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="customer:plugin" caption=" General Information   " action="init"/>
+        <invoker type="customer:plugin" caption="General Information" action="init" index="-1000"/>
    </invokers>
    
    <code class="com.rameses.clfc.customer.CustomerGeneralInfoController"/>

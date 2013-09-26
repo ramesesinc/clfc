@@ -8,9 +8,13 @@ import com.rameses.osiris2.common.*;
 class CustomerGeneralInfoController 
 {
     //feed by the caller 
-    def contextHandler;
+    def callerContext = [:];
+    def entity = [:];
     
-    void init() {
-        println 'contextHandler-> ' + contextHandler;
+    def civilstatusList = OptionTypeUtil.getCivilStatusTypes(); 
+    def genderItems = OptionTypeUtil.getGenderTypes();
+    
+    void init() { 
+        
     }
 } 

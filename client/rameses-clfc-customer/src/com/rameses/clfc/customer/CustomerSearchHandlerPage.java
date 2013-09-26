@@ -6,13 +6,11 @@
 
 package com.rameses.clfc.customer;
 
-import com.rameses.rcp.ui.annotations.Template;
-
 /**
  *
  * @author  wflores
  */
-@Template(CustomerTemplatePage.class)
+//@Template(CustomerTemplatePage.class)
 public class CustomerSearchHandlerPage extends javax.swing.JPanel {
     
     public CustomerSearchHandlerPage() {
@@ -30,17 +28,17 @@ public class CustomerSearchHandlerPage extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        xSubFormPanel1.setHandler("opener");
+        xSubFormPanel1.setHandler("subFormHandler");
         xSubFormPanel1.setName("opener");
         org.jdesktop.layout.GroupLayout xSubFormPanel1Layout = new org.jdesktop.layout.GroupLayout(xSubFormPanel1);
         xSubFormPanel1.setLayout(xSubFormPanel1Layout);
         xSubFormPanel1Layout.setHorizontalGroup(
             xSubFormPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 437, Short.MAX_VALUE)
+            .add(0, 400, Short.MAX_VALUE)
         );
         xSubFormPanel1Layout.setVerticalGroup(
             xSubFormPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 323, Short.MAX_VALUE)
+            .add(0, 300, Short.MAX_VALUE)
         );
         add(xSubFormPanel1, java.awt.BorderLayout.CENTER);
 
