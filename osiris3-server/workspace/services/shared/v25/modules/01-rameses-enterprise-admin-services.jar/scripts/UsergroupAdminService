@@ -23,6 +23,7 @@ class UsergroupAdminService extends AbstractCrudService {
 	@ProxyMethod
 	public def getColumns( def o ) {
 		o.userid = env.USERID;
+		println 'UsergroupAdminService_getColumns-> ' + o;
 		return[
 			[name:'user.username', caption:'User Name' ],
 			[name:'user.lastname', caption:'Last Name' ],
