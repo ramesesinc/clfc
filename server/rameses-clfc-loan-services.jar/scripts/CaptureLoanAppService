@@ -23,6 +23,9 @@ class CaptureLoanAppService
 	@Service('SequenceService') 
 	def seqSvc;
 
+	@Service('LoanAppUtil')
+	def loanAppUtil;	
+
 	@Env 
 	def env;
 
@@ -39,7 +42,15 @@ class CaptureLoanAppService
 	} 
 
 	@ProxyMethod 
+	public void checkBorrowerForExistingLoan( params ) {
+		loanAppUtil.checkBorrowerForExistingLoan( params ); 
+	}	
+
+	@ProxyMethod 
 	public def create(data) { 	
+		//verify the borrower first 
+		checkBorrowerForExistingLoan([borrowerid: data.borrower.objid]); 
+		
 		if (data.clienttype == 'MARKETED' && !data.marketedby) 
 			throw new Exception('Please specify marketedby'); 
 
@@ -102,16 +113,6 @@ class CaptureLoanAppService
 			type:        'PRINCIPAL' 
 		];
 		loanapp_borrower.create(o); 
-
-		o = [
-			objid: 'BIDX' + new UID(), 
-			loanappid: data.objid, 
-			loanappno: data.appno, 
-			borrowerid: data.borrower.objid, 
-			borrowername: data.borrower.name, 
-			borrowertype: 'PRINCIPAL' 
-		];
-		loanapp.create(o, 'borrower_index'); 
 	} 
 
 	private String addLeadingChars(value, schar, length) {

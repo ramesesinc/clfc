@@ -19,6 +19,16 @@
 		<field name="route_code"/> 
 	</element> 
 
+	<element name="loanapp_new" tablename="loanapp_new">
+		<field name="objid" primary="true"/>
+		<field name="version" required="true"/> 
+		<field name="loanno" required="true"/> 
+		<field name="loanamount" required="true"/> 
+		<field name="clienttype" required="true"/> 
+		<field name="marketedby" /> 
+		<field name="purpose" required="true"/> 
+	</element>
+
 	<element name="loanapp_previous" tablename="loanapp">
 		<field name="objid" primary="true"/> 
 		<field name="state" required="true"/> 
@@ -72,17 +82,16 @@
 		<field name="objid" primary="true"/> 
 		<field name="parentid" required="true"/> 
 		<field name="borrowerid" required="true"/> 
+		<field name="borrowername" required="true"/> 
 		<field name="principalid" required="true"/> 
 		<field name="relaterid" /> 
 		<field name="type" required="true"/> 
 		<field name="relation"/> 
 	</element>	
 
-	<element name="search_index" tablename="loanapp_search_index">
+	<element name="search" tablename="loanapp_search">
 		<field name="objid" primary="true"/> 
 		<field name="state" required="true"/>
-		<field name="dtcreated" required="true"/>
-		<field name="createdby" required="true"/>
 		<field name="appno" required="true"/>
 		<field name="branchcode" required="true"/>
 		<field name="branchname" required="true"/>
@@ -93,13 +102,17 @@
 		<field name="postedby" required="true"/>		
 	</element> 
 
-	<element name="borrower_index" tablename="loanapp_search_borrower">
+	<element name="search_index" tablename="loanapp_search_index">
 		<field name="objid" primary="true"/> 
-		<field name="loanappid" required="true"/> 
-		<field name="loanappno" required="true"/> 
-		<field name="borrowerid" required="true"/> 
-		<field name="borrowername" required="true"/> 
-		<field name="borrowertype" required="true"/> 
+		<field name="appid" required="true"/> 
+		<field name="searchtext" required="true"/> 
+	</element>	
+
+	<element name="search_borrower_index" tablename="loanapp_search_index">
+		<field name="objid" primary="true"/> 
+		<field name="appid" required="true"/> 
+		<field name="searchtext" required="true"/> 
+		<field name="borrowerid" required="true"/>
 	</element>	
 
 	<element name="ci_recommendation" tablename="loanapp_recommendation">
@@ -119,7 +132,7 @@
 
 	<element name="log" tablename="loanapp_log">
 		<field name="objid" primary="true"/> 
-		<field name="loanappid" required="true"/> 
+		<field name="appid" required="true"/> 
 		<field name="dtposted" required="true"/> 
 		<field name="postedby" required="true"/> 
 		<field name="remarks" required="true"/> 

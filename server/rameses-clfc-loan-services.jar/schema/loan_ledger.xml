@@ -17,6 +17,7 @@
 		<field name="compromiseid"/> 
 		<field name="dtstarted" required="true"/> 
 		<field name="dtmatured" required="true"/> 
+		<field name="dtlastpaid" required="true"/> 
 	</element> 
 
 	<element name="detail" tablename="loan_ledger_detail">

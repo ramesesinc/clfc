@@ -4,6 +4,7 @@
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/> 
 		<field name="borrowerid" required="true"/>
+		<field name="borrowername" required="true"/>
 		<field name="principalid" required="true"/>
 		<field name="relaterid"/>
 		<field name="type" required="true"/>
@@ -14,6 +15,7 @@
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/> 
 		<field name="borrowerid" required="true"/>
+		<field name="borrowername" required="true"/>
 		<field name="principalid" required="true"/>
 		<field name="relaterid" required="true"/>
 		<field name="type" required="true"/>
@@ -24,6 +26,7 @@
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/> 
 		<field name="borrowerid" required="true"/>
+		<field name="borrowername" required="true"/>
 		<field name="principalid" required="true"/>
 		<field name="relaterid" required="true"/>
 		<field name="type" required="true"/>
