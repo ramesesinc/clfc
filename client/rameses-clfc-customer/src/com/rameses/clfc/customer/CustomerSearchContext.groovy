@@ -17,6 +17,9 @@ public class CustomerSearchContext
     public def getService() { return caller?.service; } 
     public def getSelectedCustomer() { return caller?.selectedCustomer; } 
     
+    
+    /* event handlers */
     def selectHandler;
+    def closeHandler;
     
 } 

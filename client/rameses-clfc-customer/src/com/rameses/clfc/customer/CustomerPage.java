@@ -46,8 +46,8 @@ public class CustomerPage extends javax.swing.JPanel
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 1));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(180, 130));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(170, 130));
         xList1.setExpression("#{item.caption}");
         xList1.setHandler("listHandler");
         xList1.setName("selectedMenu");
@@ -60,7 +60,7 @@ public class CustomerPage extends javax.swing.JPanel
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 5));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 5));
         xSubFormPanel1.setDepends(new String[] {"selectedMenu"});
         xSubFormPanel1.setDynamic(true);
         xSubFormPanel1.setHandler("subFormHandler");
@@ -69,7 +69,7 @@ public class CustomerPage extends javax.swing.JPanel
         xSubFormPanel1.setLayout(xSubFormPanel1Layout);
         xSubFormPanel1Layout.setHorizontalGroup(
             xSubFormPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 296, Short.MAX_VALUE)
+            .add(0, 303, Short.MAX_VALUE)
         );
         xSubFormPanel1Layout.setVerticalGroup(
             xSubFormPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

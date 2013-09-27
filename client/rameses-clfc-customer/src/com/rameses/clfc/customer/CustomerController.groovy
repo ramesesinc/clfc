@@ -32,7 +32,14 @@ class CustomerController
         return '_close';
     }
     
+    @Close
+    void closing() { 
+        if (callerContext?.closeHandler) 
+            callerContext.closeHandler(); 
+    } 
+    
     def close() {
+        closing();
         return '_close';
     }
     
@@ -50,9 +57,8 @@ class CustomerController
     
     void edit() {
         mode = 'edit';
-        oldentity = entity;
-        entity = [:];
-        entity.putAll(oldentity); 
+        oldentity.clear();
+        oldentity.putAll(entity);
     } 
     
     def cancelCreate() {
@@ -74,7 +80,8 @@ class CustomerController
         if (MsgBox.confirm('Are you sure you want to cancel any changes made?')) {
             mode = 'read';
             entity.clear();
-            entity = oldentity; 
+            entity.putAll(oldentity); 
+            oldentity.clear();
         } else { 
             return null;
         }
@@ -86,12 +93,11 @@ class CustomerController
         
         mode = 'read';
         oldentity.clear();
-        oldentity.putAll(entity);
     }
     
     def createOpenerParams() {
         return [
-            callerContext: new CustomerControllerContext(this), 
+            callerContext: new CustomerControllerContext(this, callerContext.service), 
             entity: entity 
         ]; 
     } 

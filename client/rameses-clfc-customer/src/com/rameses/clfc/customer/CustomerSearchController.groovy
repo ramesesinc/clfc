@@ -38,7 +38,7 @@ class CustomerSearchController extends BasicLookupModel
             return service.getList(o);  
         }, 
         onOpenItem: {item,colname-> 
-            view(); 
+            select();
         }
     ] as PageListModel;
 
@@ -63,7 +63,7 @@ class CustomerSearchController extends BasicLookupModel
     def createContextHandler() {
         def ctx = new CustomerSearchContext(this);
         ctx.selectHandler = {o-> 
-            select();
+            select(o);
             customerlistHandler.bindingObject.fireNavigation('_close');
         }
         return ctx;
@@ -81,6 +81,10 @@ class CustomerSearchController extends BasicLookupModel
             callerContext: createContextHandler(), 
             entity: selectedCustomer 
         ];
+        params.callerContext.closeHandler = {
+            customerlistHandler.reload(); 
+        } 
+        
         def opener = InvokerUtil.lookupOpener('customer:open', params);
         opener.target = 'self';
         customerlistHandler.bindingObject.fireNavigation(opener);

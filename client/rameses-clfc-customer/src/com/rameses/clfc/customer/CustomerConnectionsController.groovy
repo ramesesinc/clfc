@@ -8,9 +8,17 @@ import com.rameses.osiris2.common.*;
 class CustomerConnectionsController 
 {
     //feed by the caller 
-    def callerContext;
+    def callerContext = [:];
+    def entity = [:];
     
     void init() {
-        println 'callerContext-> ' + callerContext;
     }
+    
+    
+    def selectedConnection;
+    def connectionListHandler = [
+        fetchList: {
+            return callerContext.service.getConnections([principalid: entity.objid]);
+        }
+    ] as BasicListModel 
 } 
