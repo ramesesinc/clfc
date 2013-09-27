@@ -12,7 +12,7 @@ class CustomerSearchController extends BasicLookupModel
     @Service('CustomerService')
     def service;
     
-    def opener;
+    def mode = 'search';
     
     void init() { 
         
@@ -24,9 +24,8 @@ class CustomerSearchController extends BasicLookupModel
     }
     
     def getTitle() {
-        return ''' 
-            <font color="#808080" size="5"><b>Search Customers</b></font><br>
-        '''; 
+        def s = (mode == 'search'? 'Search Customers': 'Customer');
+        return '<font color="#808080" size="5"><b>'+s+'</b></font><br>'; 
     } 
     
     def getValue() { 
@@ -37,7 +36,10 @@ class CustomerSearchController extends BasicLookupModel
     def customerlistHandler = [ 
         fetchList: {o-> 
             return service.getList(o);  
-        } 
+        }, 
+        onOpenItem: {item,colname-> 
+            select();
+        }
     ] as PageListModel;
 
     void search() { 
@@ -57,12 +59,34 @@ class CustomerSearchController extends BasicLookupModel
     } 
     
     void moveLastPage() {}     
+   
+    def createContextHandler() {
+        def ctx = new CustomerSearchContext(this);
+        ctx.selectHandler = {o-> 
+            select(o);
+            customerlistHandler.bindingObject.fireNavigation('_close');
+        }
+        return ctx;
+    }
     
     def create() {
-        
+        def params = [callerContext: createContextHandler()];
+        def opener = InvokerUtil.lookupOpener('customer:create', params);
+        opener.target = 'self';
+        return opener;
     }
     
     void view() {
+        def params = [
+            callerContext: createContextHandler(), 
+            entity: selectedCustomer 
+        ];
+        params.callerContext.closeHandler = {
+            customerlistHandler.reload(); 
+        } 
         
-    }
+        def opener = InvokerUtil.lookupOpener('customer:open', params);
+        opener.target = 'self';
+        customerlistHandler.bindingObject.fireNavigation(opener);
+    }    
 } 

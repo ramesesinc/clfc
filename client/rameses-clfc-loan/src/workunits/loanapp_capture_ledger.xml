@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/loan" action="init" caption="Capture Ledger" index="2"/>
-        <invoker type="captureledger:create" action="init" caption="Capture Ledger"/>
+        <invoker folderid="/menu/txn/loan" caption="Capture Ledger" action="init" index="2"/>
+        <invoker type="captureledger:create" caption="Capture Ledger" action="init"/>
         
         <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" visibleWhen="#{mode == 'init'}" immediate="true"/>
         <invoker type="formActions" action="next" caption="Next" mnemonic="n" icon="images/navbar/next.png" visibleWhen="#{mode == 'init'}"/>

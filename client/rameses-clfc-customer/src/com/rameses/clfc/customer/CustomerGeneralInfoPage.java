@@ -6,10 +6,13 @@
 
 package com.rameses.clfc.customer;
 
+import com.rameses.rcp.ui.annotations.StyleSheet;
+
 /**
  *
  * @author  wflores
  */
+@StyleSheet
 public class CustomerGeneralInfoPage extends javax.swing.JPanel 
 {
     
@@ -37,10 +40,7 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
         jPanel2 = new javax.swing.JPanel();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xTextField5 = new com.rameses.rcp.control.XTextField();
-        xFormPanel5 = new com.rameses.rcp.control.XFormPanel();
-        xTextField11 = new com.rameses.rcp.control.XTextField();
-        xTextField12 = new com.rameses.rcp.control.XTextField();
-        xTextField13 = new com.rameses.rcp.control.XTextField();
+        xTextField6 = new com.rameses.rcp.control.XTextField();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setPadding(new java.awt.Insets(25, 0, 0, 0));
@@ -49,6 +49,7 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
 
         xFormPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xFormPanel1.setCaptionWidth(100);
+        xFormPanel1.setCellspacing(1);
         xTextField1.setCaption("Last Name");
         xTextField1.setName("entity.lastname");
         xTextField1.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -67,13 +68,16 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
         xFormPanel1.add(xTextField3);
 
         xComboBox1.setCaption("Gender");
+        xComboBox1.setExpression("#{item.value}");
         xComboBox1.setItemKey("key");
         xComboBox1.setItems("genderItems");
         xComboBox1.setName("entity.gender");
+        xComboBox1.setPreferredSize(new java.awt.Dimension(100, 22));
         xFormPanel1.add(xComboBox1);
 
         xFormPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xFormPanel3.setCaptionWidth(100);
+        xFormPanel3.setCellspacing(1);
         xFormPanel3.setPadding(new java.awt.Insets(0, 0, 5, 5));
         xTextField10.setCaption("Citizenship");
         xTextField10.setCaptionWidth(100);
@@ -93,7 +97,7 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
         xFormPanel3.add(xComboBox2);
 
         xDateField1.setCaption("Birth Date");
-        xDateField1.setName("2010-10-10");
+        xDateField1.setName("entity.birthdate");
         xDateField1.setPreferredSize(new java.awt.Dimension(90, 20));
         xFormPanel3.add(xDateField1);
 
@@ -103,7 +107,7 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(xFormPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .add(xFormPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(xFormPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 262, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -118,49 +122,26 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
         );
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder2 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder2.setTitle(" Current Address Information ");
+        xTitledBorder2.setTitle(" Address Information ");
         jPanel2.setBorder(xTitledBorder2);
 
         xFormPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xFormPanel2.setCaptionWidth(100);
-        xTextField5.setCaption("Street");
+        xFormPanel2.setCellspacing(1);
+        xTextField5.setCaption("Current Address");
+        xTextField5.setCaptionWidth(120);
         xTextField5.setHint("Street");
-        xTextField5.setName("entity.currentaddress.street");
-        xTextField5.setPreferredSize(new java.awt.Dimension(410, 20));
+        xTextField5.setName("entity.address");
+        xTextField5.setPreferredSize(new java.awt.Dimension(395, 20));
         xTextField5.setRequired(true);
         xFormPanel2.add(xTextField5);
 
-        xFormPanel5.setCaption("Province");
-        xFormPanel5.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
-        xFormPanel5.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        xFormPanel5.setPreferredSize(new java.awt.Dimension(0, 21));
-        xFormPanel5.setShowCaption(false);
-        xTextField11.setCaption("Province");
-        xTextField11.setCaptionWidth(100);
-        xTextField11.setHint("Province");
-        xTextField11.setName("entity.currentaddress.province");
-        xTextField11.setPreferredSize(new java.awt.Dimension(150, 20));
-        xTextField11.setRequired(true);
-        xFormPanel5.add(xTextField11);
-
-        xTextField12.setCaption("City");
-        xTextField12.setCaptionWidth(88);
-        xTextField12.setCellPadding(new java.awt.Insets(0, 20, 0, 0));
-        xTextField12.setHint("City");
-        xTextField12.setName("entity.currentaddress.city");
-        xTextField12.setPreferredSize(new java.awt.Dimension(150, 20));
-        xTextField12.setRequired(true);
-        xFormPanel5.add(xTextField12);
-
-        xFormPanel2.add(xFormPanel5);
-
-        xTextField13.setCaption("Zip Code");
-        xTextField13.setCaptionWidth(100);
-        xTextField13.setHint("Zip Code");
-        xTextField13.setName("entity.currentaddress.zipcode");
-        xTextField13.setPreferredSize(new java.awt.Dimension(75, 20));
-        xTextField13.setRequired(true);
-        xFormPanel2.add(xTextField13);
+        xTextField6.setCaption("Previous Address");
+        xTextField6.setCaptionWidth(120);
+        xTextField6.setHint("Street");
+        xTextField6.setName("entity.previousaddress");
+        xTextField6.setPreferredSize(new java.awt.Dimension(395, 20));
+        xFormPanel2.add(xTextField6);
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -168,14 +149,14 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(xFormPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                .add(xFormPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(xFormPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .add(xFormPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -184,20 +165,18 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -211,15 +190,12 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
-    private com.rameses.rcp.control.XFormPanel xFormPanel5;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField10;
-    private com.rameses.rcp.control.XTextField xTextField11;
-    private com.rameses.rcp.control.XTextField xTextField12;
-    private com.rameses.rcp.control.XTextField xTextField13;
     private com.rameses.rcp.control.XTextField xTextField2;
     private com.rameses.rcp.control.XTextField xTextField3;
     private com.rameses.rcp.control.XTextField xTextField5;
+    private com.rameses.rcp.control.XTextField xTextField6;
     // End of variables declaration//GEN-END:variables
     
 }

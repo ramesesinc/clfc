@@ -23,6 +23,9 @@ class NewLoanAppService
 	@Service('SequenceService') 
 	def seqSvc;
 
+	@Service('LoanAppUtil')
+	def loanAppUtil;
+
 	@Env 
 	def env;
 
@@ -39,20 +42,31 @@ class NewLoanAppService
 	} 
 
 	@ProxyMethod 
-	public def create(data) { 	
+	public void checkBorrowerForExistingLoan( params ) {
+		loanAppUtil.checkBorrowerForExistingLoan( params ); 
+	}
+
+
+	@ProxyMethod 
+	public def create(data) { 
+		//verify the borrower first 
+		checkBorrowerForExistingLoan([borrowerid: data.borrower.objid]); 
+
 		if (data.clienttype == 'MARKETED' && !data.marketedby) 
 			throw new Exception('Please specify marketedby'); 
 
 		data.branch = [code: env.ORGID, name: env.ORGNAME];
 		data.dtcreated = dateSvc.serverDate.toString();
 		data.createdby = env.USERID; 
+		data.version = 1;		
 		data.state = 'INCOMPLETE'; 
-		data.version = 1;
+		data.remarks = 'PURPOSE: ' + data.purpose;
 
 		def seqno = seqSvc.getNextSeries('loan'); 
 		data.loanno = data.branch.code + addLeadingChars(seqno,'0',8); 
 		data.appno = data.loanno + addLeadingChars(data.version,'0',2); 
-		data = loanapp.create(data); 
+		loanapp.create(data); 
+		loanapp.create(data, 'loanapp_new'); 
 
 		buildSearchIndex(data); 
 		buildBorrower(data);
@@ -60,17 +74,26 @@ class NewLoanAppService
 	} 
 
 	private void buildSearchIndex(data) { 
-		def name = new StringBuffer();
-		name.append(data.borrower.lastname + ', ' + data.borrower.firstname); 
+		def name = new StringBuffer(data.borrower.lastname + ', ' + data.borrower.firstname);
 		if (data.borrower.middlename) name.append(' ' + data.borrower.middlename);
 
-		data.fullborrowername = name.toString();
-		data.dtposted = data.dtcreated; 
-		data.postedby = data.createdby;
-		data.branchcode = data.branch.code;
-		data.branchname = data.branch.name;
-		loanapp.create(data, 'search_index'); 
-	}
+		data.fullborrowername = name.toString(); 
+		data.dtposted = data.dtcreated;  
+		data.postedby = data.createdby; 
+		data.branchcode = data.branch.code; 
+		data.branchname = data.branch.name; 
+		loanapp.create(data, 'search'); 
+
+		def searchvalues = [data.appno, data.borrower.name]; 
+		for (sval in searchvalues) {
+			def o = [
+				objid: 'IDX' + new UID(), 
+				appid: data.objid, 
+				searchtext: sval 
+			];
+			loanapp.create(o, 'search_index'); 		
+		} 
+	} 
 
 	private void buildBorrower(data) { 
 		def o = borrower.findByObjid([objid: data.borrower.objid]); 
@@ -82,23 +105,14 @@ class NewLoanAppService
 		}
 		
 		o = [
-			objid: 		 'LB' + new UID(), 
-			parentid: 	 data.objid, 
-			borrowerid:  data.borrower.objid, 
-			principalid: data.borrower.objid,
-			type:        'PRINCIPAL' 
+			objid: 		  'LB' + new UID(), 
+			parentid: 	  data.objid, 
+			borrowerid:   data.borrower.objid, 
+			borrowername: data.borrower.name, 
+			principalid:  data.borrower.objid,
+			type:         'PRINCIPAL' 
 		];
 		loanapp_borrower.create(o); 
-
-		o = [
-			objid: 'BIDX' + new UID(), 
-			loanappid: data.objid, 
-			loanappno: data.appno, 
-			borrowerid: data.borrower.objid, 
-			borrowername: data.borrower.name, 
-			borrowertype: 'PRINCIPAL' 
-		];
-		loanapp.create(o, 'borrower_index'); 
 	}	
 
 	private String addLeadingChars(value, schar, length) {

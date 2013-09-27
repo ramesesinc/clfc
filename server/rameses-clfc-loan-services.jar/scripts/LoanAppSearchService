@@ -10,30 +10,20 @@ class LoanAppSearchService
 	@ProxyMethod 
 	public List getColumns( params ) {
 		return [
-			[name:'appno', caption:'App No.'],
-			[name:'dtcreated', caption:'Date Applied'],
+			[name:'appno', caption:'App No.', width:120, maxWidth:120],
+			[name:'dtcreated', caption:'Date Applied', width:140, maxWidth:140],
 			[name:'fullborrowername', caption:'Borrower Name'],
-			[name:'loanamount', caption:'Applied Amount'] 
+			[name:'loanamount', caption:'Applied Amount', width:100, maxWidth:100, type:'decimal'], 
+			//a spacer column 
+			[name:null, caption:''] 
 		];
 	}
-
-	def searchTypes = [
-		[filter:' bi.borrowername LIKE $P{searchtext} AND ', orderby:' si.fullborrowername '], 
-		[filter:' bi.loanappno LIKE $P{searchtext} AND ', orderby:' si.appno '] 
-	];
 
 	@ProxyMethod 
 	public List getList( params ) { 
 		params.searchtext = (params.searchtext? params.searchtext: '')+'%'; 
 		params.state = (params.state? param.state: params._tag);		
-		for (o in searchTypes) {
-			params.putAll(o); 
-			def list = em.getList(params);
-			if (list.isEmpty()) continue;
-
-			return list;  
-		} 
-		return [];
+		return em.getList(params); 
 	}
 
 }

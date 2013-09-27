@@ -36,8 +36,6 @@ class LoanAppService
 		def data = findByObjid(params); 
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found');
 
-		//println 'params -> '+params;
-		//throw new Exception('stopping');
 		loanapp.update(params);
 		if(params.route) loanapp.update(params, 'route');
 
