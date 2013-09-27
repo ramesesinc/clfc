@@ -1,0 +1,17 @@
+<workunit>
+    <invokers>
+        <invoker folderid="explorer/report/clfc" caption="Loan Ledgers" action="init"/>
+        
+        <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W" visibleWhen="#{mode == 'mgmt'}"/>
+        <invoker type="formActions" action="view" caption="View" mnemonic="v" shortcut="ctrl V" visibleWhen="#{mode == 'mgmt'}"/>
+        
+        <invoker type="formActions" action="back" caption="Back" mnemonic="b" shortcut="ctrl B" visibleWhen="#{mode == 'view'}"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.report.controller.BorrowerLedgerReportController"/>
+    
+     <pages>
+         <page template="com.rameses.clfc.report.LoanLedgerPage"/>
+         <page template="com.rameses.osiris2.common.ui.ReportPreviewPage" name="preview"/>
+     </pages>
+</workunit>
