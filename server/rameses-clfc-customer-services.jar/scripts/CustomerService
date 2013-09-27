@@ -28,8 +28,6 @@ class CustomerService
 	@ProxyMethod
 	public def create(data) {
 		data.dtcreated = dateSvc.serverDate.toString(); 
-		def syear = data.dtcreated.split('-')[0]; 
-
 		data.type = 'INDIVIDUAL';
 		data.state = 'ACTIVE';
 		data.mode = 'ONLINE';
@@ -47,8 +45,10 @@ class CustomerService
 	@ProxyMethod
 	public def update(data) {
 		data.type = 'INDIVIDUAL';
+		data.dtmodified = dateSvc.serverDate.toString(); 
+		data.modifiedby = env.USER; 
 		return entitySvc.update(data); 
-	}
+	} 
 
 
 	def searchTypes = [
@@ -69,7 +69,13 @@ class CustomerService
 			if (!list.isEmpty()) return list; 
 		}
 		return [];
+	} 
+
+	@ProxyMethod
+	public def getConnections( params ) {
+		return em.getConnections(params); 
 	}
+
 
     private String removeLeadingChar(String text, def ch) {
     	if (text == null) return "";

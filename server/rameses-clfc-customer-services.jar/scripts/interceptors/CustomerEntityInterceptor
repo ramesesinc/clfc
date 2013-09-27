@@ -21,4 +21,20 @@ class CustomerEntityInterceptor
 
 		customer.create(result); 
 	}	
+
+	@After(pattern="EntityService.update")
+	public void afterUpdate( evt ) {
+		def result = evt.result;
+		if (!'individual'.equalsIgnoreCase(result.type+'')) return;
+
+		customer.update(result); 
+	} 
+
+	@After(pattern="EntityService.removeEntity")
+	public void afterRemove( evt ) {
+		def result = evt.result;
+		if (!'individual'.equalsIgnoreCase(result.type+'')) return;
+
+		customer.delete(result); 
+	} 
 }
