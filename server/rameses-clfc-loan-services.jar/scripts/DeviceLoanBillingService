@@ -9,8 +9,14 @@ class DeviceLoanBillingService
 	@ActiveDB(value="loan_ledger")
 	def ledger;
 
+	@ActiveDB(value="loan_payment_temp")
+	def payment_temp;
+
 	@Service('DateService')
-	def dateService;
+	def dateSvc;
+
+	@Service('SequenceService') 
+	def seqSvc;
 
 	@ProxyMethod
 	public def getRoutes(params) {
@@ -22,27 +28,46 @@ class DeviceLoanBillingService
 
 
 	@ProxyMethod
-	public def getCollectionsheets(params) {
+	public def downloadBilling(params) {
 		if(!params.route_code) throw new Exception('Please specify route code');
 		def result = ledger.getCollectionsheets(params);
-		def list = [];
-		def currentDate = dateService.parseCurrentDate();
+		def currentDate = dateSvc.parseCurrentDate();
 		def days;
+		def list = [];
 		result.each{
-			def dtlastpaid = dateService.parseDate(it.dtlastpaid, null);
-			days = dateService.getDaysDiff(dtlastpaid.date, currentDate.date)-1;
-			println 'days = '+days;
+			def dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null);
+			days = dateSvc.getDaysDiff(dtlastpaid.date, currentDate.date)-1;
+			it.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8); 
 			it.amountdue = it.dailydue*days;
 			list.add(it);
 		}
-		return list;
+		def map = [sessionid: new java.rmi.server.UID().toString(), list: list];
+		return map;
 	}
 
 	@ProxyMethod
 	public def uploadPayments(params) {
 		if(!params.payments) throw new Exception('Payments are required');
-		params.payments.each{ println it }
-		def response = "Successfully uploaded payments!";
-		return response;
+		def result = [:];
+		def list = [];
+		def date = dateSvc.serverDate;
+		params.payments.each{ 
+			def data = [
+				objid: 		'TMP'+new java.rmi.server.UID(),
+				dtcreated: 	date,
+				refid: 		it.sessionid,
+				refno: 		it.refno,
+				appid: 		it.loanappid,
+				paytype: 	it.type,
+				payamount: 	it.amount
+			]
+			def txndate = dateSvc.parse("MMM-dd-yyyy", it.txndate);
+			txndate = dateSvc.parse("yyyy-mm-dd", txndate);
+			data.txndate = txndate;
+			payment_temp.create(data);
+			list.add(it.loanappid); 
+		}
+		result.list = list;
+		return result;
 	}
 }

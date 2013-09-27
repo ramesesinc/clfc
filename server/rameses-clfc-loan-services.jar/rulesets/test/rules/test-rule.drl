@@ -1,0 +1,12 @@
+package test;
+
+declare Test
+	day:int
+end
+
+rule "test-rule"
+	when
+		Test()
+	then
+		System.out.println("calling rule");
+end
