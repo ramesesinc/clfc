@@ -37,7 +37,7 @@ public class NewLoanAppSuccessPage extends javax.swing.JPanel {
         xLabel1.setAntiAliasOn(true);
         xLabel1.setFontStyle("font-size:18;");
         xLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel1.setText("<html><center>Your application has been successfully processed.<br> Please refer to the information below.</center></html>");
+        xLabel1.setText("<html><center>Your application has been successfully saved.<br> Please refer to the information below.</center></html>");
         xLabel1.setUseHtml(true);
 
         com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();

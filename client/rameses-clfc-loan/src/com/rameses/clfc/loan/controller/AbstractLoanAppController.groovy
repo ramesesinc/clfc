@@ -26,8 +26,17 @@ public abstract class AbstractLoanAppController
             binding.refresh('entity.marketedby');
         }
     ]
-    
-    def customerLookupHandler = InvokerUtil.lookupOpener('customer:search', [:]);
+
+    def routeLookupHandler = InvokerUtil.lookupOpener('route:lookup', [:]);
+    def customerLookupHandler = InvokerUtil.lookupOpener('customer:search', [
+        onselect: {o-> 
+            service.checkBorrowerForExistingLoan([borrowerid: o.objid]); 
+            entity.borrower = o; 
+        }, 
+        onempty: { 
+            entity.borrower = [:]; 
+        }
+    ]);
     
     def save() {
         if (entity.clienttype == 'MARKETED') {
@@ -48,6 +57,8 @@ public abstract class AbstractLoanAppController
     def close() {
         return '_close';
     }
+    
+    void init() {}
     
     def create() {
         mode = 'create';

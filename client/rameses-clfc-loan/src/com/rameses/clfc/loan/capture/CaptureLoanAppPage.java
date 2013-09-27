@@ -51,6 +51,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xNumberField1 = new com.rameses.rcp.control.XNumberField();
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xDateField1 = new com.rameses.rcp.control.XDateField();
+        xLookupField2 = new com.rameses.rcp.control.XLookupField();
         jScrollPane3 = new javax.swing.JScrollPane();
         xTextArea3 = new com.rameses.rcp.control.XTextArea();
         xLabel12 = new com.rameses.rcp.control.XLabel();
@@ -71,7 +72,6 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xLookupField1.setName("entity.borrower");
         xLookupField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xLookupField1.setRequired(true);
-        xLookupField1.setReturnFields("objid,custno,branchid,name,lastname,firstname,middlename,gender,birthdate,citizenship,civilstatus,address");
         xFormPanel1.add(xLookupField1);
 
         xLabel1.setBackground(new java.awt.Color(250, 250, 250));
@@ -95,7 +95,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xLabel2.setDepends(new String[] {"entity.borrower"});
         xLabel2.setExpression("#{entity.borrower.birthdate}");
         xLabel2.setOpaque(true);
-        xLabel2.setPreferredSize(new java.awt.Dimension(100, 20));
+        xLabel2.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel1.add(xLabel2);
 
         xFormPanel2.setCellspacing(1);
@@ -186,6 +186,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xComboBox3.setCaption("App. Type");
         xComboBox3.setCaptionWidth(100);
         xComboBox3.setExpression("#{item.value}");
+        xComboBox3.setFontStyle("font-size:12");
         xComboBox3.setItemKey("value");
         xComboBox3.setItems("appTypes");
         xComboBox3.setName("entity.apptype");
@@ -197,6 +198,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xComboBox1.setCaption("Client Type");
         xComboBox1.setCaptionWidth(100);
         xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setFontStyle("font-size:12");
         xComboBox1.setImmediate(true);
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("clientTypes");
@@ -217,6 +219,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xComboBox2.setCaption("Product Type");
         xComboBox2.setCaptionWidth(100);
         xComboBox2.setExpression("#{item.name}");
+        xComboBox2.setFontStyle("font-size:12");
         xComboBox2.setItems("productTypes");
         xComboBox2.setName("entity.producttype");
         xComboBox2.setPreferredSize(new java.awt.Dimension(210, 20));
@@ -227,6 +230,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
         xNumberField1.setCaptionWidth(100);
         xNumberField1.setDepends(new String[] {"entity.producttype"});
         xNumberField1.setFieldType(Integer.class);
+        xNumberField1.setFontStyle("font-size:12");
         xNumberField1.setName("entity.producttype.term");
         xNumberField1.setPattern("#,##0");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 20));
@@ -235,6 +239,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
 
         xDecimalField1.setCaption("Amount Applied");
         xDecimalField1.setCaptionWidth(100);
+        xDecimalField1.setFontStyle("font-size:12");
         xDecimalField1.setName("entity.loanamount");
         xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField1.setRequired(true);
@@ -242,10 +247,19 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
 
         xDateField1.setCaption("Date Released");
         xDateField1.setCaptionWidth(100);
+        xDateField1.setFontStyle("font-size:12");
         xDateField1.setName("entity.dtreleased");
-        xDateField1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDateField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xDateField1.setRequired(true);
         xFormPanel5.add(xDateField1);
+
+        xLookupField2.setCaption("Route");
+        xLookupField2.setCaptionWidth(100);
+        xLookupField2.setExpression("#{item.code}");
+        xLookupField2.setHandler("routeLookupHandler");
+        xLookupField2.setName("entity.route");
+        xLookupField2.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel5.add(xLookupField2);
 
         jScrollPane3.setPreferredSize(new java.awt.Dimension(0, 50));
         xTextArea3.setCaption("Purpose of Loan");
@@ -436,6 +450,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
     private com.rameses.rcp.control.XLookupField xLookupField1;
+    private com.rameses.rcp.control.XLookupField xLookupField2;
     private com.rameses.rcp.control.XNumberField xNumberField1;
     private com.rameses.rcp.control.XTextArea xTextArea3;
     private com.rameses.rcp.control.XTextField xTextField1;

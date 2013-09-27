@@ -14,10 +14,10 @@ class CaptureLoanAppController extends AbstractLoanAppController
     @PropertyChangeListener
     def listener = [
         "entity.apptype": {o->
-            if(o == 'NEW') {
-                entity.previousloans
-                previousLoansHandler.reload();
-            }
+            if (o == 'NEW') { 
+                entity.previousloans?.clear(); 
+                previousLoansHandler.reload(); 
+            } 
         }
     ]
     
@@ -26,6 +26,7 @@ class CaptureLoanAppController extends AbstractLoanAppController
         entity.appmode = 'CAPTURE';
         entity.previousloans = [];
         productTypes = entity.productTypes;
+        println 'entity-> ' + entity;
     }
     
     def save() {

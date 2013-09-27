@@ -20,7 +20,7 @@ class NewLoanApplicationController extends AbstractLoanAppController
         productTypes = entity.productTypes;
     }
     
-    def getTitle() { return 'Loan Application: ' + entity.mode; }
+    def getTitle() { return 'Loan Application: ' + entity.appmode; }
     
     protected def getService() { return service; }
 }
