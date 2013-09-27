@@ -1,7 +1,22 @@
-<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
-    entityName="loanapp" tag="cancelled_out">
+<workunit extends="wtemplates/ListController.xml">
     
     <invokers>
         <invoker folderid="/explorer/afterfla" caption="Cancelled Out" permission="system" index="5"/>
-   </invokers>
+    </invokers>
+   
+    <code>
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;      
+    
+    class ApprovedLoanSearchService extends ListController 
+    {
+        String serviceName = 'LoanAppSearchService';
+        String entityName = 'loanapp';
+        String tag = 'cancelled_out';
+        
+        boolean allowCreate = false;
+    }     
+    </code>   
 </workunit>
