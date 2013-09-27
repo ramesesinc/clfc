@@ -3,14 +3,14 @@ import com.rameses.common.*;
 import com.rameses.services.extended.*;
 import java.rmi.server.UID;
 
-class LoanLedgerService 
+class LoanLedgerService extends ActiveListService
 {	
 	@ActiveDB(value='loan_ledger')
-	def ledger;
+	def em;
 
 	@ProxyMethod 
 	public def create(data) { 
-		def loancount = ledger.findLoanCountByAcctid([acctid: data.acctid]).loancount; 
+		def loancount = em.findLoanCountByAcctid([acctid: data.acctid]).loancount; 
 		data.loancount = loancount+1;
 		data.totalprincipal = data.loanamount; 
 		data.dailydue = computeDailyDue(data);
@@ -18,8 +18,7 @@ class LoanLedgerService
 		data.absentpenalty = computeAbsentPenalty(data);
 		data.overduepenalty = 0.0;
 		data.totaldue = 0.0;
-		println 'create-> ' + data;
-		ledger.create(data);
+		em.create(data);
 	}
 
 	private def roundOffAmount(amt) {
@@ -62,4 +61,7 @@ class LoanLedgerService
 		return roundOffAmount(result.setScale(2));
 	}
 
+	void beforeList(params) {
+		println 'before list'
+	}
 }

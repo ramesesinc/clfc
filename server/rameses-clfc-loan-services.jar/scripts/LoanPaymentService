@@ -1,0 +1,362 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.server.common.*;
+import com.rameses.rules.common.RuleRequest;
+import java.rmi.server.UID;
+
+class LoanPaymentService
+{
+	@ActiveDB(value="loan_payment_temp")
+	def payment_temp;
+
+	@ActiveDB(value="loan_ledger")
+	def ledgerdb;
+
+	@ActiveDB(value="loan_product_type")
+	def product_type;
+
+	@Resource("RuleService")
+	def ruleSvc;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def getUnpostedPayments(params) {
+		if(!params.route_code) throw new Exception('Route code is required');
+		return payment_temp.getListByRouteId(params);
+	}
+
+	@ProxyMethod
+	public def postPayment(params) {
+		if(!params.appid) throw new Exception("App. id is required");
+		def data = [:];
+		def ledger = ledgerdb.findByAppId(params);
+		def producttype = product_type.read([name: ledger.producttypeid]);
+		def ledgeritem = ledgerdb.findLastLedgerItemByParentId([parentid: ledger.objid]);
+		//println 'ledger item = '+ledgeritem;
+		String interval = "1";
+		if(ledgeritem) interval = ledgeritem.day+"";
+		def date = dateSvc.add(ledger.dtstarted, interval);
+		def txndate = dateSvc.parseDate(params.txndate, null).date;
+		def days = dateSvc.getDaysDiff(date, txndate);
+
+		def ref = [
+			term: producttype.term,
+			amountDue: ledger.dailydue,
+			interest: ledger.interestamount,
+			absentPenalty: ledger.absentpenalty,
+			balance: ledger.totalprincipal,
+			overduePenalty: ledger.overduepenalty,
+			underpaymentRate: producttype.underpaymentpenalty
+		]
+
+		def item;
+		def isCompromise = ledger.compromiseid? true : false;
+
+		data.totalDays = days;
+		data.lackingInterest = 0;
+		data.lackingPenalty = 0;
+		data.type = params.paytype;
+		data.isCompromise = isCompromise? 1 : 0;
+		if(ledgeritem) {
+			data.lackingInterest = ledgeritem.interestbal;
+			data.lackingPenalty = ledgeritem.penaltybal;
+			//println 'ledgeritem day: '+ledgeritem.day;
+			data.currentDay = ledgeritem.day;
+			if(data.lackingInterest == 0 && data.lackingPenalty == 0) data.currentDay++;
+			data.totalDays += ledgeritem.day;
+			if(ledgeritem.balance > 0) ref.balance = ledgeritem.balance;
+		}
+		if(!data.currentDay || data.currentDay == 0) data.currentDay = 1;
+		data.amountPaid = params.payamount;
+		def req = new RuleRequest("loan");
+		def paymentFact = [
+			days: 1,
+			balance: ref.balance,
+			currentDay: data.currentDay
+		];
+		def referencesFact = [
+			underpaymentRate: producttype.underpaymentpenalty,
+			term: producttype.term,
+			absentPenalty: ledger.absentpenalty,
+			overduePenalty: ledger.overduepenalty,
+			amountDue: ledger.dailydue
+		];
+		def compromiseFact = [:];
+		def results = [];
+		def lastPayment = [:];
+		def floating = [:];
+
+		req.addFact("loan", "Payment", paymentFact); 
+		req.addFact("loan", "References", referencesFact);
+		req.addFact("loan", "Compromise", compromiseFact);
+		req.addGlobal("results", results);
+		req.addGlobal("lastPayment", lastPayment);
+		req.addGlobal("floating", floating);
+
+		lastPayment.datePaid = ledger.dtlastpaid? dateSvc.parseDate(ledger.dtlastpaid, null).date : null;
+
+		referencesFact.type = data.type;
+		referencesFact.interest = ref.interest;
+		referencesFact.hasSunday = "false";
+		referencesFact.noOfHolidays = 0;
+		compromiseFact.isCompromise = data.isCompromise;
+
+		if(txndate == lastPayment.datePaid) {
+			data.amountPaid += ledgeritem.amtpaid;
+			data.totalPayment = ledgeritem.amtdue;
+			data.days = ledgeritem.day;
+			paymentFact.balance = ledgeritem.balance;
+			def itm = ledgerdb.findLastLedgerItemNotSameDatePaid([parentid: ledger.objid, dtpaid: params.txndate]);
+			if(itm) {
+				data.currentDay = itm.day+1;
+				paymentFact.balance = itm.balance;
+			}
+			item = offsetLastPayment([item: data, ref: ref, lastledgeritem: ledgeritem]);
+			referencesFact.isOffset = 1;
+			paymentFact.lackingInterest = ledgeritem.interestbal;
+			paymentFact.lackingPenalty = ledgeritem.penaltybal;
+			referencesFact.amountPaid = item.amountPaid;
+			if(item.trialAndError == 0) paymentFact.days = 1;
+
+			lastPayment.days = data.days+1;
+			lastPayment.currentDay = ledgeritem.day;
+			lastPayment.totaldays = item.totaldays;
+			lastPayment.amountPaid = data.amountPaid;
+		} else {
+			lastPayment.totaldays = 0;
+			//println 'data = '+data;
+			item = preComputation(data, ref);
+			lastPayment.lackingInterest = item.lackingInterest;
+			referencesFact.amountPaid = item.amountPaid;
+			paymentFact.days = 1;
+			referencesFact.isOffset = 0;
+			lastPayment.amountPaid = data.amountPaid;
+			paymentFact.totalInterest = 0;
+			paymentFact.totalPenalty = 0;
+			paymentFact.lackingInterest = item.lackingInterest;
+			paymentFact.lackingPenalty = item.lackingPenalty;
+		}
+
+		paymentFact.amountPaid = item.amountPaid;
+		referencesFact.totalPayment = item.totalPayment;
+		referencesFact.totalDays = item.totalDays;
+		referencesFact.trialAndError = item.trialAndError;
+		referencesFact.isOverdue = item.isOverdue;
+		ruleSvc.execute( req );
+		def lastitem = results[results.size()-1];
+		if(lastitem) {
+			lastitem.refno = params.refno;
+			lastitem.dtpaid = params.txndate;
+			lastitem.interestbal = new BigDecimal(floating.lackingInterest).setScale(2, BigDecimal.ROUND_HALF_UP)
+			lastitem.penaltybal = new BigDecimal(floating.lackingPenalty).setScale(2, BigDecimal.ROUND_HALF_UP);
+		}
+				
+		results.each{
+			//if(it.penalty) it.penalty = new BigDecimal(it.penalty+'').setScale(2, BigDecimal.ROUND_HALF_UP);
+			//println it
+			def itm = createLedgerItem(ledger);
+			if(it.payment) 
+				itm.amtdue = new BigDecimal(it.payment).setScale(2, BigDecimal.ROUND_HALF_UP);
+			else itm.amtdue = 0.00;
+			itm.amtpaid = itm.amtdue;
+
+			if(it.interestPaid)
+				itm.interestdue  = new BigDecimal(it.interestPaid).setScale(2, BigDecimal.ROUND_HALF_UP);
+			else itm.interestdue = 0.00;
+			itm.interestpaid = itm.interestdue;
+
+			if(itm.penalty)
+				itm.penaltydue = new BigDecimal(it.penalty).setScale(2, BigDecimal.ROUND_HALF_UP);
+			else itm.penaltydue = 0.00;
+			itm.penaltypaid = itm.penaltydue;
+
+			itm.amtbal = 0.00;
+			itm.interestbal = it.interestbal? it.interestbal : 0.00;
+			itm.penaltybal = it.penaltybal? it.penaltybal : 0.00;
+
+			itm.dtpaid = it.dtpaid? it.dtpaid : null;
+			itm.refno = it.refno? it.refno : null;
+			itm.day = it.day? it.day : data.currentDay;
+			itm.balance = it.balance? it.balance : ref.balance;
+			itm.balance = new BigDecimal(itm.balance).setScale(2, BigDecimal.ROUND_HALF_UP);
+			itm.partialpayment = it.partialPayment? new BigDecimal(it.partialPayment).setScale(2, BigDecimal.ROUND_HALF_UP) : 0.00;
+			//println 'item-> '+itm;
+			ledgerdb.create(itm, "detail");
+		}		
+		ledgerdb.updateDtlastpaid([objid: ledger.objid, dtlastpaid: params.txndate]);
+	}
+
+	private def createLedgerItem( ledger ) {
+		def ledgeritem = [
+			objid: 			'LDGRITM'+new UID(),
+			parentid: 		ledger.objid,
+			state: 			'RECEIVED'
+		]
+		return ledgeritem;
+	}
+
+	private def preComputation(params, ref) {
+		def item = params;
+		//println 'pass 1'
+		if( params.totalDays <= ref.term ) {
+			def totaldays = params.totalDays-(params.currentDay-1);
+			if( totaldays < 1 ) totaldays = 1;
+			item.totalDays = totaldays;
+			//println "1total days: "+item.totalDays;
+			item.totalPayment = ref.amountDue*item.totalDays;
+			item.isOverdue = 0;
+		//println 'pass 2'
+			if( item.amountPaid < item.totalPayment ) {
+				//println "total days: "+item.totalDays;
+				def td = item.totalDays;
+				def totalInterest;
+				def totalAbsentPenalty;
+				def tempAmount;
+				def balance;
+				def underpayment;
+				while( td > 1 ) {
+					tempAmount = item.amountPaid;
+					totalInterest = ref.interest*td;
+					if( item.lackingInterest > 0 ) {
+						totalInterest -= ref.interest;
+						totalInterest += item.lackingInterest;
+					}
+					if( tempAmount > totalInterest ) {
+						tempAmount -= totalInterest;
+						if( tempAmount > item.lackingPenalty ) {
+							tempAmount -= item.lackingPenalty;
+							totalAbsentPenalty = ref.absentPenalty*td;
+							if( td == item.totalDays ) totalAbsentPenalty -= ref.absentPenalty;
+							if( tempAmount > totalAbsentPenalty ) {
+								tempAmount -= totalAbsentPenalty;
+								balance = (ref.amountDue*td) - item.amountPaid;
+								underpayment = balance*ref.underpaymentRate;
+								if( tempAmount > underpayment ) break;
+							}
+						}
+					}
+					td--;
+				}
+				if( td == item.totalDays ) item.trialAndError = 2;
+				else item.trialAndError = 1;
+				item.totalDays = td;
+				item.totalPayment = item.amountPaid;
+			}
+			else {
+				item.trialAndError = 0;
+			}
+		} 
+		else {
+		//println 'pass 3'
+			item.isOverdue = 1;
+			def totaldays = params.totalDays-(params.currentDay-1);
+			if( totaldays < 1 ) totaldays = 1;
+			item.totalDays = totaldays;
+			def td = item.totalDays;
+			def deductions;
+			def tempAmount;
+			while( td > 1 ) {
+				tempAmount = item.amountPaid;
+				if( item.lackingInterest > 0 ) tempAmount -= item.lackingInterest;
+				if( item.lackingPenalty > 0 ) tempAmount -= item.lackingPenalty;
+				deductions = (ref.interest+ref.overduePenalty)*td;
+				if( tempAmount > deductions ) break;
+				td--;
+			}
+			item.totalDays = td;
+		}
+		return item;
+	}
+
+	private def offsetLastPayment( params ) {
+		def ledgeritem = params.lastledgeritem;
+		def itm = createLedgerItem([objid: ledgeritem.parentid]);
+		itm.state = 'OFFSET';
+		itm.amtdue = ledgeritem.amtdue;
+		itm.interestdue = ledgeritem.interestdue;
+		itm.penaltydue = ledgeritem.penaltydue;
+		itm.amtpaid = ledgeritem.amtpaid;
+		itm.interestpaid = ledgeritem.interestpaid;
+		itm.penaltypaid = ledgeritem.penaltypaid;
+		itm.amtbal = ledgeritem.amtbal;
+		itm.interestbal = ledgeritem.interestbal;
+		itm.penaltybal = ledgeritem.penaltybal;
+		itm.day = ledgeritem.day;
+		itm.balance = ledgeritem.balance;
+		itm.partialpayment = ledgeritem.partialpayment;
+		ledgerdb.create(itm, 'detail');
+
+		def item = params.item;
+		def ref = params.ref;
+		//println item;
+		//println "item: "+item;
+		if( item.totalDays <= ref.term ) {
+			def totaldays = item.totalDays-(item.currentDay-1);
+			if( totaldays < 1 ) totaldays = 1;
+			item.totalDays = totaldays;
+			item.totalPayment = ref.amountDue*item.totalDays;
+			item.isOverdue = 0;
+			if( item.amountPaid < item.totalPayment ) {
+				def td = item.totalDays;
+				def totalInterest;
+				def totalAbsentPenalty;
+				def tempAmount;
+				def balance;
+				def underpayment;
+				while( td > 1 ) {
+					tempAmount = item.amountPaid;
+					totalInterest = ref.interest*td;
+					if( item.lackingInterest > 0 ) {
+						totalInterest -= ref.interest;
+						totalInterest += item.lackingInterest;
+					}
+					if( tempAmount > totalInterest ) {
+						tempAmount -= totalInterest;
+						if( tempAmount > item.lackingPenalty ) {
+							tempAmount -= item.lackingPenalty;
+							totalAbsentPenalty = ref.absentPenalty*td;
+							if( td == item.totalDays ) totalAbsentPenalty -= ref.absentPenalty;
+							if( tempAmount > totalAbsentPenalty ) {
+								tempAmount -= totalAbsentPenalty;
+								balance = (ref.amountDue*td)-item.amountPaid;
+								underpayment = balance*ref.underpaymentRate;
+								if( tempAmount > underpayment ) break;
+							}
+						}
+					}
+					td--;
+				}
+				if( td == item.totalDays ) item.trialAndError = 2;
+				else item.trialAndError = 1;
+				item.totalDays = td;
+				item.totalPayment = item.amountPaid;
+			}
+			else {
+				item.totaldays = Integer.valueOf((item.amountPaid/ref.amountDue).intValue());
+				item.trialAndError = 0;
+			}
+		} 
+		else {
+			item.isOverdue = 1;
+			def totaldays = item.totalDays-(item.currentDay-1);
+			if( totaldays < 1 ) totaldays = 1;
+			item.totalDays = totaldays;
+			def td = item.totalDays;
+			def deductions;
+			def tempAmount;
+			while( td > 1 ) {
+				tempAmount = item.amountPaid;
+				if( item.lackingInterest > 0 ) tempAmount -= item.lackingInterest;
+				if( item.lackingPenalty > 0 ) tempAmount -= item.lackingPenalty;
+				deductions = (interest+ref.overduePenalty)*td;
+				if( tempAmount > deductions ) break;
+				td--;
+			}
+			item.totalDays = td;
+			item.days--;
+		}
+		return item;
+	}
+}
