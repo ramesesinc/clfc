@@ -26,7 +26,6 @@ class CaptureLoanAppController extends AbstractLoanAppController
         entity.appmode = 'CAPTURE';
         entity.previousloans = [];
         productTypes = entity.productTypes;
-        println 'entity-> ' + entity;
     }
     
     def save() {

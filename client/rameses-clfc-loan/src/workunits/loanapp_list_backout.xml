@@ -14,7 +14,7 @@
     {
         String serviceName = 'LoanAppSearchService';
         String entityName = 'loanapp';
-        String tag = 'back_out';
+        String tag = 'BACK_OUT';
         
         boolean allowCreate = false;
     }     

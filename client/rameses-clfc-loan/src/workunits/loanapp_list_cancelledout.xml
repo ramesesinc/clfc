@@ -10,11 +10,11 @@
     import com.rameses.osiris2.client.*;
     import com.rameses.osiris2.common.*;      
     
-    class ApprovedLoanSearchService extends ListController 
+    class CancelledOutLoanSearchService extends ListController 
     {
         String serviceName = 'LoanAppSearchService';
         String entityName = 'loanapp';
-        String tag = 'cancelled_out';
+        String tag = 'CANCELLED_OUT';
         
         boolean allowCreate = false;
     }     

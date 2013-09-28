@@ -239,7 +239,7 @@ public class CaptureLoanAppPage extends javax.swing.JPanel {
 
         xDecimalField1.setCaption("Amount Applied");
         xDecimalField1.setCaptionWidth(100);
-        xDecimalField1.setFontStyle("font-size:12");
+        xDecimalField1.setFontStyle("font-size:14");
         xDecimalField1.setName("entity.loanamount");
         xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField1.setRequired(true);

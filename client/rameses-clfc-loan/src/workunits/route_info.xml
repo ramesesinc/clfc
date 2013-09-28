@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="route:create" action="create" caption="Route" target="popup"/>
-        <invoker type="route:open" action="open" caption="Route" target="popup"/>
+        <invoker type="route:create" action="create" caption="Route" target="popup" resizable="false"/>
+        <invoker type="route:open" action="open" caption="Route" target="popup" resizable="false"/>
     </invokers>
     <code>
         import com.rameses.rcp.common.*;

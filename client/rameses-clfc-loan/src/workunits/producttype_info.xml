@@ -1,7 +1,7 @@
 <workunits>
     <invokers>
-        <invoker type="producttype:create" action="create" caption="Product Type" target="popup"/>
-        <invoker type="producttype:open" action="open" caption="Product Type" target="popup"/>
+        <invoker type="producttype:create" action="create" caption="Product Type" target="popup" resizable="false"/>
+        <invoker type="producttype:open" action="open" caption="Product Type" target="popup" resizable="false"/>
     </invokers>
     <code>
         <![CDATA[

@@ -14,7 +14,7 @@
     {
         String serviceName = 'LoanAppSearchService';
         String entityName = 'loanapp';
-        String tag = 'approved';
+        String tag = 'APPROVED';
         
         boolean allowCreate = false;
     }     

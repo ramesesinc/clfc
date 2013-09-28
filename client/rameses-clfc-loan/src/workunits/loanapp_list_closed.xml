@@ -1,7 +1,22 @@
-<workunit extends="wtemplates/ListController.xml" serviceName="LoanAppSearchService" 
-    entityName="loanapp" tag="closed">
+<workunit extends="wtemplates/ListController.xml">
     
     <invokers>
         <invoker folderid="/explorer/afterfla" caption="Fully Paid" permission="system" index="7"/>
    </invokers>
+   
+    <code>
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;      
+    
+    class ClosedLoanSearchService extends ListController 
+    {
+        String serviceName = 'LoanAppSearchService';
+        String entityName = 'loanapp';
+        String tag = 'CLOSED';
+        
+        boolean allowCreate = false;
+    }     
+    </code>   
 </workunit>
