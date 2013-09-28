@@ -37,10 +37,16 @@ class LoanPaymentService
 		//println 'ledger item = '+ledgeritem;
 		String interval = "1";
 		if(ledgeritem) interval = ledgeritem.day+"";
-		def date = dateSvc.add(ledger.dtstarted, "-1");
-		date = dateSvc.add(date, interval);
+		def dtlastpaid = ledger.dtlastpaid;
+		
+		if(dtlastpaid == null) 
+			dtlastpaid = dateSvc.add(ledger.dtstarted, "-1");
+		else
+			dtlastpaid = dateSvc.parseDate(dtlastpaid, null).date;
+
+		dtlastpaid = dateSvc.add(dtlastpaid, interval);
 		def txndate = dateSvc.parseDate(params.txndate, null).date;
-		def days = dateSvc.getDaysDiff(date, txndate);
+		def days = dateSvc.getDaysDiff(dtlastpaid, txndate);
 
 		def ref = [
 			term: producttype.term,

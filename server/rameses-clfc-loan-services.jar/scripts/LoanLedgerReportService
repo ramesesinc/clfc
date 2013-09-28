@@ -33,6 +33,7 @@ class LoanLedgerReportService
 
 		def flag = false;
 		def prevrefno;
+		def prevbal;
 		payments.each{
 
 			def itm = [
@@ -47,6 +48,9 @@ class LoanLedgerReportService
 				datepaid			: it.dtpaid
 			];
 			if(it.balance == ledger.totalprincipal) {
+				itm.balanceamount = null;
+			}
+			if(it.balance == prevbal) {
 				itm.balanceamount = null;
 			}
 			if(it.partialpayment == 0) {
@@ -71,6 +75,7 @@ class LoanLedgerReportService
 			}
 			if(it.penaltypaid == 0) itm.penaltycharge = null;
 			prevrefno = it.refno;
+			prevbal = it.balance;
 			data.payments.add(itm);
 		}
 
