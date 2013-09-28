@@ -236,12 +236,13 @@ Receipt No.]]></text>
 						y="0"
 						width="57"
 						height="13"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2">					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{paymentschedule}]]></textFieldExpression>
@@ -252,11 +253,12 @@ Receipt No.]]></text>
 						y="0"
 						width="55"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{originalamount}]]></textFieldExpression>
@@ -267,11 +269,12 @@ Receipt No.]]></text>
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{partialpayment}]]></textFieldExpression>
@@ -282,11 +285,12 @@ Receipt No.]]></text>
 						y="0"
 						width="55"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{balanceamount}]]></textFieldExpression>
@@ -297,11 +301,12 @@ Receipt No.]]></text>
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{interestpaid}]]></textFieldExpression>
@@ -312,11 +317,12 @@ Receipt No.]]></text>
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{penaltycharge}]]></textFieldExpression>
@@ -327,11 +333,12 @@ Receipt No.]]></text>
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalpayment}]]></textFieldExpression>
@@ -342,11 +349,12 @@ Receipt No.]]></text>
 						y="0"
 						width="60"
 						height="13"
-						key="textField"/>
-					<box>					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{receiptno}]]></textFieldExpression>
@@ -357,11 +365,12 @@ Receipt No.]]></text>
 						y="0"
 						width="60"
 						height="13"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{datepaid}]]></textFieldExpression>
@@ -372,11 +381,12 @@ Receipt No.]]></text>
 						y="0"
 						width="69"
 						height="13"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{remarks}]]></textFieldExpression>
