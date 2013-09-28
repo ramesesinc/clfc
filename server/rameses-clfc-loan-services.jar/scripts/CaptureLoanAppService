@@ -68,8 +68,10 @@ class CaptureLoanAppService
 		data.appno = data.loanno; 
 		data.appmode = 'CAPTURE'; 
 		data.remarks = data.purpose;
-		data = loanapp.create(data); 
-		data = loanapp.create(data, 'loanapp_capture'); 
+		loanapp.create(data); 
+		loanapp.create(data, 'loanapp_capture'); 
+
+		buildSearchIndex(data);
 		buildBorrower(data);
 		return data; 
 	} 
@@ -79,7 +81,6 @@ class CaptureLoanAppService
 
 		int versionno = 1;
 		for (o in data.previousloans) { 
-			println 'saving previous loan-> version='+versionno;
 			o.objid = 'LOANPRV' + new UID(); 
 			o.state = 'CLOSED'; 
 			o.appno = o.loanno; 
@@ -94,7 +95,30 @@ class CaptureLoanAppService
 			loanapp.create(o, 'loanapp_previous_capture'); 
 			versionno++; 
 		} 
-	}
+	} 
+
+	private void buildSearchIndex(data) { 
+		def name = new StringBuffer(data.borrower.lastname + ', ' + data.borrower.firstname);
+		if (data.borrower.middlename) name.append(' ' + data.borrower.middlename);
+
+		data.fullborrowername = name.toString(); 
+		data.dtposted = data.dtcreated;  
+		data.postedby = data.createdby; 
+		data.branchcode = data.branch.code; 
+		data.branchname = data.branch.name; 
+		data.routecode  = data.route?.code;
+		loanapp.create(data, 'search'); 
+
+		def searchvalues = [data.appno, data.borrower.name]; 
+		for (sval in searchvalues) {
+			def o = [
+				objid: 'IDX' + new UID(), 
+				appid: data.objid, 
+				searchtext: sval 
+			];
+			loanapp.create(o, 'search_index'); 		
+		} 
+	} 	
 
 	private void buildBorrower(data) { 
 		def o = borrower.findByObjid([objid: data.borrower.objid]); 
@@ -106,11 +130,12 @@ class CaptureLoanAppService
 		}
 		
 		o = [
-			objid: 		 'LB' + new UID(), 
-			parentid: 	 data.objid, 
-			borrowerid:  data.borrower.objid, 
-			principalid: data.borrower.objid,
-			type:        'PRINCIPAL' 
+			objid: 		  'LB' + new UID(), 
+			parentid: 	  data.objid, 
+			borrowerid:   data.borrower.objid, 
+			borrowername: data.borrower.name, 
+			principalid:  data.borrower.objid,
+			type:         'PRINCIPAL' 
 		];
 		loanapp_borrower.create(o); 
 	} 
