@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker folderid="explorer/report/clfc" caption="Loan Ledgers" action="init"/>
+        <invoker folderid="explorer/txn/clfc" caption="Loan Ledgers"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W" visibleWhen="#{mode == 'mgmt'}"/>
         <invoker type="formActions" action="view" caption="View" mnemonic="v" shortcut="ctrl V" visibleWhen="#{mode == 'mgmt'}"/>
