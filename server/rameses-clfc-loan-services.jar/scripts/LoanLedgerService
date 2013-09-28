@@ -61,7 +61,7 @@ class LoanLedgerService extends ActiveListService
 		return roundOffAmount(result.setScale(2));
 	}
 
-	void beforeList(params) {
-		println 'before list'
+	void beforeList( params ) {
+		params.searchtext = (params.searchtext? '%'+params.searchtext+'%' : '%');
 	}
 }
