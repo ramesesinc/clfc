@@ -48,7 +48,7 @@
     = DEPLOY DEVLIBS 
     =======================================================-->
     <target name="deploy-project-devlibs" depends="init">
-        <property name="target.downloads.core.dir" value="${workspace.osiris3.dir}/workspace/web/clfc/downloads/modules/core"/>
+        <property name="target.downloads.core.dir" value="${workspace.osiris3.dir}/workspace/web/resources/downloads/modules/core"/>
         <copy file="${devlib.projects.dir}/osiris2-client-themes.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
         <copy file="${devlib.projects.dir}/osiris2-client-ui.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
         <copy file="${devlib.projects.dir}/osiris2-framework.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
@@ -62,7 +62,7 @@
     = DEPLOY SHARED LIBS 
     =======================================================-->
     <target name="deploy-project-sharedlibs" depends="init">
-        <property name="target.downloads.shared.dir" value="${workspace.osiris3.dir}/workspace/web/clfc/downloads/modules/shared"/>
+        <property name="target.downloads.shared.dir" value="${workspace.osiris3.dir}/workspace/web/resources/downloads/modules/shared"/>
         <copy file="${shared.projects.dir}/client/client-libs/client-system.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
         <copy file="${shared.projects.dir}/client/client-libs/client-ui-extended.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
         <copy file="${shared.projects.dir}/client/client-libs/rameses-client-menu.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
