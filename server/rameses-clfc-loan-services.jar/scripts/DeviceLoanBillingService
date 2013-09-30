@@ -46,7 +46,7 @@ class DeviceLoanBillingService
 			it.amountdue = it.dailydue*days;
 			list.add(it);
 		}
-		def map = [sessionid: new java.rmi.server.UID().toString(), list: list];
+		def map = [sessionid: new java.rmi.server.UID().toString(), list: list, serverdate: dateSvc.serverDate];
 		return map;
 	}
 

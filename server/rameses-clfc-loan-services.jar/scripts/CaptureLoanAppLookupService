@@ -7,6 +7,9 @@ class CaptureLoanAppLookupService
 	@ActiveDB(value='loanapp_capture')
 	def em;
 
+	@Service("DateService")
+	def dateSvc;
+
 	@ProxyMethod
 	public def getColumns( params ) { 
 		return [ 
@@ -20,6 +23,10 @@ class CaptureLoanAppLookupService
 		params.searchtext = (params.searchtext? params.searchtext: '')+'%';
 		params._start = (params._start? params.start: 0); 
 		params._limit = (params._limit? params._limit: 10); 
-		return em.getList(params);
+		def list = em.getList(params);
+		list.each{
+			it.dtstarted = dateSvc.add(it.dtreleased)
+		}
+		return list;
 	}
 }

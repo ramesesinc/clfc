@@ -20,6 +20,16 @@
 		<field name="dtlastpaid"/> 
 	</element> 
 
+	<element name="overpayment" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="overpayment" required="true"/>
+	</element>
+
+	<element name="dtlastpaid" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="dtlastpaid" required="true"/>
+	</element>
+
 	<element name="detail" tablename="loan_ledger_detail">
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/>

@@ -21,6 +21,9 @@ class LoanPaymentService
 	@Service("DateService")
 	def dateSvc;
 
+	@Service("HolidayEventCalendarService")
+	def calendarSvc;
+
 	@ProxyMethod
 	public def getUnpostedPayments( params ) {
 		if(!params.route_code) throw new Exception('Route code is required');
@@ -35,18 +38,13 @@ class LoanPaymentService
 		def producttype = product_type.read([name: ledger.producttypeid]);
 		def ledgeritem = ledgerdb.findLastLedgerItemByParentId([parentid: ledger.objid]);
 		//println 'ledger item = '+ledgeritem;
-		String interval = "1";
-		if(ledgeritem) interval = ledgeritem.day+"";
-		def dtlastpaid = ledger.dtlastpaid;
-		
-		if(dtlastpaid == null) 
-			dtlastpaid = dateSvc.add(ledger.dtstarted, "-1");
-		else
-			dtlastpaid = dateSvc.parseDate(dtlastpaid, null).date;
+		def interval = 0;
+		def lastscheduledate = dateSvc.add(ledger.dtstarted, "-1");;
+		if(ledgeritem) interval = ledgeritem.day;
 
-		dtlastpaid = dateSvc.add(dtlastpaid, interval);
+		lastscheduledate = dateSvc.add(lastscheduledate, (interval+1)+'');
 		def txndate = dateSvc.parseDate(params.txndate, null).date;
-		def days = dateSvc.getDaysDiff(dtlastpaid, txndate);
+		def days = dateSvc.getDaysDiff(lastscheduledate, txndate);
 
 		def ref = [
 			term: producttype.term,
@@ -107,7 +105,9 @@ class LoanPaymentService
 		referencesFact.type = data.type;
 		referencesFact.interest = ref.interest;
 		referencesFact.hasSunday = "false";
-		referencesFact.noOfHolidays = 0;
+		def cal = Calendar.getInstance();
+		cal.setTime(txndate);
+		if((cal.get(cal.DAY_OF_WEEK)-1) == 1) referencesFact.hasSunday = "true";
 		compromiseFact.isCompromise = data.isCompromise;
 
 		if(txndate == lastPayment.datePaid) {
@@ -146,23 +146,28 @@ class LoanPaymentService
 			paymentFact.lackingPenalty = item.lackingPenalty;
 		}
 
+		item.hasSunday = referencesFact.hasSunday;
+		item.noOfHolidays = calendarSvc.getNoOfHolidays([item: item, lastscheduledate: lastscheduledate]);
+
 		paymentFact.amountPaid = item.amountPaid;
 		referencesFact.totalPayment = item.totalPayment;
 		referencesFact.totalDays = item.totalDays;
 		referencesFact.trialAndError = item.trialAndError;
 		referencesFact.isOverdue = item.isOverdue;
+		referencesFact.noOfHolidays = item.noOfHolidays;
 		ruleSvc.execute( req );
-		def lastitem = results[results.size()-1];
-		if(lastitem) {
+		def lastitem;
+		if(results.size() > 0) {
+			lastitem = results[results.size()-1];
 			lastitem.refno = params.refno;
 			lastitem.dtpaid = params.txndate;
 			lastitem.interestbal = new BigDecimal(floating.lackingInterest).setScale(2, BigDecimal.ROUND_HALF_UP)
 			lastitem.penaltybal = new BigDecimal(floating.lackingPenalty).setScale(2, BigDecimal.ROUND_HALF_UP);
 		}
-				
+
 		results.each{
 			//if(it.penalty) it.penalty = new BigDecimal(it.penalty+'').setScale(2, BigDecimal.ROUND_HALF_UP);
-			//println it
+			println it
 			def itm = createLedgerItem(ledger);
 			if(it.payment) 
 				itm.amtdue = new BigDecimal(it.payment).setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -192,7 +197,9 @@ class LoanPaymentService
 			//println 'item-> '+itm;
 			ledgerdb.create(itm, "detail");
 		}		
-		ledgerdb.updateDtlastpaid([objid: ledger.objid, dtlastpaid: params.txndate]);
+		ledgerdb.update([objid: ledger.objid, dtlastpaid: params.txndate], "dtlastpaid");
+		if(ledger.overpaymentamount == 0 && params.paytype == "over")
+			ledgerdb.update([objid: ledger.objid, overpaymentamount: params.payamount], "overpayment");
 		payment_temp.removeByAppId(params);
 	}
 

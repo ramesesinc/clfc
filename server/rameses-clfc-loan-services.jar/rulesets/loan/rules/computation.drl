@@ -264,8 +264,11 @@ rule "amountPaid less than totalPayment"
 		}
 		if( amountPaid == 0 ) {
 			if( td > 1 ) totalPenalty += (td-1)*ap;
+			System.out.println("total penalty1 = "+totalPenalty);
 			if( hasSunday == "true" ) totalPenalty -= ap;
+			System.out.println("total penalty2 = "+totalPenalty);
 			if( noOfHolidays > 0 ) totalPenalty -= (noOfHolidays*ap);
+			System.out.println("total penalty3 = "+totalPenalty);
 			if( totalPenalty < 0 ) totalPenalty = 0;
 		}
 		//if( days == td ) amountPaid = 0;

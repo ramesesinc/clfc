@@ -29,4 +29,27 @@ class HolidayEventCalendarService extends ActiveCrudListService
 	public void beforeCreate(data) {
 		data.dtcreated = dateSvc.serverDate.toString();
 	}
+
+	@ProxyMethod
+	public def getNoOfHolidays( params ) {
+		if(!params.lastscheduledate) throw new Exception('Please specify last schedule date')
+		if(!params.item) throw new Exception('Please specify item')
+
+		def enddate = dateSvc.add(params.lastscheduledate, params.item.totalDays+"");
+		def list = em.getListBetweenStartdateAndEnddate([startdate: params.lastscheduledate, enddate: enddate])
+		def noofholidays = list.size();
+		def hasSunday = (params.item.hasSunday == "true")? true : false;
+		Calendar cal = Calendar.getInstance();
+		if(params.item.trialAndError == 0) {
+			list.each{
+				cal.setTime(it.date);
+				def day = cal.get( Calendar.DAY_OF_WEEK);
+				if(day == 1 && hasSunday == true) {
+					noofholidays--;
+					hasSunday = false;
+				}
+			}
+		}
+		return noofholidays;
+	}
 }
