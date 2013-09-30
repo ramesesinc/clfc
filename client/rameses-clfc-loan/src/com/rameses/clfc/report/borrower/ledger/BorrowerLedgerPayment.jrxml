@@ -17,7 +17,7 @@
 		 whenNoDataType="NoPages"
 		 isTitleNewPage="false"
 		 isSummaryNewPage="false">
-	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.scriptlethandling" value="0" />
 	<property name="ireport.encoding" value="UTF-8" />
 	<import value="java.util.*" />
 	<import value="net.sf.jasperreports.engine.*" />
@@ -230,153 +230,163 @@ Receipt No.]]></text>
 		</columnHeader>
 		<detail>
 			<band height="13"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" pattern="MMM. dd, yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="MMM. dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
 						y="0"
 						width="57"
 						height="13"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2">					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{paymentschedule}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="57"
 						y="0"
 						width="55"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{originalamount}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="112"
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{partialpayment}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="161"
 						y="0"
 						width="55"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{balanceamount}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="216"
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{interestpaid}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="265"
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{penaltycharge}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="314"
 						y="0"
 						width="49"
 						height="13"
-						key="textField"/>
-					<box rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalpayment}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="363"
 						y="0"
 						width="60"
 						height="13"
-						key="textField"/>
-					<box>					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{receiptno}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="MMM. dd, yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="MMM. dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="423"
 						y="0"
 						width="60"
 						height="13"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{datepaid}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="483"
 						y="0"
 						width="69"
 						height="13"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2">					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement verticalAlignment="Middle">
+					<textElement verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{remarks}]]></textFieldExpression>

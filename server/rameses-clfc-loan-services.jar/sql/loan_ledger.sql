@@ -5,7 +5,7 @@ FROM loan_ledger WHERE acctid=$P{acctid}
 [getCollectionsheets]
 SELECT la.objid AS loanappid, la.appno AS appno, 
 		ll.acctname AS acctname, ll.dailydue AS dailydue,
-		ll.dtlastpaid AS dtlastpaid
+		ll.dtlastpaid AS dtlastpaid, ll.dtstarted AS dtstarted
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
 WHERE la.route_code=$P{route_code}
@@ -41,3 +41,9 @@ SELECT ll.objid AS ledgerid, la.borrower_objid AS borrower_objid,
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
 WHERE la.state IN('RELEASED','CLOSED')
+	AND la.borrower_name LIKE $P{searchtext}
+
+[getLedgerDetailsByLedgerid]
+SELECT * FROM loan_ledger_detail
+WHERE parentid=$P{parentid}
+ORDER BY day, refno, state DESC

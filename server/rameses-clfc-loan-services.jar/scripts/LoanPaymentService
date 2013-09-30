@@ -22,13 +22,13 @@ class LoanPaymentService
 	def dateSvc;
 
 	@ProxyMethod
-	public def getUnpostedPayments(params) {
+	public def getUnpostedPayments( params ) {
 		if(!params.route_code) throw new Exception('Route code is required');
 		return payment_temp.getListByRouteId(params);
 	}
 
 	@ProxyMethod
-	public def postPayment(params) {
+	public void postPayment( params ) {
 		if(!params.appid) throw new Exception("App. id is required");
 		def data = [:];
 		def ledger = ledgerdb.findByAppId(params);
@@ -37,9 +37,16 @@ class LoanPaymentService
 		//println 'ledger item = '+ledgeritem;
 		String interval = "1";
 		if(ledgeritem) interval = ledgeritem.day+"";
-		def date = dateSvc.add(ledger.dtstarted, interval);
+		def dtlastpaid = ledger.dtlastpaid;
+		
+		if(dtlastpaid == null) 
+			dtlastpaid = dateSvc.add(ledger.dtstarted, "-1");
+		else
+			dtlastpaid = dateSvc.parseDate(dtlastpaid, null).date;
+
+		dtlastpaid = dateSvc.add(dtlastpaid, interval);
 		def txndate = dateSvc.parseDate(params.txndate, null).date;
-		def days = dateSvc.getDaysDiff(date, txndate);
+		def days = dateSvc.getDaysDiff(dtlastpaid, txndate);
 
 		def ref = [
 			term: producttype.term,
@@ -167,7 +174,7 @@ class LoanPaymentService
 			else itm.interestdue = 0.00;
 			itm.interestpaid = itm.interestdue;
 
-			if(itm.penalty)
+			if(it.penalty)
 				itm.penaltydue = new BigDecimal(it.penalty).setScale(2, BigDecimal.ROUND_HALF_UP);
 			else itm.penaltydue = 0.00;
 			itm.penaltypaid = itm.penaltydue;
@@ -186,6 +193,7 @@ class LoanPaymentService
 			ledgerdb.create(itm, "detail");
 		}		
 		ledgerdb.updateDtlastpaid([objid: ledger.objid, dtlastpaid: params.txndate]);
+		payment_temp.removeByAppId(params);
 	}
 
 	private def createLedgerItem( ledger ) {
@@ -197,7 +205,7 @@ class LoanPaymentService
 		return ledgeritem;
 	}
 
-	private def preComputation(params, ref) {
+	private def preComputation( params, ref ) {
 		def item = params;
 		//println 'pass 1'
 		if( params.totalDays <= ref.term ) {

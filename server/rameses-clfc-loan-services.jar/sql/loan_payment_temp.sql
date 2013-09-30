@@ -8,3 +8,6 @@ SELECT l.appno AS appno, l.objid AS appid, l.borrower_name AS borrowername,
 FROM loan_payment_temp lpt
 INNER JOIN loanapp l ON lpt.appid = l.objid
 WHERE l.route_code=$P{route_code}
+
+[removeByAppId]
+DELETE FROM loan_payment_temp WHERE appid=$P{appid}

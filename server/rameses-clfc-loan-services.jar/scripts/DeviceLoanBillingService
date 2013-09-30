@@ -31,12 +31,17 @@ class DeviceLoanBillingService
 	public def downloadBilling(params) {
 		if(!params.route_code) throw new Exception('Please specify route code');
 		def result = ledger.getCollectionsheets(params);
-		def currentDate = dateSvc.parseCurrentDate();
+		def currentDate = dateSvc.parseCurrentDate().date;
 		def days;
 		def list = [];
 		result.each{
-			def dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null);
-			days = dateSvc.getDaysDiff(dtlastpaid.date, currentDate.date)-1;
+			def dtlastpaid;
+			if(!it.dtlastpaid)
+				dtlastpaid = dateSvc.add(it.dtstarted, "-1");
+			else 
+				dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;
+
+			days = dateSvc.getDaysDiff(dtlastpaid, currentDate)-1;
 			it.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8); 
 			it.amountdue = it.dailydue*days;
 			list.add(it);

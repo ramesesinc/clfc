@@ -15,6 +15,7 @@ class PostPaymentController
     
     def route;
     def mode = 'init';
+    def unpostedPayments;
     
     def getRouteList() {
         return routeSvc.getList([:]);
@@ -22,6 +23,11 @@ class PostPaymentController
     
     def next() {
         mode = 'mgmt';
+        unpostedPayments = paymentSvc.getUnpostedPayments([route_code: route]);
+        if(!unpostedPayments) {
+            throw new Exception('No unposted payments for this route.')
+            retur null;
+        }
         paymentHandler.reload();
         return 'mgmtpage';
     }
@@ -32,7 +38,7 @@ class PostPaymentController
     }
     
     def post() {
-        list.each{
+        unpostedPayments.each{
             paymentSvc.postPayment(it);
         }
         route = null;
@@ -46,21 +52,19 @@ class PostPaymentController
     
     def paymentHandler = [
         fetchList: {o->
-            return list;
+            if(!unpostedPayments) unpostedPayments = [];
+            return unpostedPayments;
         }
-    ] as EditorListModel;
+    ] as BasicListModel;
     
-    def getList() {
-        return paymentSvc.getUnpostedPayments([route_code: route]);
-    }
     
     def getTotalamount() {
-        if(!list) return 0;
-        return list.payamount.sum();
+        if(!unpostedPayments) return 0;
+        return unpostedPayments.payamount.sum();
     }
     
     boolean getIsAllowPost() {
-        if(mode == 'init' || list.isEmpty()) return false;
+        if(mode == 'init' || unpostedPayments.isEmpty()) return false;
         return true;
     }
 }
