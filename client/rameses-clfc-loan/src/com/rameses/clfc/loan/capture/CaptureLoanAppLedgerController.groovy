@@ -42,7 +42,6 @@ class LoanAppCaptureLedgerController
     def save() {
         entity.acctid = entity.borrower.objid;
         entity.acctname = entity.borrower.name;
-        println 'payments = '+entity.payments;
         entity = service.create(entity);
         mode = 'read';
         init();

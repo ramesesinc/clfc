@@ -180,12 +180,14 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
 
         xDateField3.setCaption("Data Started");
         xDateField3.setCaptionWidth(90);
+        xDateField3.setEnabled(false);
         xDateField3.setName("entity.dtstarted");
         xDateField3.setRequired(true);
         xFormPanel2.add(xDateField3);
 
         xDateField4.setCaption("Date Matured");
         xDateField4.setCaptionWidth(90);
+        xDateField4.setEnabled(false);
         xDateField4.setName("entity.dtmatured");
         xDateField4.setRequired(true);
         xFormPanel2.add(xDateField4);
