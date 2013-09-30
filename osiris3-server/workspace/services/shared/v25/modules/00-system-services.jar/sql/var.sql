@@ -15,3 +15,6 @@ ORDER BY t.name
 SELECT t.* FROM sys_var t 
 WHERE t.category IS NULL AND t.name LIKE $P{searchtext} 
 ORDER BY t.name 
+
+[getLookupList]
+SELECT t.* FROM sys_var t ORDER BY t.name 
