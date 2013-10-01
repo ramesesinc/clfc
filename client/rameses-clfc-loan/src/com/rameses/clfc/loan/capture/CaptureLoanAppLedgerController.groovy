@@ -66,6 +66,8 @@ class LoanAppCaptureLedgerController
             entity.underpaymentrate = o.producttype?.underpaymentpenalty;
             entity.term = o.producttype?.term;
             entity.route = o.route;
+            entity.dtstarted = o.dtstarted;
+            entity.dtmatured = o.dtmatured;
         }
         return InvokerUtil.lookupOpener("capture_loanapp:lookup", [onselect:handler]);
     }

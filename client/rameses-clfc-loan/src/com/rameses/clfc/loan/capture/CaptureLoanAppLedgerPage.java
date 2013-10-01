@@ -50,8 +50,8 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "orno"}
-                , new Object[]{"caption", "OR No."}
+                new Object[]{"name", "refno"}
+                , new Object[]{"caption", "Ref. No."}
                 , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
@@ -64,8 +64,8 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "ordate"}
-                , new Object[]{"caption", "OR Date"}
+                new Object[]{"name", "txndate"}
+                , new Object[]{"caption", "Txn Date"}
                 , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}

@@ -13,7 +13,11 @@ class PostPaymentController
     @Service('LoanPaymentService')
     def paymentSvc;
     
+    @Service('LoanLedgerService')
+    def ledgerSvc;
+    
     def route;
+    def entity;
     def mode = 'init';
     def unpostedPayments;
     
@@ -22,12 +26,14 @@ class PostPaymentController
     }
     
     def next() {
-        mode = 'mgmt';
-        unpostedPayments = paymentSvc.getUnpostedPayments([route_code: route]);
+        def data = paymentSvc.getUnpostedPayments([route_code: route]);
+        entity = data.entity;
+        unpostedPayments = data.list;
         if(!unpostedPayments) {
             throw new Exception('No unposted payments for this route.')
-            retur null;
+            return null;
         }
+        mode = 'mgmt';
         paymentHandler.reload();
         return 'mgmtpage';
     }
@@ -39,8 +45,10 @@ class PostPaymentController
     
     def post() {
         unpostedPayments.each{
+            it.entity = entity;
             paymentSvc.postPayment(it);
         }
+        ledgerSvc.approveBatchPayment(entity);
         route = null;
         mode = 'init';
         return 'default';
