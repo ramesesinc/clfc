@@ -22,7 +22,7 @@
 
 	<element name="overpayment" tablename="loan_ledger">
 		<field name="objid" primary="true"/>
-		<field name="overpayment" required="true"/>
+		<field name="overpaymentamount" required="true"/>
 	</element>
 
 	<element name="dtlastpaid" tablename="loan_ledger">

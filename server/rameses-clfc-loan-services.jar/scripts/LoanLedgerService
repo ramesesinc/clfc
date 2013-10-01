@@ -8,6 +8,9 @@ class LoanLedgerService extends ActiveListService
 	@ActiveDB(value='loan_ledger')
 	def em;
 
+	@ActiveDB(value="batch_payment")
+	def batch_payment;
+
 	@Service("LoanPaymentService")
 	def paymentSvc;
 
@@ -27,8 +30,8 @@ class LoanLedgerService extends ActiveListService
 			    appno: data.appno,
 			    appid: data.appid,
 			    borrowername: data.borrower.name,
-			    refno: it.orno,
-			    txndate: it.ordate,
+			    refno: it.refno,
+			    txndate: it.txndate,
 			    paytype: it.type,
 			    payamount: it.amount
 			]
@@ -78,5 +81,12 @@ class LoanLedgerService extends ActiveListService
 
 	void beforeList( params ) {
 		params.searchtext = (params.searchtext? '%'+params.searchtext+'%' : '%');
+	}
+
+	@ProxyMethod
+	public def approveBatchPayment( params ) {
+		if(!params.objid) throw new Exception('Please specify objid');
+		batch_payment.changeStateApproved(params);
+		return params;
 	}
 }

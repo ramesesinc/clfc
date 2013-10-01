@@ -6,14 +6,17 @@ import java.rmi.server.UID;
 
 class LoanPaymentService
 {
-	@ActiveDB(value="loan_payment_temp")
-	def payment_temp;
+	@ActiveDB(value="batch_payment")
+	def batch_payment;
 
 	@ActiveDB(value="loan_ledger")
 	def ledgerdb;
 
 	@ActiveDB(value="loan_product_type")
 	def product_type;
+
+	@ActiveDB(value="loan_payment")
+	def loan_payment;
 
 	@Resource("RuleService")
 	def ruleSvc;
@@ -27,12 +30,58 @@ class LoanPaymentService
 	@ProxyMethod
 	public def getUnpostedPayments( params ) {
 		if(!params.route_code) throw new Exception('Route code is required');
-		return payment_temp.getListByRouteId(params);
+		def bp = batch_payment.findByRoutecode(params);
+		def list = []
+		if(bp) {
+			list = batch_payment.getDetailsByParentId([parentid: bp.objid]);
+			if(bp.totalcount != list.size()) 
+				throw new Exception('Payments for this route was not uploaded successfully.');
+		}
+		return [entity: bp, list: list];
+	}
+
+	private void createPayment( params ) {
+		createPaymentHeader(params);
+		def o = loan_payment.read(params.entity);
+		if(o) {
+			def itm = [
+				objid: 		'LPDTL'+new UID(),
+				parentid: 	o.objid,
+				refno: 		params.refno,
+				appid: 		params.appid,
+				paytype: 	params.paytype,
+				payamount: 	params.payamount
+			]
+			loan_payment.create(itm, "detail");
+		}
+	}
+	
+	private void createPaymentHeader(params) {
+		def data = params.entity;
+		def itm = loan_payment.read(data);
+		if(!itm) {
+			itm = [
+				objid: 			data.objid,
+				txndate: 		data.txndate,
+				dtcreated: 		dateSvc.serverDate,
+				totalcount: 	data.totalcount,
+				totalamount: 	data.totalamount
+			]
+			loan_payment.create(itm);
+		}
 	}
 
 	@ProxyMethod
 	public void postPayment( params ) {
-		if(!params.appid) throw new Exception("App. id is required");
+		if(!params.appid) throw new Exception('App. id is required.');
+		def txndate;
+		if(params.entity) {
+			txndate = params.entity.txndate;
+			createPayment(params);
+		} else {
+			txndate = params.txndate;
+		}
+
 		def data = [:];
 		def ledger = ledgerdb.findByAppId(params);
 		def producttype = product_type.read([name: ledger.producttypeid]);
@@ -43,7 +92,7 @@ class LoanPaymentService
 		if(ledgeritem) interval = ledgeritem.day;
 
 		lastscheduledate = dateSvc.add(lastscheduledate, (interval+1)+'');
-		def txndate = dateSvc.parseDate(params.txndate, null).date;
+		txndate = dateSvc.parseDate(txndate, null).date;
 		def days = dateSvc.getDaysDiff(lastscheduledate, txndate);
 
 		def ref = [
@@ -115,7 +164,7 @@ class LoanPaymentService
 			data.totalPayment = ledgeritem.amtdue;
 			data.days = ledgeritem.day;
 			paymentFact.balance = ledgeritem.balance;
-			def itm = ledgerdb.findLastLedgerItemNotSameDatePaid([parentid: ledger.objid, dtpaid: params.txndate]);
+			def itm = ledgerdb.findLastLedgerItemNotSameDatePaid([parentid: ledger.objid, dtpaid: txndate]);
 			if(itm) {
 				data.currentDay = itm.day+1;
 				paymentFact.balance = itm.balance;
@@ -160,14 +209,15 @@ class LoanPaymentService
 		if(results.size() > 0) {
 			lastitem = results[results.size()-1];
 			lastitem.refno = params.refno;
-			lastitem.dtpaid = params.txndate;
+			lastitem.dtpaid = txndate;
 			lastitem.interestbal = new BigDecimal(floating.lackingInterest).setScale(2, BigDecimal.ROUND_HALF_UP)
 			lastitem.penaltybal = new BigDecimal(floating.lackingPenalty).setScale(2, BigDecimal.ROUND_HALF_UP);
+			lastitem.paytype = params.paytype;
 		}
 
 		results.each{
 			//if(it.penalty) it.penalty = new BigDecimal(it.penalty+'').setScale(2, BigDecimal.ROUND_HALF_UP);
-			println it
+			//println it
 			def itm = createLedgerItem(ledger);
 			if(it.payment) 
 				itm.amtdue = new BigDecimal(it.payment).setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -197,10 +247,10 @@ class LoanPaymentService
 			//println 'item-> '+itm;
 			ledgerdb.create(itm, "detail");
 		}		
-		ledgerdb.update([objid: ledger.objid, dtlastpaid: params.txndate], "dtlastpaid");
+		ledgerdb.update([objid: ledger.objid, dtlastpaid: txndate], "dtlastpaid");
 		if(ledger.overpaymentamount == 0 && params.paytype == "over")
 			ledgerdb.update([objid: ledger.objid, overpaymentamount: params.payamount], "overpayment");
-		payment_temp.removeByAppId(params);
+		//payment_temp.removeByAppId(params);
 	}
 
 	private def createLedgerItem( ledger ) {

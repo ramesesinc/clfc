@@ -25,8 +25,8 @@ class CaptureLoanAppLookupService
 		params._limit = (params._limit? params._limit: 10); 
 		def list = em.getList(params);
 		list.each{
-			it.dtstarted = dateSvc.add(it.dtreleased)
-		}
+			it.dtstarted = dateSvc.add(it.dtreleased, "1");
+			it.dtmatured = dateSvc.add(it.dtreleased, it.producttype.term+'');		}
 		return list;
 	}
 }

@@ -35,47 +35,56 @@ class LoanLedgerReportService
 		def prevrefno;
 		def prevbal;
 		payments.each{
-
 			def itm = [
 				paymentschedule 	: dateSvc.add(data.dategranted, it.day+''),
 				originalamount		: null,
-				partialpayment		: it.partialpayment,
-				balanceamount		: it.balance,
-				interestpaid		: (it.interestpaid > 0)? it.interestpaid : null,
-				penaltycharge		: it.penaltypaid,
-				totalpayment		: (it.amtpaid > 0)? it.amtpaid : null,
+				partialpayment		: it.partialpayment+'',
+				balanceamount		: it.balance+'',
+				interestpaid		: (it.interestpaid > 0)? it.interestpaid+'' : null,
+				penaltycharge		: it.penaltypaid+'',
+				totalpayment		: (it.amtpaid > 0)? it.amtpaid+'' : null,
 				receiptno			: it.refno,
 				datepaid			: it.dtpaid
 			];
-			if(it.balance == ledger.totalprincipal) {
-				itm.balanceamount = null;
-			}
-			if(it.balance == prevbal) {
-				itm.balanceamount = null;
-			}
-			if(it.partialpayment == 0) {
-				itm.partialpayment = null;
-			}
-			if(!flag && it.interestbal == 0 && it.penaltybal == 0) {
-				itm.originalamount = ledger.totalprincipal;
-				flag = true;
-			}
-			if(it.refno == prevrefno) {
+			if(it.state != "OFFSET") {
+				if(it.balance == ledger.totalprincipal) {
+					itm.balanceamount = null;
+				}
+				if(it.balance == prevbal) {
+					itm.balanceamount = null;
+				}
+				if(it.partialpayment == 0) {
+					itm.partialpayment = null;
+				}
+				if(!flag && it.interestbal == 0 && it.penaltybal == 0) {
+					itm.originalamount = ledger.totalprincipal;
+					flag = true;
+				}
+				if(it.refno == prevrefno) {
+					itm.receiptno = null;
+					itm.datepaid = null
+				}
+				if(it.interestbal > 0) {
+					if(!itm.remarks) itm.remarks = '';
+					itm.remarks += 'lacking interest: '+it.interestbal;
+				}
+				if(it.penaltybal > 0) {
+					if(!itm.remarks) itm.remarks = '';
+					else itm.remarks += '\n';
+					itm.remarks += 'lacking penalty: '+it.penaltybal;
+				}
+				if(it.penaltypaid == 0) itm.penaltycharge = null;
+				prevrefno = it.refno;
+				prevbal = it.balance;
+			} else {
+				itm.partialpayment = itm.partialpayment? '('+itm.partialpayment+')' : null;
+				itm.balanceamount = itm.balanceamount? '('+itm.balanceamount+')' : null;
+				itm.interestpaid = itm.interestpaid? '('+itm.interestpaid+')' : null;
+				itm.penaltycharge = itm.penaltycharge? '('+itm.penaltycharge+')' : null;
+				itm.totalpayment = itm.totalpayment? '('+itm.totalpayment+')' : null;
 				itm.receiptno = null;
-				itm.datepaid = null
+				itm.datepaid = null;
 			}
-			if(it.interestbal > 0) {
-				if(!itm.remarks) itm.remarks = '';
-				itm.remarks += 'lacking interest: '+it.interestbal;
-			}
-			if(it.penaltybal > 0) {
-				if(!itm.remarks) itm.remarks = '';
-				else itm.remarks += '\n';
-				itm.remarks += 'lacking penalty: '+it.penaltybal;
-			}
-			if(it.penaltypaid == 0) itm.penaltycharge = null;
-			prevrefno = it.refno;
-			prevbal = it.balance;
 			data.payments.add(itm);
 		}
 
