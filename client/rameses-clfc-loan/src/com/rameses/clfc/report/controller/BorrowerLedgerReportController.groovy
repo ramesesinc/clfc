@@ -43,6 +43,14 @@ class BorrowerLedgerReportController extends ReportModel
         return close();
     }
     
+    def adjust() {
+        if(!selectedLedger) {
+            throw new Exception('No ledger selected.');
+            return null;
+        }
+        return InvokerUtil.lookupOpener("loanledger:adjustment", [ledger: selectedLedger]);
+    }
+    
     def view() {
         if(!selectedLedger) {
             throw new Exception('No ledger selected.')
@@ -51,7 +59,11 @@ class BorrowerLedgerReportController extends ReportModel
         viewReport();
         mode = 'view';
         return new Opener(outcome:'preview');
-    }    
+    }
+    
+    def viewHistory() {
+        return InvokerUtil.lookupOpener("loanledger:history", [ledgerid: selectedLedger.ledgerid]);
+    }
 
     public Map getParameters() {
         return [:];
