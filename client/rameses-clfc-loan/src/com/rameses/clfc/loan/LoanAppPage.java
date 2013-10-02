@@ -73,7 +73,7 @@ public class LoanAppPage extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 0));
+        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 2));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(150, 130));
         xlist.setExpression("#{item.caption}");
         xlist.setHandler("listHandler");

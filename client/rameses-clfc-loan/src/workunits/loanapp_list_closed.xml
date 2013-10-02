@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/ListController.xml">
     
     <invokers>
-        <invoker folderid="/explorer/afterfla" caption="Fully Paid" permission="system" index="7"/>
+        <invoker folderid="/explorer/txn/afterfla" caption="Fully Paid" permission="system" index="7"/>
    </invokers>
    
     <code>

@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/ListController.xml">
     
     <invokers>
-        <invoker folderid="/explorer/txn/afterfla" caption="For Release" permission="system" index="1"/>
+        <invoker folderid="/explorer/txn/capture" caption="Released" permission="system" index="0"/>
    </invokers>
    
     <code>
@@ -10,13 +10,18 @@
     import com.rameses.osiris2.client.*;
     import com.rameses.osiris2.common.*;      
     
-    class ForReleaseLoanSearchService extends ListController 
+    class CaptureReleasedLoanSearchService extends ListController 
     {
         String serviceName = 'LoanAppSearchService';
-        String entityName = 'loanapp';
-        String tag = 'FOR_RELEASE';
+        String entityName = 'loanapp-capture';
+        String tag = 'RELEASED';
         
         boolean allowCreate = false;
+                
+        List fetchList( params ) {
+            params.appmode = 'CAPTURE'; 
+            return super.fetchList(params);
+        } 
     }     
     </code>     
 </workunit>

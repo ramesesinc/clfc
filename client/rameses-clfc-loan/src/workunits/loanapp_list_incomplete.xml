@@ -2,6 +2,6 @@
     entityName="loanapp" tag="incomplete">
     
     <invokers>
-        <invoker folderid="/explorer/loan" caption="Incomplete Applications" permission="system" index="0"/>
+        <invoker folderid="/explorer/txn/loan" caption="Incomplete Applications" permission="system" index="0"/>
    </invokers>
 </workunit>
