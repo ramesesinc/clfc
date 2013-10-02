@@ -71,7 +71,6 @@ class CaptureLoanAppService
 
 		loanapp.create(data); 
 		loanapp.create(data, 'loanapp_capture'); 
-		loanapp.update(data, 'loanapp_capture_approval'); 
 
 		def log = [
 			objid:    'LOG' + new UID(), 

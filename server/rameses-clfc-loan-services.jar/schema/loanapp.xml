@@ -15,8 +15,14 @@
 		<field name="borrower_name" required="true"/> 
 		<field name="producttype_name" required="true"/> 
 		<field name="producttype_term" required="true"/> 
-		<field name="remarks" required="true"/> 
 		<field name="route_code"/> 
+		<field name="purpose" required="true"/> 		
+		<field name="remarks" /> 
+		<field name="approval_type" />  
+		<field name="approval_amount" /> 
+		<field name="approval_absencetype" /> 
+		<field name="approval_absencepolicy"/> 
+		<field name="approval_absenceprovision" />  
 	</element> 
 
 	<element name="loanapp_new" tablename="loanapp_new">
@@ -26,7 +32,6 @@
 		<field name="loanamount" required="true"/> 
 		<field name="clienttype" required="true"/> 
 		<field name="marketedby" /> 
-		<field name="purpose" required="true"/> 
 	</element>
 
 	<element name="loanapp_previous" tablename="loanapp">
@@ -56,20 +61,8 @@
 		<field name="loanno" required="true"/> 
 		<field name="clienttype" required="true"/> 
 		<field name="marketedby"/> 
-		<field name="purpose" required="true"/> 
-		<field name="producttype_name" required="true"/> 
-		<field name="producttype_term" required="true"/> 
 		<field name="dtreleased" required="true"/> 
 	</element>	
-
-	<element name="loanapp_capture_approval" tablename="loanapp">
-		<field name="objid" primary="true"/>
-		<field name="approval_type" /> 
-		<field name="approval_amount" required="true"/> 
-		<field name="approval_absencetype" /> 
-		<field name="approval_absencepolicy"/> 
-		<field name="approval_absenceprovision" /> 
-	</element>		
 
 	<element name="loanapp_approval" tablename="loanapp">
 		<field name="objid" primary="true"/>
