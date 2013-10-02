@@ -1,22 +1,17 @@
 "entity.*" [borrowerContext.mode != 'edit']{
     enabled: false; 
-    background-color: rgb(250,250,250);
 }
 "entity.residency.*|entity.occupancy.*" [borrowerContext.mode == 'edit' && entity.objid != null] {
     enabled: true;
-    background-color: #fff;
 }
 "entity.residency.*|entity.occupancy.*" [borrowerContext.mode == 'edit' && entity.objid == null] {
-    enabled: false; 
-    background-color: rgb(250,250,250);
+    enabled: false;
 }
 "borrower" [borrowerContext.mode != 'edit']{
-    enabled: false; 
-    background-color: rgb(250,250,250);
+    enabled: false;
 }
 "borrower" [borrowerContext.mode == 'edit']{
     enabled: true;
-    background-color: #fff;
 }
 "entity.residency.rent.*" [borrowerContext.mode == 'edit' && entity.residency?.type == 'RENTED' && entity.objid != null] {
     enabled:true;

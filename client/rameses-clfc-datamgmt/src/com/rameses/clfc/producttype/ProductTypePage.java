@@ -4,7 +4,7 @@
  * Created on September 6, 2013, 11:48 AM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.producttype;
 
 import com.rameses.osiris2.themes.FormPage;
 import com.rameses.rcp.ui.annotations.Template;
@@ -15,9 +15,8 @@ import java.math.BigDecimal;
  * @author  Rameses
  */
 @Template(FormPage.class)
-public class ProductTypePage extends javax.swing.JPanel {
-    
-    /** Creates new form ProductTypePage */
+public class ProductTypePage extends javax.swing.JPanel 
+{    
     public ProductTypePage() {
         initComponents();
     }
@@ -42,7 +41,7 @@ public class ProductTypePage extends javax.swing.JPanel {
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setTitle("Product Type Information");
         xFormPanel1.setBorder(xTitledBorder1);
-        xFormPanel1.setPadding(new java.awt.Insets(10, 10, 10, 20));
+        xFormPanel1.setPadding(new java.awt.Insets(10, 15, 10, 20));
         xTextField1.setCaption("Name");
         xTextField1.setCaptionWidth(135);
         xTextField1.setIndex(-10);

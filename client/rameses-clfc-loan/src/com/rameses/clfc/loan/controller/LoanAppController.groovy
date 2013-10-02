@@ -18,11 +18,15 @@ class LoanAppController
     def entity = [:];
     def mode = 'read';
     
-    @FormTitle
     @FormId
     def getFormId() { 
         return 'LOAN-'+entity.appno;
     }
+
+    @FormTitle
+    def getFormTitle() { 
+        return getFormId(); 
+    } 
     
     void open() {
         source = entity;

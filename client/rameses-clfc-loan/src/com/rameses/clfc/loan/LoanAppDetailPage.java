@@ -26,136 +26,159 @@ public class LoanAppDetailPage extends javax.swing.JPanel
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        xLabel3 = new com.rameses.rcp.control.XLabel();
+        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
+        xLabel4 = new com.rameses.rcp.control.XLabel();
+        xLabel3 = new com.rameses.rcp.control.XLabel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xComboBox3 = new com.rameses.rcp.control.XComboBox();
-        xComboBox4 = new com.rameses.rcp.control.XComboBox();
-        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
-        xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
-        xDateField1 = new com.rameses.rcp.control.XDateField();
         xTextField2 = new com.rameses.rcp.control.XTextField();
+        xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
+        xLabel5 = new com.rameses.rcp.control.XLabel();
+        xComboBox4 = new com.rameses.rcp.control.XComboBox();
         xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
-        xNumberField3 = new com.rameses.rcp.control.XNumberField();
-        jPanel2 = new javax.swing.JPanel();
+        xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
+        xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
         xLookupField1 = new com.rameses.rcp.control.XLookupField();
+        xLabel6 = new com.rameses.rcp.control.XLabel();
+        xLabel7 = new com.rameses.rcp.control.XLabel();
 
-        com.rameses.rcp.control.border.XEtchedBorder xEtchedBorder1 = new com.rameses.rcp.control.border.XEtchedBorder();
-        xEtchedBorder1.setHideLeft(true);
-        xEtchedBorder1.setHideRight(true);
-        xEtchedBorder1.setHideTop(true);
-        xLabel3.setBorder(xEtchedBorder1);
-        xLabel3.setFontStyle("font-weight:bold;");
-        xLabel3.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel3.setText("Loan Details");
+        com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
+        xTitledBorder1.setTitle(" General Information ");
+        jPanel2.setBorder(xTitledBorder1);
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 0, 0));
+        jPanel1.setOpaque(false);
 
-        xFormPanel2.setCellspacing(4);
-        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        com.rameses.rcp.control.border.XUnderlineBorder xUnderlineBorder1 = new com.rameses.rcp.control.border.XUnderlineBorder();
+        xUnderlineBorder1.setLineColor(new java.awt.Color(192, 192, 192));
+        xUnderlineBorder1.setThickness(1);
+        xFormPanel2.setCaptionBorder(xUnderlineBorder1);
+        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 10));
+        xLabel4.setAntiAliasOn(true);
+        xLabel4.setBackground(new java.awt.Color(0, 153, 204));
+        xLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        xLabel4.setCaption("App Mode");
+        xLabel4.setCaptionWidth(110);
+        xLabel4.setExpression("#{data.appmode}");
+        xLabel4.setFontStyle("font-weight:bold;font-size:14;");
+        xLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        xLabel4.setOpaque(true);
+        xLabel4.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel2.add(xLabel4);
+
+        xLabel3.setBackground(new java.awt.Color(245, 245, 245));
         com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
-        xLabel2.setBorder(xLineBorder1);
+        xLineBorder1.setLineColor(new java.awt.Color(180, 180, 180));
+        xLabel3.setBorder(xLineBorder1);
+        xLabel3.setCaption("App Date");
+        xLabel3.setCaptionWidth(110);
+        xLabel3.setExpression("#{data.dtcreated}");
+        xLabel3.setFontStyle("font-size:12;");
+        xLabel3.setOpaque(true);
+        xLabel3.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel2.add(xLabel3);
+
+        xLabel2.setBackground(new java.awt.Color(245, 245, 245));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder2.setLineColor(new java.awt.Color(180, 180, 180));
+        xLabel2.setBorder(xLineBorder2);
         xLabel2.setCaption("App Type");
         xLabel2.setCaptionWidth(110);
         xLabel2.setExpression("#{data.apptype}");
-        xLabel2.setPreferredSize(new java.awt.Dimension(150, 20));
+        xLabel2.setFontStyle("font-size:12;");
+        xLabel2.setOpaque(true);
+        xLabel2.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xLabel2);
 
         xComboBox3.setAllowNull(false);
         xComboBox3.setCaption("Client Type");
         xComboBox3.setCaptionWidth(110);
         xComboBox3.setExpression("#{item.value}");
+        xComboBox3.setFontStyle("font-size:12;");
+        xComboBox3.setItemKey("value");
         xComboBox3.setItems("clientTypes");
-        xComboBox3.setName("clienttype");
-        xComboBox3.setPreferredSize(new java.awt.Dimension(150, 20));
+        xComboBox3.setName("data.clienttype");
+        xComboBox3.setPreferredSize(new java.awt.Dimension(0, 20));
         xComboBox3.setRequired(true);
         xFormPanel2.add(xComboBox3);
+
+        xTextField2.setCaption("Interviewed by");
+        xTextField2.setCaptionWidth(110);
+        xTextField2.setDepends(new String[] {"data.clienttype"});
+        xTextField2.setName("data.marketedby");
+        xTextField2.setPreferredSize(new java.awt.Dimension(0, 20));
+        xTextField2.setRequired(true);
+        xFormPanel2.add(xTextField2);
+
+        xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        xLabel5.setBackground(new java.awt.Color(245, 245, 245));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder3 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder3.setLineColor(new java.awt.Color(180, 180, 180));
+        xLabel5.setBorder(xLineBorder3);
+        xLabel5.setCaption("Loan Count");
+        xLabel5.setCaptionWidth(110);
+        xLabel5.setExpression("#{data.loancount}");
+        xLabel5.setFont(new java.awt.Font("Courier New", 0, 14));
+        xLabel5.setOpaque(true);
+        xLabel5.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel1.add(xLabel5);
 
         xComboBox4.setCaption("Product Type");
         xComboBox4.setCaptionWidth(110);
         xComboBox4.setExpression("#{item.name}");
+        xComboBox4.setFontStyle("font-size:12;");
         xComboBox4.setImmediate(true);
         xComboBox4.setItems("productTypes");
-        xComboBox4.setName("producttype");
-        xComboBox4.setPreferredSize(new java.awt.Dimension(150, 20));
+        xComboBox4.setName("data.producttype");
+        xComboBox4.setPreferredSize(new java.awt.Dimension(0, 20));
         xComboBox4.setRequired(true);
-        xFormPanel2.add(xComboBox4);
+        xFormPanel1.add(xComboBox4);
 
-        xDecimalField1.setCaption("Amount Applied");
-        xDecimalField1.setCaptionWidth(110);
-        xDecimalField1.setName("data.loanamount");
-        xDecimalField1.setRequired(true);
-        xFormPanel2.add(xDecimalField1);
-
-        xFormPanel1.setCellspacing(4);
-        xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
-        com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
-        xDateField1.setBorder(xLineBorder2);
-        xDateField1.setCaption("Date Filed");
-        xDateField1.setCaptionWidth(100);
-        xDateField1.setName("data.dtcreated");
-        xDateField1.setPreferredSize(new java.awt.Dimension(0, 20));
-        xDateField1.setReadonly(true);
-        xFormPanel1.add(xDateField1);
-
-        xTextField2.setCaption("Interviewed by");
-        xTextField2.setCaptionWidth(100);
-        xTextField2.setDepends(new String[] {"clienttype"});
-        xTextField2.setName("data.marketedby");
-        xTextField2.setPreferredSize(new java.awt.Dimension(0, 20));
-        xTextField2.setRequired(true);
-        xFormPanel1.add(xTextField2);
-
-        xDecimalField2.setCaption("Term");
-        xDecimalField2.setCaptionWidth(100);
-        xDecimalField2.setDepends(new String[] {"schedule"});
+        xDecimalField2.setCaption("Product Term");
+        xDecimalField2.setCaptionWidth(110);
+        xDecimalField2.setDepends(new String[] {"data.producttype"});
+        xDecimalField2.setFont(new java.awt.Font("Courier New", 0, 14));
         xDecimalField2.setName("data.producttype.term");
         xDecimalField2.setPattern("#,##0");
+        xDecimalField2.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField2.setRequired(true);
         xDecimalField2.setScale(0);
         xFormPanel1.add(xDecimalField2);
 
-        xNumberField3.setCaption("Loan Count");
-        xNumberField3.setCaptionWidth(100);
-        xNumberField3.setFieldType(Integer.class);
-        xNumberField3.setName("data.loancount");
-        xNumberField3.setPattern("#,##0");
-        xNumberField3.setReadonly(true);
-        xFormPanel1.add(xNumberField3);
+        xDecimalField1.setCaption("Amount Applied");
+        xDecimalField1.setCaptionWidth(110);
+        xDecimalField1.setFont(new java.awt.Font("Courier New", 0, 14));
+        xDecimalField1.setName("data.loanamount");
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
+        xDecimalField1.setRequired(true);
+        xFormPanel1.add(xDecimalField1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(xFormPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-            .addComponent(xFormPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(xFormPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                    .addComponent(xFormPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 102, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        xFormPanel3.setCellspacing(4);
-        xFormPanel3.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        xFormPanel3.setCaptionBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        xFormPanel3.setPadding(new java.awt.Insets(0, 5, 0, 10));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
         xTextArea1.setCaption("Purpose of Loan");
         xTextArea1.setCaptionWidth(110);
@@ -165,51 +188,81 @@ public class LoanAppDetailPage extends javax.swing.JPanel
 
         xFormPanel3.add(jScrollPane1);
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(xFormPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(xFormPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        com.rameses.rcp.control.border.XTitledBorder xTitledBorder2 = new com.rameses.rcp.control.border.XTitledBorder();
+        xTitledBorder2.setTitle(" Route Information ");
+        xFormPanel4.setBorder(xTitledBorder2);
+        xFormPanel4.setPadding(new java.awt.Insets(10, 15, 10, 20));
         xLookupField1.setCaption("Route");
         xLookupField1.setCaptionWidth(110);
         xLookupField1.setDepends(new String[] {"entity"});
-        xLookupField1.setExpression("#{item.name}");
+        xLookupField1.setExpression("#{item.code}");
         xLookupField1.setHandler("routeLookupHandler");
         xLookupField1.setName("data.route");
-        xLookupField1.setPreferredSize(new java.awt.Dimension(250, 20));
+        xLookupField1.setPreferredSize(new java.awt.Dimension(180, 20));
         xLookupField1.setRequired(true);
-        xFormPanel3.add(xLookupField1);
+        xFormPanel4.add(xLookupField1);
+
+        xLabel6.setBackground(new java.awt.Color(245, 245, 245));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder4 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder4.setLineColor(new java.awt.Color(180, 180, 180));
+        xLabel6.setBorder(xLineBorder4);
+        xLabel6.setCaption("Description");
+        xLabel6.setCaptionWidth(110);
+        xLabel6.setDepends(new String[] {"data.route"});
+        xLabel6.setExpression("#{data.route.description}");
+        xLabel6.setOpaque(true);
+        xLabel6.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel4.add(xLabel6);
+
+        xLabel7.setBackground(new java.awt.Color(245, 245, 245));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder5 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder5.setLineColor(new java.awt.Color(180, 180, 180));
+        xLabel7.setBorder(xLineBorder5);
+        xLabel7.setCaption("Area");
+        xLabel7.setCaptionWidth(110);
+        xLabel7.setDepends(new String[] {"data.route"});
+        xLabel7.setExpression("#{data.route.area}");
+        xLabel7.setOpaque(true);
+        xLabel7.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel4.add(xLabel7);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(xLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(xFormPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(xFormPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(xLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xFormPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(87, 87, 87))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(xFormPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -220,16 +273,19 @@ public class LoanAppDetailPage extends javax.swing.JPanel
     private javax.swing.JScrollPane jScrollPane1;
     private com.rameses.rcp.control.XComboBox xComboBox3;
     private com.rameses.rcp.control.XComboBox xComboBox4;
-    private com.rameses.rcp.control.XDateField xDateField1;
     private com.rameses.rcp.control.XDecimalField xDecimalField1;
     private com.rameses.rcp.control.XDecimalField xDecimalField2;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
+    private com.rameses.rcp.control.XFormPanel xFormPanel4;
     private com.rameses.rcp.control.XLabel xLabel2;
     private com.rameses.rcp.control.XLabel xLabel3;
+    private com.rameses.rcp.control.XLabel xLabel4;
+    private com.rameses.rcp.control.XLabel xLabel5;
+    private com.rameses.rcp.control.XLabel xLabel6;
+    private com.rameses.rcp.control.XLabel xLabel7;
     private com.rameses.rcp.control.XLookupField xLookupField1;
-    private com.rameses.rcp.control.XNumberField xNumberField3;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField2;
     // End of variables declaration//GEN-END:variables

@@ -33,17 +33,18 @@ WHERE lb.parentid=$P{parentid} AND lb.type IN ('principal','joint')
 SELECT * FROM loanapp_borrower WHERE parentid=$P{parentid} AND type=$P{type}  
 
 [removeBorrowerIndices]
-DELETE FROM loanapp_borrower_index WHERE loanappid=$P{loanappid} 
+DELETE FROM loanapp_search_index 
+WHERE appid=$P{appid} and borrowerid IS NOT NULL 
 
 [removeBorrowerIndex]
-DELETE FROM loanapp_borrower_index 
-WHERE loanappid=$P{loanappid} AND borrowerid=$P{borrowerid} 
+DELETE FROM loanapp_search_index
+WHERE appid=$P{appid} AND borrowerid=$P{borrowerid} 
 
 [findSearchIndex]
-SELECT * FROM loanapp_search_index WHERE objid=$P{objid} 
+SELECT * FROM loanapp_search WHERE objid=$P{objid} 
 
 [removeSearchIndex]
-DELETE FROM loanapp_search_index WHERE objid=$P{objid} 
+DELETE FROM loanapp_search WHERE objid=$P{objid} 
 
 [findPrincipalBorrower]
 SELECT b.* 

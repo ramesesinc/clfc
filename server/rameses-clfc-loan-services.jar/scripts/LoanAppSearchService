@@ -22,8 +22,11 @@ class LoanAppSearchService
 	@ProxyMethod 
 	public List getList( params ) { 
 		params.searchtext = (params.searchtext? params.searchtext: '')+'%'; 
-		params.state = (params.state? param.state: params._tag);		
-		return em.getList(params); 
+		params.state = (params.state? param.state: params._tag);
+		if (params.appmode == 'CAPTURE') 
+			return em.getCaptureList(params); 
+	    else 
+			return em.getList(params); 
 	}
 
 }

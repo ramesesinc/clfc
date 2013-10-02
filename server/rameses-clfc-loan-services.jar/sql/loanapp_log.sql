@@ -1,3 +1,2 @@
 [getList]
-SELECT * FROM loanapp_log WHERE loanappid = $P{loanappid}
-ORDER BY dtposted DESC
+SELECT * FROM loanapp_log WHERE appid=$P{appid} ORDER BY dtposted DESC 

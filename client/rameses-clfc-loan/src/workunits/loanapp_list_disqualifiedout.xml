@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/ListController.xml">
     
     <invokers>
-        <invoker folderid="/explorer/afterfla" caption="Disqualified Out" permission="system" index="4"/>
+        <invoker folderid="/explorer/txn/afterfla" caption="Disqualified Out" permission="system" index="4"/>
    </invokers>
    
     <code>

@@ -60,6 +60,6 @@ class BorrowerSpouseInfoController
                 binding.refresh('entity.residency.*|entity.occupancy.*');
             }
         ]; 
-        return InvokerUtil.lookupOpener('customer:lookup', params); 
+        return InvokerUtil.lookupOpener('customer:search', params); 
     } 
 }

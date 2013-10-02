@@ -4,7 +4,7 @@
  * Created on September 28, 2013, 2:24 PM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.calendar;
 
 import com.rameses.rcp.ui.annotations.Template;
 
@@ -13,7 +13,8 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  wflores
  */
 @Template(com.rameses.osiris2.themes.FormPage.class)
-public class HolidayEventPage extends javax.swing.JPanel {
+public class HolidayEventPage extends javax.swing.JPanel 
+{
     
     public HolidayEventPage() {
         initComponents();

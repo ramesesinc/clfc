@@ -1,8 +1,10 @@
 <workunit>
     <invokers>
-        <invoker type="route:create" action="create" caption="Route" target="popup" resizable="false"/>
-        <invoker type="route:open" action="open" caption="Route" target="popup" resizable="false"/>
-    </invokers>
+        <invoker type="route:create" action="create" caption="Route" 
+            role="ROUTE_AUTHOR" target="popup" resizable="false"/> 
+        <invoker type="route:open" action="open" caption="Route" 
+            role="ROUTE_AUTHOR" target="popup" resizable="false"/> 
+    </invokers>     
     <code>
         import com.rameses.rcp.common.*;
         import com.rameses.osiris2.common.*;
@@ -16,6 +18,6 @@
         }
     </code>
     <pages>
-        <page name="com.rameses.clfc.loan.RoutePage"/>
+        <page name="com.rameses.clfc.route.RoutePage"/>
     </pages>
 </workunit>

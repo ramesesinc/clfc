@@ -6,59 +6,21 @@ import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 import com.rameses.clfc.loan.controller.*;
 
-class CaptureLoanAppController extends AbstractLoanAppController
+class CaptureLoanAppController extends LoanAppController 
 {
-    @Service('CaptureLoanAppService')
-    def service; 
-    
-    @PropertyChangeListener
-    def listener = [
-        "entity.apptype": {o->
-            if (o == 'NEW') { 
-                entity.previousloans?.clear(); 
-                previousLoansHandler.reload(); 
-            } 
-        }
-    ]
-    
-    void init() {
-        entity = service.initEntity();
-        entity.appmode = 'CAPTURE';
-        entity.previousloans = [];
-        productTypes = entity.productTypes;
+    def getFormId() {
+        return 'CLOAN-' + entity.appno;
     }
     
-    def save() {
-        if(entity.apptype != 'NEW' && entity.previousloans.isEmpty())
-            throw new Exception('Previous Loans are required.');
+    public boolean isEditButtonVisible() {
+        if (mode != 'read') return false; 
         
-        return super.save();
+        return (entity.appmode == 'CAPTURE' && entity.state == 'RELEASED'); 
     }
     
-    def getTitle() { return 'Capture Loan Application'; }
-    protected def getService() { return service }
-        
-    def previousLoansHandler = [
-        fetchList: {o->
-            if(!entity.previousloans) entity.previousloans = [];
-            return entity.previousloans
-        },
-        createItem: {
-            return [loancount: entity.previousloans.size()+1];
-        },
-        onAddItem: {o->
-            entity.previousloans.add(o)
-        },
-        onRemoveItem: {o->
-            if( MsgBox.confirm("You are about to remove this loan. Continue?") ) {
-                entity.previousloans.remove(o)
-                return true
-            }
-            return false
-        },
-        onColumnUpdate: {o, colName->
-            def item = entity.previousloans.find{ it == o }
-            if( item ) item = o
-        }
-    ] as EditorListModel;   
+    public boolean isEditableMode() { 
+        return (mode == 'edit'); 
+    }
+    
+    
 }

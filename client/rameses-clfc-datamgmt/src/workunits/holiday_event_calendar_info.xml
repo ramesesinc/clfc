@@ -1,9 +1,9 @@
 <workunit>
     <invokers>
         <invoker type="holidayevent:create" action="create" caption="Holiday Event" 
-            target="popup" resizable="false"/>
+            role="HOLIDAY_EVENT_AUTHOR" target="popup" resizable="false"/>
         <invoker type="holidayevent:open" action="open" caption="Holiday Event" 
-            target="popup" resizable="false"/>
+            role="HOLIDAY_EVENT_AUTHOR" target="popup" resizable="false"/>
     </invokers>
     <code>
         import com.rameses.rcp.common.*;
@@ -20,6 +20,6 @@
         }
     </code>
     <pages>
-        <page name="com.rameses.clfc.loan.HolidayEventPage"/>
+        <page name="com.rameses.clfc.calendar.HolidayEventPage"/>
     </pages>
 </workunit>

@@ -26,10 +26,13 @@ WHERE lb.parentid=$P{parentid} AND lb.type='COMAKER'
 DELETE FROM loanapp_borrower WHERE parentid=$P{parentid} AND type='COMAKER' 
 
 [getBorrowerNames]
-SELECT b.objid, b.lastname, b.firstname, b.middlename, lb.type
+SELECT 
+	b.objid, b.lastname, b.firstname, b.middlename, lb.type, 
+	CASE WHEN lb.type='PRINCIPAL' THEN 0 ELSE 1 END AS orderindex 
 FROM loanapp_borrower lb 
 	INNER JOIN borrower b ON lb.borrowerid=b.objid 
 WHERE lb.parentid=$P{parentid} AND lb.type IN ('PRINCIPAL','JOINT') 
+ORDER BY orderindex 
 
 [removeItems]
 DELETE FROM loanapp_borrower WHERE parentid=$P{parentid} 

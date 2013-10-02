@@ -116,7 +116,7 @@ class CaptureLoanAppService
 				appid: data.objid, 
 				searchtext: sval 
 			];
-			loanapp.create(o, 'search_index'); 		
+			loanapp.create(o, 'loanapp_search_index'); 		
 		} 
 	} 	
 

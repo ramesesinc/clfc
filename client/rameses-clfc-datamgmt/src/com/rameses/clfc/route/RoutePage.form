@@ -41,7 +41,7 @@
           </PropertyBean>
         </Property>
         <Property name="padding" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[10, 10, 10, 20]"/>
+          <Insets value="[10, 15, 10, 20]"/>
         </Property>
       </Properties>
       <SubComponents>

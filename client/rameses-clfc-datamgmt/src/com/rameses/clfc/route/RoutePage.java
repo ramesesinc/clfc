@@ -4,7 +4,7 @@
  * Created on September 11, 2013, 10:38 AM
  */
 
-package com.rameses.clfc.loan;
+package com.rameses.clfc.route;
 
 import com.rameses.osiris2.themes.FormPage;
 import com.rameses.rcp.ui.annotations.Template;
@@ -14,9 +14,8 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  Rameses
  */
 @Template(FormPage.class)
-public class RoutePage extends javax.swing.JPanel {
-    
-    /** Creates new form RoutePage */
+public class RoutePage extends javax.swing.JPanel 
+{    
     public RoutePage() {
         initComponents();
     }
@@ -37,7 +36,7 @@ public class RoutePage extends javax.swing.JPanel {
         xTitledBorder1.setFont(new java.awt.Font("Tahoma", 1, 11));
         xTitledBorder1.setTitle(" Route Information ");
         xFormPanel1.setBorder(xTitledBorder1);
-        xFormPanel1.setPadding(new java.awt.Insets(10, 10, 10, 20));
+        xFormPanel1.setPadding(new java.awt.Insets(10, 15, 10, 20));
         xTextField1.setCaption("Code");
         xTextField1.setName("entity.code");
         xTextField1.setPreferredSize(new java.awt.Dimension(200, 20));

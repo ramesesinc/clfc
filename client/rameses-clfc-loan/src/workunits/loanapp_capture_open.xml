@@ -1,0 +1,16 @@
+<workunit>
+    <invokers>
+        <invoker type="loanapp-capture:open" caption="Loan Application" action="open" target="window"/>
+        
+        <invoker type="formActions" caption="Edit" action="edit" visibleWhen="#{editButtonVisible == true}" immediate="true"/>
+        <invoker type="formActions" caption="Cancel" action="cancel" visibleWhen="#{editableMode == true}" immediate="true"/>
+        <invoker type="formActions" caption="Save" action="save" visibleWhen="#{editableMode == true}"/>         
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.capture.CaptureLoanAppController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.LoanAppPage"/> 
+        <page template="com.rameses.clfc.loan.LoanAppBlankPage" name="blankpage"/> 
+    </pages>
+</workunit>

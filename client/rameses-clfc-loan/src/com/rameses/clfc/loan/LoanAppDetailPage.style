@@ -1,28 +1,24 @@
-"data.*|producttype|clienttype" [caller.mode != 'edit']{
+"data.*" [caller.mode != 'edit']{
     enabled: false; 
-    background-color: rgb(250,250,250);
 }
-"data.*|producttype|clienttype" [caller.mode == 'edit']{
-    enabled: true;
-    background-color: #fff;
-}
-"data.marketedby" [caller.mode == 'edit' && clienttype.value != 'MARKETED'] {
-    enabled: false; 
-    background-color: rgb(250,250,250);
-} 
-"data.marketedby" [caller.mode == 'edit' && clienttype.value == 'MARKETED'] {
+"data.*" [caller.mode == 'edit']{
     enabled: true; 
-    background-color: #fff;    
 }
-"data.route" [loanapp.state == 'FOR_INSPECTION' && caller.mode != 'edit'] {
+"data.marketedby" [caller.mode=='edit' && data.clienttype=='MARKETED'] {
+    enabled: true; 
+} 
+"data.route" [caller.mode=='edit' && loanapp.state=='FOR_INSPECTION'] {
+    enabled: true; 
+}
+"data.*" [caller.mode=='edit' && loanapp.appmode=='CAPTURE' && loanapp.state=='RELEASED'] {
     enabled: false; 
-    background-color: rgb(250,250,250);
 }
-"data.route" [loanapp.state == 'FOR_INSPECTION' && caller.mode == 'edit'] {
-    enabled: true;
-    background-color: #fff;    
+"data.(clienttype|marketedby|route)" [caller.mode=='edit' && loanapp.appmode=='CAPTURE' && loanapp.state=='RELEASED'] {
+    enabled: true; 
 }
-"data.route" [loanapp.state != 'FOR_INSPECTION'] {
+"data.producttype.*" [caller.mode=='edit' && loanapp.appmode=='CAPTURE' && loanapp.state=='RELEASED'] {
     enabled: false; 
-    background-color: rgb(250,250,250);
 }
+"data.marketedby" [caller.mode=='edit' && data.clienttype!='MARKETED'] {
+    enabled: false; 
+} 

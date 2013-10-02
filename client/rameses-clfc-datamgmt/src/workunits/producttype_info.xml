@@ -1,7 +1,9 @@
 <workunits>
     <invokers>
-        <invoker type="producttype:create" action="create" caption="Product Type" target="popup" resizable="false"/>
-        <invoker type="producttype:open" action="open" caption="Product Type" target="popup" resizable="false"/>
+        <invoker type="producttype:create" action="create" caption="Product Type" 
+            role="PRODUCT_TYPE_AUTHOR" target="popup" resizable="false"/>
+        <invoker type="producttype:open" action="open" caption="Product Type" 
+            role="PRODUCT_TYPE_AUTHOR" target="popup" resizable="false"/>
     </invokers>
     <code>
         <![CDATA[
@@ -20,6 +22,6 @@
         ]]>
     </code>
     <pages>
-        <page template="com.rameses.clfc.loan.ProductTypePage"/>
+        <page template="com.rameses.clfc.producttype.ProductTypePage"/>
     </pages>
 </workunits>

@@ -34,33 +34,42 @@ class PrincipalBorrowerService
 	public def update ( params ) {
 		if (!params.objid) throw new Exception('Please specify objid'); 
 
+		println 'update: pass 1.0';
 		def data = loanAppService.findByObjid(params);
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found'); 
 
 		def borrower = params.remove('borrower'); 
 		data.borrower.objid = borrower.objid;
 		data.borrower.name = borrowerService.createFullName(borrower.lastname, borrower.firstname, borrower.middlename);
+		println 'update: pass 1.1';
 		loanAppService.em.update(data); 
+		println 'update: pass 1.2';
 		borrowerService.update(borrower); 
+		println 'update: pass 1.3';
 		loanapp_borrower.removePrincipalBorrower([parentid: data.objid]); 
 
 		def lb = [
-			objid: 		 'LBRWR' + new UID(), 
-			parentid: 	 data.objid, 
-			borrowerid:  borrower.objid, 
-			principalid: borrower.objid, 
-			type: 		 'PRINCIPAL' 
+			objid: 		  'LBRWR' + new UID(), 
+			parentid: 	  data.objid, 
+			borrowerid:   borrower.objid, 
+			borrowername: borrower.name,  
+			principalid:  borrower.objid, 
+			type: 		  'PRINCIPAL' 
 		];
+		println 'update: pass 1.4';		
 		loanapp_borrower.create(lb); 
 
+		println 'update: pass 1.5';
 		def list = loanapp_borrower.getBorrowerNames([parentid: data.objid]); 
 		for (o in list) {
 			o.borrowerid = o.objid; 
 			o.borrowertype = o.type; 			
 			o.borrowername = borrowerService.createFullName(o.lastname, o.firstname, o.middlename); 
 		}
+		println 'update: pass 1.6';		
 		loanAppService.updateBorrowerIndices(data.objid, list);  
-		data.borrower = borrower;  
+		data.borrower = borrower;
+		println 'update: pass 1.7';  
 		return data; 
 	} 
 }
