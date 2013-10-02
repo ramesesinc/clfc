@@ -245,6 +245,7 @@ class LoanPaymentService
 			itm.balance = new BigDecimal(itm.balance).setScale(2, BigDecimal.ROUND_HALF_UP);
 			itm.partialpayment = it.partialPayment? new BigDecimal(it.partialPayment).setScale(2, BigDecimal.ROUND_HALF_UP) : 0.00;
 			//println 'item-> '+itm;
+			itm.txndate = new Date();
 			ledgerdb.create(itm, "detail");
 		}		
 		ledgerdb.update([objid: ledger.objid, dtlastpaid: txndate], "dtlastpaid");
@@ -339,18 +340,21 @@ class LoanPaymentService
 		def ledgeritem = params.lastledgeritem;
 		def itm = createLedgerItem([objid: ledgeritem.parentid]);
 		itm.state = 'OFFSET';
-		itm.amtdue = ledgeritem.amtdue;
-		itm.interestdue = ledgeritem.interestdue;
-		itm.penaltydue = ledgeritem.penaltydue;
-		itm.amtpaid = ledgeritem.amtpaid;
-		itm.interestpaid = ledgeritem.interestpaid;
-		itm.penaltypaid = ledgeritem.penaltypaid;
-		itm.amtbal = ledgeritem.amtbal;
-		itm.interestbal = ledgeritem.interestbal;
-		itm.penaltybal = ledgeritem.penaltybal;
+		itm.amtdue = ledgeritem.amtdue - (ledgeritem.amtdue*2);
+		itm.interestdue = ledgeritem.interestdue - (ledgeritem.interestdue*2);
+		itm.penaltydue = ledgeritem.penaltydue - (ledgeritem.penaltydue*2);
+		itm.amtpaid = ledgeritem.amtpaid - (ledgeritem.amtpaid*2);
+		itm.interestpaid = ledgeritem.interestpaid - (ledgeritem.interestpaid*2);
+		itm.penaltypaid = ledgeritem.penaltypaid - (ledgeritem.penaltypaid*2);
+		itm.amtbal = ledgeritem.amtbal - (ledgeritem.amtbal*2);
+		itm.interestbal = ledgeritem.interestbal - (ledgeritem.interestbal*2);
+		itm.penaltybal = ledgeritem.penaltybal - (ledgeritem.penaltybal*2);
+		itm.dtpaid = ledgeritem.dtpaid;
+		itm.refno = ledgeritem.refno;
 		itm.day = ledgeritem.day;
-		itm.balance = ledgeritem.balance;
-		itm.partialpayment = ledgeritem.partialpayment;
+		itm.balance = ledgeritem.balance - (ledgeritem.balance*2);
+		itm.partialpayment = ledgeritem.partialpayment - (ledgeritem.partialpayment*2);
+		itm.txndate = new Date();	
 		ledgerdb.create(itm, 'detail');
 
 		def item = params.item;
