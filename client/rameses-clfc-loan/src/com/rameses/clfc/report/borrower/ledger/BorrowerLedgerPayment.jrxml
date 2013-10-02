@@ -26,11 +26,11 @@
 
 	<field name="paymentschedule" class="java.util.Date"/>
 	<field name="originalamount" class="java.math.BigDecimal"/>
-	<field name="partialpayment" class="java.lang.String"/>
-	<field name="balanceamount" class="java.lang.String"/>
-	<field name="interestpaid" class="java.lang.String"/>
-	<field name="penaltycharge" class="java.lang.String"/>
-	<field name="totalpayment" class="java.lang.String"/>
+	<field name="partialpayment" class="java.math.BigDecimal"/>
+	<field name="balanceamount" class="java.math.BigDecimal"/>
+	<field name="interestpaid" class="java.math.BigDecimal"/>
+	<field name="penaltycharge" class="java.math.BigDecimal"/>
+	<field name="totalpayment" class="java.math.BigDecimal"/>
 	<field name="receiptno" class="java.lang.String"/>
 	<field name="datepaid" class="java.util.Date"/>
 	<field name="remarks" class="java.lang.String"/>
@@ -263,7 +263,7 @@ Receipt No.]]></text>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{originalamount}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="112"
 						y="0"
@@ -277,9 +277,9 @@ Receipt No.]]></text>
 					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{partialpayment}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{partialpayment}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="161"
 						y="0"
@@ -293,9 +293,9 @@ Receipt No.]]></text>
 					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{balanceamount}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{balanceamount}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="216"
 						y="0"
@@ -309,9 +309,9 @@ Receipt No.]]></text>
 					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{interestpaid}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{interestpaid}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="265"
 						y="0"
@@ -325,9 +325,9 @@ Receipt No.]]></text>
 					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{penaltycharge}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{penaltycharge}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="314"
 						y="0"
@@ -341,7 +341,7 @@ Receipt No.]]></text>
 					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font fontName="Tahoma" size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{totalpayment}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalpayment}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

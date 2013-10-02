@@ -1,0 +1,40 @@
+package com.rameses.clfc.ledger.adjustment;
+
+import com.rameses.rcp.common.*;
+import com.rameses.rcp.annotations.*;
+import com.rameses.osiris2.client.*;
+import com.rameses.clfc.util.*;
+
+class LoanLedgerAdjustmentController
+{
+    @Service("LoanLedgerAdjustmentService")
+    def adjustmentSvc;
+    
+    String title = "Ledger Adjustment";
+    def ledger;
+    def paymentTypes = LoanUtil.paymentTypes;
+    def payments;
+    
+    void init() {
+        payments = adjustmentSvc.getPayments(ledger)
+    }
+    
+    def paymentHandler = [
+        fetchList: {o->
+            if(payments == null) payments = [];
+            return payments;
+        }, 
+        onColumnUpdate: {item, colName->
+            item.adjusted = true;
+        }
+    ] as EditorListModel
+            
+    def save() {
+        adjustmentSvc.create([ledgerid: ledger.ledgerid, payments: payments]);
+        return close();
+    }
+    
+    def close() {
+        return '_close';
+    }
+}

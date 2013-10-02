@@ -38,11 +38,11 @@ class LoanLedgerReportService
 			def itm = [
 				paymentschedule 	: dateSvc.add(data.dategranted, it.day+''),
 				originalamount		: null,
-				partialpayment		: it.partialpayment+'',
-				balanceamount		: it.balance+'',
-				interestpaid		: (it.interestpaid > 0)? it.interestpaid+'' : null,
-				penaltycharge		: it.penaltypaid+'',
-				totalpayment		: (it.amtpaid > 0)? it.amtpaid+'' : null,
+				partialpayment		: it.partialpayment,
+				balanceamount		: it.balance,
+				interestpaid		: (it.interestpaid != 0)? it.interestpaid : null,
+				penaltycharge		: it.penaltypaid,
+				totalpayment		: (it.amtpaid != 0)? it.amtpaid : null,
 				receiptno			: it.refno,
 				datepaid			: it.dtpaid
 			];
@@ -77,11 +77,6 @@ class LoanLedgerReportService
 				prevrefno = it.refno;
 				prevbal = it.balance;
 			} else {
-				itm.partialpayment = itm.partialpayment? '('+itm.partialpayment+')' : null;
-				itm.balanceamount = itm.balanceamount? '('+itm.balanceamount+')' : null;
-				itm.interestpaid = itm.interestpaid? '('+itm.interestpaid+')' : null;
-				itm.penaltycharge = itm.penaltycharge? '('+itm.penaltycharge+')' : null;
-				itm.totalpayment = itm.totalpayment? '('+itm.totalpayment+')' : null;
 				itm.receiptno = null;
 				itm.datepaid = null;
 			}
@@ -89,75 +84,5 @@ class LoanLedgerReportService
 		}
 
 		return data;
-		/*["amtbal":0.00, "objid":"LDGRITM-130842a:1415e188677:-8000", "interestbal":10.00
-		, "penaltydue":0.00, "state":"RECEIVED", "parentid":"LEDGER3c67f221:14154e013ee:
-		-7ff6", "penaltypaid":0.00, "balance":12000.00, "amtpaid":10.00, "refno":"B00000
-		102", "partialpayment":0.00, "dtpaid":2013-09-24 00:00:00.0, "penaltybal":3.30,
-		"interestdue":10.00, "interestpaid":10.00, "day":1, "amtdue":10.00]*/
-		//TEMP DATA
-	    /*def data = [
-	        borrowername	: 'LIAN YOUNG',
-	        spousename	: 'SUMMER YOUNG',
-	        borroweraddress	: 'CEBU CITY',
-	        borrowertelno   : '233-4152',
-	        comakername	: 'LEN VALDEZ',
-	        comakeraddress	: 'CEBU CITY',
-	        comakertelno	: '412-5689',
-	        officename      : 'OFFICE 1',
-	        officeaddress   : 'CEBU CITY',
-	        officetelno     : '233-8959',
-	        collateral      : 'COLLATERAL 1',
-	        computercode    : 'CC-5989',
-	        pn              : 'PN',
-	        checkno         : '65515616',
-	        originalamtloan : 10000.00,
-	        dategranted     : new Date(),
-	        datematurity    : new Date(),
-	        interestrate    : 20.00,
-	        term            : 129,
-	        totalcharges    : 10000.00,
-	        dailypayment    : 100.00,
-
-	        payments        : [
-	                            [
-	                                paymentschedule : new Date(),
-	                                originalamount  : 10000.00,
-	                                partialpayment  : 100.00,
-	                                balanceamount   : 9900.00,
-	                                interestpaid    : 10.00,
-	                                penaltycharge   : 10.00,
-	                                totalpayment    : 110.00,
-	                                receiptno       : '0001',
-	                                datepaid        : new Date(),
-	                                remarks         : 'TEST'
-	                            ],
-
-	                            [
-	                                paymentschedule : new Date(),
-	                                originalamount  : 10000.00,
-	                                partialpayment  : 100.00,
-	                                balanceamount   : 9800.00,
-	                                interestpaid    : 20.00,
-	                                penaltycharge   : 20.00,
-	                                totalpayment    : 120.00,
-	                                receiptno       : '0002',
-	                                datepaid        : new Date(),
-	                                remarks         : 'TEST'
-	                            ],
-
-	                            [
-	                                paymentschedule : new Date(),
-	                                originalamount  : 10000.00,
-	                                partialpayment  : 100.00,
-	                                balanceamount   : 9700.00,
-	                                interestpaid    : 30.00,
-	                                penaltycharge   : 30.00,
-	                                totalpayment    : 130.00,
-	                                receiptno       : '0003',
-	                                datepaid        : new Date(),
-	                                remarks         : 'TEST'
-	                            ]
-	                          ]
-	    ];*/
 	}
 }

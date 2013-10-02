@@ -26,8 +26,7 @@ UPDATE loan_ledger SET dtlastpaid=$P{dtlastpaid} WHERE objid=$P{objid}
 
 [findLastLedgerItemNotSameDatePaid]
 SELECT * FROM loan_ledger_detail
-WHERE dtpaid IS NOT NULL
-	AND dtpaid < $P{dtpaid}
+WHERE dtpaid < $P{dtpaid}
 	AND parentid=$P{parentid}
 ORDER BY dtpaid DESC
 LIMIT 1
@@ -47,4 +46,17 @@ WHERE la.state IN('RELEASED','CLOSED')
 [getLedgerDetailsByLedgerid]
 SELECT * FROM loan_ledger_detail
 WHERE parentid=$P{parentid}
-ORDER BY day, refno, state DESC
+ORDER BY txndate, day, refno, state DESC
+
+[getPaymentsFromLedgerDetail]
+SELECT ll.appid AS appid, lld.refno, lld.dtpaid AS txndate, 
+	lld.paytype, lld.amtpaid AS payamount
+FROM loan_ledger_detail lld
+INNER JOIN loan_ledger ll ON lld.parentid=ll.objid
+WHERE lld.paytype IS NOT NULL
+	AND lld.parentid=$P{parentid}
+ORDER BY lld.dtpaid, lld.refno
+
+[removeLedgerDetail]
+DELETE FROM loan_ledger_detail
+WHERE parentid=$P{parentid}

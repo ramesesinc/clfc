@@ -34,20 +34,21 @@
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/>
 		<field name="state" required="true"/>
-		<field name="amtdue"/>
-		<field name="interestdue"/>
-		<field name="penaltydue"/>
+		<field name="amtdue" required="true"/>
+		<field name="interestdue" required="true"/>
+		<field name="penaltydue" required="true"/>
 		<field name="amtpaid" required="true"/>
 		<field name="interestpaid" required="true"/>
-		<field name="penaltypaid"/>
-		<field name="amtbal"/>
-		<field name="interestbal"/>
-		<field name="penaltybal"/>
+		<field name="penaltypaid" required="true"/>
+		<field name="amtbal" required="true"/>
+		<field name="interestbal" required="true"/>
+		<field name="penaltybal" required="true"/>
 		<field name="dtpaid"/>
 		<field name="refno"/>
-		<field name="day"/>
-		<field name="balance"/>
-		<field name="partialpayment"/>
+		<field name="day" required="true"/>
+		<field name="balance" required="true"/>
+		<field name="partialpayment" required="true"/>
+		<field name="txndate" required="true"/>
 	</element> 
 
 </schema>
