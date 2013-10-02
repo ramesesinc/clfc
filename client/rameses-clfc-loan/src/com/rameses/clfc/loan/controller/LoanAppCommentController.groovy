@@ -13,7 +13,7 @@ class LoanAppCommentController
     def htmlbuilder = new CommentHtmlBuilder();
     
     def getHtmlview() {
-        def comments = service.getComments([loanappid: loanapp.objid]);
+        def comments = service.getComments([appid: loanapp.objid]);
         return htmlbuilder.buildComments(comments);
     }
 }
