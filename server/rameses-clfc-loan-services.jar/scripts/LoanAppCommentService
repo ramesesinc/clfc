@@ -7,7 +7,7 @@ class LoanAppCommentService
 
 	@ProxyMethod
 	public def getComments(params) {
-		if(!params.loanappid) throw new Exception('Please specify loanappid');
+		if(!params.appid) throw new Exception('Please specify appid');
 
 		return log.getList(params);
 	}

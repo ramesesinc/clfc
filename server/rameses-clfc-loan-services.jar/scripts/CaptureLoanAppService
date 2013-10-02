@@ -36,6 +36,7 @@ class CaptureLoanAppService
             borrower: [:], 
             producttype: [:], 
             branch: [:], 
+            approval: [:], 
             productTypes: productType.getList()  
         ]; 	
         return entity; 	
@@ -62,14 +63,24 @@ class CaptureLoanAppService
 		data.state = 'RELEASED'; 
 		data.version = data.previousloans.size()+1;
 
-		//def seqno = seqSvc.getNextSeries('loan'); 
-		//data.loanno = data.branch.code + addLeadingChars(seqno,'0',8); 
-		//data.appno = data.loanno + addLeadingChars(data.version,'0',2); 
 		data.appno = data.loanno; 
 		data.appmode = 'CAPTURE'; 
 		data.remarks = data.purpose;
+		if (data.approval == null) data.approval = [:]; 
+		if (!data.approval.amount) data.approval.amount = data.loanamount;
+
 		loanapp.create(data); 
 		loanapp.create(data, 'loanapp_capture'); 
+		loanapp.update(data, 'loanapp_capture_approval'); 
+
+		def log = [
+			objid:    'LOG' + new UID(), 
+			appid: 	  data.objid, 
+			dtposted: data.dtcreated, 
+			postedby: data.createdby, 
+			remarks:  'CAPTURED LOAN TRANSACTION #'+data.appno 
+		];
+		loanapp.create(log, 'loanapp_log'); 
 
 		buildSearchIndex(data);
 		buildBorrower(data);
@@ -107,7 +118,7 @@ class CaptureLoanAppService
 		data.branchcode = data.branch.code; 
 		data.branchname = data.branch.name; 
 		data.routecode  = data.route?.code;
-		loanapp.create(data, 'search'); 
+		loanapp.create(data, 'loanapp_search'); 
 
 		def searchvalues = [data.appno, data.borrower.name]; 
 		for (sval in searchvalues) {

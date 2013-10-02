@@ -82,7 +82,7 @@ class NewLoanAppService
 		data.postedby = data.createdby; 
 		data.branchcode = data.branch.code; 
 		data.branchname = data.branch.name; 
-		loanapp.create(data, 'search'); 
+		loanapp.create(data, 'loanapp_search'); 
 
 		def searchvalues = [data.appno, data.borrower.name]; 
 		for (sval in searchvalues) {
@@ -91,7 +91,7 @@ class NewLoanAppService
 				appid: data.objid, 
 				searchtext: sval 
 			];
-			loanapp.create(o, 'search_index'); 		
+			loanapp.create(o, 'loanapp_search_index'); 		
 		} 
 	} 
 
