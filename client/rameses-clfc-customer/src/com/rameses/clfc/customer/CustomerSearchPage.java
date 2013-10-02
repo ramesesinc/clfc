@@ -93,11 +93,13 @@ public class CustomerSearchPage extends javax.swing.JPanel {
         xActionBar1.setName("navActions");
         jPanel2.add(xActionBar1, java.awt.BorderLayout.WEST);
 
+        xButton3.setMnemonic('s');
         xButton3.setAccelerator("s");
         xButton3.setDepends(new String[] {"selectedCustomer"});
         xButton3.setName("select");
         xButton3.setText("Select");
 
+        xButton4.setMnemonic('c');
         xButton4.setAccelerator("c");
         xButton4.setName("cancel");
         xButton4.setText("Cancel");
@@ -120,6 +122,7 @@ public class CustomerSearchPage extends javax.swing.JPanel {
         );
         jPanel2.add(jPanel4, java.awt.BorderLayout.CENTER);
 
+        xButton1.setMnemonic('n');
         xButton1.setName("create");
         xButton1.setText("New");
 
@@ -134,6 +137,7 @@ public class CustomerSearchPage extends javax.swing.JPanel {
         xActionTextField1.setName("customerlistHandler.searchtext");
         xActionTextField1.setPreferredSize(new java.awt.Dimension(250, 22));
 
+        xButton2.setMnemonic('v');
         xButton2.setAccelerator("v");
         xButton2.setDepends(new String[] {"selectedCustomer"});
         xButton2.setDisableWhen("#{selectedCustomer == null}");

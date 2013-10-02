@@ -115,6 +115,7 @@
               <SubComponents>
                 <Component class="com.rameses.rcp.control.XButton" name="xButton3">
                   <Properties>
+                    <Property name="mnemonic" type="int" value="115"/>
                     <Property name="accelerator" type="java.lang.String" value="s"/>
                     <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
                       <StringArray count="1">
@@ -127,6 +128,7 @@
                 </Component>
                 <Component class="com.rameses.rcp.control.XButton" name="xButton4">
                   <Properties>
+                    <Property name="mnemonic" type="int" value="99"/>
                     <Property name="accelerator" type="java.lang.String" value="c"/>
                     <Property name="name" type="java.lang.String" value="cancel"/>
                     <Property name="text" type="java.lang.String" value="Cancel"/>
@@ -171,6 +173,7 @@
           <SubComponents>
             <Component class="com.rameses.rcp.control.XButton" name="xButton1">
               <Properties>
+                <Property name="mnemonic" type="int" value="110"/>
                 <Property name="name" type="java.lang.String" value="create"/>
                 <Property name="text" type="java.lang.String" value="New"/>
               </Properties>
@@ -198,6 +201,7 @@
             </Component>
             <Component class="com.rameses.rcp.control.XButton" name="xButton2">
               <Properties>
+                <Property name="mnemonic" type="int" value="118"/>
                 <Property name="accelerator" type="java.lang.String" value="v"/>
                 <Property name="depends" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
                   <StringArray count="1">
