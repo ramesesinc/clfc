@@ -1,0 +1,25 @@
+<workunit>
+    <invokers>
+        <invoker type="holidayevent:create" action="create" caption="Holiday Event" 
+            role="HOLIDAY_EVENT_AUTHOR" target="popup" resizable="false"/>
+        <invoker type="holidayevent:open" action="open" caption="Holiday Event" 
+            role="HOLIDAY_EVENT_AUTHOR" target="popup" resizable="false"/>
+    </invokers>
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.common.*;
+        
+        class HolidayEventInfoController extends CRUDController
+        {
+            String serviceName = 'HolidayEventCalendarService';
+            String entityName = 'holidayevent';
+            
+            String createFocusComponent = 'entity.date';
+            String editFocusComponent = 'entity.date';            
+            boolean allowApprove = false;
+        }
+    </code>
+    <pages>
+        <page name="com.rameses.clfc.calendar.HolidayEventPage"/>
+    </pages>
+</workunit>

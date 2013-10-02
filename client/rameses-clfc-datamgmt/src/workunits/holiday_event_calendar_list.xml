@@ -1,0 +1,7 @@
+<workunit extends="wtemplates/ListController.xml" 
+    serviceName="HolidayEventCalendarService" entityName="holidayevent">
+    
+    <invokers>
+        <invoker folderid="/explorer/master/loan" caption="Holiday Events" permission="system" index="0"/>
+   </invokers>
+</workunit>
