@@ -20,25 +20,25 @@ class BorrowerService
 			o.spouse.name = createFullName(o.spouse.lastname, o.spouse.firstname, o.spouse.middlename); 
 		}
 		
-		o.children = em.getChildren([borrowerid: o.objid]); 
+		o.children = em.getChildren([parentid: o.objid]); 
 		for (item in o.children) {
 			item.employments = em.getEmployments([refid: item.objid]); 
 			item.otherincomes = em.getOtherIncomes([refid: item.objid]); 
 		} 
-		o.educations = em.getEducations([borrowerid: o.objid]);
+		o.educations = em.getEducations([parentid: o.objid]);
 		o.employments = em.getEmployments([refid: o.objid]);
 		o.parent = em.findParent(data);
 		if (o.parent == null) o.parent = [:]; 
 
-		o.siblings = em.getSiblings([borrowerid: o.objid]);
+		o.siblings = em.getSiblings([parentid: o.objid]);
 		for (item in o.siblings) {
 			item.employments = em.getEmployments([refid: item.objid]); 
 			item.otherincomes = em.getOtherIncomes([refid: item.objid]); 
 		}
 		o.otherincomes = em.getOtherIncomes([refid: data.objid]); 
-		o.savingaccts = em.getBankAccts([borrowerid: data.objid, type:'SAVING']); 
-		o.checkingaccts = em.getBankAccts([borrowerid: data.objid, type:'CHECKING']); 
-		o.otheracct = em.findBankAcct([borrowerid: data.objid, type:'OTHER']);
+		o.savingaccts = em.getBankAccts([parentid: data.objid, type:'SAVING']); 
+		o.checkingaccts = em.getBankAccts([parentid: data.objid, type:'CHECKING']); 
+		o.otheracct = em.findBankAcct([parentid: data.objid, type:'OTHER']);
 		return o;
 	}
 
@@ -50,6 +50,7 @@ class BorrowerService
 		} else {
 			em.update(data);
 		}
+
 		updateChildren(data);
 		updateEducations(data);
 		updateEmployments(data);
@@ -57,7 +58,7 @@ class BorrowerService
 		updateSiblings(data);
 		updateOtherIncomes(data);
 		updateBankAccts(data);
-		return data; 
+		return data; 		
 	}
 
 	@ProxyMethod(local=true)
@@ -69,18 +70,18 @@ class BorrowerService
 	} 
 
 	private void updateChildren(data) {
-		def list = em.getChildren([borrowerid: data.objid]); 
+		def list = em.getChildren([parentid: data.objid]); 
 		list?.each {
 			em.removeEmployments([refid: it.objid]); 
 			em.removeOtherIncomes([refid: it.objid]);
 		}
 
-		em.removeChildren([borrowerid: data.objid]); 
+		em.removeChildren([parentid: data.objid]); 
 		if (data.children == null) data.children = [];
 
 		for (o in data.children) {
 			o.objid = 'BCHLD'+new UID();
-			o.borrowerid = data.objid; 
+			o.parentid = data.objid; 
 			em.create(o, 'children'); 
 
 			if (o.employments == null) o.employments = [];
@@ -100,12 +101,12 @@ class BorrowerService
 	} 
 
 	private void updateEducations(data) {
-		em.removeEducations([borrowerid: data.objid]); 
+		em.removeEducations([parentid: data.objid]); 
 		if (data.educations == null) data.educations = [];
 
 		for (o in data.educations) { 
 			o.objid = 'EDUC'+new UID();
-			o.borrowerid =  data.objid; 
+			o.parentid =  data.objid; 
 			em.create(o, 'education'); 
 		} 
 	} 
@@ -144,18 +145,18 @@ class BorrowerService
 	} 
 
 	private void updateSiblings(data) {
-		def list = em.getSiblings([borrowerid: data.objid]); 
+		def list = em.getSiblings([parentid: data.objid]); 
 		list?.each {
 			em.removeEmployments([refid: it.objid]); 
 			em.removeOtherIncomes([refid: it.objid]);
 		}
 
-		em.removeSiblings([borrowerid: data.objid]); 
+		em.removeSiblings([parentid: data.objid]); 
 		if (data.siblings == null) data.siblings = [];
 
 		for (o in data.siblings) {
 			o.objid = 'SIBL'+new UID();
-			o.borrowerid = data.objid; 
+			o.parentid = data.objid; 
 			em.create(o, 'sibling'); 
 
 			if (o.employments == null) o.employments = [];
@@ -186,12 +187,12 @@ class BorrowerService
 	} 
 
 	private void updateBankAccts(data) { 
-		em.removeAllBankAccts([borrowerid: data.objid]); 
+		em.removeAllBankAccts([parentid: data.objid]); 
 
 		if (data.savingaccts == null) data.savingaccts = [];
 		for (o in data.savingaccts) { 
 			o.objid = 'BACCT'+new UID();
-			o.borrowerid = data.objid;  
+			o.parentid = data.objid;  
 			o.type = 'SAVING';
 			em.create(o, 'bankacct'); 
 		} 
@@ -199,13 +200,14 @@ class BorrowerService
 		if (data.checkingaccts == null) data.checkingaccts = [];
 		for (o in data.checkingaccts) {
 			o.objid = 'BACCT'+new UID();
-			o.borrowerid = data.objid; 
+			o.parentid = data.objid; 
 			o.type = 'CHECKING';
 			em.create(o, 'bankacct');
 		}
 
 		if (data.otheracct != null) {
 			data.otheracct.objid = 'BACCT'+new UID();
+			data.otheracct.parentid = data.objid;
 			data.otheracct.bankname = 'OTHER';
 			data.otheracct.type = 'OTHER';
 			em.create(data.otheracct, 'bankacct'); 

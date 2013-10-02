@@ -46,13 +46,14 @@ class ComakerService
 		loanapp_borrower.removeComakers([parentid: data.objid]); 
 		for (o in borrowers) {
 			def lb = [
-				objid: 		 'LBRWR' + new UID(), 
-				parentid: 	 data.objid, 
-				borrowerid:  o.objid, 
-				principalid: data.borrower.objid, 
-				relaterid:   o.objid, 
-				type: 		 'COMAKER',
-				relation:    o.relation  
+				objid: 		  'LBRWR' + new UID(), 
+				parentid: 	  data.objid, 
+				borrowerid:   o.objid, 
+				borrowername: o.name, 
+				principalid:  data.borrower.objid, 
+				relaterid:    o.objid, 
+				type: 		  'COMAKER',
+				relation:     o.relation  
 			]; 
 			loanapp_borrower.create(lb, 'comaker'); 
 		} 

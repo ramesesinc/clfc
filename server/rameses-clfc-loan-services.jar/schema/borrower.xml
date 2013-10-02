@@ -45,7 +45,7 @@
 
 	<element name="children" tablename="borrower_children"> 
 		<field name="objid" primary="true"/> 
-		<field name="borrowerid" required="true"/> 
+		<field name="parentid" required="true"/> 
 		<field name="name" required="true"/> 
 		<field name="age" required="true"/> 
 		<field name="education"/> 
@@ -74,7 +74,7 @@
 
 	<element name="education" tablename="borrower_education"> 
 		<field name="objid" primary="true"/> 
-		<field name="borrowerid" required="true"/>
+		<field name="parentid" required="true"/>
 		<field name="attainment" required="true"/> 
 		<field name="school" required="true"/> 
 		<field name="remarks"/> 
@@ -92,7 +92,7 @@
 
 	<element name="sibling" tablename="borrower_sibling"> 
 		<field name="objid" primary="true"/> 
-		<field name="borrowerid" required="true"/>
+		<field name="parentid" required="true"/>
 		<field name="name" required="true"/>
 		<field name="age" required="true"/>
 		<field name="address" required="true"/>		
@@ -100,7 +100,7 @@
 
 	<element name="bankacct" tablename="borrower_bankacct"> 
 		<field name="objid" primary="true"/> 
-		<field name="borrowerid" required="true"/> 
+		<field name="parentid" required="true"/> 
 		<field name="type"/> 
 		<field name="bankname" required="true"/> 
 		<field name="acctno"/> 

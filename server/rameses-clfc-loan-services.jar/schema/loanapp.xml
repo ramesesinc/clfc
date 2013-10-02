@@ -65,8 +65,6 @@
 	<element name="route" tablename="loanapp">
 		<field name="objid" primary="true"/>
 		<field name="route_code" required="true"/>
-		<field name="route_description" required="true"/>
-		<field name="route_area" required="true"/>
 	</element>
 
 	<element name="approval" tablename="loanapp">
@@ -89,7 +87,7 @@
 		<field name="relation"/> 
 	</element>	
 
-	<element name="search" tablename="loanapp_search">
+	<element name="loanapp_search" tablename="loanapp_search">
 		<field name="objid" primary="true"/> 
 		<field name="state" required="true"/>
 		<field name="appno" required="true"/>
@@ -102,13 +100,13 @@
 		<field name="postedby" required="true"/>		
 	</element> 
 
-	<element name="search_index" tablename="loanapp_search_index">
+	<element name="loanapp_search_index" tablename="loanapp_search_index">
 		<field name="objid" primary="true"/> 
 		<field name="appid" required="true"/> 
 		<field name="searchtext" required="true"/> 
 	</element>	
 
-	<element name="search_borrower_index" tablename="loanapp_search_index">
+	<element name="loanapp_search_borrower_index" tablename="loanapp_search_index">
 		<field name="objid" primary="true"/> 
 		<field name="appid" required="true"/> 
 		<field name="searchtext" required="true"/> 

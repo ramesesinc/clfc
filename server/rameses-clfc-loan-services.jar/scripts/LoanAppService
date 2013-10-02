@@ -11,6 +11,12 @@ class LoanAppService
 	@ActiveDB(value='loanapp_business')
 	def business;
 
+	@ActiveDB(value='loan_product_type')
+	def productType;	
+
+	@ActiveDB(value='loan_route')
+	def emRoute;	
+
 	@Service('DateService') 
 	def dateService;
 
@@ -24,10 +30,18 @@ class LoanAppService
 	public def getEm() { return loanapp; } 	
 
 	@ProxyMethod 
+	public def getProductTypes() { 
+		return productType.getList(); 
+	} 
+
+	@ProxyMethod 
 	public def open( params ) {
 		def data = findByObjid(params); 
 		if (!data) throw new Exception('\''+params.objid+'\' loan application record not found');
 		
+		def route = emRoute.findByCode([code: data.route?.code]); 
+		if (route) data.route = route;
+
 		return data;
 	}
 
@@ -51,12 +65,12 @@ class LoanAppService
 	@ProxyMethod(local=true) 
 	public void updateBorrowerIndices(loanappid, list) { 
 		def data = findByObjid([objid: loanappid]); 
-		loanapp.removeBorrowerIndices([loanappid: data.objid]); 
+		loanapp.removeBorrowerIndices([appid: data.objid]); 
 		for (o in list) {
-			o.objid = 'BIDX' + new UID();
-			o.loanappid = data.objid;
-			o.loanappno = data.appno;
-			loanapp.create(o, 'borrower_index'); 
+			o.objid = 'IDX' + new UID();
+			o.appid = data.objid;
+			o.searchtext = o.borrowername; 
+			loanapp.create(o, 'loanapp_search_borrower_index'); 
 		}
 
 		data.branchcode = data.branch.code;
@@ -68,9 +82,9 @@ class LoanAppService
 		if (si == null) { 
 			data.dtposted = data.dtcreated;
 			data.postedby = data.createdby;
-			loanapp.create(data, 'search_index');
+			loanapp.create(data, 'loanapp_search');
 		} else {
-			loanapp.update(data, 'search_index');
+			loanapp.update(data, 'loanapp_search');
 		}
 	}
 
@@ -92,7 +106,7 @@ class LoanAppService
 		o.state = data.state; 
 		o.dtposted = data.dtposted;
 		o.postedby = data.postedby;
-		loanapp.update(o, 'search_index'); 
+		loanapp.update(o, 'loanapp_search'); 
 		loanapp.removeRecommendation(data); 
 
 		o = [
@@ -125,7 +139,7 @@ class LoanAppService
 		o.state = data.state; 
 		o.dtposted = data.dtposted;
 		o.postedby = data.postedby;
-		loanapp.update(o, 'search_index'); 
+		loanapp.update(o, 'loanapp_search'); 
 		loanapp.removeRecommendation(data); 
 
 		o = [objid: data.objid, ciremarks: params.ciremarks];
@@ -160,7 +174,7 @@ class LoanAppService
 		o.state = data.state; 
 		o.dtposted = data.dtposted;
 		o.postedby = data.postedby;
-		loanapp.update(o, 'search_index'); 
+		loanapp.update(o, 'loanapp_search'); 
 		loanapp.removeRecommendation(data);
 
 		o = [
@@ -192,7 +206,7 @@ class LoanAppService
 		o.state = data.state; 
 		o.dtposted = data.dtposted; 
 		o.postedby = data.postedby;
-		loanapp.update(o, 'search_index'); 
+		loanapp.update(o, 'loanapp_search'); 
 
 		o = loanapp.findRecommendation(data); 
 		if (o == null) throw new Exception('Unable to find previous recommandation. Please check!'); 
