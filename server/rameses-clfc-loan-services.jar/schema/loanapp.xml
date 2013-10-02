@@ -62,6 +62,24 @@
 		<field name="dtreleased" required="true"/> 
 	</element>	
 
+	<element name="loanapp_capture_approval" tablename="loanapp">
+		<field name="objid" primary="true"/>
+		<field name="approval_type" /> 
+		<field name="approval_amount" required="true"/> 
+		<field name="approval_absencetype" /> 
+		<field name="approval_absencepolicy"/> 
+		<field name="approval_absenceprovision" /> 
+	</element>		
+
+	<element name="loanapp_approval" tablename="loanapp">
+		<field name="objid" primary="true"/>
+		<field name="approval_type" required="true"/> 
+		<field name="approval_amount" required="true"/> 
+		<field name="approval_absencetype" required="true"/> 
+		<field name="approval_absencepolicy" required="true"/> 
+		<field name="approval_absenceprovision" required="true"/> 
+	</element>		
+
 	<element name="route" tablename="loanapp">
 		<field name="objid" primary="true"/>
 		<field name="route_code" required="true"/>
@@ -128,7 +146,7 @@
 		<field name="bcohamount" required="true"/>		
 	</element>	
 
-	<element name="log" tablename="loanapp_log">
+	<element name="loanapp_log" tablename="loanapp_log">
 		<field name="objid" primary="true"/> 
 		<field name="appid" required="true"/> 
 		<field name="dtposted" required="true"/> 
