@@ -1,26 +1,38 @@
 <workunits>
     <invokers>
         <invoker type="producttype:create" action="create" caption="Product Type" 
-            role="PRODUCT_TYPE_AUTHOR" target="popup" resizable="false"/>
-        <invoker type="producttype:open" action="open" caption="Product Type" 
-            role="PRODUCT_TYPE_AUTHOR" target="popup" resizable="false"/>
-    </invokers>
-    <code>
-        <![CDATA[
-            import com.rameses.rcp.common.*;
-            import com.rameses.rcp.annotations.*;
-            import com.rameses.osiris2.client.*;
-            import com.rameses.osiris2.common.*;
+            role="LOAN_DATAMGMT_AUTHOR" permission="producttype.create" 
+            target="popup" resizable="false"/>
             
-            class ProductTypeController extends CRUDController
-            {
-                String serviceName = 'LoanProductTypeService'
-                String entityName = 'producttype'
-                
-                boolean allowApprove = false;
-            }
-        ]]>
+        <invoker type="producttype:open" action="open" caption="Product Type" 
+            role="LOAN_DATAMGMT_AUTHOR" permission="producttype.read" 
+            target="popup" resizable="false"/>
+            
+    </invokers>
+    
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+
+        class ProductTypeController extends CRUDController
+        {
+            String serviceName = 'LoanProductTypeService'
+            String entityName = 'producttype'
+
+            String createFocusComponent = 'entity.name';
+            String editFocusComponent = 'entity.description';                         
+            boolean showConfirmOnSave = false;
+            boolean allowApprove = false;
+
+            Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.create']; 
+            Map editPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.edit']; 
+            Map deletePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.delete']; 
+            Map approvePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.approve']; 
+        } 
     </code>
+    
     <pages>
         <page template="com.rameses.clfc.producttype.ProductTypePage"/>
     </pages>

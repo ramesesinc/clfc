@@ -1,5 +1,22 @@
-<workunit extends="wtemplates/ListController.xml" serviceName="LoanProductTypeService" entityName="producttype">
+<workunit extends="wtemplates/ListController.xml">
     <invokers>
-        <invoker folderid="/explorer/master/loan" caption="Product Types"/>
+        <invoker folderid="/explorer/master/loan" caption="Product Types" 
+            role="LOAN_DATAMGMT_AUTHOR" permission="producttype.read"/>
     </invokers>
+    
+    <code>
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class ProductTypeListController extends ListController 
+    {
+        String serviceName = 'LoanProductTypeService';
+        String entityName  = 'producttype';
+        
+        Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.create']; 
+        Map readPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.read']; 
+    } 
+    </code>    
 </workunit>
