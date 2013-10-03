@@ -45,7 +45,9 @@ class LoanAppBusinessService
 			business.create(o); 
 		} 
 
-		if (data.businesses.isEmpty()) {
+		if (data.appmode=='CAPTURE' && data.state=='RELEASED') {
+			//do not change the state 
+		} else if (data.businesses.isEmpty()) {
 			loanapp.changeState([objid: data.objid, state:'INCOMPLETE']); 
 		} else if (data.state == 'INCOMPLETE') {
 			loanapp.changeState([objid: data.objid, state:'PENDING']); 
