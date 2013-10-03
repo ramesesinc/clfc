@@ -60,13 +60,21 @@ class NewLoanAppService
 		data.createdby = env.USERID; 
 		data.version = 1;		
 		data.state = 'INCOMPLETE'; 
-		data.remarks = 'PURPOSE: ' + data.purpose;
 
 		def seqno = seqSvc.getNextSeries('loan'); 
 		data.loanno = data.branch.code + addLeadingChars(seqno,'0',8); 
 		data.appno = data.loanno + addLeadingChars(data.version,'0',2); 
 		loanapp.create(data); 
 		loanapp.create(data, 'loanapp_new'); 
+
+		def log = [
+			objid:    'LOG' + new UID(), 
+			appid: 	  data.objid, 
+			dtposted: data.dtcreated, 
+			postedby: data.createdby, 
+			remarks:  'NEW LOAN TRANSACTION #'+data.appno 
+		];
+		loanapp.create(log, 'loanapp_log'); 		
 
 		buildSearchIndex(data); 
 		buildBorrower(data);

@@ -65,7 +65,6 @@ class CaptureLoanAppService
 
 		data.appno = data.loanno; 
 		data.appmode = 'CAPTURE'; 
-		data.remarks = data.purpose;
 		if (data.approval == null) data.approval = [:]; 
 		if (!data.approval.amount) data.approval.amount = data.loanamount;
 
