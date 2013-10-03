@@ -6,12 +6,14 @@
 
 package com.rameses.clfc.calendar;
 
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
  * @author  wflores
  */
+@StyleSheet
 @Template(com.rameses.osiris2.themes.FormPage.class)
 public class HolidayEventPage extends javax.swing.JPanel 
 {

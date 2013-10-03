@@ -7,13 +7,14 @@
 package com.rameses.clfc.producttype;
 
 import com.rameses.osiris2.themes.FormPage;
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
-import java.math.BigDecimal;
 
 /**
  *
  * @author  Rameses
  */
+@StyleSheet
 @Template(FormPage.class)
 public class ProductTypePage extends javax.swing.JPanel 
 {    
