@@ -46,6 +46,9 @@ class LoanLedgerAdjustmentService
 		list.eachWithIndex{item, index-> 
 			if (index > startIndex) {
 				item.dtcreated = serverdate;
+				if(list[index-1].state == 'OFFSET') {
+					
+				}
 				ledger_history.create(item);
 			}
 		}

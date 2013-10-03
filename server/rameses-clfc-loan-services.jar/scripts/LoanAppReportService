@@ -1,0 +1,127 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+
+class LoanAppReportService
+{
+	@ActiveDB(value="loanapp")
+	def loanapp;
+
+	@ActiveDB(value="borrower")
+	def borrower;
+
+	@ActiveDB(value="loanapp_collateral")
+	def collateral;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def getLoanapplicationReportData( params ) {
+		if (!params.loanappid) throw new Exception('Please specify loanappid');
+		def app = loanapp.read([objid: params.loanappid]);
+		def pb = borrower.read([objid: app.borrower.objid]);
+		def currentyear = dateSvc.parseCurrentDate().year;
+		def birthyear = currentyear;
+		if(pb.birthdate != null) birthyear = dateSvc.parseDate(pb.birthdate, null).year;
+		def spousename;
+		if(pb.spouse.objid != null) {
+			spousename = pb.spouse.lastname+', '+pb.spouse.firstname+' '+pb.spouse.middlename? pb.spouse.middlename : ''
+		}
+		def list = borrower.getEmployments([refid: pb.objid]);
+		def employment = [:];
+		if(list) employment.putAll(list[0]);
+
+		list = loanapp.getBusinesses([parentid: app.objid]);
+		def business = [:];		
+		if(list) business.putAll(list[0]);
+
+		def spouseemployment = [:];
+		if(pb.spouse.objid) {
+			list = borrower.getEmployments([refid: pb.spouse.objid]);
+			if(list) spouseemployment.putAll(list[0]);
+		}
+		def propertyholdings = [];
+		list = collateral.getProperties([parentid: app.objid]);
+		def counter = (list.size() > 4)? 4 : list.size();
+		if(!list.isEmpty()) {
+			println 'size = '+list.size();
+			for(i in 1..counter) {
+				propertyholdings.add(list[i-1]);
+			}
+		}
+
+	    // TEMP DATA
+	    def data = [
+	        branchname	: 'BRANCH 1',
+	        branchaddress	:'BRANCH ADDR 1',
+	        amountapproved	: app.approval.amount,//10000.00,
+	        //purpose			: 'TEST',
+	        term            : app.producttype.term,
+
+	        // APPLICANT INFORMATION
+	       	name		: app.borrower.name,//'SAMANTHA FAYE',
+	        address		: pb.address,//'CEBU CITY',
+	        birthdate	: pb.birthdate, //new Date(),
+	        age			: currentyear - birthyear,//25,
+	        citizenship	: pb.citizenship,//'FILIPINO',
+	        spousename	: spousename, ///pb.spouse.name,//'SUMMER YOUNG',
+	        civilstatus	: pb.civilstatus,//'MARRIED',
+	        //birthplace	: 'CEBU',
+	        telno		: pb.contactno,//'233-8965',
+	        //dependent	: 'TEST TEST',
+	        //acrno		: '5615',
+
+	        // IF EMPLOYED
+	        applicantemployername	    	: employment.employer,//'HULK SMITH',
+	        applicantemployedtelno    		: employment.contactno,//'412-6556',
+	        applicantemployedaddress  		: employment.address,//'CEBU CITY',
+	        applicantemployedposition 		: employment.position,//'CLERK',
+	        applicantemployedsalary   		: employment.salary,//12000.00,
+	        applicantemployedservicelen  	: employment.lengthofservice,//3,
+	        //applicantemployedsuperiortitle 	: 'PRESIDENT',
+	        //applicantemployedcashiername 	 : 'MAYLENE CANOY',
+
+	        // IF IN BUSINESS FOR SELF
+	        applicanttradename 					: business.tradename,//'SARI-SARI STORE',
+	        applicantbusinesstelno 				: business.contactno,//'233-6561',
+	        applicantbusinesstype				: business.kind,//'RETAILER',
+	        applicantbusinessorganization		: business.ownership,//'SOLE PROPRIETORSHIP',
+	        applicantbusinesscapital	 		: business.capital,//20000.00,
+	        applicantbusinessdateestablished 	: business.dtstarted,//new Date(),
+
+	        // SPOUSE INFORMATION
+	        // IF EMPLOYED
+	        spouseemployername	    	: spouseemployment.employment,//'HULK SMITH',
+	        spouseemployedtelno    		: spouseemployment.contactno,//'412-6556',
+	        spouseemployedaddress  		: spouseemployment.address,//'CEBU CITY',
+	        spouseemployedposition 		: spouseemployment.position,//'CLERK',
+	        spouseemployedsalary   		: spouseemployment.salary,//12000.00,
+	        spouseemployedservicelen  	: spouseemployment.lengthofservice,//3,
+	        //spouseemployedsuperiortitle : 'PRESIDENT',
+	        //spouseemployedcashiername 	: 'MAYLENE CANOY',
+
+	        // IF IN BUSINESS FOR SELF
+	        /*spousetradename 	: 'SARI-SARI STORE',
+	        spousebusinesstelno 	: '233-6561',
+	        spousebusinesstype	: 'RETAILER',
+	        spousebusinessorganization	 : 'SOLE PROPRIETORSHIP',
+	        spousebusinesscapital	 : 20000.00,
+	        spousebusinessdateestablished : new Date(),*/
+
+	        // OTHER INFORMATION
+	        /*ctcno		: '46554954',
+	        ctcdateissued 	: new Date(),
+	        ctcplaceissued	: 'CEBU CITY',
+	        tin		: '646611',*/
+
+	        // PROPERTY HOLDINGS
+	        //propertyholdings: propertyholdings
+	        propertyholdings : [
+	            [classification:'LAND', location:'CEBU CITY', areavalue:30000.00, marketvalue:25000.00],
+	            [classification:'LAND', location:'CEBU CITY', areavalue:30000.00, marketvalue:25000.00],
+	            [classification:'LAND', location:'CEBU CITY', areavalue:30000.00, marketvalue:25000.00],
+	            [classification:'LAND', location:'CEBU CITY', areavalue:30000.00, marketvalue:25000.00],
+	        ]
+	    ];
+	}
+}

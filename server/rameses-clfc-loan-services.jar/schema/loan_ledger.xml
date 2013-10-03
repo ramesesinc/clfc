@@ -48,6 +48,7 @@
 		<field name="day" required="true"/>
 		<field name="balance" required="true"/>
 		<field name="partialpayment" required="true"/>
+		<field name="paytype"/>
 		<field name="txndate" required="true"/>
 	</element> 
 

@@ -26,13 +26,15 @@ class LoanLedgetHistoryService
 		def list = history.getList(params);
 		def total = 0;
 		def prevdate;
+		def prevdtcreated;
 		list.eachWithIndex{item, idx->
-			if(item.dtpaid == prevdate) {
+			if(item.dtpaid == prevdate && item.dtcreated == prevdtcreated) {
 				if(total == 0) total = list[idx-1].amtpaid
 				item.amtpaid -= total;
 				total += item.amtpaid;
 			} else total = 0;
 			prevdate = item.dtpaid;
+			prevdtcreated = item.dtcreated;
 		}
 		return list;
 	}
