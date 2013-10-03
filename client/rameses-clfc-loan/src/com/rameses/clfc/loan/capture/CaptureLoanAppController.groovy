@@ -22,5 +22,12 @@ class CaptureLoanAppController extends LoanAppController
         return (mode == 'edit'); 
     }
     
-    
+    private def menu;
+    def viewReport() {
+       if(menu == null) {
+           menu = new PopupMenuOpener();
+           menu.addAll(InvokerUtil.lookupOpeners("loanapp-report:plugin", [loanappid: entity.objid]));
+       }
+       return menu;
+    }
 }
