@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build-clfc-workspace" default="build-workspace" basedir=".">
+    
+    <target name="init">
+        <property file="build-clfc.properties"/>
+    </target>
+        
+    <target name="cleanup" depends="init">
+        <delete dir="${workspace.platform.dir}/bin/osiris2" failonerror="false"/>
+        <delete dir="${workspace.platform.dir}/downloads" failonerror="false"/>
+    </target>
+    
+    <!--=====================================================
+    = DEPLOY DEVLIBS 
+    =======================================================-->
+    <target name="deploy-project-devlibs" depends="init">
+        <property name="target.downloads.core.dir" value="${osiris3.server.dir}/workspace/web/resources/downloads/modules/core"/>
+        <copy file="${devlib.projects.dir}/osiris2-client-themes.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
+        <copy file="${devlib.projects.dir}/osiris2-client-ui.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
+        <copy file="${devlib.projects.dir}/osiris2-framework.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
+        <copy file="${devlib.projects.dir}/osiris2-report.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
+        <copy file="${devlib.projects.dir}/rameses-client-ui.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
+        <copy file="${devlib.projects.dir}/rameses-common2.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
+        <copy file="${devlib.projects.dir}/rameses-custom-impl.jar" todir="${target.downloads.core.dir}" failonerror="false"/>
+    </target>    
+    
+    <!--=====================================================
+    = DEPLOY SHARED LIBS 
+    =======================================================-->
+    <target name="deploy-project-sharedlibs" depends="init">
+        <property name="target.downloads.shared.dir" value="${osiris3.server.dir}/workspace/web/resources/downloads/modules/shared"/>
+        <copy file="${shared.projects.dir}/client/client-libs/client-system.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-libs/client-ui-extended.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-libs/rameses-client-menu.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-libs/rameses-client-report.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-libs/rameses-enterprise-accounts.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-libs/rameses-enterprise-admin.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-libs/rameses-enterprise-entity.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-libs/rameses-enterprise-treasury.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+    </target>            
+        
+    <!--=====================================================
+    = DEPLOY SHARED  
+    =======================================================-->
+    <target name="deploy-project-shared" depends="init">
+        <property name="target.downloads.shared.dir" value="${osiris3.server.dir}/workspace/web/resources/downloads/modules/shared"/>
+        <copy file="${shared.projects.dir}/client/client-system/dist/client-system.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-accounts/dist/rameses-enterprise-accounts.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+        <copy file="${shared.projects.dir}/client/rameses-enterprise-treasury/dist/rameses-enterprise-treasury.jar" todir="${target.downloads.shared.dir}" failonerror="false"/>
+    </target>
+    
+    <!--=====================================================
+    = DEPLOY CLFC APPLICATION LIBS
+    =======================================================-->
+    <target name="deploy-project-clfc-apps" depends="init">
+        <property name="target.downloads.module.dir" value="${osiris3.server.dir}/workspace/web/resources/downloads/modules"/>
+        <copy file="${clfc.project.dir}/client/rameses-clfc-customer/dist/rameses-clfc-customer.jar" todir="${target.downloads.module.dir}" failonerror="false"/>
+        <copy file="${clfc.project.dir}/client/rameses-clfc-datamgmt/dist/rameses-clfc-datamgmt.jar" todir="${target.downloads.module.dir}" failonerror="false"/>
+        <copy file="${clfc.project.dir}/client/rameses-clfc-loan/dist/rameses-clfc-loan.jar" todir="${target.downloads.module.dir}" failonerror="false"/>
+        <copy file="${clfc.project.dir}/client/rameses-clfc-main/dist/rameses-clfc-main.jar" todir="${target.downloads.module.dir}" failonerror="false"/>
+    </target>        
+        
+    <!--=====================================================
+    = COPY OSIRIS SERVER 
+    =======================================================-->
+    <target name="copy-osiris3-server" depends="init">
+        <copy todir="${workspace.osiris3.dir}/bin">
+            <fileset dir="${osiris3.server.dir}/bin"/>
+        </copy>
+        <copy todir="${workspace.osiris3.dir}/lib">
+            <fileset dir="${osiris3.server.dir}/lib"/>
+        </copy>
+        <copy todir="${workspace.osiris3.dir}/workspace">
+            <fileset dir="${osiris3.server.dir}/workspace"/>
+        </copy>
+    </target>
+
+    <!--=====================================================
+    = COPY CLFC PLATFORM
+    =======================================================-->
+    <target name="copy-clfc-platform" depends="init">
+        <copy todir="${workspace.dir}/clfc_platform">
+            <fileset dir="${clfc.project.dir}/platform/clfc_platform"/>
+        </copy>
+    </target>
+    
+    
+    <!--=====================================================
+    = DEPLOY SERVER CODES  
+    =======================================================-->
+    <target name="deploy-server-codes" depends="init">
+        <copy todir="${workspace.dir}/osiris3-server/workspace/services/apps/clfc/modules">
+            <fileset dir="${clfc.project.dir}/server"/>
+        </copy> 
+    </target>
+            
+    <target name="build-workspace" depends="init,cleanup,deploy-project-devlibs,deploy-project-sharedlibs,deploy-project-shared,deploy-project-clfc-apps,copy-osiris3-server,copy-clfc-platform,deploy-server-codes">
+    </target>
+
+</project>
