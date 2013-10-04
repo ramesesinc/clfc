@@ -1,0 +1,12 @@
+<workunit>
+    <invokers>
+        <invoker type="child:create" action="create" caption="Child Form" target="popup"/>
+        <invoker type="child:open" action="open" caption="Child Form" target="popup"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.ChildFormController"/>
+        
+    <pages>
+        <page template="com.rameses.clfc.loan.ChildFormPage"/>
+    </pages>
+</workunit>
