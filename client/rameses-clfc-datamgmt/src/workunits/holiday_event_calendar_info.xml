@@ -1,0 +1,34 @@
+<workunit>
+    <invokers>
+        <invoker type="holidayevent:create" action="create" caption="Holiday Event" 
+            role="LOAN_DATAMGMT_AUTHOR" permission="holidayevent.create" 
+            target="popup" resizable="false"/>
+            
+        <invoker type="holidayevent:open" action="open" caption="Holiday Event" 
+            role="LOAN_DATAMGMT_AUTHOR" permission="holidayevent.read" 
+            target="popup" resizable="false"/>
+    </invokers>
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.common.*;
+        
+        class HolidayEventInfoController extends CRUDController
+        {
+            String serviceName = 'HolidayEventCalendarService';
+            String entityName = 'holidayevent';
+            
+            String createFocusComponent = 'entity.date';
+            String editFocusComponent = 'entity.name';            
+            boolean showConfirmOnSave = false;
+            boolean allowApprove = false;
+            
+            Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.create']; 
+            Map editPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.edit']; 
+            Map deletePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.delete']; 
+            Map approvePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.approve'];             
+        }
+    </code>
+    <pages>
+        <page name="com.rameses.clfc.calendar.HolidayEventPage"/>
+    </pages>
+</workunit>

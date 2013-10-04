@@ -1,0 +1,17 @@
+<workunit>
+    <invokers>
+        <invoker type="route:create" action="create" caption="Route" 
+            role="LOAN_DATAMGMT_AUTHOR" permission="route.create" 
+            target="popup" resizable="false"/> 
+            
+        <invoker type="route:open" action="open" caption="Route" 
+            role="LOAN_DATAMGMT_AUTHOR" permission="route.read" 
+            target="popup" resizable="false"/>             
+    </invokers>     
+    
+    <code class="com.rameses.clfc.route.RouteController"/>
+
+    <pages>
+        <page name="com.rameses.clfc.route.RoutePage"/>
+    </pages>
+</workunit>
