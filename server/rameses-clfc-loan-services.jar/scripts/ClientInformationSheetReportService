@@ -28,8 +28,8 @@ class ClientInformationSheetReportService
 	private def getSiblings( parent ) {
 		def list = borrower.getSiblings([parentid: parent.objid]);
 		list.each{
-			it.employments = borrower.getEmployments([refid: parent.objid]);
-			it.otherincomes = borrower.getOtherIncomes([refid: parent.objid]);
+			it.employments = borrower.getEmployments([refid: it.objid]);
+			it.otherincomes = borrower.getOtherIncomes([refid: it.objid]);
 		}
 		return list;
 	}
@@ -37,8 +37,8 @@ class ClientInformationSheetReportService
 	private def getChildren( parent ) {
 		def list = borrower.getChildren([parentid: parent.objid]);
 		list.each{
-			it.employments = borrower.getEmployments([refid: parent.objid]);
-			it.otherincomes = borrower.getOtherIncomes([refid: parent.objid]);
+			it.employments = borrower.getEmployments([refid: it.objid]);
+			it.otherincomes = borrower.getOtherIncomes([refid: it.objid]);
 		}
 		return list;
 	}
@@ -55,11 +55,11 @@ class ClientInformationSheetReportService
                 joint.spouse.age = 0;
                 if (joint.spouse.birthdate) joint.spouse.age = currentdate.year - dateSvc.parseDate(joint.spouse.birthdate, null).year;
             }
-			joint.children = borrower.getChildren([parentid: joint.objid]);
+			joint.children = getChildren(joint);//borrower.getChildren([parentid: joint.objid]);
 			joint.educations = borrower.getEducations([parentid: joint.objid]);
 			joint.employments = borrower.getEmployments([refid: joint.objid]);
 			joint.parents = borrower.findParent(joint);
-			joint.siblings = borrower.getSiblings(joint);
+			joint.siblings = getSiblings(joint);//borrower.getSiblings(joint);
 			joint.otherincomes = borrower.getOtherIncomes([refid: joint.objid]);
 			joint.savingaccts = borrower.getBankAccts([parentid: joint.objid, type: 'SAVING']);
 			joint.checkingaccts = borrower.getBankAccts([parentid: joint.objid, type: 'CHECKING']);
@@ -79,11 +79,11 @@ class ClientInformationSheetReportService
                 comaker.spouse.age = 0;
                 if (comaker.spouse.birthdate) comaker.spouse.age = currentdate.year - dateSvc.parseDate(comaker.spouse.birthdate, null).year;
             }
-			comaker.children = borrower.getChildren([parentid: comaker.objid]);
+			comaker.children = getChildren(comaker);//borrower.getChildren([parentid: comaker.objid]);
 			comaker.educations = borrower.getEducations([parentid: comaker.objid]);
 			comaker.employments = borrower.getEmployments([refid: comaker.objid]);
 			comaker.parents = borrower.findParent(comaker);
-			comaker.siblings = borrower.getSiblings(comaker);
+			comaker.siblings = getSiblings(comaker);//borrower.getSiblings(comaker);
 			comaker.otherincomes = borrower.getOtherIncomes([refid: comaker.objid]);
 			comaker.savingaccts = borrower.getBankAccts([parentid: comaker.objid, type: 'SAVING']);
 			comaker.checkingaccts = borrower.getBankAccts([parentid: comaker.objid, type: 'CHECKING']);
@@ -106,7 +106,7 @@ class ClientInformationSheetReportService
             pb.spouse.age = 0;
             if (pb.spouse.birthdate) pb.spouse.age = currentdate.year - dateSvc.parseDate(pb.spouse.birthdate, null).year;
         }
-		pb.children = borrower.getChildren([parentid: pb.objid]);
+		pb.children = getChildren(pb);//borrower.getChildren([parentid: pb.objid]);
 		pb.educations = borrower.getEducations([parentid: pb.objid]);
 		pb.employments = borrower.getEmployments([refid: pb.objid]);
 		pb.parents = borrower.findParent(pb);
@@ -174,6 +174,20 @@ class ClientInformationSheetReportService
         if(amt) data.totalcav += amt;
         amt = data.collateral.vehicles.marketvalue.sum();
         if(amt) data.totalcav += amt;
+        data.jointborrower = [
+            names           : data.jointborrowers.collect{ it.lastname+', '+it.firstname+' '+(it.middlename? it.middlename : '') }.join(', '),
+            ages            : data.jointborrowers.collect{ it.age }.join(', '),
+            civilstatuses   : data.jointborrowers.collect{ it.civilstatus }.join(', '),
+            relations       : data.jointborrowers.collect{ it.relation }.join(', '),
+            addresses       : data.jointborrowers.collect{ it.address }.join(', ')
+        ];
+        data.comaker = [
+            names           : data.comakers.collect{ it.lastname+', '+it.firstname+' '+(it.middlename? it.middlename : '') }.join(', '),
+            ages            : data.comakers.collect{ it.age }.join(', '),
+            civilstatuses   : data.comakers.collect{ it.civilstatus }.join(', '),
+            relations       : data.comakers.collect{ it.relation }.join(', '),
+            addresses       : data.comakers.collect{ it.address }.join(', ')
+        ];
         return data;
 	}
 }
