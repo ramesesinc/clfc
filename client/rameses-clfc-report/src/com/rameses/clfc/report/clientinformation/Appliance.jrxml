@@ -30,8 +30,11 @@
 	<field name="serialno" class="java.lang.String"/>
 	<field name="modelno" class="java.lang.String"/>
 	<field name="marketvalue" class="java.math.BigDecimal"/>
-	<field name="dtacquired" class="java.lang.String"/>
+	<field name="dtacquired" class="java.util.Date"/>
 
+	<variable name="totalcav" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{marketvalue}]]></variableExpression>
+	</variable>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -45,13 +48,13 @@
 			</band>
 		</pageHeader>
 		<columnHeader>
-			<band height="28"  isSplitAllowed="true" >
+			<band height="20"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="0"
 						y="0"
 						width="100"
-						height="24"
+						height="20"
 						key="staticText-1"/>
 					<box></box>
 					<textElement>
@@ -64,7 +67,7 @@
 						x="99"
 						y="0"
 						width="146"
-						height="24"
+						height="20"
 						key="staticText-2"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -77,7 +80,7 @@
 						x="346"
 						y="0"
 						width="189"
-						height="25"
+						height="20"
 						key="staticText-3"/>
 					<box></box>
 					<textElement textAlignment="Left">
@@ -88,7 +91,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="1"
-						y="26"
+						y="-1"
 						width="534"
 						height="1"
 						key="line-4"/>
@@ -97,70 +100,55 @@
 				<staticText>
 					<reportElement
 						x="244"
-						y="1"
+						y="0"
 						width="55"
-						height="15"
+						height="20"
 						key="staticText-4"/>
 					<box>					<bottomPen lineWidth="0.0"/>
 </box>
 					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Date]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="244"
-						y="11"
-						width="55"
-						height="14"
-						key="staticText-5"/>
-					<box>					<bottomPen lineWidth="0.0"/>
-</box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Acquired]]></text>
+				<text><![CDATA[Date 
+Acquired]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="298"
-						y="1"
+						y="0"
 						width="48"
-						height="15"
+						height="20"
 						key="staticText-6"/>
 					<box>					<bottomPen lineWidth="0.0"/>
 </box>
 					<textElement textAlignment="Center">
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Appraised]]></text>
+				<text><![CDATA[Appraised Value
+]]></text>
 				</staticText>
-				<staticText>
+				<line direction="TopDown">
 					<reportElement
-						x="298"
-						y="11"
-						width="48"
-						height="14"
-						key="staticText-7"/>
-					<box>					<bottomPen lineWidth="0.0"/>
-</box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Value]]></text>
-				</staticText>
+						x="0"
+						y="19"
+						width="535"
+						height="0"
+						key="line-5"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="10"  isSplitAllowed="true" >
+			<band height="11"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="2"
-						y="-1"
+						y="0"
 						width="98"
 						height="11"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"
+						isPrintWhenDetailOverflows="true"/>
 					<box>					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement>
@@ -171,10 +159,12 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="99"
-						y="-1"
+						y="0"
 						width="146"
 						height="11"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"
+						isPrintWhenDetailOverflows="true"/>
 					<box>					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement>
@@ -185,10 +175,12 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="346"
-						y="-1"
+						y="0"
 						width="189"
 						height="11"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"
+						isPrintWhenDetailOverflows="true"/>
 					<box>					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement>
@@ -196,30 +188,34 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{remarks}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="MMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="245"
-						y="-1"
+						y="0"
 						width="54"
 						height="11"
-						key="textField-1"/>
+						key="textField-1"
+						stretchType="RelativeToBandHeight"
+						isPrintWhenDetailOverflows="true"/>
 					<box>					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dtacquired}]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{dtacquired}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="298"
-						y="-1"
-						width="49"
+						y="0"
+						width="48"
 						height="11"
-						key="textField-2"/>
+						key="textField-2"
+						stretchType="RelativeToBandHeight"
+						isPrintWhenDetailOverflows="true"/>
 					<box>					<bottomPen lineWidth="0.25"/>
 </box>
-					<textElement textAlignment="Right">
+					<textElement textAlignment="Center">
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{marketvalue}]]></textFieldExpression>
@@ -230,9 +226,9 @@
 			<band height="11"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="299"
+						x="298"
 						y="0"
-						width="49"
+						width="48"
 						height="11"
 						key="textField-3"/>
 					<box>					<bottomPen lineWidth="0.25"/>
@@ -240,7 +236,7 @@
 					<textElement textAlignment="Center">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{totalcav}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement

@@ -280,19 +280,19 @@
 					</textElement>
 				<text><![CDATA[]]></text>
 				</staticText>
-			</band>
-		</columnHeader>
-		<detail>
-			<band height="13"  isSplitAllowed="true" >
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="0"
+						y="48"
 						width="534"
 						height="1"
 						key="line-4"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="13"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="110"
@@ -402,7 +402,7 @@
 						width="44"
 						height="11"
 						key="textField-9"/>
-					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
+					<box leftPadding="2" rightPadding="3">					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement textAlignment="Center">
 						<font size="8"/>

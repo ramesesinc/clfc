@@ -150,7 +150,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fathername}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{fathername}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -178,7 +178,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mothername}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{mothername}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -192,7 +192,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{address}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{address}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -206,7 +206,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{remarks}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{remarks}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -219,9 +219,13 @@
 					<textElement>
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{DTYPE}.equals("PRINCIPAL")? "PRINCIPAL BORROWER'S PARENTS' INFO" :
-	$P{DTYPE}.equals("JOINT")? "JOINT BORROWER'S PARENTS' INFO" :
-	$P{DTYPE}.equals("COMAKER")? "CO-MAKER'S PARENTS' INFO" : "SPOUSE'S PARENT'S INFO"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{DTYPE}.toUpperCase().equals("PRINCIPAL")?
+	"PRINCIPAL BORROWER'S PARENTS' INFO":
+	$P{DTYPE}.toUpperCase().equals("JOINT")?
+		"JOINT BORROWER'S PARENTS' INFO":
+		$P{DTYPE}.toUpperCase().equals("COMAKER")?
+			"CO-MAKER'S PARENTS' INFO":
+			"SPOUSE'S PARENT'S INFO"]]></textFieldExpression>
 				</textField>
 			</band>
 		</columnHeader>
