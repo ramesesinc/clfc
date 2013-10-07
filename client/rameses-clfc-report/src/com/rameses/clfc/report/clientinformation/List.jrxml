@@ -48,21 +48,129 @@
 	<field name="address" class="java.lang.String"/>
 	<field name="civilstatus" class="java.lang.String"/>
 	<field name="parents" class="java.lang.Object"/>
-	<field name="otheraccount" class="java.lang.String"/>
+	<field name="otheraccts" class="java.lang.String"/>
 	<field name="otherincomes" class="java.lang.Object"/>
 	<field name="employments" class="java.lang.Object"/>
 	<field name="siblings" class="java.lang.Object"/>
 	<field name="checkingaccts" class="java.lang.Object"/>
 	<field name="savingaccts" class="java.lang.Object"/>
 	<field name="educations" class="java.lang.Object"/>
-	<field name="businesses" class="java.lang.Object"/>
-	<field name="objid" class="java.lang.String"/>
 	<field name="residency" class="java.lang.Object"/>
 	<field name="occupancy" class="java.lang.Object"/>
-	<field name="dtype" class="java.lang.String"/>
 	<field name="children" class="java.lang.Object"/>
 	<field name="spouse" class="java.lang.Object"/>
 
+
+		<group  name="otherAccounts" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="checkingAccounts" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="savingAccounts" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="otherIncome" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="siblings" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="parents" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="employment" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="educationalBackground" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="children" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<group  name="spouse" >
+			<groupExpression><![CDATA[]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -76,15 +184,28 @@
 			</band>
 		</pageHeader>
 		<columnHeader>
-			<band height="0"  isSplitAllowed="true" >
+			<band height="26"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="12"
+						y="4"
+						width="510"
+						height="18"
+						key="textField-32"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{DTYPE}.equals("JOINT")? "JOINT BORROWER INFORMATION" : "CO-MAKER INFORMATION"]]></textFieldExpression>
+				</textField>
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="299"  isSplitAllowed="true" >
+			<band height="315"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="83"
-						y="285"
+						y="295"
 						width="397"
 						height="11"
 						key="textField-30"
@@ -94,16 +215,18 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{otheraccount}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{otheraccts}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="10"
-						y="285"
+						y="295"
 						width="77"
 						height="11"
 						key="textField-31"
-						positionType="Float"/>
+						positionType="Float">
+							<printWhenExpression><![CDATA[$F{otheraccts}? true : false]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.0"/>
 </box>
 					<textElement>
@@ -114,7 +237,7 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="260"
+						y="270"
 						width="508"
 						height="22"
 						key="subreport-12"
@@ -129,7 +252,7 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="236"
+						y="245"
 						width="508"
 						height="22"
 						key="subreport-11"
@@ -142,26 +265,30 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="212"
+						y="220"
 						width="508"
 						height="22"
 						key="subreport-9"
 						positionType="Float"
 						isPrintRepeatedValues="false"
-						isRemoveLineWhenBlank="true"/>
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
 					<dataSourceExpression><![CDATA[$F{otherincomes}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{OTHER_INCOME}]]></subreportExpression>
 				</subreport>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="188"
+						y="195"
 						width="508"
 						height="22"
 						key="subreport-17"
 						positionType="Float"
 						isPrintRepeatedValues="false"
-						isRemoveLineWhenBlank="true"/>
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
 					<subreportParameter  name="SIBLING_EMPLOYMENT">
 						<subreportParameterExpression><![CDATA[$P{SIBLING_EMPLOYMENT}]]></subreportParameterExpression>
 					</subreportParameter>
@@ -174,26 +301,30 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="164"
+						y="170"
 						width="508"
 						height="22"
 						key="subreport-4"
 						positionType="Float"
 						isPrintRepeatedValues="false"
-						isRemoveLineWhenBlank="true"/>
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
 					<dataSourceExpression><![CDATA[$F{educations}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{EDUCATIONAL_BACKGROUND}]]></subreportExpression>
 				</subreport>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="140"
+						y="144"
 						width="508"
 						height="22"
 						key="subreport-16"
 						positionType="Float"
 						isPrintRepeatedValues="false"
-						isRemoveLineWhenBlank="true"/>
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
 					<subreportParameter  name="CHILDREN_EMPLOYMENT">
 						<subreportParameterExpression><![CDATA[$P{CHILDREN_EMPLOYMENT}]]></subreportParameterExpression>
 					</subreportParameter>
@@ -206,7 +337,7 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="116"
+						y="119"
 						width="508"
 						height="22"
 						key="subreport-14"
@@ -222,7 +353,7 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="92"
+						y="94"
 						width="508"
 						height="22"
 						key="subreport-13"
@@ -237,14 +368,14 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="10"
-						y="68"
+						y="69"
 						width="508"
 						height="22"
 						key="subreport-7"
 						positionType="Float"
 						isPrintRepeatedValues="false"
 						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[$F{spouse}?true : false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$F{spouse}? true : false]]></printWhenExpression>
 						</reportElement>
 					<subreportParameter  name="RESIDENCY">
 						<subreportParameterExpression><![CDATA[$P{RESIDENCY}]]></subreportParameterExpression>

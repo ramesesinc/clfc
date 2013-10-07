@@ -3,7 +3,8 @@
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
 		 name="Spouse"
-		 columnCount="1"
+
+		 language="groovy"		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Portrait"
 		 pageWidth="535"
@@ -25,15 +26,17 @@
 
 	<parameter name="RESIDENCY" isForPrompting="false" class="java.lang.Object"/>
 
-	<field name="birthdate" class="java.lang.String"/>
+	<field name="birthdate" class="java.util.Date"/>
 	<field name="contactno" class="java.lang.String"/>
 	<field name="citizenship" class="java.lang.String"/>
-	<field name="age" class="java.lang.Integer"/>
 	<field name="address" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="occupancy" class="java.lang.Object"/>
 	<field name="residency" class="java.lang.Object"/>
 
+	<variable name="age" class="java.lang.Integer" resetType="Report" calculation="System">
+		<initialValueExpression><![CDATA[Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date())) - Integer.parseInt(new SimpleDateFormat("yyyy").format($F{birthdate}))]]></initialValueExpression>
+	</variable>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -154,7 +157,7 @@
 					</textElement>
 				<text><![CDATA[Address :]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="MMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="47"
 						y="33"
@@ -168,7 +171,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{birthdate}]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{birthdate}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -231,7 +234,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{age}+" yrs. old"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{age}+" yrs. old"]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement

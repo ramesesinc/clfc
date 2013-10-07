@@ -84,11 +84,11 @@
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{TYPE}.equals("appliance")?
-	$P{APPLIANCELIST}.source[$F{id}]?.type+" - "+$P{APPLIANCELIST}.source[$F{id}]?.brand :
+	$P{APPLIANCELIST}.source[$F{id}]?.type+" - "+$P{APPLIANCELIST}.source[$F{id}].brand :
 	$P{TYPE}.equals("vehicle")?
-		$P{VEHICLELIST}.source[$F{id}]?.make+" - "+$P{VEHICLELIST}.source[$F{id}]?.model:
+		$P{VEHICLELIST}.source[$F{id}].make+" - "+$P{VEHICLELIST}.source[$F{id}].model :
 		$P{TYPE}.equals("property")?
-			$P{PROPERTYLIST}.source[$F{id}]?.classification+" - "+$P{PROPERTYLIST}.source[$F{id}]?.location : ""]]></textFieldExpression>
+			$P{PROPERTYLIST}.source[$F{id}].classification+" - "+$P{PROPERTYLIST}.source[$F{id}].location : ""]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -104,10 +104,10 @@
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$P{TYPE}.equals("appliance")? $P{APPLIANCELIST}.source[$F{id}]?.marketvalue:
-	$P{TYPE}.equals("vehicle")? $P{VEHICLELIST}.source[$F{id}]?.marketvalue:
-	$P{TYPE}.equals("property")? $P{PROPERTYLIST}.source[$F{id}]?.marketvalue:
-	$P{APPLIANCELIST}.source[$F{id}]?.marketvalue]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$P{TYPE}.equals("appliance")? $P{APPLIANCELIST}.source[$F{id}]?.marketvalue :
+	$P{TYPE}.equals("vehicle")? $P{VEHICLELIST}.source[$F{id}]?.marketvalue :
+		$P{TYPE}.equals("property")? $P{PROPERTYLIST}.source[$F{id}]?.marketvalue :
+		$P{APPLIANCELIST}.source[$F{id}].marketvalue]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
