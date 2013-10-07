@@ -21,18 +21,28 @@ class RouteController extends CRUDController
     Map approvePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'route.approve']; 
     
     void entityChanged() {
-        listHandler.reload(); 
+        //listHandler.reload(); 
     }    
     
+    def collectors = [];
     def selectedItem;
     def listHandler = [
-        fetchList: {o-> 
-            o.code = entity.code;
-            def results = service.getCollectors(o); 
-            println 'results-> ' + results;
-            return results;
-        }  
+        fetchList: {o-> return collectors; }  
     ] as BasicListModel;
+    
+    void afterCreate(data) {
+        collectors = [];
+        listHandler.reload();
+    }
+    
+    void afterOpen(data) { 
+        loadCollectors(); 
+    } 
+    
+    void loadCollectors() {
+        collectors = service.getCollectors([code: entity.code]); 
+        listHandler.reload(); 
+    }
     
     def addItem() {
         return InvokerUtil.lookupOpener('route-collector:lookup', [
@@ -41,7 +51,7 @@ class RouteController extends CRUDController
             onselect: {o-> 
                 o.parentid = entity.code; 
                 service.addCollector(o); 
-                listHandler.reload();
+                loadCollectors(); 
             } 
         ]);
     }
@@ -50,7 +60,7 @@ class RouteController extends CRUDController
         if (selectedItem == null) return;
         if (MsgBox.confirm('You are about to remove the selected item. Continue?')) {
             service.removeCollector(selectedItem);
-            listHandler.reload(); 
+            loadCollectors(); 
         }        
     }    
 }
