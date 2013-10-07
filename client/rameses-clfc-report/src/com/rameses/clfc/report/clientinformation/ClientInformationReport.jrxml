@@ -1136,7 +1136,7 @@
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="119"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{collateral.properties} || $F{collateral.appliances} || $F{collateral.vehicles} || $F{collateral}.source?.othercollateral? true : false]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$F{collateral}.source?.properties.size > 0 || $F{collateral}.source?.appliances.size > 0 || $F{collateral}.source?.vehicles.size > 0 || $F{collateral}.source?.othercollateral? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="1"
@@ -2356,15 +2356,10 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="collectionsite" >
+		<group  name="collectionsite" isStartNewPage="true" minHeightToStartNewPage="700" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="443"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[new Boolean((!$F{state}.equals("FOR_FLA")) ||
-	   (!$F{state}.equals("FOR_APPROVAL")) ||
-           (!$F{state}.equals("FOR_RELEASE")) ||
-           (!$F{state}.equals("RELEASED"))
-)]]></printWhenExpression>
 				<line direction="BottomUp">
 					<reportElement
 						x="4"

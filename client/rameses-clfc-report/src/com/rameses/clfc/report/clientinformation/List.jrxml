@@ -379,7 +379,7 @@
 						positionType="Float"
 						isPrintRepeatedValues="false"
 						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[$F{spouse}? true : false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$F{spouse}.source?.objid? true : false]]></printWhenExpression>
 						</reportElement>
 					<subreportParameter  name="RESIDENCY">
 						<subreportParameterExpression><![CDATA[$P{RESIDENCY}]]></subreportParameterExpression>

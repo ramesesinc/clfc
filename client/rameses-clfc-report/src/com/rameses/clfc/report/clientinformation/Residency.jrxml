@@ -31,10 +31,10 @@
 	</parameter>
 
 	<variable name="residencyyears" class="java.lang.Integer" resetType="Report" calculation="System">
-		<initialValueExpression><![CDATA[Integer.parseInt(new java.text.SimpleDateFormat("yyyy").format(new Date())) - Integer.parseInt(new SimpleDateFormat("yyyy").format($P{RESIDENCY}.source?.since))]]></initialValueExpression>
+		<initialValueExpression><![CDATA[$P{RESIDENCY}.source?.since? Integer.parseInt(new java.text.SimpleDateFormat("yyyy").format(new Date())) - Integer.parseInt(new SimpleDateFormat("yyyy").format($P{RESIDENCY}.source?.since)) : 0]]></initialValueExpression>
 	</variable>
 	<variable name="occupancyyears" class="java.lang.Integer" resetType="Report" calculation="System">
-		<initialValueExpression><![CDATA[Integer.parseInt(new java.text.SimpleDateFormat("yyyy").format(new Date())) - Integer.parseInt(new SimpleDateFormat("yyyy").format($P{OCCUPANCY}.source?.since))]]></initialValueExpression>
+		<initialValueExpression><![CDATA[$P{OCCUPANCY}.source?.since? Integer.parseInt(new java.text.SimpleDateFormat("yyyy").format(new Date())) - Integer.parseInt(new SimpleDateFormat("yyyy").format($P{OCCUPANCY}.source?.since)) : 0]]></initialValueExpression>
 	</variable>
 		<background>
 			<band height="0"  isSplitAllowed="true" >

@@ -31,18 +31,22 @@ class SiblingsFormController extends PopupMasterController
     }
     
     public def doOk() {
-        entity.employments.each{item->
+        employments.clear();
+        employments.addAll(entity.employments);
+        entity.employments = employments;
+        /*entity.employments.each{item->
             def o = employments.find{ it.objid == item.objid }
             if(!o) employments.add(item);
             else o.putAll(item);
-        }
-        entity.employments = employments;
+        }*/
         
-        entity.otherincomes.each{item->
+        /*entity.otherincomes.each{item->
             def o = otherincomes.find{ it.objid == item.objid }
             if(!o) otherincomes.add(item);
             else o.putAll(item);
-        }
+        }*/
+        otherincomes.clear();
+        otherincomes.addAll(entity.otherincomes);
         entity.otherincomes = otherincomes;
         super.doOk();
     }
