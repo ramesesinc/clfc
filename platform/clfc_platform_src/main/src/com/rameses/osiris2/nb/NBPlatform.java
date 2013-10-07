@@ -51,7 +51,8 @@ public class NBPlatform implements Platform {
         this.startupWindow = startupWindow;
     }
     
-    //<editor-fold defaultstate="collapsed" desc="  show top component  ">
+    // <editor-fold defaultstate="collapsed" desc="  show top component  ">
+    
     public void showStartupWindow(JComponent actionSource, JComponent comp, Map properties) {
         final Map props = properties;
         final JComponent content = comp;
@@ -64,8 +65,8 @@ public class NBPlatform implements Platform {
                 }
                 
                 startupWindow.removeAll();
-                SwingUtilities.updateComponentTreeUI( startupWindow );
                 startupWindow.add(content);
+                SwingUtilities.updateComponentTreeUI( startupWindow );
             }
         });
     }
@@ -114,9 +115,11 @@ public class NBPlatform implements Platform {
         win.requestActive();
         comp.requestFocus();
     }
-    //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="  show popup  ">
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="  show popup  ">
+    
     public void showPopup(JComponent actionSource, JComponent comp, Map properties) {
         String id = (String) properties.remove("id");
         if (id == null || id.trim().length() == 0)
@@ -160,9 +163,11 @@ public class NBPlatform implements Platform {
             ((Component) windows.get(id)).requestFocus();
         }
     }
-    //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="  show floating window  ">
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="  show floating window  ">
+    
     public void showFloatingWindow(JComponent owner, JComponent comp, Map properties) {
         String id = (String) properties.remove("id");
         if (id == null || id.trim().length() == 0)
@@ -190,10 +195,12 @@ public class NBPlatform implements Platform {
         } else {
             ((Component) windows.get(id)).requestFocus();
         }
-    }
-    //</editor-fold>
+    } 
     
-    //<editor-fold defaultstate="collapsed" desc="  helper methods  ">
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="  helper methods  ">
+    
     private void setProperties(Object bean, Map properties) {
         for(Map.Entry me: (Set<Map.Entry>) properties.entrySet()) {
             try {
@@ -214,10 +221,12 @@ public class NBPlatform implements Platform {
             parent = parent.getParent();
         }
         return (NBSubWindow) parent;
-    }
-    //</editor-fold>
+    } 
     
-    //<editor-fold defaultstate="collapsed" desc="  Message box support  ">
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="  Message box support  ">
+    
     public void showError(JComponent actionSource, Exception e) {
         Component c = actionSource;
         if (c == null) c = mainWindow.getComponent();
@@ -247,8 +256,9 @@ public class NBPlatform implements Platform {
         if( w != null && w.isShowing() ) return w;
         
         return (Window) mainWindow.getComponent();
-    }
-    //</editor-fold>
+    } 
+    
+    // </editor-fold>
     
     public MainWindow getMainWindow() {
         return mainWindow;
