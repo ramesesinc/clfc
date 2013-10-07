@@ -244,7 +244,7 @@
 						positionType="Float"
 						isPrintRepeatedValues="false"
 						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$F{checkingaccts}? true : false]]></printWhenExpression>
 						</reportElement>
 					<dataSourceExpression><![CDATA[$F{checkingaccts}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{CHECKING_LIST}]]></subreportExpression>
@@ -258,7 +258,9 @@
 						key="subreport-11"
 						positionType="Float"
 						isPrintRepeatedValues="false"
-						isRemoveLineWhenBlank="true"/>
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[$F{savingaccts}? true : false]]></printWhenExpression>
+						</reportElement>
 					<dataSourceExpression><![CDATA[$F{savingaccts}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{SAVING_LIST}]]></subreportExpression>
 				</subreport>
@@ -272,7 +274,7 @@
 						positionType="Float"
 						isPrintRepeatedValues="false"
 						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$F{otherincomes}? true : false]]></printWhenExpression>
 						</reportElement>
 					<dataSourceExpression><![CDATA[$F{otherincomes}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{OTHER_INCOME}]]></subreportExpression>
@@ -287,7 +289,7 @@
 						positionType="Float"
 						isPrintRepeatedValues="false"
 						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$F{siblings}? true : false]]></printWhenExpression>
 						</reportElement>
 					<subreportParameter  name="SIBLING_EMPLOYMENT">
 						<subreportParameterExpression><![CDATA[$P{SIBLING_EMPLOYMENT}]]></subreportParameterExpression>
@@ -308,7 +310,7 @@
 						positionType="Float"
 						isPrintRepeatedValues="false"
 						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$F{educations}? true : false]]></printWhenExpression>
 						</reportElement>
 					<dataSourceExpression><![CDATA[$F{educations}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{EDUCATIONAL_BACKGROUND}]]></subreportExpression>
@@ -323,7 +325,7 @@
 						positionType="Float"
 						isPrintRepeatedValues="false"
 						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
+							<printWhenExpression><![CDATA[$F{children}? true : false]]></printWhenExpression>
 						</reportElement>
 					<subreportParameter  name="CHILDREN_EMPLOYMENT">
 						<subreportParameterExpression><![CDATA[$P{CHILDREN_EMPLOYMENT}]]></subreportParameterExpression>
@@ -343,7 +345,9 @@
 						key="subreport-14"
 						positionType="Float"
 						isPrintRepeatedValues="false"
-						isRemoveLineWhenBlank="true"/>
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[$F{parents}? true : false]]></printWhenExpression>
+						</reportElement>
 					<subreportParameter  name="DTYPE">
 						<subreportParameterExpression><![CDATA[$P{DTYPE}]]></subreportParameterExpression>
 					</subreportParameter>
