@@ -48,9 +48,14 @@ class LoanAppBusinessService
 		if (data.appmode=='CAPTURE' && data.state=='RELEASED') {
 			//do not change the state 
 		} else if (data.businesses.isEmpty()) {
-			loanapp.changeState([objid: data.objid, state:'INCOMPLETE']); 
+			def stateinfo = [objid: data.objid, state:'INCOMPLETE'];
+			loanapp.changeState(stateinfo); 
+			data.state = stateinfo.state;
+
 		} else if (data.state == 'INCOMPLETE') {
-			loanapp.changeState([objid: data.objid, state:'PENDING']); 
+			def stateinfo = [objid: data.objid, state:'PENDING'];
+			loanapp.changeState(stateinfo); 
+			data.state = stateinfo.state;
 		} 
 
 		def o = loanapp.findSearchIndex(data); 

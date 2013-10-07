@@ -1,5 +1,10 @@
 [findByObjid]
-SELECT * FROM loanapp WHERE objid=$P{objid} 
+SELECT l.*, 
+	lr.description AS route_description, 
+	lr.area AS route_area 
+FROM loanapp l  
+	LEFT JOIN loan_route lr ON l.route_code=lr.code 
+WHERE l.objid=$P{objid} 
 
 [changeState]
 UPDATE loanapp SET state=$P{state} WHERE objid=$P{objid} 

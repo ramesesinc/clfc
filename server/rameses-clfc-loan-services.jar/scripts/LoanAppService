@@ -111,12 +111,12 @@ class LoanAppService
 
 		o = [
 			objid: 		'LOG' + new UID(),
-			loanappid: 	data.objid, 
+			appid: 		data.objid, 
 			dtposted: 	data.dtposted,
 			postedby:  	data.postedby,
 			remarks: 	params.remarks 
 		];
-		loanapp.create(o, 'log'); 
+		loanapp.create(o, 'loanapp_log'); 
 		return data; 
 	} 
 
@@ -147,12 +147,12 @@ class LoanAppService
 
 		o = [
 			objid: 		'LOG' + new UID(),
-			loanappid: 	data.objid, 
+			appid: 		data.objid, 
 			dtposted: 	data.dtposted, 
 			postedby:  	data.postedby,
 			remarks: 	params.remarks 
 		];
-		loanapp.create(o, 'log'); 
+		loanapp.create(o, 'loanapp_log'); 
 		return data; 
 	}	
 
@@ -179,12 +179,12 @@ class LoanAppService
 
 		o = [
 			objid: 		'LOG' + new UID(),
-			loanappid: 	data.objid, 
+			appid: 		data.objid, 
 			dtposted: 	data.dtposted,
 			postedby:  	data.postedby,
 			remarks: 	params.remarks 
 		];
-		loanapp.create(o, 'log'); 
+		loanapp.create(o, 'loanapp_log'); 
 		return data; 
 	} 	
 
@@ -221,12 +221,12 @@ class LoanAppService
 
 		o = [
 			objid: 		'LOG' + new UID(),
-			loanappid: 	data.objid, 
+			appid: 		data.objid, 
 			dtposted: 	data.dtposted, 
 			postedby:  	data.postedby,
 			remarks: 	params.remarks 
 		]; 
-		loanapp.create(o, 'log'); 
+		loanapp.create(o, 'loanapp_log'); 
 		return data; 
 	}
 
