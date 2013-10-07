@@ -1,7 +1,8 @@
 <workunit extends="wtemplates/ListController.xml">
     
     <invokers>
-        <invoker folderid="/explorer/txn/loan" caption="For CRECOM" permission="system" index="3"/>
+        <invoker folderid="/explorer/txn/loan" caption="For CRECOM" 
+            role="LOAN_CAO_OFFICER,LOAN_CRECOM_OFFICER" index="3"/>
    </invokers>
    
     <code>

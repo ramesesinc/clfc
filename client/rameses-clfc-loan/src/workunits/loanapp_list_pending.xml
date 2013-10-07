@@ -2,7 +2,8 @@
     serviceName="LoanAppSearchService" entityName="loanapp" tag="pending">
     
     <invokers>
-        <invoker folderid="/explorer/txn/loan" caption="Pending Applications" permission="system" index="1"/>
+        <invoker folderid="/explorer/txn/loan" caption="Pending Applications" 
+            role="LOAN_CAO_OFFICER" index="1"/>
    </invokers>
 
 </workunit>

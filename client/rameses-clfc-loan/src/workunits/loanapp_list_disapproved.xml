@@ -1,7 +1,8 @@
 <workunit extends="wtemplates/ListController.xml">
     
     <invokers>
-        <invoker folderid="/explorer/txn/afterfla" caption="Disapproved" permission="system" index="3"/>
+        <invoker folderid="/explorer/txn/afterfla" caption="Disapproved" 
+            role="LOAN_CAO_OFFICER" index="3"/>
    </invokers>
    
     <code>
