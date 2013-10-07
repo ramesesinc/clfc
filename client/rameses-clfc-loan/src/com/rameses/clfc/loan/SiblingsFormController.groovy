@@ -11,8 +11,8 @@ class SiblingsFormController extends PopupMasterController
 {
     def selectedEmployment;
     def selectedOtherIncome;
-    def employments;
-    def otherincomes;
+    def employments = [];
+    def otherincomes = [];
     
     public def createEntity() {
         return [ objid:'BS'+new UID() ]

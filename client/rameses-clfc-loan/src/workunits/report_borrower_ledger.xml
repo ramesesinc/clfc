@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker folderid="explorer/txn/clfc" caption="Loan Ledgers"/>
+        <invoker folderid="explorer/txn/loan" caption="Loan Ledgers" role="LOAN_ACCOUNTING"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W" visibleWhen="#{mode == 'mgmt'}"/>
         <invoker type="formActions" action="adjust" caption="Adjust Payments" mnemonic="a" shortcut="ctrl A" visibleWhen="mode == 'mgmt'"/>
