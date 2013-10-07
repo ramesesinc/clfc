@@ -10,6 +10,18 @@ class ClientInformationSheetReportService
 	@ActiveDB(value="borrower")
 	def borrower;
 
+	@ActiveDB(value="loanapp_borrower")
+	def loanapp_borrower;
+
+	@ActiveDB(value="loanapp_business")
+	def business;
+
+	@ActiveDB(value="loanapp_otherlending")
+	def otherlending;
+
+	@ActiveDB(value="loanapp_collateral")
+	def collateral;
+
 	@Service("DateService")
 	def dateSvc;
 
@@ -22,6 +34,63 @@ class ClientInformationSheetReportService
 		return list;
 	}
 
+	private def getChildren( parent ) {
+		def list = borrower.getChildren([parentid: parent.objid]);
+		list.each{
+			it.employments = borrower.getEmployments([refid: parent.objid]);
+			it.otherincomes = borrower.getOtherIncomes([refid: parent.objid]);
+		}
+		return list;
+	}
+
+	private def getJointBorrowers( app, currentdate ) {
+		def list = loanapp_borrower.getJointBorrowers([parentid: app.objid]);
+		list.each{joint->
+            if (!joint.name) joint.name = joint.lastname+', '+joint.firstname+' '+(joint.middlename? joint.middlename : '')
+			joint.age = 0;
+			if (joint.birthdate) joint.age = currentdate.year - dateSvc.parseDate(joint.birthdate, null).year;
+			joint.spouse.name;
+			if (joint.spouse.objid) {
+                joint.spouse.name = joint.spouse.lastname+', '+joint.spouse.firstname+' '+(joint.spouse.middlename? joint.spouse.middlename : '')
+                joint.spouse.age = 0;
+                if (joint.spouse.birthdate) joint.spouse.age = currentdate.year - dateSvc.parseDate(joint.spouse.birthdate, null).year;
+            }
+			joint.children = borrower.getChildren([parentid: joint.objid]);
+			joint.educations = borrower.getEducations([parentid: joint.objid]);
+			joint.employments = borrower.getEmployments([refid: joint.objid]);
+			joint.parents = borrower.findParent(joint);
+			joint.siblings = borrower.getSiblings(joint);
+			joint.otherincomes = borrower.getOtherIncomes([refid: joint.objid]);
+			joint.savingaccts = borrower.getBankAccts([parentid: joint.objid, type: 'SAVING']);
+			joint.checkingaccts = borrower.getBankAccts([parentid: joint.objid, type: 'CHECKING']);
+		}
+		return list;
+	}
+
+	private def getComakers( app, currentdate ) {
+		def list = loanapp_borrower.getComakers([parentid: app.objid]);
+		list.each{comaker->
+            if (!comaker.name) comaker.name = comaker.lastname+', '+comaker.firstname+' '+(comaker.middlename? comaker.middlename : '')
+			comaker.age = 0;
+			if (comaker.birthdate) comaker.age = currentdate.year - dateSvc.parseDate(comaker.birthdate, null).year;
+			comaker.spouse.name;
+			if (comaker.spouse.objid) {
+                comaker.spouse.name = comaker.spouse.lastname+', '+comaker.spouse.firstname+' '+(comaker.spouse.middlename? comaker.spouse.middlename : '')
+                comaker.spouse.age = 0;
+                if (comaker.spouse.birthdate) comaker.spouse.age = currentdate.year - dateSvc.parseDate(comaker.spouse.birthdate, null).year;
+            }
+			comaker.children = borrower.getChildren([parentid: comaker.objid]);
+			comaker.educations = borrower.getEducations([parentid: comaker.objid]);
+			comaker.employments = borrower.getEmployments([refid: comaker.objid]);
+			comaker.parents = borrower.findParent(comaker);
+			comaker.siblings = borrower.getSiblings(comaker);
+			comaker.otherincomes = borrower.getOtherIncomes([refid: comaker.objid]);
+			comaker.savingaccts = borrower.getBankAccts([parentid: comaker.objid, type: 'SAVING']);
+			comaker.checkingaccts = borrower.getBankAccts([parentid: comaker.objid, type: 'CHECKING']);
+		}
+		return list;		
+	}
+
 	@ProxyMethod
 	public def getReportData( params ) {
 		if (!params.loanappid) throw new Exception('Please specify loanappid');
@@ -30,9 +99,13 @@ class ClientInformationSheetReportService
 		def pb = borrower.read(app.borrower);
 		def currentdate = dateSvc.parseCurrentDate();
 		pb.age = 0
-		if(pb.birthdate) pb.age = ccurrentdate.year - dateSvc.parseDate(pb.birthdate, null).year
+		if (pb.birthdate) pb.age = currentdate.year - dateSvc.parseDate(pb.birthdate, null).year
 		pb.spouse.name;
-		if(pb.spouse.objid) pb.spouse.name = pb.spouse.lastname+', '+pb.spouse.firstname+' '+(pb.spouse.middlename)? pb.spouse.middlename : ''
+		if (pb.spouse.objid) {
+            pb.spouse.name = pb.spouse.lastname+', '+pb.spouse.firstname+' '+(pb.spouse.middlename? pb.spouse.middlename : '')
+            pb.spouse.age = 0;
+            if (pb.spouse.birthdate) pb.spouse.age = currentdate.year - dateSvc.parseDate(pb.spouse.birthdate, null).year;
+        }
 		pb.children = borrower.getChildren([parentid: pb.objid]);
 		pb.educations = borrower.getEducations([parentid: pb.objid]);
 		pb.employments = borrower.getEmployments([refid: pb.objid]);
@@ -57,631 +130,11 @@ class ClientInformationSheetReportService
             printedby	: 'PRINTED BY',
             dtprinted	: currentdate.date,
             route		: [code:'ROUTE CODE', description:'ROUTE DESCRIPTION'],
-            borrower	: pb/*[
-                name		: app.borrower.name,//'BORROWER NAME',
-                lastname	: pb.lastname,//'BORROWER LASTNAME',
-                firstname	: pb.firstname,//'BORROWER FIRSTNAME',
-                middlename	: pb.middlename,//'BORROWER MIDDLENAME',
-                address		: pb.address,//'BORROWER ADDRESS',
-                custno		: 'BORROWER CUSTNO',
-                contactno	: pb.contactno,//'BORROWER CONTACTNO',
-                age			: pb.age,
-                civilstatus	: pb.civilstatus,//'BORROWER CIVILSTATUS',
-                otheraccounts 	: 'BORROWER OTHERACCOUNTS',
-                parent		: parent,//[address:'PARENT ADDRESS'],
-                spouse		: pb.spouse,//[name:'SPOUSENAME'],
-                dtype		: 'BORROWER TYPE',
-                residency 	: [
-                    type       : 'BORROWER RES. TYPE',
-                    renttype   : 'BORROWER RES. RENTTYPE',
-                    rentamount : 1000.00,
-                    since      : '2012-09-30',
-                    remarks    : 'RES. REMARKS'
-                ],
-                occupancy 	: [
-                    type       : 'OCCP. TYPE',
-                    renttype   : 'OCCP. RENTTYPE',
-                    rentamount : 1000.00,
-                    since      : '2012-09-30',
-                    remarks    : 'OCCP. REMARKS'
-                ],
-                spouse      : [
-                    name        : 'SPOUSE NAME',
-                    address     : 'SPOUSE ADDR',
-                    age         : 50,
-                    birthdate   : '1963-05-22',
-                    contactno   : '233-5564',
-                    citizenship : 'FILIPINO',
-                    residency   : [
-                        type	   : 'RES. TYPE',
-                        renttype   : 'RENTTYPE',
-                        rentamount : 1000.00,
-                        since	   : '2012-09-30',
-                        remarks	   : 'RES. REMARKS'
-                    ],
-                    occupancy   : [
-                        type	   : 'OCCP. TYPE',
-                        renttype   : 'OCCP. RENTTYPE',
-                        rentamount : 1000.00,
-                        since	   : '2012-09-30',
-                        remarks	   : 'OCCP. REMARKS'
-                    ]
-                ],*/
-                /*children : [
-	                [
-	                    name            : 'CHILDREN NAME',
-	                    age		: 25,
-	                    status          : 'STATUS',
-	                    education	: 'EDUCATION',
-	                    employments 	: [
-                            [
-                                employer	: 'EMPLOYER',
-                                contactno	: '233-4849',
-                                address		: 'CEBU CITY',
-                                remarks		: 'REMARKS',
-                                position	: 'POSITION',
-                                status		: 'STATUS',
-                                lengthofservice : '3',
-                                salary		: 10000.00
-                            ]
-	                    ],
-	                    otherincomes	: [
-                            [
-                                name	: 'NAME',
-                                remarks	: 'REMARKS'
-                            ]
-	                    ]
-	                ]
-                ],*/
-                /*educations : [
-                    [
-                        attainment	: 'ATTAINMENT',
-                        school	: 'SCHOOL',
-                        remarks	: 'REMARKS'
-                    ]
-                ],*/
-                /*employments : [
-                    [
-                        employer	: 'EMPLOYER',
-                        contactno	: '233-4849',
-                        address	: 'CEBU CITY',
-                        remarks	: 'REMARKS',
-                        position	: 'POSITION',
-                        status	: 'STATUS',
-                        lengthofservice : '3',
-                        salary	: 10000.00
-                    ]
-                ],*/
-                /*parents	: [
-                        fathername	: 'FATHERNAME',
-                        fatherage	: 55,
-                        mothername	: 'MOTHERNAME',
-                        motherage	: 55,
-                        address	: 'CEBU CITY',
-                        remarks	: 'REMARKS'
-                ],*/
-                /*siblings	: [
-	                [
-	                    name	: 'SIBLINGNAME',
-	                    age		: 25,
-	                    address	: 'SIBLING ADDR',
-	                    employments  : [
-	                        [
-	                            employer	: 'EMPLOYER',
-	                            contactno	: '233-4849',
-	                            address	: 'CEBU CITY',
-	                            remarks	: 'REMARKS',
-	                            position	: 'POSITION',
-	                            status	: 'STATUS',
-	                            lengthofservice : '3',
-	                            salary	: 10000.00
-	                        ]
-	                    ],
-	                    otherincomes : [
-	                        [
-	                            name	: 'NAME',
-	                            remarks	: 'REMARKS'
-	                        ]
-	                    ]
-	                ]
-                ],*/
-                /*otherincomes : [
-                    [
-                        name	: 'NAME',
-                        remarks	: 'REMARKS'
-                    ]
-                ],*/
-                savingaccts	: [
-                    [
-                        bankname	: 'BANKNAME',
-                        remarks	: 'REMARKS'
-                    ]
-                ],
-                checkingaccts	: [
-                    [
-                        bankname	: 'BANKNAME',
-                        remarks	: 'REMARKS'
-                    ]
-                ]    
-            ],
-            jointborrowers : [
-                [
-	                name	: 'JOINTNAME',
-	                birthdate	: 'BIRTHDATE',
-	                contactno	: '233-5659',
-	                age		: 50,
-	                address	: 'CEBU CITY',
-	                civilstatus	: 'SINGLE',
-	                otheraccount : 'OTHER ACOUNT',
-	                objid	: 'OBJID',
-	                dtype	: 'TYPE',
-	                residency 	: [
-	                    type       : 'BORROWER RES. TYPE',
-	                    renttype   : 'BORROWER RES. RENTTYPE',
-	                    rentamount : 1000.00,
-	                    since      : '2012-09-30',
-	                    remarks    : 'RES. REMARKS'
-	                ],
-	                occupancy 	: [
-	                    type       : 'OCCP. TYPE',
-	                    renttype   : 'OCCP. RENTTYPE',
-	                    rentamount : 1000.00,
-	                    since      : '2012-09-30',
-	                    remarks    : 'OCCP. REMARKS'
-	                ],
-	                spouse      : [
-	                    name        : 'SPOUSE NAME',
-	                    address     : 'SPOUSE ADDR',
-	                    age         : 50,
-	                    birthdate   : '1963-05-22',
-	                    contactno   : '233-5564',
-	                    citizenship : 'FILIPINO',
-	                    residency   : [
-	                        type	   : 'RES. TYPE',
-	                        renttype   : 'RENTTYPE',
-	                        rentamount : 1000.00,
-	                        since      : '2012-09-30',
-	                        remarks    : 'RES. REMARKS'
-	                    ],
-	                    occupancy   : [
-	                        type       : 'OCCP. TYPE',
-	                        renttype   : 'OCCP. RENTTYPE',
-	                        rentamount : 1000.00,
-	                        since      : '2012-09-30',
-	                        remarks    : 'OCCP. REMARKS'
-	                    ]
-	                ],
-	                employments : [
-	                    [
-	                        employer	: 'EMPLOYER',
-	                        contactno	: '233-4849',
-	                        address	: 'CEBU CITY',
-	                        remarks	: 'REMARKS',
-	                        position	: 'POSITION',
-	                        status	: 'STATUS',
-	                        lengthofservice : '3',
-	                        salary	: 10000.00
-	                    ]
-	                ],
-	                parents	: [
-	                    fathername	: 'FATHERNAME',
-	                    fatherage	: 55,
-	                    mothername	: 'MOTHERNAME',
-	                    motherage	: 55,
-	                    address	: 'CEBU CITY',
-	                    remarks	: 'REMARKS'
-	                ],
-	                children : [
-	                    [
-	                        name        : 'CHILDREN NAME',
-	                        age		: 25,
-	                        status      : 'STATUS',
-	                        education	: 'EDUCATION',
-	                        employments  : [
-	                            [
-	                                employer	: 'EMPLOYER',
-	                                contactno	: '233-4849',
-	                                address	: 'CEBU CITY',
-	                                remarks	: 'REMARKS',
-	                                position	: 'POSITION',
-	                                status	: 'STATUS',
-	                                lengthofservice : '3',
-	                                salary	: 10000.00
-	                            ]
-	                        ],
-	                        otherincomes : [
-	                            [
-	                                name	: 'NAME',
-	                                remarks	: 'REMARKS'
-	                            ]
-	                        ]
-	                    ]
-	                ],
-	                educations : [
-	                    [
-	                        attainment	: 'ATTAINMENT',
-	                        school	: 'SCHOOL',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ],
-	                siblings	: [
-	                    [
-	                        name	: 'SIBLINGNAME',
-	                        age		: 25,
-	                        address	: 'SIBLING ADDR',
-	                        employments  : [
-	                            [
-	                                employer	: 'EMPLOYER',
-	                                contactno	: '233-4849',
-	                                address	: 'CEBU CITY',
-	                                remarks	: 'REMARKS',
-	                                position	: 'POSITION',
-	                                status	: 'STATUS',
-	                                lengthofservice : '3',
-	                                salary	: 10000.00
-	                            ]
-	                        ],
-	                        otherincomes : [
-	                            [
-	                                name	: 'NAME',
-	                                remarks	: 'REMARKS'
-	                            ]
-	                        ]
-	                    ]
-	                ],
-	                otherincomes : [
-	                    [
-	                        name	: 'NAME',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ],
-	                savingaccts  : [
-	                    [
-	                        bankname	: 'BANKNAME',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ],
-	                checkingaccts : [
-	                    [
-	                        bankname	: 'BANKNAME',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ]
-                ],
-                [
-	                name	: 'JOINTNAME2',
-	                birthdate	: 'BIRTHDATE',
-	                contactno	: '233-5659',
-	                age		: 50,
-	                address	: 'CEBU CITY',
-	                civilstatus	: 'SINGLE',
-	                otheraccount : 'OTHER ACOUNT',
-	                objid	: 'OBJID',
-	                dtype	: 'TYPE',
-	                residency 	: [
-	                    type       : 'BORROWER RES. TYPE',
-	                    renttype   : 'BORROWER RES. RENTTYPE',
-	                    rentamount : 1000.00,
-	                    since      : '2012-09-30',
-	                    remarks    : 'RES. REMARKS'
-	                ],
-	                occupancy 	: [
-	                    type       : 'OCCP. TYPE',
-	                    renttype   : 'OCCP. RENTTYPE',
-	                    rentamount : 1000.00,
-	                    since      : '2012-09-30',
-	                    remarks    : 'OCCP. REMARKS'
-	                ],
-	                spouse      : [
-	                    name        : 'SPOUSE NAME',
-	                    address     : 'SPOUSE ADDR',
-	                    age         : 50,
-	                    birthdate   : '1963-05-22',
-	                    contactno   : '233-5564',
-	                    citizenship : 'FILIPINO',
-	                    residency   : [
-	                        type	   : 'RES. TYPE',
-	                        renttype   : 'RENTTYPE',
-	                        rentamount : 1000.00,
-	                        since      : '2012-09-30',
-	                        remarks    : 'RES. REMARKS'
-	                    ],
-	                    occupancy   : [
-	                        type       : 'OCCP. TYPE',
-	                        renttype   : 'OCCP. RENTTYPE',
-	                        rentamount : 1000.00,
-	                        since      : '2012-09-30',
-	                        remarks    : 'OCCP. REMARKS'
-	                    ]
-	                ],
-	                employments : [
-	                    [
-	                        employer	: 'EMPLOYER',
-	                        contactno	: '233-4849',
-	                        address	: 'CEBU CITY',
-	                        remarks	: 'REMARKS',
-	                        position	: 'POSITION',
-	                        status	: 'STATUS',
-	                        lengthofservice : '3',
-	                        salary	: 10000.00
-	                    ]
-	                ],
-	                parents	: [
-	                    fathername	: 'FATHERNAME',
-	                    fatherage	: 55,
-	                    mothername	: 'MOTHERNAME',
-	                    motherage	: 55,
-	                    address	: 'CEBU CITY',
-	                    remarks	: 'REMARKS'
-	                ],
-	                children : [
-	                    [
-	                        name        : 'CHILDREN NAME',
-	                        age		: 25,
-	                        status      : 'STATUS',
-	                        education	: 'EDUCATION',
-	                        employments  : [
-	                            [
-	                                employer	: 'EMPLOYER',
-	                                contactno	: '233-4849',
-	                                address	: 'CEBU CITY',
-	                                remarks	: 'REMARKS',
-	                                position	: 'POSITION',
-	                                status	: 'STATUS',
-	                                lengthofservice : '3',
-	                                salary	: 10000.00
-	                            ]
-	                        ],
-	                        otherincomes : [
-	                            [
-	                                name	: 'NAME',
-	                                remarks	: 'REMARKS'
-	                            ]
-	                        ]
-	                    ]
-	                ],
-	                educations : [
-	                    [
-	                        attainment	: 'ATTAINMENT',
-	                        school	: 'SCHOOL',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ],
-	                siblings	: [
-	                    [
-	                        name	: 'SIBLINGNAME',
-	                        age		: 25,
-	                        address	: 'SIBLING ADDR',
-	                        employments  : [
-	                            [
-	                                employer	: 'EMPLOYER',
-	                                contactno	: '233-4849',
-	                                address	: 'CEBU CITY',
-	                                remarks	: 'REMARKS',
-	                                position	: 'POSITION',
-	                                status	: 'STATUS',
-	                                lengthofservice : '3',
-	                                salary	: 10000.00
-	                            ]
-	                        ],
-	                        otherincomes : [
-	                            [
-	                                name	: 'NAME',
-	                                remarks	: 'REMARKS'
-	                            ]
-	                        ]
-	                    ]
-	                ],
-	                otherincomes : [
-	                    [
-	                        name	: 'NAME',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ],
-	                savingaccts  : [
-	                    [
-	                        bankname	: 'BANKNAME',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ],
-	                checkingaccts : [
-	                    [
-	                        bankname	: 'BANKNAME',
-	                        remarks	: 'REMARKS'
-	                    ]
-	                ]
-                ]
-            ],
-            comakers : [
-                name	: 'JOINTNAME',
-                birthdate	: 'BIRTHDATE',
-                contactno	: '233-5659',
-                age		: 50,
-                address	: 'CEBU CITY',
-                civilstatus	: 'SINGLE',
-                otheraccount : 'OTHER ACOUNT',
-                objid	: 'OBJID',
-                dtype	: 'TYPE',
-                residency 	: [
-                    type       : 'BORROWER RES. TYPE',
-                    renttype   : 'BORROWER RES. RENTTYPE',
-                    rentamount : 1000.00,
-                    since      : '2012-09-30',
-                    remarks    : 'RES. REMARKS'
-                ],
-                occupancy 	: [
-                    type       : 'OCCP. TYPE',
-                    renttype   : 'OCCP. RENTTYPE',
-                    rentamount : 1000.00,
-                    since      : '2012-09-30',
-                    remarks    : 'OCCP. REMARKS'
-                ],
-                spouse      : [
-                    name        : 'SPOUSE NAME',
-                    address     : 'SPOUSE ADDR',
-                    age         : 50,
-                    birthdate   : '1963-05-22',
-                    contactno   : '233-5564',
-                    citizenship : 'FILIPINO',
-                    residency   : [
-                        type	   : 'RES. TYPE',
-                        renttype   : 'RENTTYPE',
-                        rentamount : 1000.00,
-                        since      : '2012-09-30',
-                        remarks    : 'RES. REMARKS'
-                    ],
-                    occupancy   : [
-                        type       : 'OCCP. TYPE',
-                        renttype   : 'OCCP. RENTTYPE',
-                        rentamount : 1000.00,
-                        since      : '2012-09-30',
-                        remarks    : 'OCCP. REMARKS'
-                    ]
-                ],
-                employments : [
-                    [
-                        employer	: 'EMPLOYER',
-                        contactno	: '233-4849',
-                        address	: 'CEBU CITY',
-                        remarks	: 'REMARKS',
-                        position	: 'POSITION',
-                        status	: 'STATUS',
-                        lengthofservice : '3',
-                        salary	: 10000.00
-                    ]
-                ],
-                parents	: [
-                    fathername	: 'FATHERNAME',
-                    fatherage	: 55,
-                    mothername	: 'MOTHERNAME',
-                    motherage	: 55,
-                    address	: 'CEBU CITY',
-                    remarks	: 'REMARKS'
-                ],
-                children : [
-                    [
-                        name        : 'CHILDREN NAME',
-                        age		: 25,
-                        status      : 'STATUS',
-                        education	: 'EDUCATION',
-                        employments  : [
-                            [
-                                employer	: 'EMPLOYER',
-                                contactno	: '233-4849',
-                                address	: 'CEBU CITY',
-                                remarks	: 'REMARKS',
-                                position	: 'POSITION',
-                                status	: 'STATUS',
-                                lengthofservice : '3',
-                                salary	: 10000.00
-                            ]
-                        ],
-                        otherincomes : [
-                            [
-                                name	: 'NAME',
-                                remarks	: 'REMARKS'
-                            ]
-                        ]
-                    ]
-                ],
-                educations : [
-                    [
-                        attainment	: 'ATTAINMENT',
-                        school	: 'SCHOOL',
-                        remarks	: 'REMARKS'
-                    ]
-                ],
-                siblings	: [
-                    [
-                        name	: 'SIBLINGNAME',
-                        age		: 25,
-                        address	: 'SIBLING ADDR',
-                        employments  : [
-                            [
-                                employer	: 'EMPLOYER',
-                                contactno	: '233-4849',
-                                address	: 'CEBU CITY',
-                                remarks	: 'REMARKS',
-                                position	: 'POSITION',
-                                status	: 'STATUS',
-                                lengthofservice : '3',
-                                salary	: 10000.00
-                            ]
-                        ],
-                        otherincomes : [
-                            [
-                                name	: 'NAME',
-                                remarks	: 'REMARKS'
-                            ]
-                        ]
-                    ]
-                ],
-                otherincomes : [
-                    [
-                        name	: 'NAME',
-                        remarks	: 'REMARKS'
-                    ]
-                ],
-                savingaccts  : [
-                    [
-                        bankname	: 'BANKNAME',
-                        remarks	: 'REMARKS'
-                    ]
-                ],
-                checkingaccts : [
-                    [
-                        bankname	: 'BANKNAME',
-                        remarks	: 'REMARKS'
-                    ]
-                ]
-            ],
-            businesses : [
-                [
-                    tradename	: 'TRADENAME',
-                    officehours	: 'OFFICE HRS',
-                    capital		: 10000.00,
-                    stallsize	: 10.00,
-                    avgsales	: 'AVG SALES',
-                    address		: 'BUSINESS ADDR',
-                    ownership	: 'OWNERSHIP',
-                    kind		: 'KIND',
-                    dtstarted	: dateSvc.parseDate('2013-01-01', null).date,
-                    occupancy	: [
-                        type   		: 'TYPE',
-                        renttype	: 'RENT TYPE',
-                        rentamount 	: 1000.00,
-                        remarks		: 'REMARKS'
-                    ],
-                ],
-                [
-                    tradename	: 'TRADENAME2',
-                    officehours	: 'OFFICE HRS2',
-                    capital		: 10000.00,
-                    stallsize	: 10.00,
-                    avgsales	: 'AVG SALES2',
-                    address		: 'BUSINESS ADDR2',
-                    ownership	: 'OWNERSHIP2',
-                    kind		: 'KIND2',
-                    dtstarted	: dateSvc.parseDate('2013-01-01', null).date,
-                    occupancy	: [
-                        type   		: 'TYPE2',
-                        renttype	: 'RENT TYPE2',
-                        rentamount 	: 1000.00,
-                        remarks		: 'REMARKS2'
-                    ],
-                ]
-            ],
-            otherlendings : [
-                company		 	: 'COMPANY',
-                loanamount	 	: 1000.00,
-                modeofpayment 	: 'MODEOFPAYMENT',
-                lendingpayment	: 1000.00,
-                maturitydate	: '2013-12-01',
-                collateraloffered	: 'COLLATERAL OFFERED',
-                remarks			: 'REMARKS',
-                address			: 'ADDRESS',
-                dategranted		: '2013-10-01'
-            ],
+            borrower	: pb,
+            jointborrowers : getJointBorrowers(app, currentdate),
+            comakers : getComakers(app, currentdate),
+            businesses : business.getList([parentid: app.objid]),
+            otherlendings : otherlending.getList([parentid: app.objid]),
             loaninfo : [
                 loanamount	: 1000.00,
                 purpose	: 'LOAN PURPOSE',
@@ -707,75 +160,20 @@ class ClientInformationSheetReportService
                 ]
             ],
             collateral	: [
-                properties : [
-                    [
-                        classification	: 'CLASSIFICATION',
-                        location		: 'LOCATION',
-                        area			: 2000.00,
-                        marketvalue		: 1500.00,
-                        remarks			: 'REMARKS',
-                        zonalvalue		: 1000.00,
-                        totalcav		: 1000.00
-                    ],
-                    [
-                        classification	: 'CLASSIFICATION2',
-                        location		: 'LOCATION2',
-                        area			: 2000.00,
-                        marketvalue		: 1500.00,
-                        remarks			: 'REMARKS2',
-                        zonalvalue		: 1000.00,
-                        totalcav		: 1000.00
-                    ]
-
-                ],
-                appliances : [
-                    [
-                        type	: 'TYPE',
-                        brand	: 'BRAND',
-                        remarks	: 'REMARKS',
-                        serialno    : 'SERIALNO',
-                        modelno	: 'MODELNO',
-                        marketvalue : 1000.00,
-                        dtacquired	: '2013-10-01',
-                        totalcav	: 1000.00
-                    ]
-                ],
-                vehicles : [
-                    [
-                        make	: 'MAKE',
-                        model	: 'MODEL',
-                        bodytype    : 'BODYTYPE',
-                        remarks	: 'REMARKS',
-                        engineno    : 'ENGINENO',
-                        chassisno   : 'CHASSISNO',
-                        marketvalue : 1000.00,
-                        dtacquired	: '2013-10-01',
-                        totalcav	: [1000.00]
-                    ]
-                ],
-                othercollateral : 'OTHER COLLATERAL'	
+                properties : collateral.getProperties([parentid: app.objid]),
+                appliances : collateral.getAppliances([parentid: app.objid]),
+                vehicles : collateral.getVehicles([parentid: app.objid]),
+                othercollateral : collateral.findOtherCollateral(app)
             ],
-            previousloans : [
-                [
-                    dtreleased	: 'DATE RELEASE',
-                    loanamount	: [1000.00],
-                    remarks	: 'REMARKS'
-                ]
-            ],
-            businesses2 : [
-                [
-                    tradename	: 'TRADENAME',
-                    ci		: [
-                        evaluation      : 'EVALUATION',
-                        physicaloutlook : 'PHYSICAL OUTLOOK',
-                        filedby         : 'FILEDBY',
-                        dtfiled         : 'DATE FILED',
-                        timefiled       : 'TIME FILED',
-                        amount          : [1000.00]
-                    ]
-                ]
-            ]
         ];
+        data.businessesci = data.businesses;
+        data.totalcav = 0.00;
+        def amt = data.collateral.properties.marketvalue.sum();
+        if(amt) data.totalcav += amt;
+        amt = data.collateral.appliances.marketvalue.sum();
+        if(amt) data.totalcav += amt;
+        amt = data.collateral.vehicles.marketvalue.sum();
+        if(amt) data.totalcav += amt;
         return data;
 	}
 }
