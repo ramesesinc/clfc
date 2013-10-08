@@ -1,0 +1,26 @@
+<schema>
+	<element name="batch_payment" tablename="batch_payment">
+		<field name="objid" primary="true"/>
+		<field name="state" required="true"/>
+		<field name="txndate" required="true"/>
+		<field name="dtcreated" required="true"/>
+		<field name="route_code" required="true"/>
+		<field name="totalcount" required="true"/>
+		<field name="totalamount" required="true"/>
+	</element>
+
+	<element name="posted" tablename="batch_payment">
+		<field name="objid" primary="true"/>
+		<field name="dtposted" required="true"/>
+		<field name="postedby"/>"
+	</element>
+
+	<element name="detail" tablename="batch_payment_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/>
+		<field name="refno" required="true"/>
+		<field name="appid" required="true"/>
+		<field name="paytype" required="true"/>
+		<field name="payamount" required="true"/>
+	</element>	
+</schema>

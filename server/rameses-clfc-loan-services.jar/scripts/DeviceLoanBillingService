@@ -1,0 +1,99 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+
+class DeviceLoanBillingService
+{
+	@ActiveDB(value="loan_route")
+	def route;
+
+	@ActiveDB(value="loan_ledger")
+	def ledger;
+
+	@ActiveDB(value="batch_payment")
+	def batch_payment;
+
+	@Service('DateService')
+	def dateSvc;
+
+	@Service('SequenceService') 
+	def seqSvc;
+
+	@ProxyMethod
+	public def getRoutes(params) {
+		def result = route.getList();
+		def list = [];
+		list.addAll(result)
+		return list;
+	}
+
+
+	@ProxyMethod
+	public def downloadBilling(params) {
+		if(!params.route_code) throw new Exception('Please specify route code');
+		def unpostedpayment = batch_payment.findUnpostedPayment(params);
+		if(unpostedpayment) throw new Exception('Cannot download billing. There are still unposted payments.');
+
+		def result = ledger.getCollectionsheets(params);
+		if(!result) throw new Exception("No billing for route code $params.route_code.");
+		def currentDate = dateSvc.parseCurrentDate().date;
+		def days;
+		def list = [];
+		result.each{
+			def dtlastpaid;
+			if(!it.dtlastpaid)
+				dtlastpaid = dateSvc.add(it.dtstarted, "-1");
+			else 
+				dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;
+
+			days = dateSvc.getDaysDiff(dtlastpaid, currentDate)-1;
+			it.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8); 
+			it.amountdue = it.dailydue*days;
+			list.add(it);
+		}
+		def map = [sessionid: new java.rmi.server.UID().toString(), list: list, serverdate: dateSvc.serverDate];
+		return map;
+	}
+
+	@ProxyMethod
+	public def uploadPayments(params) {
+		if(!params.sessionid) throw new Exception('Session ID is required.');
+		if(!params.payments) throw new Exception('Payments are required.');
+		createBatchPaymentHeader(params);
+
+		def data = batch_payment.read([objid: params.sessionid]);
+		def list = [];
+		params.payments.each{
+			def itm = batch_payment.findDetailByAppIdAndParentId([appid: it.loanappid, parentid: data.objid]);
+			if(!itm) {
+				itm = [
+					objid: 		'BPDTL'+new java.rmi.server.UID(),
+					parentid: 	data.objid,
+					refno: 		it.refno,
+					appid: 		it.loanappid,
+					paytype: 	it.type,
+					payamount: 	it.amount
+				]
+				batch_payment.create(itm, "detail");
+			}
+			list.add(it.loanappid); 
+		}
+		return [list: list];
+	}
+
+	private void createBatchPaymentHeader( params ) {
+		def itm = batch_payment.read([objid: params.sessionid]);
+		if(!itm) {
+			def txndate = dateSvc.parse("yyyy-mm-dd", params.txndate);
+			itm = [
+				objid: 			params.sessionid,
+				state: 			'DRAFT',
+				dtcreated: 		dateSvc.serverDate,
+				txndate: 		txndate,
+				route_code: 	params.routecode,
+				totalcount: 	params.totalcount,
+				totalamount: 	params.totalamount
+			];
+			batch_payment.create(itm);
+		}
+	}
+}

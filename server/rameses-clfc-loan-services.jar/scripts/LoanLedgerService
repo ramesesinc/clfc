@@ -1,0 +1,92 @@
+import com.rameses.annotations.*;
+import com.rameses.common.*;
+import com.rameses.services.extended.*;
+import java.rmi.server.UID;
+
+class LoanLedgerService extends ActiveListService
+{	
+	@ActiveDB(value='loan_ledger')
+	def em;
+
+	@ActiveDB(value='batch_payment')
+	def batch_payment;
+
+	@Service('LoanPaymentService')
+	def paymentSvc;
+
+	@ProxyMethod 
+	public def create(data) { 
+		def loancount = em.findLoanCountByAcctid([acctid: data.acctid]).loancount; 
+		data.loancount = loancount+1;
+		data.totalprincipal = data.loanamount; 
+		data.dailydue = computeDailyDue(data);
+		data.interestamount = computeInterestAmount(data);
+		data.absentpenalty = computeAbsentPenalty(data);
+		data.overduepenalty = 0.0;
+		data.totaldue = 0.0;
+		em.create(data);
+		data.payments.each{
+			def itm = [
+			    appno: data.appno,
+			    appid: data.appid,
+			    borrowername: data.borrower.name,
+			    refno: it.refno,
+			    txndate: it.txndate,
+			    paytype: it.type,
+			    payamount: it.amount
+			]
+			paymentSvc.postPayment(itm);
+		}
+	}
+
+	private def roundOffAmount(amt) {
+		def amount = amt+'';
+		def result = 0;
+		def ld = Integer.parseInt(amount[amount.length()-1]);
+		if(ld > 0 && ld < 5) {
+			result = new BigDecimal(amount.substring(0, amount.length()-1)+'5');
+			result = result.setScale(2);
+		} else if(ld > 5) {
+		    def a = '0.0'+(10 - ld)
+		    result = new BigDecimal(amount).add(new BigDecimal(a)).setScale(2);
+		} else {
+			result = new BigDecimal(amount).setScale(2); 
+		} 
+		return result;
+	}
+
+	private def computeDailyDue(params) {
+		if(!params.loanamount) throw new Exception('Please specify loan amount');
+		if(!params.term) throw new Exception('Please specify term');
+		def result = new BigDecimal(params.loanamount+'');
+		result = result.setScale(2, BigDecimal.ROUND_HALF_UP).multiply(1.2);
+		result = result.divide(new BigDecimal(params.term+'')).setScale(2, BigDecimal.ROUND_HALF_UP); 
+		return result;
+	}
+
+	private def computeInterestAmount(params) {
+		if(!params.loanamount) throw new Exception('Please specify loan amount');
+		if(!params.interestrate) throw new Exception('Please specify interest rate');
+		def result = new BigDecimal(params.loanamount+'').setScale(2).multiply(new BigDecimal(params.interestrate+'').setScale(2));
+		result = result.setScale(2).divide(30, BigDecimal.ROUND_HALF_UP);
+		return roundOffAmount(result);
+	}
+
+	private def computeAbsentPenalty(params) {
+		if(!params.dailydue) throw new Exception('Please specify daily due');
+		if(!params.underpaymentrate) throw new Exception('Please specify underpayment rate');
+		def result = new BigDecimal(params.dailydue+'').setScale(2).multiply(new BigDecimal(params.underpaymentrate+'').setScale(2));
+		return roundOffAmount(result.setScale(2));
+	}
+
+	void beforeList( params ) {
+		params.searchtext = (params.searchtext? '%'+params.searchtext+'%' : '%');
+	}
+
+	@ProxyMethod
+	public def approveBatchPayment( params ) {
+		if(!params.objid) throw new Exception('Please specify objid');
+		batch_payment.changeStateApproved(params);
+		return params;
+	}
+}

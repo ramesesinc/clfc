@@ -1,0 +1,61 @@
+import com.rameses.annotations.*;
+
+class LoanLedgerAdjustmentService
+{
+	@ActiveDB(value="loan_ledger_history")
+	def ledger_history;
+
+	@ActiveDB(value="loan_ledger")
+	def ledger;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@Service("LoanPaymentService")
+	def paymentSvc;
+
+	@ProxyMethod
+	public def getPayments( params ) {
+		if (!params.ledgerid) throw new Exception('Please specify ledgerid.');
+
+		def list = ledger.getPaymentsFromLedgerDetail([parentid: params.ledgerid]);
+		def total = 0;
+		def prevdate;
+		list.eachWithIndex{item, idx->
+			if (item.txndate == prevdate) {
+				if(total == 0) total = list[idx-1].payamount;
+				item.payamount -= total;
+				total += item.payamount;
+			} else total = 0;
+			prevdate = item.txndate;
+		}
+		return list;
+	}
+
+	@ProxyMethod
+	public def create( adjustment ) {
+		if (!adjustment.ledgerid) throw new Exception('Please specify ledgerid');
+		if (!adjustment.payments) throw new Exception('Please specify payments');
+
+		def list = ledger.getLedgerDetailsByLedgerid([parentid: adjustment.ledgerid]);
+		def idx = adjustment.payments.findIndexOf{ it.adjusted == true }
+		def payment = adjustment.payments[(idx > 0)? (idx-1) : 0];
+		def startIndex =  list.findIndexOf{ it.paytype != null && it.refno == payment.refno }
+
+		def serverdate = dateSvc.serverDate;
+		list.eachWithIndex{item, index-> 
+			if (index > startIndex) {
+				item.dtcreated = serverdate;
+				if(list[index-1].state == 'OFFSET') {
+					
+				}
+				ledger_history.create(item);
+			}
+		}
+
+		ledger.removeLedgerDetail([parentid: adjustment.ledgerid]);
+		adjustment.payments.each{
+			paymentSvc.postPayment(it);
+		}
+	}
+}

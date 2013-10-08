@@ -1,0 +1,88 @@
+import com.rameses.annotations.*;
+
+class LoanLedgerReportService
+{
+	@ActiveDB(value="loan_ledger")
+	def ledgerdb;
+
+	@ActiveDB(value="loan_product_type")
+	def product_type;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def getReportData( params ) {
+		if(!params.ledgerid) throw new Exception('Please specify ledgerid');
+		if(!params.appid) throw new Exception('Please specify appid');
+
+		def ledger = ledgerdb.read([objid: params.ledgerid]);
+		def producttype = product_type.read([name: ledger.producttypeid]);
+
+		def data = [
+			borrowername	: ledger.acctname,
+			originalamtloan	: ledger.totalprincipal,
+			dategranted		: dateSvc.add(ledger.dtstarted, "-1"),
+			datematurity	: ledger.dtmatured,
+			interestrate	: producttype.interestrate,
+			term			: producttype.term,
+			dailypayment	: ledger.dailydue,
+			payments 		: []
+		];
+		def payments = ledgerdb.getLedgerDetailsByLedgerid([parentid: ledger.objid]);
+
+		def flag = false;
+		def prevrefno;
+		def prevbal;
+		payments.each{
+			def itm = [
+				paymentschedule 	: dateSvc.add(data.dategranted, it.day+''),
+				originalamount		: null,
+				partialpayment		: it.partialpayment,
+				balanceamount		: it.balance,
+				interestpaid		: (it.interestpaid != 0)? it.interestpaid : null,
+				penaltycharge		: it.penaltypaid,
+				totalpayment		: (it.amtpaid != 0)? it.amtpaid : null,
+				receiptno			: it.refno,
+				datepaid			: it.dtpaid
+			];
+			if(it.state != "OFFSET") {
+				if(it.balance == ledger.totalprincipal) {
+					itm.balanceamount = null;
+				}
+				if(it.balance == prevbal) {
+					itm.balanceamount = null;
+				}
+				if(it.partialpayment == 0) {
+					itm.partialpayment = null;
+				}
+				if(!flag && it.interestbal == 0 && it.penaltybal == 0) {
+					itm.originalamount = ledger.totalprincipal;
+					flag = true;
+				}
+				if(it.refno == prevrefno) {
+					itm.receiptno = null;
+					itm.datepaid = null
+				}
+				if(it.interestbal > 0) {
+					if(!itm.remarks) itm.remarks = '';
+					itm.remarks += 'lacking interest: '+it.interestbal;
+				}
+				if(it.penaltybal > 0) {
+					if(!itm.remarks) itm.remarks = '';
+					else itm.remarks += '\n';
+					itm.remarks += 'lacking penalty: '+it.penaltybal;
+				}
+				if(it.penaltypaid == 0) itm.penaltycharge = null;
+				prevrefno = it.refno;
+				prevbal = it.balance;
+			} else {
+				itm.receiptno = null;
+				itm.datepaid = null;
+			}
+			data.payments.add(itm);
+		}
+
+		return data;
+	}
+}

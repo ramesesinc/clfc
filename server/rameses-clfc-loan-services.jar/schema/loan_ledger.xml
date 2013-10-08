@@ -1,0 +1,55 @@
+<schema>
+
+	<element name="loan_ledger" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="acctid" required="true"/> 
+		<field name="acctname" required="true"/> 
+		<field name="appid" required="true"/> 
+		<field name="producttypeid" required="true"/> 
+		<field name="loancount" required="true"/> 
+		<field name="term" required="true"/> 
+		<field name="dailydue" required="true"/> 
+		<field name="interestamount" required="true"/> 
+		<field name="overduepenalty" /> 
+		<field name="absentpenalty" required="true"/> 
+		<field name="totalprincipal" required="true"/> 
+		<field name="totaldue"/> 
+		<field name="compromiseid"/> 
+		<field name="dtstarted" required="true"/> 
+		<field name="dtmatured" required="true"/> 
+		<field name="dtlastpaid"/> 
+	</element> 
+
+	<element name="overpayment" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="overpaymentamount" required="true"/>
+	</element>
+
+	<element name="dtlastpaid" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="dtlastpaid" required="true"/>
+	</element>
+
+	<element name="detail" tablename="loan_ledger_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/>
+		<field name="state" required="true"/>
+		<field name="amtdue" required="true"/>
+		<field name="interestdue" required="true"/>
+		<field name="penaltydue" required="true"/>
+		<field name="amtpaid" required="true"/>
+		<field name="interestpaid" required="true"/>
+		<field name="penaltypaid" required="true"/>
+		<field name="amtbal" required="true"/>
+		<field name="interestbal" required="true"/>
+		<field name="penaltybal" required="true"/>
+		<field name="dtpaid"/>
+		<field name="refno"/>
+		<field name="day" required="true"/>
+		<field name="balance" required="true"/>
+		<field name="partialpayment" required="true"/>
+		<field name="paytype"/>
+		<field name="txndate" required="true"/>
+	</element> 
+
+</schema>
