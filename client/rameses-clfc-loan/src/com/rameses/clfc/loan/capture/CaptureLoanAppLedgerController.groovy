@@ -44,6 +44,7 @@ class LoanAppCaptureLedgerController
         entity.acctname = entity.borrower.name;
         entity = service.create(entity);
         mode = 'read';
+        MsgBox.alert('Transaction has been successfully saved'); 
         init();
         return 'default';
     }

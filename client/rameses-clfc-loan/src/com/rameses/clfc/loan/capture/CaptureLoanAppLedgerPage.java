@@ -34,7 +34,7 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         xDataTable1 = new com.rameses.rcp.control.XDataTable();
         jPanel2 = new javax.swing.JPanel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
-        xNumberField2 = new com.rameses.rcp.control.XNumberField();
+        xIntegerField1 = new com.rameses.rcp.control.XIntegerField();
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField3 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField4 = new com.rameses.rcp.control.XDecimalField();
@@ -51,10 +51,10 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "refno"}
-                , new Object[]{"caption", "Ref. No."}
-                , new Object[]{"width", 100}
+                , new Object[]{"caption", "Txn No."}
+                , new Object[]{"width", 150}
                 , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 0}
+                , new Object[]{"maxWidth", 150}
                 , new Object[]{"required", true}
                 , new Object[]{"resizable", true}
                 , new Object[]{"nullWhenEmpty", true}
@@ -68,7 +68,7 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
                 , new Object[]{"caption", "Txn Date"}
                 , new Object[]{"width", 100}
                 , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 0}
+                , new Object[]{"maxWidth", 100}
                 , new Object[]{"required", true}
                 , new Object[]{"resizable", true}
                 , new Object[]{"nullWhenEmpty", true}
@@ -113,54 +113,63 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+            .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+                .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
         );
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder2 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder2.setTitle("General Information");
+        xTitledBorder2.setPadding(new java.awt.Insets(15, 10, 10, 10));
+        xTitledBorder2.setTitle(" General Information ");
         jPanel2.setBorder(xTitledBorder2);
 
-        xNumberField2.setCaption("Term");
-        xNumberField2.setCaptionWidth(150);
-        xNumberField2.setEnabled(false);
-        xNumberField2.setFieldType(Integer.class);
-        xNumberField2.setName("entity.term");
-        xNumberField2.setPattern("#,##0");
-        xFormPanel1.add(xNumberField2);
+        xFormPanel1.setPadding(new java.awt.Insets(5, 0, 0, 0));
+        xIntegerField1.setCaption("Term");
+        xIntegerField1.setCaptionWidth(160);
+        xIntegerField1.setEnabled(false);
+        xIntegerField1.setFontStyle("font-size:14");
+        xIntegerField1.setName("entity.term");
+        xFormPanel1.add(xIntegerField1);
 
         xDecimalField1.setCaption("Underpayment Penalty Rate");
-        xDecimalField1.setCaptionWidth(150);
+        xDecimalField1.setCaptionWidth(160);
         xDecimalField1.setEnabled(false);
+        xDecimalField1.setFontStyle("font-size:14;");
         xDecimalField1.setName("entity.underpaymentrate");
         xFormPanel1.add(xDecimalField1);
 
         xDecimalField3.setCaption("Interest Rate");
-        xDecimalField3.setCaptionWidth(150);
+        xDecimalField3.setCaptionWidth(160);
         xDecimalField3.setEnabled(false);
+        xDecimalField3.setFontStyle("font-size:14;");
         xDecimalField3.setName("entity.interestrate");
         xFormPanel1.add(xDecimalField3);
 
         xDecimalField4.setCaption("Overdue Penalty Rate");
-        xDecimalField4.setCaptionWidth(150);
+        xDecimalField4.setCaptionWidth(160);
         xDecimalField4.setEnabled(false);
+        xDecimalField4.setFontStyle("font-size:14;");
         xDecimalField4.setName("entity.overduerate");
         xFormPanel1.add(xDecimalField4);
 
+        xFormPanel2.setPadding(new java.awt.Insets(5, 5, 0, 20));
+        xLabel1.setBackground(new java.awt.Color(250, 250, 250));
         com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
         xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
         xLabel1.setBorder(xLineBorder1);
         xLabel1.setCaption("App. No.");
         xLabel1.setCaptionWidth(90);
         xLabel1.setExpression("#{entity.appno}");
-        xLabel1.setPreferredSize(new java.awt.Dimension(0, 18));
+        xLabel1.setFontStyle("font-size:12");
+        xLabel1.setOpaque(true);
+        xLabel1.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xLabel1);
 
+        xLabel2.setBackground(new java.awt.Color(250, 250, 250));
         com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
         xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
         xLabel2.setBorder(xLineBorder2);
@@ -168,28 +177,32 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         xLabel2.setCaptionWidth(90);
         xLabel2.setDepends(new String[] {"application"});
         xLabel2.setExpression("#{entity.borrower.name}");
-        xLabel2.setPreferredSize(new java.awt.Dimension(0, 18));
+        xLabel2.setOpaque(true);
+        xLabel2.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xLabel2);
 
         xDecimalField2.setCaption("Loan Amount");
         xDecimalField2.setCaptionWidth(90);
         xDecimalField2.setEnabled(false);
+        xDecimalField2.setFontStyle("font-size:14;");
         xDecimalField2.setName("entity.loanamount");
-        xDecimalField2.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDecimalField2.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel2.add(xDecimalField2);
 
-        xDateField3.setCaption("Data Started");
+        xDateField3.setCaption("Date Started");
         xDateField3.setCaptionWidth(90);
         xDateField3.setEnabled(false);
+        xDateField3.setFontStyle("font-size:12");
         xDateField3.setName("entity.dtstarted");
-        xDateField3.setRequired(true);
+        xDateField3.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel2.add(xDateField3);
 
         xDateField4.setCaption("Date Matured");
         xDateField4.setCaptionWidth(90);
         xDateField4.setEnabled(false);
+        xDateField4.setFontStyle("font-size:12");
         xDateField4.setName("entity.dtmatured");
-        xDateField4.setRequired(true);
+        xDateField4.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel2.add(xDateField4);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -197,18 +210,19 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(xFormPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(xFormPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(xFormPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                    .addComponent(xFormPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -219,8 +233,8 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,7 +243,7 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -246,9 +260,9 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDecimalField xDecimalField4;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
+    private com.rameses.rcp.control.XIntegerField xIntegerField1;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XLabel xLabel2;
-    private com.rameses.rcp.control.XNumberField xNumberField2;
     // End of variables declaration//GEN-END:variables
     
 }
