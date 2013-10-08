@@ -190,29 +190,4 @@ class LoanAppReportService
 
         return data;
 	}
-
-	@ProxyMethod
-	public def getDeedOfAbsoluteSaleReportData( params ) {
-		if (!params.loanappid) throw new Exception('Please specify loanappid');
-		if (!params.propertyid) throw new Exception('Please specify propertyid');
-		def app = loanapp.read([objid: params.loanappid]);
-		def pb = borrower.read(app.borrower);
-		def serverdate = dateSvc.parseCurrentDate().date;
-		def varlist = var.getList([category:"BRANCH", searchtext:"branch_%"]);
-		def data = [
-            loanamount		: app.approval.amount,//10000.00,
-            name			: app.borrower.name,//'LIAN YOUNG',
-            address			: pb.address,//'CEBU CITY',
-            amtinwords		: numberSvc.doubleToWords(app.approval.amount),//'TEN THOUSAND PESOS',
-            dtprinted		: serverdate,
-            branchaddress	: varlist.find{ it.name == "branch_address" }?.value,//'CEBU CITY',
-            name2		: 'SUMMER WATT',
-            spousename	: 'RHIU YOUNG',
-            spousename2	: 'RYAN WATT',
-            username	: 'MAY SANCHES',
-            lottype		: 'TYPE 1',
-            lotaddress	: 'CEBU CITY'
-        ];
-        return data;
-	}
 }
