@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/loan" caption="Post Payments" index="3"/>
+        <invoker folderid="/menu/txn/loan" caption="Post Payments" role="LOAN_CAO_OFFICER" index="3"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl C" visibleWhen="#{mode == 'init'}" immediate="true"/>
         <invoker type="formActions" action="next" caption="Next" mnemonic="n" shortcut="ctrl N" visibleWhen="#{mode == 'init'}"/>

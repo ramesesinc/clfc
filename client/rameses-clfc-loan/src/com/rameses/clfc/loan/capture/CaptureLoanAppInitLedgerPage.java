@@ -37,47 +37,55 @@ public class CaptureLoanAppInitLedgerPage extends javax.swing.JPanel {
         xLabel1 = new com.rameses.rcp.control.XLabel();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Initial Information");
+        xTitledBorder1.setTitle(" General Information ");
         xFormPanel2.setBorder(xTitledBorder1);
+        xFormPanel2.setPadding(new java.awt.Insets(10, 15, 10, 20));
         xLookupField2.setCaption("App. No.");
         xLookupField2.setCaptionWidth(115);
         xLookupField2.setExpression("#{item.appno}");
         xLookupField2.setHandler("appLookupHandler");
         xLookupField2.setIndex(-10);
         xLookupField2.setName("entity");
+        xLookupField2.setPreferredSize(new java.awt.Dimension(200, 20));
         xLookupField2.setRequired(true);
         xFormPanel2.add(xLookupField2);
 
+        xLabel4.setBackground(new java.awt.Color(250, 250, 250));
         com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        xLineBorder1.setLineColor(new java.awt.Color(180, 180, 180));
         xLabel4.setBorder(xLineBorder1);
         xLabel4.setCaption("Borrower Name");
         xLabel4.setCaptionWidth(115);
         xLabel4.setDepends(new String[] {"entity"});
         xLabel4.setExpression("#{entity.borrower.name}");
         xLabel4.setName("");
-        xLabel4.setPreferredSize(new java.awt.Dimension(0, 18));
+        xLabel4.setOpaque(true);
+        xLabel4.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xLabel4);
 
+        xLabel5.setBackground(new java.awt.Color(250, 250, 250));
         com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
+        xLineBorder2.setLineColor(new java.awt.Color(180, 180, 180));
         xLabel5.setBorder(xLineBorder2);
         xLabel5.setCaption("Borrower Address");
         xLabel5.setCaptionWidth(115);
         xLabel5.setDepends(new String[] {"entity"});
         xLabel5.setExpression("#{entity.borrower.address}");
-        xLabel5.setPreferredSize(new java.awt.Dimension(0, 16));
+        xLabel5.setOpaque(true);
+        xLabel5.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xLabel5);
 
+        xLabel1.setBackground(new java.awt.Color(250, 250, 250));
         com.rameses.rcp.control.border.XLineBorder xLineBorder3 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder3.setLineColor(new java.awt.Color(204, 204, 204));
+        xLineBorder3.setLineColor(new java.awt.Color(180, 180, 180));
         xLabel1.setBorder(xLineBorder3);
         xLabel1.setCaption("Route");
         xLabel1.setCaptionWidth(115);
         xLabel1.setDepends(new String[] {"entity"});
         xLabel1.setExpression("#{item.code} - #{item.description} #{item.area}");
         xLabel1.setName("entity.route");
-        xLabel1.setPreferredSize(new java.awt.Dimension(0, 16));
+        xLabel1.setOpaque(true);
+        xLabel1.setPreferredSize(new java.awt.Dimension(0, 20));
         xLabel1.setVarName("item");
         xFormPanel2.add(xLabel1);
 
@@ -87,15 +95,15 @@ public class CaptureLoanAppInitLedgerPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

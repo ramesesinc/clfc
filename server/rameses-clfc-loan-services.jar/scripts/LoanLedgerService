@@ -8,10 +8,10 @@ class LoanLedgerService extends ActiveListService
 	@ActiveDB(value='loan_ledger')
 	def em;
 
-	@ActiveDB(value="batch_payment")
+	@ActiveDB(value='batch_payment')
 	def batch_payment;
 
-	@Service("LoanPaymentService")
+	@Service('LoanPaymentService')
 	def paymentSvc;
 
 	@ProxyMethod 

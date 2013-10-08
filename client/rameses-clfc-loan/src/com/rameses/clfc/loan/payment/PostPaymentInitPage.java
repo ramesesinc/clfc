@@ -32,14 +32,16 @@ public class PostPaymentInitPage extends javax.swing.JPanel {
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Initial Information");
+        xTitledBorder1.setTitle(" Select a route ");
         xFormPanel1.setBorder(xTitledBorder1);
+        xFormPanel1.setCaptionBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        xFormPanel1.setPadding(new java.awt.Insets(10, 15, 10, 10));
         xComboBox1.setCaption("Route");
         xComboBox1.setExpression("#{item.code}");
         xComboBox1.setItemKey("code");
         xComboBox1.setItems("routeList");
         xComboBox1.setName("route");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(120, 22));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 22));
         xComboBox1.setRequired(true);
         xFormPanel1.add(xComboBox1);
 
@@ -49,15 +51,15 @@ public class PostPaymentInitPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

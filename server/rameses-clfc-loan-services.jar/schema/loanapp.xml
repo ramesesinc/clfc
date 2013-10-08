@@ -64,6 +64,10 @@
 		<field name="dtreleased" required="true"/> 
 	</element>	
 
+	<element name="loanapp_capture_open" tablename="loanapp_capture_open">
+		<field name="objid" primary="true"/>
+	</element>	
+
 	<element name="loanapp_approval" tablename="loanapp">
 		<field name="objid" primary="true"/>
 		<field name="approval_type" required="true"/> 
