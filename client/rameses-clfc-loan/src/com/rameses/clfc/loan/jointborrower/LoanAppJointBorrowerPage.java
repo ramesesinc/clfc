@@ -30,10 +30,10 @@ public class LoanAppJointBorrowerPage extends javax.swing.JPanel {
         xSplitView1 = new com.rameses.rcp.control.XSplitView();
         jPanel1 = new javax.swing.JPanel();
         xDataTable1 = new com.rameses.rcp.control.XDataTable();
-        xLabel2 = new com.rameses.rcp.control.XLabel();
         jPanel2 = new javax.swing.JPanel();
         xButton1 = new com.rameses.rcp.control.XButton();
         xButton2 = new com.rameses.rcp.control.XButton();
+        xLabel2 = new com.rameses.rcp.control.XLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xHtmlView1 = new com.rameses.rcp.control.XHtmlView();
@@ -43,7 +43,7 @@ public class LoanAppJointBorrowerPage extends javax.swing.JPanel {
         xSplitView1.setOrientation("VERTICAL");
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 10));
         xDataTable1.setAutoResize(false);
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
             new com.rameses.rcp.common.Column(new Object[]{
@@ -117,42 +117,43 @@ public class LoanAppJointBorrowerPage extends javax.swing.JPanel {
         xDataTable1.setName("selectedJointBorrower");
         jPanel1.add(xDataTable1, java.awt.BorderLayout.CENTER);
 
-        xLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
-        xLabel2.setFontStyle("font-weight:bold;");
-        xLabel2.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel2.setText("Joint Borrower(s)");
-        jPanel1.add(xLabel2, java.awt.BorderLayout.NORTH);
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 5, 0));
         xButton1.setName("addJointBorrower");
         xButton1.setText("Add");
 
         xButton2.setName("removeJointBorrower");
         xButton2.setText("Remove");
 
+        xLabel2.setFontStyle("font-size:12;font-weight:bold;");
+        xLabel2.setForeground(new java.awt.Color(80, 80, 80));
+        xLabel2.setText("Joint Borrowers");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(xLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(xButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(512, Short.MAX_VALUE))
+                .addContainerGap(384, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(xButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(xLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
         );
-        jPanel1.add(jPanel2, java.awt.BorderLayout.SOUTH);
+        jPanel1.add(jPanel2, java.awt.BorderLayout.NORTH);
 
         xSplitView1.add(jPanel1);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 10));
         xHtmlView1.setDepends(new String[] {"selectedJointBorrower"});
         xHtmlView1.setName("htmlview");
         jScrollPane1.setViewportView(xHtmlView1);
@@ -161,7 +162,7 @@ public class LoanAppJointBorrowerPage extends javax.swing.JPanel {
 
         xLabel1.setFontStyle("font-weight:bold;");
         xLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel1.setText("Quick Preview");
+        xLabel1.setText("Quick Info");
         jPanel3.add(xLabel1, java.awt.BorderLayout.NORTH);
 
         xSplitView1.add(jPanel3);

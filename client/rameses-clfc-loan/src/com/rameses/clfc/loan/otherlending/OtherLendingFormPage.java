@@ -55,7 +55,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         jPanel1.setLayout(null);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Other Lending Information");
+        xTitledBorder1.setTitle("  General Information  ");
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
@@ -79,7 +79,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xFormPanel1.add(xTextField3);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 20, 480, 70);
+        xFormPanel1.setBounds(15, 25, 475, 75);
 
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDecimalField1.setCaption("Loan Amount");
@@ -110,7 +110,7 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xFormPanel2.add(xNumberField1);
 
         jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(10, 90, 250, 90);
+        xFormPanel2.setBounds(15, 95, 245, 90);
 
         xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDecimalField4.setCaption("Interest Rate");
@@ -135,31 +135,31 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
         xFormPanel3.add(xDecimalField3);
 
         jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(270, 90, 220, 90);
+        xFormPanel3.setBounds(270, 95, 220, 85);
 
         xLabel1.setPadding(new java.awt.Insets(5, 0, 1, 1));
         xLabel1.setText("Collateral(s) Offered:");
         jPanel1.add(xLabel1);
-        xLabel1.setBounds(10, 180, 110, 20);
+        xLabel1.setBounds(15, 190, 110, 20);
 
         xTextArea2.setName("entity.collateral");
         xTextArea2.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane2.setViewportView(xTextArea2);
 
         jPanel1.add(jScrollPane2);
-        jScrollPane2.setBounds(10, 200, 480, 70);
+        jScrollPane2.setBounds(15, 210, 480, 70);
 
         xLabel2.setPadding(new java.awt.Insets(5, 0, 1, 1));
         xLabel2.setText("Remarks:");
         jPanel1.add(xLabel2);
-        xLabel2.setBounds(10, 270, 110, 20);
+        xLabel2.setBounds(15, 280, 110, 20);
 
         xTextArea1.setName("entity.remarks");
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 290, 480, 70);
+        jScrollPane1.setBounds(15, 300, 480, 70);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -167,15 +167,15 @@ public class OtherLendingFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     

@@ -29,11 +29,11 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
         xEtchedBorder1 = new com.rameses.rcp.control.border.XEtchedBorder();
         xSplitView1 = new com.rameses.rcp.control.XSplitView();
         jPanel1 = new javax.swing.JPanel();
-        xLabel2 = new com.rameses.rcp.control.XLabel();
-        xDataTable1 = new com.rameses.rcp.control.XDataTable();
         jPanel2 = new javax.swing.JPanel();
         xButton1 = new com.rameses.rcp.control.XButton();
         xButton2 = new com.rameses.rcp.control.XButton();
+        xLabel2 = new com.rameses.rcp.control.XLabel();
+        xDataTable1 = new com.rameses.rcp.control.XDataTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xHtmlView1 = new com.rameses.rcp.control.XHtmlView();
@@ -43,12 +43,41 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
         xSplitView1.setOrientation("VERTICAL");
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
-        xLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
-        xLabel2.setFontStyle("font-weight:bold;");
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 10));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 5, 0));
+        xButton1.setDepends(new String[] {"selectedOtherLending"});
+        xButton1.setName("addOtherLending");
+        xButton1.setText("Add");
+
+        xButton2.setDepends(new String[] {"selectedOtherLending"});
+        xButton2.setDisableWhen("#{selectedOtherLending == null || caller.mode=='read'}");
+        xButton2.setName("removeOtherLending");
+        xButton2.setText("Remove");
+
+        xLabel2.setFontStyle("font-size:12;font-weight:bold;");
         xLabel2.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel2.setText("Other Lending(s)");
-        jPanel1.add(xLabel2, java.awt.BorderLayout.NORTH);
+        xLabel2.setText("Other Lendings");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(xLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(xButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(386, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(xButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(xLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1.add(jPanel2, java.awt.BorderLayout.NORTH);
 
         xDataTable1.setAutoResize(false);
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
@@ -89,7 +118,7 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
                 , new Object[]{"nullWhenEmpty", true}
                 , new Object[]{"editable", false}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.DecimalColumnHandler("#,##0.00", -1.0, -1.0, false)}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.DecimalColumnHandler("#,##0.00", -1.0, -1.0, false, 0)}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "dtgranted"}
@@ -123,39 +152,11 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
         xDataTable1.setName("selectedOtherLending");
         jPanel1.add(xDataTable1, java.awt.BorderLayout.CENTER);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 0, 0));
-        xButton1.setDepends(new String[] {"selectedOtherLending"});
-        xButton1.setName("addOtherLending");
-        xButton1.setText("Add");
-
-        xButton2.setDepends(new String[] {"selectedOtherLending"});
-        xButton2.setDisableWhen("#{selectedOtherLending == null || caller.mode=='read'}");
-        xButton2.setName("removeOtherLending");
-        xButton2.setText("Remove");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(xButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(512, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(xButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel1.add(jPanel2, java.awt.BorderLayout.SOUTH);
-
         xSplitView1.add(jPanel1);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 10));
         xHtmlView1.setDepends(new String[] {"selectedOtherLending"});
         xHtmlView1.setName("htmlview");
         jScrollPane1.setViewportView(xHtmlView1);
@@ -164,7 +165,7 @@ public class LoanAppOtherLendingPage extends javax.swing.JPanel {
 
         xLabel1.setFontStyle("font-weight:bold;");
         xLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel1.setText("Quick Preview");
+        xLabel1.setText("Quick Info");
         jPanel3.add(xLabel1, java.awt.BorderLayout.NORTH);
 
         xSplitView1.add(jPanel3);

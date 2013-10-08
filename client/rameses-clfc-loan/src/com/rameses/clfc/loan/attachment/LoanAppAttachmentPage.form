@@ -32,7 +32,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                <EmptyBorder bottom="0" left="10" right="10" top="10"/>
+                <EmptyBorder bottom="0" left="5" right="10" top="0"/>
               </Border>
             </Property>
           </Properties>
@@ -54,36 +54,17 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="com.rameses.rcp.control.XLabel" name="xLabel2">
-              <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                    <EmptyBorder bottom="2" left="0" right="0" top="0"/>
-                  </Border>
-                </Property>
-                <Property name="fontStyle" type="java.lang.String" value="font-weight:bold;"/>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="50" green="50" red="50" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Attachment(s)"/>
-              </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                  <BorderConstraints direction="North"/>
-                </Constraint>
-              </Constraints>
-            </Component>
             <Container class="javax.swing.JPanel" name="jPanel2">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                    <EmptyBorder bottom="0" left="0" right="0" top="5"/>
+                    <EmptyBorder bottom="5" left="0" right="0" top="0"/>
                   </Border>
                 </Property>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                  <BorderConstraints direction="South"/>
+                  <BorderConstraints direction="North"/>
                 </Constraint>
               </Constraints>
 
@@ -91,16 +72,19 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
+                          <Component id="xLabel2" min="-2" pref="119" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="xButton1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="xButton3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="512" max="32767" attributes="0"/>
+                          <EmptySpace pref="531" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="xLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="xButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="xButton3" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -108,6 +92,20 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
+                <Component class="com.rameses.rcp.control.XLabel" name="xLabel2">
+                  <Properties>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                        <EmptyBorder bottom="2" left="0" right="0" top="0"/>
+                      </Border>
+                    </Property>
+                    <Property name="fontStyle" type="java.lang.String" value="font-weight:bold; font-size:12;"/>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="50" green="50" red="50" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Attachments"/>
+                  </Properties>
+                </Component>
                 <Component class="com.rameses.rcp.control.XButton" name="xButton1">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="addAttachment"/>
@@ -134,7 +132,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                <EmptyBorder bottom="0" left="10" right="10" top="0"/>
+                <EmptyBorder bottom="0" left="5" right="10" top="0"/>
               </Border>
             </Property>
           </Properties>

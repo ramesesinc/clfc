@@ -17,9 +17,9 @@ import java.math.BigDecimal;
  */
 @StyleSheet
 @Template(OKCancelPage.class)
-public class BusinessFormPage extends javax.swing.JPanel {
+public class BusinessFormPage extends javax.swing.JPanel 
+{
     
-    /** Creates new form BussinessFormPage2 */
     public BusinessFormPage() {
         initComponents();
     }
@@ -62,7 +62,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         jPanel1.setLayout(null);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Business Information");
+        xTitledBorder1.setTitle(" General Information ");
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel3.setPadding(new java.awt.Insets(4, 0, 0, 0));
@@ -72,13 +72,14 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("kindTypes");
         xComboBox1.setName("entity.kind");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 20));
         xComboBox1.setRequired(true);
         xFormPanel3.add(xComboBox1);
 
         jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 20, 280, 30);
+        xFormPanel3.setBounds(15, 30, 280, 30);
 
+        xFormPanel2.setCaptionBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xFormPanel2.setPadding(new java.awt.Insets(4, 5, 0, 0));
         xDecimalField3.setCaption("Stall Size/P.O. Size(in mtrs.)");
         xDecimalField3.setCaptionWidth(160);
@@ -88,7 +89,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel2.add(xDecimalField3);
 
         jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(290, 20, 280, 30);
+        xFormPanel2.setBounds(295, 30, 280, 30);
 
         xFormPanel1.setPadding(new java.awt.Insets(6, 0, 0, 0));
         xTextField1.setCaption("Firm/Trade Name");
@@ -106,7 +107,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel1.add(xTextField2);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 40, 560, 50);
+        xFormPanel1.setBounds(15, 50, 560, 50);
 
         xFormPanel12.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xComboBox9.setCaption("Occupancy");
@@ -115,12 +116,12 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xComboBox9.setItemKey("value");
         xComboBox9.setItems("occupancyTypes");
         xComboBox9.setName("entity.occupancy.type");
-        xComboBox9.setPreferredSize(new java.awt.Dimension(120, 20));
+        xComboBox9.setPreferredSize(new java.awt.Dimension(150, 20));
         xComboBox9.setRequired(true);
         xFormPanel12.add(xComboBox9);
 
         jPanel1.add(xFormPanel12);
-        xFormPanel12.setBounds(10, 90, 280, 20);
+        xFormPanel12.setBounds(15, 100, 280, 20);
 
         xFormPanel13.setPadding(new java.awt.Insets(2, 0, 0, 0));
         xComboBox10.setCaption("Rent Type");
@@ -130,16 +131,17 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xComboBox10.setItemKey("value");
         xComboBox10.setItems("rentTypes");
         xComboBox10.setName("entity.occupancy.renttype");
-        xComboBox10.setPreferredSize(new java.awt.Dimension(120, 20));
+        xComboBox10.setPreferredSize(new java.awt.Dimension(150, 20));
         xComboBox10.setRequired(true);
         xFormPanel13.add(xComboBox10);
 
         jPanel1.add(xFormPanel13);
-        xFormPanel13.setBounds(10, 110, 280, 30);
+        xFormPanel13.setBounds(15, 120, 280, 30);
 
+        xFormPanel10.setCaptionBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xFormPanel10.setPadding(new java.awt.Insets(2, 5, 0, 0));
         xDecimalField1.setCaption("Rent Amount");
-        xDecimalField1.setCaptionWidth(160);
+        xDecimalField1.setCaptionWidth(100);
         xDecimalField1.setDepends(new String[] {"entity.occupancy.type"});
         xDecimalField1.setName("entity.occupancy.rentamount");
         xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
@@ -147,7 +149,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel10.add(xDecimalField1);
 
         jPanel1.add(xFormPanel10);
-        xFormPanel10.setBounds(290, 110, 280, 30);
+        xFormPanel10.setBounds(355, 120, 220, 30);
 
         xFormPanel8.setPadding(new java.awt.Insets(4, 0, 0, 0));
         jScrollPane4.setPreferredSize(new java.awt.Dimension(0, 40));
@@ -162,7 +164,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel8.add(jScrollPane4);
 
         jPanel1.add(xFormPanel8);
-        xFormPanel8.setBounds(10, 130, 560, 50);
+        xFormPanel8.setBounds(15, 140, 560, 50);
 
         xFormPanel7.setCellspacing(40);
         xFormPanel7.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
@@ -170,21 +172,21 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xDateField1.setCaption("Business Started");
         xDateField1.setCaptionWidth(125);
         xDateField1.setName("entity.dtstarted");
-        xDateField1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDateField1.setPreferredSize(new java.awt.Dimension(150, 20));
         xDateField1.setRequired(true);
         xFormPanel7.add(xDateField1);
 
         xTextField10.setCaption("Estimated Daily Sales");
-        xTextField10.setCaptionWidth(160);
+        xTextField10.setCaptionWidth(130);
         xTextField10.setName("entity.avgsales");
         xTextField10.setPreferredSize(new java.awt.Dimension(115, 20));
         xTextField10.setRequired(true);
         xFormPanel7.add(xTextField10);
 
         jPanel1.add(xFormPanel7);
-        xFormPanel7.setBounds(10, 170, 560, 30);
+        xFormPanel7.setBounds(15, 180, 560, 30);
 
-        xFormPanel11.setCellspacing(10);
+        xFormPanel11.setCellspacing(70);
         xFormPanel11.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel11.setPadding(new java.awt.Insets(8, 0, 0, 0));
         xComboBox8.setCaption("Ownership");
@@ -198,14 +200,14 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel11.add(xComboBox8);
 
         xDecimalField2.setCaption("Initial Invested");
-        xDecimalField2.setCaptionWidth(160);
+        xDecimalField2.setCaptionWidth(100);
         xDecimalField2.setName("entity.capital");
         xDecimalField2.setPreferredSize(new java.awt.Dimension(115, 20));
         xDecimalField2.setRequired(true);
         xFormPanel11.add(xDecimalField2);
 
         jPanel1.add(xFormPanel11);
-        xFormPanel11.setBounds(10, 190, 560, 30);
+        xFormPanel11.setBounds(15, 200, 560, 30);
 
         xFormPanel5.setPadding(new java.awt.Insets(0, 0, 0, 0));
         jScrollPane3.setPreferredSize(new java.awt.Dimension(0, 40));
@@ -226,7 +228,7 @@ public class BusinessFormPage extends javax.swing.JPanel {
         xFormPanel5.add(xTextField5);
 
         jPanel1.add(xFormPanel5);
-        xFormPanel5.setBounds(10, 220, 560, 70);
+        xFormPanel5.setBounds(15, 230, 560, 70);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -234,15 +236,15 @@ public class BusinessFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     

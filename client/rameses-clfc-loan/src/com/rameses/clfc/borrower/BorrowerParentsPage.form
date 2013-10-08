@@ -54,16 +54,16 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="xLabel6" min="-2" pref="91" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="344" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="1">
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="xLabel5" min="-2" pref="91" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="xTextField3" max="32767" attributes="0"/>
+                          <Component id="xTextField3" pref="344" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -73,7 +73,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="xTextField1" max="32767" attributes="1"/>
-                              <Component id="xTextField2" alignment="0" min="-2" pref="239" max="-2" attributes="1"/>
+                              <Component id="xTextField2" alignment="0" pref="239" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -82,8 +82,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="xNumberField1" min="-2" pref="45" max="-2" attributes="0"/>
-                              <Component id="xNumberField2" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
+                              <Component id="xNumberField2" min="-2" pref="45" max="-2" attributes="0"/>
+                              <Component id="xNumberField1" alignment="0" min="-2" pref="45" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -99,17 +99,19 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="xLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="xLabel2" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="xLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="xTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="xTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="xLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="xNumberField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="xTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="xTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="xLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="xNumberField2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -125,7 +127,7 @@
                       <Component id="xLabel6" min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="79" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="12" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
