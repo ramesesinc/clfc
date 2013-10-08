@@ -79,7 +79,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xFormPanel1.add(xSeparator1);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 10, 360, 40);
+        xFormPanel1.setBounds(10, 10, 505, 40);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
@@ -92,52 +92,57 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(10, 30, 360, 70);
+        jPanel2.setBounds(10, 30, 505, 70);
 
         xFormPanel4.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
         xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDecimalField1.setCaption("Marketer");
-        xDecimalField1.setCaptionWidth(70);
+        xDecimalField1.setCaptionWidth(80);
+        xDecimalField1.setFontStyle("font-size:14;");
         xDecimalField1.setName("data.marketeramount");
         xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField1.setRequired(true);
         xFormPanel4.add(xDecimalField1);
 
         xDecimalField2.setCaption("CI");
-        xDecimalField2.setCaptionWidth(70);
+        xDecimalField2.setCaptionWidth(80);
+        xDecimalField2.setFontStyle("font-size:14;");
         xDecimalField2.setName("data.ciamount");
         xDecimalField2.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField2.setRequired(true);
         xFormPanel4.add(xDecimalField2);
 
         xDecimalField3.setCaption("FCA");
-        xDecimalField3.setCaptionWidth(70);
+        xDecimalField3.setCaptionWidth(80);
+        xDecimalField3.setFontStyle("font-size:14;");
         xDecimalField3.setName("data.fcaamount");
         xDecimalField3.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField3.setRequired(true);
         xFormPanel4.add(xDecimalField3);
 
         jPanel1.add(xFormPanel4);
-        xFormPanel4.setBounds(10, 110, 180, 70);
+        xFormPanel4.setBounds(10, 110, 240, 70);
 
         xFormPanel2.setCellpadding(new java.awt.Insets(0, 0, 0, 5));
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDecimalField4.setCaption("CAO");
-        xDecimalField4.setCaptionWidth(50);
+        xDecimalField4.setCaptionWidth(80);
+        xDecimalField4.setFontStyle("font-size:14;");
         xDecimalField4.setName("data.caoamount");
         xDecimalField4.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField4.setRequired(true);
         xFormPanel2.add(xDecimalField4);
 
         xDecimalField5.setCaption("BCOH");
-        xDecimalField5.setCaptionWidth(50);
+        xDecimalField5.setCaptionWidth(80);
+        xDecimalField5.setFontStyle("font-size:14;");
         xDecimalField5.setName("data.bcohamount");
         xDecimalField5.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField5.setRequired(true);
         xFormPanel2.add(xDecimalField5);
 
         jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(200, 110, 170, 60);
+        xFormPanel2.setBounds(275, 110, 240, 60);
 
         xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
@@ -161,7 +166,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         xFormPanel3.add(xSeparator2);
 
         jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 180, 360, 40);
+        xFormPanel3.setBounds(10, 180, 505, 40);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
@@ -174,7 +179,7 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
         jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel3);
-        jPanel3.setBounds(10, 200, 360, 80);
+        jPanel3.setBounds(10, 200, 505, 80);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -182,15 +187,15 @@ public class SubmitForApprovalPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     

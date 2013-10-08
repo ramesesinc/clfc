@@ -43,8 +43,9 @@ public class EmploymentFormPage extends javax.swing.JPanel {
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Employment Information");
+        xTitledBorder1.setTitle("  General Information  ");
         xFormPanel1.setBorder(xTitledBorder1);
+        xFormPanel1.setPadding(new java.awt.Insets(10, 15, 10, 20));
         xTextField1.setCaption("Employer");
         xTextField1.setCaptionWidth(100);
         xTextField1.setName("entity.employer");
@@ -55,6 +56,7 @@ public class EmploymentFormPage extends javax.swing.JPanel {
         xTextField2.setCaption("Tel. No.");
         xTextField2.setCaptionWidth(100);
         xTextField2.setName("entity.contactno");
+        xTextField2.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel1.add(xTextField2);
 
         xTextField3.setCaption("Address");
@@ -72,13 +74,13 @@ public class EmploymentFormPage extends javax.swing.JPanel {
         xDecimalField1.setCaption("Salary");
         xDecimalField1.setCaptionWidth(100);
         xDecimalField1.setName("entity.salary");
-        xDecimalField1.setPreferredSize(new java.awt.Dimension(130, 20));
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel1.add(xDecimalField1);
 
         xTextField5.setCaption("Length of Service");
         xTextField5.setCaptionWidth(100);
         xTextField5.setName("entity.lengthofservice");
-        xTextField5.setPreferredSize(new java.awt.Dimension(130, 20));
+        xTextField5.setPreferredSize(new java.awt.Dimension(150, 20));
         xFormPanel1.add(xTextField5);
 
         xComboBox1.setCaption("Status");
@@ -106,15 +108,15 @@ public class EmploymentFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     

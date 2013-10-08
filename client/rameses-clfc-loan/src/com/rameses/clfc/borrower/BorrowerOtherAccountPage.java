@@ -26,7 +26,6 @@ public class BorrowerOtherAccountPage extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        xLabel1 = new com.rameses.rcp.control.XLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
@@ -34,12 +33,6 @@ public class BorrowerOtherAccountPage extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
-        xLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
-        xLabel1.setFontStyle("font-weight:bold;");
-        xLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel1.setText("Other Accounts");
-        add(xLabel1, java.awt.BorderLayout.NORTH);
-
         xTextArea1.setName("entity.remarks");
         xTextArea1.setTextCase(com.rameses.rcp.constant.TextCase.UPPER);
         jScrollPane1.setViewportView(xTextArea1);
@@ -56,7 +49,7 @@ public class BorrowerOtherAccountPage extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -66,7 +59,6 @@ public class BorrowerOtherAccountPage extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     // End of variables declaration//GEN-END:variables
     

@@ -58,8 +58,9 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xTextField11 = new com.rameses.rcp.control.XTextField();
         xDateField1 = new com.rameses.rcp.control.XDateField();
 
+        xFormPanel1.setPadding(new java.awt.Insets(0, 10, 5, 5));
         xLookupField1.setCaption("Name");
-        xLookupField1.setCaptionWidth(100);
+        xLookupField1.setCaptionWidth(90);
         xLookupField1.setExpression("#{entity.name}");
         xLookupField1.setHandler("lookupBorrower");
         xLookupField1.setName("borrower");
@@ -69,7 +70,7 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(150, 70));
         xTextArea1.setBackground(new java.awt.Color(250, 250, 250));
         xTextArea1.setCaption("Address");
-        xTextArea1.setCaptionWidth(100);
+        xTextArea1.setCaptionWidth(90);
         xTextArea1.setDepends(new String[] {"borrower"});
         xTextArea1.setEnabled(false);
         xTextArea1.setName("entity.address");
@@ -95,12 +96,15 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xLabel2.setForeground(new java.awt.Color(80, 80, 80));
         xLabel2.setText("Residency");
 
+        xFormPanel2.setPadding(new java.awt.Insets(0, 10, 5, 5));
+
+        xFormPanel3.setCellspacing(8);
         xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel3.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel3.setShowCaption(false);
         xComboBox1.setCaption("Type");
-        xComboBox1.setCaptionWidth(100);
+        xComboBox1.setCaptionWidth(90);
         xComboBox1.setExpression("#{item.value}");
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("occupancyTypes");
@@ -119,12 +123,13 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
 
         xFormPanel2.add(xFormPanel3);
 
+        xFormPanel4.setCellspacing(8);
         xFormPanel4.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel4.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel4.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel4.setShowCaption(false);
         xComboBox2.setCaption("Rent Type");
-        xComboBox2.setCaptionWidth(100);
+        xComboBox2.setCaptionWidth(90);
         xComboBox2.setDepends(new String[] {"entity.residency.type"});
         xComboBox2.setExpression("#{item.value}");
         xComboBox2.setItemKey("value");
@@ -144,10 +149,10 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
 
         xFormPanel2.add(xFormPanel4);
 
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(367, 40));
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(372, 40));
         xTextArea2.setBackground(new java.awt.Color(250, 250, 250));
         xTextArea2.setCaption("Remarks");
-        xTextArea2.setCaptionWidth(100);
+        xTextArea2.setCaptionWidth(90);
         xTextArea2.setName("entity.residency.remarks");
         jScrollPane2.setViewportView(xTextArea2);
 
@@ -162,12 +167,15 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
         xLabel3.setForeground(new java.awt.Color(80, 80, 80));
         xLabel3.setText("Lot Occupancy");
 
+        xFormPanel5.setPadding(new java.awt.Insets(0, 10, 5, 5));
+
+        xFormPanel6.setCellspacing(8);
         xFormPanel6.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel6.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel6.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel6.setShowCaption(false);
         xComboBox3.setCaption("Type");
-        xComboBox3.setCaptionWidth(100);
+        xComboBox3.setCaptionWidth(90);
         xComboBox3.setExpression("#{item.value}");
         xComboBox3.setItemKey("value");
         xComboBox3.setItems("occupancyTypes");
@@ -186,12 +194,13 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
 
         xFormPanel5.add(xFormPanel6);
 
+        xFormPanel7.setCellspacing(8);
         xFormPanel7.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel7.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xFormPanel7.setPreferredSize(new java.awt.Dimension(500, 20));
         xFormPanel7.setShowCaption(false);
         xComboBox4.setCaption("Rent Type");
-        xComboBox4.setCaptionWidth(100);
+        xComboBox4.setCaptionWidth(90);
         xComboBox4.setDepends(new String[] {"entity.occupancy.type"});
         xComboBox4.setExpression("#{item.value}");
         xComboBox4.setItemKey("value");
@@ -211,10 +220,10 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
 
         xFormPanel5.add(xFormPanel7);
 
-        jScrollPane3.setPreferredSize(new java.awt.Dimension(367, 40));
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(372, 40));
         xTextArea3.setBackground(new java.awt.Color(250, 250, 250));
         xTextArea3.setCaption("Remarks");
-        xTextArea3.setCaptionWidth(100);
+        xTextArea3.setCaptionWidth(90);
         xTextArea3.setName("entity.occupancy.remarks");
         jScrollPane3.setViewportView(xTextArea3);
 
@@ -259,15 +268,15 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(xLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
-                    .addComponent(xFormPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
-                    .addComponent(xFormPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
-                    .addComponent(xLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
+                    .addComponent(xLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+                    .addComponent(xFormPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+                    .addComponent(xFormPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+                    .addComponent(xLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xFormPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE))
-                    .addComponent(xLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE))
+                        .addComponent(xFormPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
+                    .addComponent(xLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -287,7 +296,7 @@ public class BorrowerSpouseInfoPage extends javax.swing.JPanel {
                 .addComponent(xLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(xFormPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     

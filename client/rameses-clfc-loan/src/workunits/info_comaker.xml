@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker type="comaker:create" action="init" caption="Co-Maker" target="popup"/>
-        <invoker type="comaker:open" action="init" caption="Co-Maker" target="popup"/>
+        <invoker type="comaker:create" action="init" caption="Co-Maker Information" target="popup"/>
+        <invoker type="comaker:open" action="init" caption="Co-Maker Information" target="popup"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.comaker.CoMakerController"/>
