@@ -16,6 +16,7 @@ class PostPaymentController
     @Service('LoanLedgerService')
     def ledgerSvc;
     
+    def title = 'Post Payments';
     def route;
     def entity;
     def mode = 'init';

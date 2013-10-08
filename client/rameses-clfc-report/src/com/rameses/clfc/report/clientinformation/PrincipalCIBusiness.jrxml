@@ -3,7 +3,8 @@
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
 		 name="PrincipalCIBusiness"
-		 columnCount="1"
+
+		 language="groovy"		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Portrait"
 		 pageWidth="535"
@@ -25,12 +26,7 @@
 
 
 	<field name="tradename" class="java.lang.String"/>
-	<field name="ci.evaluation" class="java.lang.String"/>
-	<field name="ci.physicaloutlook" class="java.lang.String"/>
-	<field name="ci.filedby" class="java.lang.String"/>
-	<field name="ci.dtfiled" class="java.lang.String"/>
-	<field name="ci.timefiled" class="java.lang.String"/>
-	<field name="ci.amount" class="java.math.BigDecimal"/>
+	<field name="ci" class="java.lang.Object"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -174,7 +170,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci.evaluation}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci}.source?.evaluation]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -189,7 +185,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci.physicaloutlook}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci}.source?.physicaloutlook]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -204,7 +200,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci.timefiled}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci}.source?.timefiled]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -219,7 +215,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ci.amount}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ci}.source?.amount]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -234,7 +230,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci.dtfiled}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci}.source?.dtfiled]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -249,7 +245,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci.filedby}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ci}.source?.filedby]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -278,7 +274,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{tradename}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{tradename}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

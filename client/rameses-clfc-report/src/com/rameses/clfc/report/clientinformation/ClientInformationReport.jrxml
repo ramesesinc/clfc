@@ -27,6 +27,7 @@
 	<parameter name="COLLATERAL_PROPERTY" isForPrompting="false" class="java.lang.Object"/>
 	<parameter name="COLLATERAL_APPLIANCE" isForPrompting="false" class="java.lang.Object"/>
 	<parameter name="COLLATERAL_VEHICLE" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="COLLATERAL_OTHERS" isForPrompting="false" class="java.lang.Object"/>
 	<parameter name="MUST_COLLATERAL" isForPrompting="false" class="java.lang.Object"/>
 	<parameter name="MUST_COLLATERAL_APPLIANCE" isForPrompting="false" class="java.lang.Object"/>
 	<parameter name="MUST_COLLATERAL_PROPERTY" isForPrompting="false" class="java.lang.Object"/>
@@ -97,18 +98,6 @@
 	<field name="printedby" class="java.lang.String"/>
 	<field name="dtprinted" class="java.util.Date"/>
 	<field name="borrower" class="java.lang.Object"/>
-	<field name="borrower.name" class="java.lang.String"/>
-	<field name="borrower.lastname" class="java.lang.String"/>
-	<field name="borrower.firstname" class="java.lang.String"/>
-	<field name="borrower.middlename" class="java.lang.String"/>
-	<field name="borrower.address" class="java.lang.String"/>
-	<field name="borrower.custno" class="java.lang.String"/>
-	<field name="borrower.contactno" class="java.lang.String"/>
-	<field name="borrower.age" class="java.lang.Integer"/>
-	<field name="borrower.civilstatus" class="java.lang.String"/>
-	<field name="borrower.otheraccounts" class="java.lang.String"/>
-	<field name="borrower.parent.address" class="java.lang.String"/>
-	<field name="borrower.spouse.name" class="java.lang.String"/>
 	<field name="borrower.residency" class="java.lang.Object"/>
 	<field name="borrower.employments" class="java.lang.Object"/>
 	<field name="borrower.children" class="java.lang.Object"/>
@@ -120,7 +109,6 @@
 	<field name="borrower.spouse" class="java.lang.Object"/>
 	<field name="borrower.educations" class="java.lang.Object"/>
 	<field name="borrower.parents" class="java.lang.Object"/>
-	<field name="borrower.spouse.parents" class="java.lang.Object"/>
 	<field name="loaninfo" class="java.lang.Object"/>
 	<field name="loaninfo.producttype.code" class="java.lang.String"/>
 	<field name="loaninfo.producttype.term" class="java.lang.Integer"/>
@@ -134,29 +122,11 @@
 	<field name="loaninfo.approval.absenceprovision" class="java.lang.Integer"/>
 	<field name="loaninfo.approval.remarks" class="java.lang.String"/>
 	<field name="collateral" class="java.lang.Object"/>
-	<field name="collateral.othercollateral" class="java.lang.String"/>
 	<field name="collateral.properties" class="java.lang.Object"/>
 	<field name="collateral.vehicles" class="java.lang.Object"/>
 	<field name="collateral.appliances" class="java.lang.Object"/>
 	<field name="jointborrowers" class="java.lang.Object"/>
-	<field name="jointborrower.name" class="java.lang.String"/>
-	<field name="jointborrower.birthdate" class="java.lang.String"/>
-	<field name="jointborrower.age" class="java.lang.String"/>
-	<field name="jointborrower.relationship" class="java.lang.String"/>
-	<field name="jointborrower.address" class="java.lang.String"/>
-	<field name="jointborrower.otheraccounts" class="java.lang.String"/>
-	<field name="jointborrower.residency" class="java.lang.String"/>
-	<field name="jointborrower.civilstatus" class="java.lang.String"/>
-	<field name="jointborrower.employmentlist" class="java.lang.Object"/>
 	<field name="comakers" class="java.lang.Object"/>
-	<field name="comaker.name" class="java.lang.String"/>
-	<field name="comaker.birthdate" class="java.lang.String"/>
-	<field name="comaker.address" class="java.lang.String"/>
-	<field name="comaker.age" class="java.lang.String"/>
-	<field name="comaker.relationship" class="java.lang.String"/>
-	<field name="comaker.residency" class="java.lang.String"/>
-	<field name="comaker.civilstatus" class="java.lang.String"/>
-	<field name="comaker.employmentlist" class="java.lang.Object"/>
 	<field name="recommendation" class="java.lang.Object"/>
 	<field name="recommendation.ci" class="java.lang.String"/>
 	<field name="recommendation.crecomremarks" class="java.lang.String"/>
@@ -173,18 +143,19 @@
 	<field name="ledgerEvaluation" class="java.lang.Object"/>
 	<field name="principalcibusiness" class="java.lang.Object"/>
 	<field name="route" class="java.lang.String"/>
-	<field name="employmentlist" class="java.lang.Object"/>
 	<field name="totalcav" class="java.math.BigDecimal"/>
 	<field name="otherlendings" class="java.lang.Object"/>
 	<field name="previousloans" class="java.lang.Object"/>
 	<field name="businessList_1" class="java.lang.Object"/>
-	<field name="businesslist2" class="java.lang.Object"/>
+	<field name="businessesci" class="java.lang.Object"/>
+	<field name="jointborrower" class="java.lang.Object"/>
+	<field name="comaker" class="java.lang.Object"/>
 
 
 		<group  name="clientinfo" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="331"  isSplitAllowed="true" >
+			<band height="335"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="3"
@@ -227,8 +198,8 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="247"
-						y="212"
+						x="13"
+						y="231"
 						width="23"
 						height="11"
 						key="staticText-16"
@@ -294,7 +265,7 @@
 				<staticText>
 					<reportElement
 						x="3"
-						y="263"
+						y="267"
 						width="51"
 						height="11"
 						key="staticText-21"
@@ -304,20 +275,6 @@
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Co-Maker(s) :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="247"
-						y="263"
-						width="24"
-						height="11"
-						key="staticText-22"
-						positionType="Float"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Age :]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -335,7 +292,7 @@
 				<staticText>
 					<reportElement
 						x="3"
-						y="286"
+						y="301"
 						width="40"
 						height="11"
 						key="staticText-24"
@@ -376,7 +333,7 @@
 				<staticText>
 					<reportElement
 						x="3"
-						y="311"
+						y="319"
 						width="161"
 						height="14"
 						key="staticText-41"
@@ -404,7 +361,7 @@
 					<reportElement
 						x="74"
 						y="212"
-						width="172"
+						width="456"
 						height="11"
 						key="textField-1"
 						positionType="Float"/>
@@ -413,7 +370,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower.name}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower}.source?.names]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -450,7 +407,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="164"
-						y="312"
+						y="320"
 						width="369"
 						height="12"
 						key="textField"
@@ -474,7 +431,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower.name}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower}.source?.name]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -559,8 +516,8 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="52"
-						y="263"
-						width="195"
+						y="267"
+						width="478"
 						height="11"
 						key="textField-4"
 						positionType="Float"/>
@@ -569,7 +526,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker.name}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker}.source?.names]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -597,7 +554,7 @@
 					<textElement textAlignment="Justified">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower.custno}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower}.source?.custno]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -611,12 +568,12 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower.address}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower}.source?.address]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="43"
-						y="287"
+						y="301"
 						width="489"
 						height="11"
 						key="textField-8"
@@ -626,12 +583,12 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker.address}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker}.source?.addresses]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
-						x="405"
-						y="212"
+						x="312"
+						y="231"
 						width="57"
 						height="11"
 						key="staticText-15"
@@ -661,20 +618,6 @@
 					</textElement>
 				<text><![CDATA[Profile Picture]]></text>
 				</staticText>
-				<staticText>
-					<reportElement
-						x="404"
-						y="263"
-						width="62"
-						height="12"
-						key="staticText-52"
-						positionType="Float"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Relationship :]]></text>
-				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="421"
@@ -687,7 +630,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower.contactno}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower}.source?.contactno]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -703,11 +646,11 @@
 					</textElement>
 				<text><![CDATA[days]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="269"
-						y="263"
-						width="23"
+						x="35"
+						y="231"
+						width="65"
 						height="11"
 						key="textField"
 						positionType="Float"/>
@@ -716,22 +659,7 @@
 					<textElement textAlignment="Left">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker.age}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="269"
-						y="212"
-						width="23"
-						height="11"
-						key="textField"
-						positionType="Float"/>
-					<box>					<bottomPen lineWidth="0.5"/>
-</box>
-					<textElement textAlignment="Left">
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower.age}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower}.source?.ages]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -745,7 +673,7 @@
 					<textElement textAlignment="Left">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{borrower.age}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{borrower}.source?.age]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -790,9 +718,9 @@
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="462"
-						y="212"
-						width="71"
+						x="369"
+						y="231"
+						width="161"
 						height="11"
 						key="textField"
 						positionType="Float"/>
@@ -801,22 +729,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower.relationship}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="460"
-						y="264"
-						width="75"
-						height="11"
-						key="textField"
-						positionType="Float"/>
-					<box>					<bottomPen lineWidth="0.5"/>
-</box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker.relationship}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower}.source?.relations]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -858,32 +771,10 @@
 					</textElement>
 				<text><![CDATA[Client Type :]]></text>
 				</staticText>
-				<line direction="TopDown">
-					<reportElement
-						x="52"
-						y="284"
-						width="480"
-						height="1"
-						forecolor="#999999"
-						key="line-65"
-						positionType="Float"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="43"
-						y="307"
-						width="489"
-						height="1"
-						forecolor="#999999"
-						key="line-67"
-						positionType="Float"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<staticText>
 					<reportElement
 						x="4"
-						y="238"
+						y="250"
 						width="40"
 						height="11"
 						key="staticText-83"
@@ -897,7 +788,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="43"
-						y="238"
+						y="250"
 						width="492"
 						height="11"
 						key="textField"
@@ -907,7 +798,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower.address}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower}.source?.addresses]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -938,34 +829,12 @@
 				</textField>
 				<line direction="TopDown">
 					<reportElement
-						x="41"
-						y="258"
-						width="408"
-						height="1"
-						forecolor="#999999"
-						key="line-128"
-						positionType="Float"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
 						x="43"
 						y="177"
 						width="296"
 						height="1"
 						forecolor="#000000"
 						key="line-129"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="448"
-						y="258"
-						width="84"
-						height="1"
-						forecolor="#999999"
-						key="line-136"
-						positionType="Float"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
@@ -997,8 +866,8 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="292"
-						y="212"
+						x="104"
+						y="231"
 						width="60"
 						height="11"
 						key="staticText-158"
@@ -1009,31 +878,6 @@
 					</textElement>
 				<text><![CDATA[Civil Status :]]></text>
 				</staticText>
-				<staticText>
-					<reportElement
-						x="292"
-						y="263"
-						width="60"
-						height="11"
-						key="staticText-159"
-						positionType="Float"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Civil Status :]]></text>
-				</staticText>
-				<line direction="TopDown">
-					<reportElement
-						x="74"
-						y="233"
-						width="458"
-						height="1"
-						forecolor="#999999"
-						key="line-139"
-						positionType="Float"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<line direction="TopDown">
 					<reportElement
 						x="341"
@@ -1056,13 +900,13 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower.civilstatus}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{borrower}.source?.civilstatus]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="347"
-						y="212"
-						width="58"
+						x="159"
+						y="231"
+						width="151"
 						height="11"
 						key="textField-35"
 						positionType="Float"/>
@@ -1071,22 +915,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower.civilstatus}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="348"
-						y="263"
-						width="57"
-						height="11"
-						key="textField-36"
-						positionType="Float"/>
-					<box>					<bottomPen lineWidth="0.5"/>
-</box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker.civilstatus}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{jointborrower}.source?.civilstatuses]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -1144,11 +973,12 @@
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="6"
+						x="3"
 						y="187"
 						width="520"
 						height="20"
-						key="subreport-44"/>
+						key="subreport-44"
+						isRemoveLineWhenBlank="true"/>
 					<subreportParameter  name="RESIDENCY">
 						<subreportParameterExpression><![CDATA[$F{borrower.residency}]]></subreportParameterExpression>
 					</subreportParameter>
@@ -1158,6 +988,93 @@
 					<dataSourceExpression><![CDATA[$F{borrower}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{PRINCIPAL_RESIDENCY}]]></subreportExpression>
 				</subreport>
+				<staticText>
+					<reportElement
+						x="14"
+						y="284"
+						width="23"
+						height="11"
+						key="staticText-219"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Age :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="313"
+						y="284"
+						width="57"
+						height="11"
+						key="staticText-220"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Relationship :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="36"
+						y="284"
+						width="65"
+						height="11"
+						key="textField-79"
+						positionType="Float"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Left">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker}.source?.ages]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="370"
+						y="284"
+						width="161"
+						height="11"
+						key="textField-80"
+						positionType="Float"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker}.source?.relations]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="105"
+						y="284"
+						width="60"
+						height="11"
+						key="staticText-221"
+						positionType="Float"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Civil Status :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="160"
+						y="284"
+						width="151"
+						height="11"
+						key="textField-81"
+						positionType="Float"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comaker}.source?.civilstatuses]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -1177,6 +1094,7 @@
 						width="501"
 						height="20"
 						key="subreport-10"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{businesses}]]></dataSourceExpression>
@@ -1192,276 +1110,21 @@
 		<group  name="otherLending" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="67"  isSplitAllowed="false" >
+			<band height="18"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[$F{otherlendings}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="2"
-						y="51"
-						width="532"
+						x="3"
+						y="2"
+						width="501"
 						height="15"
 						key="subreport-20"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{otherlendings}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{PRINCIPAL_OTHER_LENDING}]]></subreportExpression>
 				</subreport>
-				<staticText>
-					<reportElement
-						x="143"
-						y="24"
-						width="45"
-						height="13"
-						key="staticText-220"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[ Loan]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="317"
-						y="24"
-						width="45"
-						height="13"
-						key="staticText-221"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Lendingment]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="272"
-						y="24"
-						width="46"
-						height="13"
-						key="staticText-222"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[ Mode of]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="2"
-						y="24"
-						width="73"
-						height="13"
-						key="staticText-223"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Name of Other]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="361"
-						y="24"
-						width="62"
-						height="13"
-						key="staticText-224"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Collateral(s)]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="232"
-						y="24"
-						width="41"
-						height="13"
-						key="staticText-225"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Maturity]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="422"
-						y="24"
-						width="113"
-						height="13"
-						key="staticText-226"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Remarks]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="2"
-						y="37"
-						width="73"
-						height="13"
-						key="staticText-227"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Lending Inst.]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="74"
-						y="24"
-						width="70"
-						height="13"
-						key="staticText-228"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Address]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="143"
-						y="37"
-						width="45"
-						height="13"
-						key="staticText-229"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Amount]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="188"
-						y="24"
-						width="45"
-						height="13"
-						key="staticText-230"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Date]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="188"
-						y="37"
-						width="45"
-						height="13"
-						key="staticText-231"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Granted]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="232"
-						y="37"
-						width="41"
-						height="13"
-						key="staticText-232"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Date]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="272"
-						y="37"
-						width="46"
-						height="13"
-						key="staticText-233"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Payment]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="317"
-						y="37"
-						width="45"
-						height="13"
-						key="staticText-234"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Payment]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="361"
-						y="37"
-						width="62"
-						height="13"
-						key="staticText-235"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Offered]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="422"
-						y="37"
-						width="113"
-						height="13"
-						key="staticText-236"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="74"
-						y="37"
-						width="70"
-						height="13"
-						key="staticText-237"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="3"
-						y="5"
-						width="158"
-						height="13"
-						key="staticText-238"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
-					</textElement>
-				<text><![CDATA[OTHER LENDING AVAILED]]></text>
-				</staticText>
-				<line direction="TopDown">
-					<reportElement
-						x="2"
-						y="50"
-						width="534"
-						height="1"
-						key="line-148"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -1469,119 +1132,100 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="property" >
+		<group  name="collateral" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="35"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{collateral}.source?.properties? true : false]]></printWhenExpression>
+			<band height="119"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[$F{collateral}.source?.properties.size > 0 || $F{collateral}.source?.appliances.size > 0 || $F{collateral}.source?.vehicles.size > 0 || $F{collateral}.source?.othercollateral? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="3"
-						y="14"
-						width="501"
+						x="1"
+						y="2"
+						width="535"
 						height="20"
 						key="subreport-1"
+						positionType="Float"
 						isRemoveLineWhenBlank="true"
-						isPrintWhenDetailOverflows="true"/>
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[$F{collateral.properties} && $F{collateral}.source?.properties.size > 0? true : false]]></printWhenExpression>
+						</reportElement>
 					<dataSourceExpression><![CDATA[$F{collateral.properties}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COLLATERAL_PROPERTY}]]></subreportExpression>
 				</subreport>
-				<staticText>
-					<reportElement
-						x="3"
-						y="1"
-						width="279"
-						height="13"
-						key="staticText-11"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" isBold="true"/>
-					</textElement>
-				<text><![CDATA[COLLATERAL / SECURITY (Personal/Real Property)]]></text>
-				</staticText>
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
-		<group  name="appliance" >
-			<groupExpression><![CDATA[]]></groupExpression>
-			<groupHeader>
-			<band height="20"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{collateral}.source?.appliances? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="3"
-						y="2"
-						width="501"
+						x="0"
+						y="27"
+						width="535"
 						height="18"
 						key="subreport-3"
-						isPrintWhenDetailOverflows="true"/>
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[$F{collateral.appliances} && $F{collateral}.source?.appliances.size > 0? true : false]]></printWhenExpression>
+						</reportElement>
 					<dataSourceExpression><![CDATA[$F{collateral.appliances}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COLLATERAL_APPLIANCE}]]></subreportExpression>
 				</subreport>
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
-		<group  name="vehicle" >
-			<groupExpression><![CDATA[]]></groupExpression>
-			<groupHeader>
-			<band height="23"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{collateral}.source?.vehicles? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="3"
-						y="2"
-						width="501"
+						x="0"
+						y="51"
+						width="535"
 						height="20"
-						key="subreport-12"/>
+						key="subreport-12"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[$F{collateral.vehicles} && $F{collateral}.source?.vehicles.size > 0? true : false]]></printWhenExpression>
+						</reportElement>
 					<dataSourceExpression><![CDATA[$F{collateral.vehicles}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COLLATERAL_VEHICLE}]]></subreportExpression>
 				</subreport>
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
-		<group  name="otherCollateral" >
-			<groupExpression><![CDATA[]]></groupExpression>
-			<groupHeader>
-			<band height="32"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{collateral}.source?.othercollateral? true : false]]></printWhenExpression>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="75"
+						width="535"
+						height="20"
+						key="subreport-47"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[$F{collateral}.source?.othercollateral? true : false]]></printWhenExpression>
+						</reportElement>
+					<dataSourceExpression><![CDATA[$F{collateral}]]></dataSourceExpression>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COLLATERAL_OTHERS}]]></subreportExpression>
+				</subreport>
 				<staticText>
 					<reportElement
-						x="2"
-						y="2"
-						width="189"
-						height="13"
-						key="staticText-219"/>
-					<box></box>
-					<textElement textAlignment="Left">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+						x="0"
+						y="101"
+						width="175"
+						height="14"
+						key="staticText-218"
+						positionType="Float"/>
+					<box>					<bottomPen lineWidth="0.0"/>
+</box>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
-				<text><![CDATA[OTHER COLLATERALS]]></text>
+				<text><![CDATA[Total Collateral(s) Appraised Value :]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="2"
-						y="17"
-						width="520"
-						height="13"
-						key="textField-79"/>
+						x="177"
+						y="101"
+						width="101"
+						height="14"
+						key="textField-78"
+						positionType="Float"/>
 					<box>					<bottomPen lineWidth="0.25"/>
 </box>
-					<textElement verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{collateral.othercollateral}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalcav}]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupHeader>
@@ -1593,11 +1237,11 @@
 		<group  name="spouse" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="53"  isSplitAllowed="true" >
+			<band height="47"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="4"
-						y="16"
+						x="3"
+						y="5"
 						width="529"
 						height="22"
 						key="staticText-217"/>
@@ -1607,38 +1251,10 @@
 					</textElement>
 				<text><![CDATA[   PRINCIPAL BORROWER INFORMATION]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="181"
-						y="2"
-						width="101"
-						height="14"
-						key="textField-78"/>
-					<box>					<bottomPen lineWidth="0.25"/>
-</box>
-					<textElement textAlignment="Center">
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{totalcav}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="5"
-						y="2"
-						width="175"
-						height="14"
-						key="staticText-218"/>
-					<box>					<bottomPen lineWidth="0.0"/>
-</box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Total Collateral(s) Appraised Value :]]></text>
-				</staticText>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="2"
-						y="33"
+						y="27"
 						width="501"
 						height="18"
 						key="subreport-45"
@@ -1662,7 +1278,7 @@
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="23"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{borrower}.source?.childrens? true : false]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$F{borrower.children}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="2"
@@ -1670,6 +1286,7 @@
 						width="502"
 						height="20"
 						key="subreport-9"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<subreportParameter  name="CHILDREN_EMPLOYMENT">
@@ -1692,7 +1309,7 @@
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="23"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{borrower}.source?.educations? true : false]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$F{borrower.educations}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="2"
@@ -1700,6 +1317,7 @@
 						width="502"
 						height="20"
 						key="subreport-29"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{borrower.educations}]]></dataSourceExpression>
@@ -1715,8 +1333,8 @@
 		<group  name="employment" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="24"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{borrower}.source?.employments? true : false]]></printWhenExpression>
+			<band height="23"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[$F{borrower.employments}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
@@ -1736,14 +1354,15 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="parents" >
+		<group  name="parent" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="26"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[$F{borrower.parents}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
-						y="3"
+						y="2"
 						width="507"
 						height="22"
 						key="subreport-42"
@@ -1765,12 +1384,12 @@
 		<group  name="siblings" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="43"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{borrower}.source?.siblings? true : false]]></printWhenExpression>
+			<band height="24"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[$F{borrower.siblings}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
-						y="19"
+						y="1"
 						width="507"
 						height="22"
 						key="subreport-22"
@@ -1786,30 +1405,6 @@
 					<dataSourceExpression><![CDATA[$F{borrower.siblings}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{PRINCIPAL_SIBLING_LIST}]]></subreportExpression>
 				</subreport>
-				<staticText>
-					<reportElement
-						x="3"
-						y="4"
-						width="158"
-						height="13"
-						key="staticText-239"/>
-					<box></box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
-					</textElement>
-				<text><![CDATA[SIBLINGS INFORMATION]]></text>
-				</staticText>
-			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-			</groupFooter>
-		</group>
-		<group  name="principalSpouseSiblingsList" >
-			<groupExpression><![CDATA[]]></groupExpression>
-			<groupHeader>
-			<band height="0"  isSplitAllowed="true" >
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -1820,15 +1415,16 @@
 		<group  name="otherIncome" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="22"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{borrower}.source?.otherincomes? true : false]]></printWhenExpression>
+			<band height="24"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[$F{borrower.otherincomes}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
-						y="1"
+						y="2"
 						width="507"
 						height="20"
 						key="subreport-17"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{borrower.otherincomes}]]></dataSourceExpression>
@@ -1844,15 +1440,16 @@
 		<group  name="savingAccounts" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="25"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{borrower}.source?.savingaccts? true : false]]></printWhenExpression>
+			<band height="24"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[$F{borrower.savingaccts}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
-						y="3"
+						y="2"
 						width="507"
 						height="20"
 						key="subreport-24"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{borrower.savingaccts}]]></dataSourceExpression>
@@ -1869,7 +1466,7 @@
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="26"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{borrower}.source?.checkingaccts? true : false]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$F{borrower.checkingaccts}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
@@ -1877,6 +1474,7 @@
 						width="507"
 						height="20"
 						key="subreport-25"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{borrower.checkingaccts}]]></dataSourceExpression>
@@ -1892,15 +1490,16 @@
 		<group  name="jointBorrowers" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="48"  isSplitAllowed="true" >
+			<band height="25"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[$F{jointborrowers}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
-						y="24"
+						y="2"
 						width="508"
 						height="21"
 						key="subreport-19"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<subreportParameter  name="SPOUSE">
@@ -1954,32 +1553,6 @@
 					<dataSourceExpression><![CDATA[$F{jointborrowers}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{JOINTBORROWER_LIST}]]></subreportExpression>
 				</subreport>
-				<staticText>
-					<reportElement
-						x="3"
-						y="6"
-						width="529"
-						height="22"
-						key="staticText-240"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
-					</textElement>
-				<text><![CDATA[   JOINT BORROWER INFORMATION]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						x="3"
-						y="6"
-						width="529"
-						height="22"
-						key="staticText-242"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
-					</textElement>
-				<text><![CDATA[   JOINT BORROWER INFORMATION]]></text>
-				</staticText>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -1990,15 +1563,16 @@
 		<group  name="comakers" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="55"  isSplitAllowed="true" >
+			<band height="26"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[$F{comakers}? true : false]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
-						y="27"
+						y="2"
 						width="508"
 						height="22"
 						key="subreport-18"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<subreportParameter  name="SPOUSE">
@@ -2046,25 +1620,9 @@
 					<subreportParameter  name="CHECKING_LIST">
 						<subreportParameterExpression><![CDATA[$P{COMAKER_CHECKING_LIST}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportParameter  name="DTYPE">
-						<subreportParameterExpression><![CDATA["COMAKER"]]></subreportParameterExpression>
-					</subreportParameter>
 					<dataSourceExpression><![CDATA[$F{comakers}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{COMAKER_LIST}]]></subreportExpression>
 				</subreport>
-				<staticText>
-					<reportElement
-						x="3"
-						y="8"
-						width="529"
-						height="22"
-						key="staticText-241"/>
-					<box></box>
-					<textElement textAlignment="Center">
-						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
-					</textElement>
-				<text><![CDATA[   CO-MAKER INFORMATION]]></text>
-				</staticText>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -2083,10 +1641,9 @@
 						width="508"
 						height="20"
 						key="subreport-39"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
-						isPrintWhenDetailOverflows="true">
-							<printWhenExpression><![CDATA[new Boolean(false)]]></printWhenExpression>
-						</reportElement>
+						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{previousavailed}]]></dataSourceExpression>
 				</subreport>
 			</band>
@@ -2099,18 +1656,17 @@
 		<group  name="ledgerEvaluation" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="22"  isSplitAllowed="true" >
+			<band height="26"  isSplitAllowed="true" >
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="3"
-						y="2"
+						y="3"
 						width="508"
 						height="20"
 						key="subreport-38"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
-						isPrintWhenDetailOverflows="true">
-							<printWhenExpression><![CDATA[new Boolean(false)]]></printWhenExpression>
-						</reportElement>
+						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{loanHistory}]]></dataSourceExpression>
 				</subreport>
 			</band>
@@ -2131,6 +1687,7 @@
 						width="508"
 						height="20"
 						key="subreport-21"
+						stretchType="RelativeToBandHeight"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<dataSourceExpression><![CDATA[$F{previousloans}]]></dataSourceExpression>
@@ -2159,7 +1716,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{recommendation.ci}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{recommendation}.source?.ciremarks]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -2185,7 +1742,7 @@
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="25"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$F{businesses}? true : false]]></printWhenExpression>
+				<printWhenExpression><![CDATA[new Boolean(!$F{recommendation.ci}.equals(null))]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="5"
@@ -2195,7 +1752,7 @@
 						key="subreport-46"
 						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
-					<dataSourceExpression><![CDATA[$F{businesses}]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[$F{businessesci}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{CI_BUSINESS_REPORT}]]></subreportExpression>
 				</subreport>
 			</band>
@@ -2485,7 +2042,7 @@
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
 			<band height="173"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[Boolean.false]]></printWhenExpression>
+				<printWhenExpression><![CDATA[false]]></printWhenExpression>
 				<staticText>
 					<reportElement
 						x="3"
@@ -2758,7 +2315,9 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{loaninfo.approval.absencetype}.toUpperCase().equals("POLICY")?
+	$F{loaninfo.approval.absencetype}+": "+$F{loaninfo.approval.absencepolicy}+" Abs" : 
+	$F{loaninfo.approval.absencetype}+": "+$F{loaninfo.approval.absenceprovision}+" Abs"]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
@@ -2797,10 +2356,10 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="collectionsite" >
+		<group  name="collectionsite" isStartNewPage="true" minHeightToStartNewPage="700" >
 			<groupExpression><![CDATA[]]></groupExpression>
 			<groupHeader>
-			<band height="443"  isSplitAllowed="false" >
+			<band height="443"  isSplitAllowed="true" >
 				<line direction="BottomUp">
 					<reportElement
 						x="4"
@@ -2868,15 +2427,22 @@
 		</group>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[new Boolean($F{borrower.parents}!=null)]]></printWhenExpression>
 			</band>
 		</background>
 		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
 			<band height="43"  isSplitAllowed="true" >
 				<line direction="TopDown">
 					<reportElement
 						x="121"
-						y="21"
+						y="22"
 						width="313"
 						height="1"
 						key="line-19"/>
@@ -2885,7 +2451,7 @@
 				<staticText>
 					<reportElement
 						x="2"
-						y="1"
+						y="2"
 						width="532"
 						height="20"
 						key="staticText-49"/>
@@ -2898,7 +2464,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="178"
-						y="23"
+						y="24"
 						width="182"
 						height="13"
 						key="textField"/>
@@ -2908,14 +2474,6 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{branchname}+ " " + "Business Office"]]></textFieldExpression>
 				</textField>
-			</band>
-		</title>
-		<pageHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageHeader>
-		<columnHeader>
-			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</columnHeader>
 		<detail>

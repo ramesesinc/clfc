@@ -24,9 +24,6 @@
 	<import value="net.sf.jasperreports.engine.*" />
 	<import value="net.sf.jasperreports.engine.data.*" />
 
-	<parameter name="CURRENTDATE" isForPrompting="false" class="java.util.Date">
-		<defaultValueExpression ><![CDATA[new Date()]]></defaultValueExpression>
-	</parameter>
 
 	<field name="tradename" class="java.lang.String"/>
 	<field name="officehours" class="java.lang.String"/>
@@ -38,8 +35,10 @@
 	<field name="kind" class="java.lang.String"/>
 	<field name="dtstarted" class="java.util.Date"/>
 	<field name="occupancy" class="java.lang.Object"/>
-	<field name="years" class="java.lang.Integer"/>
 
+	<variable name="years" class="java.lang.Integer" resetType="Report" calculation="System">
+		<initialValueExpression><![CDATA[Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date())) - Integer.parseInt(new SimpleDateFormat("yyyy").format($F{dtstarted}))]]></initialValueExpression>
+	</variable>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -73,7 +72,7 @@
 			<band height="136"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="5"
+						x="4"
 						y="2"
 						width="89"
 						height="11"
@@ -86,7 +85,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="5"
+						x="4"
 						y="41"
 						width="80"
 						height="11"
@@ -138,7 +137,7 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="88"
+						x="87"
 						y="42"
 						width="183"
 						height="11"
@@ -270,7 +269,7 @@
 					<textElement textAlignment="Left">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{years}+" Yr/Yrs"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{years}+" Yr/Yrs"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -287,7 +286,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="5"
+						x="4"
 						y="53"
 						width="60"
 						height="11"
@@ -408,7 +407,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="87"
+						x="86"
 						y="3"
 						width="203"
 						height="11"
@@ -418,7 +417,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{tradename}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{tradename}.toUpperCase()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement

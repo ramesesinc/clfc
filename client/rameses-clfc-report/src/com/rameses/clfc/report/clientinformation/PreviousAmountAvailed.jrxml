@@ -24,8 +24,8 @@
 	<import value="net.sf.jasperreports.engine.data.*" />
 
 
-	<field name="dtreleased" class="java.lang.String"/>
-	<field name="loanamount" class="java.math.BigDecimal"/>
+	<field name="dtreleased" class="java.util.Date"/>
+	<field name="loanamount" class="java.lang.Object"/>
 	<field name="remarks" class="java.lang.String"/>
 
 		<background>
@@ -137,9 +137,9 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{remarks}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{remarks}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="MMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="13"
 						y="0"
@@ -153,7 +153,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dtreleased}]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{dtreleased}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
