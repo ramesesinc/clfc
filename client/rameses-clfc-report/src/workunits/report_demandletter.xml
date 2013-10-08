@@ -1,6 +1,8 @@
 <workunit>
     <invokers>
+        <!--
         <invoker type="loanapp-report:plugin" caption="Demand Letter" action="preview" target="window" />
+        -->
     </invokers>
     
     <code class="com.rameses.clfc.report.controller.DemandLetterReportController"/>
