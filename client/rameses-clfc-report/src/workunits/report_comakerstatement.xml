@@ -8,7 +8,7 @@
         <invoker type="formActions" action="back" caption="Back" mnemonic="b" visibleWhen="#{mode == 'view'}" immediate="true"/>
     </invokers>
     
-    <code class="com.rameses.clfc.report.controller.ComakerStateReportController"/>
+    <code class="com.rameses.clfc.report.controller.ComakerStatementReportController"/>
     
     <pages>
         <page template="com.rameses.clfc.report.comakerstatement.ComakerStatementInitPage"/>

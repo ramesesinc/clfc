@@ -104,7 +104,7 @@ class LoanAppReportService
 
 	        // SPOUSE INFORMATION
 	        // IF EMPLOYED
-	        spouseemployername	    	: spouseemployment.employment,//'HULK SMITH',
+	        spouseemployername	    	: spouseemployment.employer,//'HULK SMITH',
 	        spouseemployedtelno    		: spouseemployment.contactno,//'412-6556',
 	        spouseemployedaddress  		: spouseemployment.address,//'CEBU CITY',
 	        spouseemployedposition 		: spouseemployment.position,//'CLERK',
