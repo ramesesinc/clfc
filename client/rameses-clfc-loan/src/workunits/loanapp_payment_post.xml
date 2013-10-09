@@ -3,10 +3,10 @@
         <invoker folderid="/menu/txn/loan" caption="Post Payments" role="LOAN_CAO_OFFICER" index="3"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
-            shortcut="ctrl C" visibleWhen="#{mode == 'init'}" immediate="true"/>
+            shortcut="ctrl W" visibleWhen="#{mode == 'read'}" immediate="true"/>
             
         <invoker type="formActions" action="next" caption="Next" mnemonic="n" 
-            shortcut="ctrl N" visibleWhen="#{mode == 'init'}"/>
+            shortcut="ctrl N" visibleWhen="#{mode == 'read'}"/>
         
         <invoker type="formActions" action="back" caption="Back" mnemonic="b" 
             shortcut="ctrl B" visibleWhen="#{mode == 'mgmt'}"/>

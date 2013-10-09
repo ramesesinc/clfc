@@ -4,7 +4,7 @@
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W" visibleWhen="#{mode == 'mgmt'}"/>
         <invoker type="formActions" action="adjust" caption="Adjust Payments" mnemonic="a" shortcut="ctrl A" visibleWhen="mode == 'mgmt'"/>
-        <invoker type="formActions" action="view" caption="View" mnemonic="v" shortcut="ctrl V" visibleWhen="#{mode == 'mgmt'}"/>
+        <invoker type="formActions" action="view" caption="View" mnemonic="v" shortcut="ctrl V" icon="images/toolbars/chart.png" visibleWhen="#{mode == 'mgmt'}"/>
         
         <invoker type="formActions" action="back" caption="Back" mnemonic="b" shortcut="ctrl B" visibleWhen="#{mode == 'view'}"/>
         <invoker type="formActions" action="viewHistory" caption="View History" mnemonic="h" shortcut="ctrl H" visibleWhen="#{mode == 'view'}"/>

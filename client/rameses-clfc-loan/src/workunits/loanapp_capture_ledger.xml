@@ -5,11 +5,11 @@
             
         <invoker type="captureledger:create" caption="Capture Ledger" action="init"/>
         
-        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" 
-            visibleWhen="#{mode == 'init'}" immediate="true"/>
+        <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
+            visibleWhen="#{mode == 'read'}" immediate="true"/>
             
         <invoker type="formActions" action="next" caption="Next" mnemonic="n" 
-            icon="images/toolbars/arrow_right.png" visibleWhen="#{mode == 'init'}"/>
+            icon="images/toolbars/arrow_right.png" visibleWhen="#{mode == 'read'}"/>
         
         <invoker type="formActions" action="back" caption="Back" mnemonic="b" 
             icon="images/toolbars/arrow_left.png" visibleWhen="#{mode == 'create'}" 
@@ -17,9 +17,6 @@
             
         <invoker type="formActions" action="save" caption="Save" mnemonic="s" 
             visibleWhen="#{mode == 'create'}"/>
-        
-        <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
-            visibleWhen="#{mode == 'read'}" immediate="true"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.capture.CaptureLoanAppLedgerController"/>
