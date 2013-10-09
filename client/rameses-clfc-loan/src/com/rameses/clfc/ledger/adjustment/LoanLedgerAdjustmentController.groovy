@@ -11,12 +11,12 @@ class LoanLedgerAdjustmentController
     def adjustmentSvc;
     
     String title = "Ledger Adjustment";
-    def ledger;
+    def entity;
     def paymentTypes = LoanUtil.paymentTypes;
     def payments;
     
     void init() {
-        payments = adjustmentSvc.getPayments(ledger)
+        payments = adjustmentSvc.getPayments(entity)
     }
     
     def paymentHandler = [

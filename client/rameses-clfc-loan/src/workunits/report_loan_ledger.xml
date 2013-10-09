@@ -1,0 +1,14 @@
+<workunit>
+    <invokers>
+        <invoker type="loanledger:open" action="preview" caption="Loan Ledger" target="window"/>
+        
+        <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W"/>
+        <invoker type="formActions" action="viewHistory" caption="View History" mnemonic="h"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.report.controller.LoanLedgerReportController"/>
+    
+    <pages>
+        <page template="com.rameses.osiris2.common.ui.ReportPreviewPage"/>
+    </pages>
+</workunit>
