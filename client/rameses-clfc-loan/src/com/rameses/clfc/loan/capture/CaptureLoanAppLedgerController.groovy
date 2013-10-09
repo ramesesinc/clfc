@@ -22,11 +22,15 @@ class LoanAppCaptureLedgerController
     def title = 'Capture Ledger';
       
     void init() {
-        mode = 'init';
+        mode = 'read';
         entity = [
             objid: 'LEDGER'+new UID(),
             payments: []
         ]
+    }
+    
+    def close() {
+        return '_close';
     }
     
     def next() {
@@ -35,7 +39,7 @@ class LoanAppCaptureLedgerController
     }
     
     def back() {
-        mode = 'init';
+        mode = 'read';
         return 'default';
     }
     

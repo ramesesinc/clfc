@@ -19,7 +19,7 @@ class PostPaymentController
     def title = 'Post Payments';
     def route;
     def entity;
-    def mode = 'init';
+    def mode = 'read';
     def unpostedPayments;
     
     def getRouteList() {
@@ -40,7 +40,7 @@ class PostPaymentController
     }
     
     def back() {
-        mode = 'init';
+        mode = 'read';
         return 'default';
     }
     
@@ -51,7 +51,8 @@ class PostPaymentController
         }
         ledgerSvc.approveBatchPayment(entity);
         route = null;
-        mode = 'init';
+        mode = 'read';
+        MsgBox.alert('Transaction has been successfully posted'); 
         return 'default';
     }
     
@@ -73,7 +74,7 @@ class PostPaymentController
     }
     
     boolean getIsAllowPost() {
-        if(mode == 'init' || unpostedPayments.isEmpty()) return false;
+        if(mode == 'read' || unpostedPayments.isEmpty()) return false;
         return true;
     }
 }

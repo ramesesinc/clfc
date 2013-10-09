@@ -306,7 +306,7 @@
 				<staticText>
 					<reportElement
 						x="341"
-						y="168"
+						y="170"
 						width="82"
 						height="11"
 						key="staticText-25"/>
@@ -560,7 +560,7 @@
 					<reportElement
 						x="42"
 						y="157"
-						width="299"
+						width="488"
 						height="11"
 						key="textField-7"/>
 					<box>					<bottomPen lineWidth="0.5"/>
@@ -621,7 +621,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="421"
-						y="168"
+						y="170"
 						width="112"
 						height="11"
 						key="textField"/>
@@ -830,7 +830,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="43"
-						y="177"
+						y="179"
 						width="296"
 						height="1"
 						forecolor="#000000"
@@ -878,16 +878,6 @@
 					</textElement>
 				<text><![CDATA[Civil Status :]]></text>
 				</staticText>
-				<line direction="TopDown">
-					<reportElement
-						x="341"
-						y="167"
-						width="191"
-						height="1"
-						forecolor="#000000"
-						key="line-141"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="466"
@@ -2731,7 +2721,7 @@
 					<textElement textAlignment="Justified">
 						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false"/>
 					</textElement>
-				<text><![CDATA[to verify and ivestigate from whatever sources C & L]]></text>
+				<text><![CDATA[to verify and investigate from whatever sources C & L]]></text>
 				</staticText>
 				<staticText>
 					<reportElement

@@ -3,9 +3,11 @@ SELECT IFNULL(MAX(loancount),0) AS loancount
 FROM loan_ledger WHERE acctid=$P{acctid} 
 
 [getCollectionsheets]
-SELECT la.objid AS loanappid, la.appno AS appno, 
+SELECT ll.objid AS objid, la.objid AS loanappid, la.appno AS appno, 
 		ll.acctname AS acctname, ll.dailydue AS dailydue,
 		ll.dtlastpaid AS dtlastpaid, ll.dtstarted AS dtstarted,
+		ll.overduepenalty AS overduepenalty, ll.dtmatured AS dtmatured,
+		ll.producttypeid AS producttypeid, ll.balance AS balance,
 		ll.overpaymentamount AS overpaymentamount
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
@@ -46,7 +48,7 @@ WHERE la.state IN('RELEASED','CLOSED')
 [getLedgerDetailsByLedgerid]
 SELECT * FROM loan_ledger_detail
 WHERE parentid=$P{parentid}
-ORDER BY txndate, day, refno, state DESC
+ORDER BY day, refno, txndate, state
 
 [getPaymentsFromLedgerDetail]
 SELECT ll.appid AS appid, lld.refno, lld.dtpaid AS txndate, 

@@ -8,19 +8,52 @@ class LoanLedgerReportService
 	@ActiveDB(value="loan_product_type")
 	def product_type;
 
+	@ActiveDB(value="borrower")
+	def borrower;
+
+	@ActiveDB(value="loanapp_business")
+	def business;
+
 	@Service("DateService")
 	def dateSvc;
 
+	@Service("ComakerService")
+	def comakerSvc;
+
 	@ProxyMethod
 	public def getReportData( params ) {
-		if(!params.ledgerid) throw new Exception('Please specify ledgerid');
-		if(!params.appid) throw new Exception('Please specify appid');
+		if (!params.ledgerid) throw new Exception('Please specify ledgerid');
+		if (!params.appid) throw new Exception('Please specify appid');
 
 		def ledger = ledgerdb.read([objid: params.ledgerid]);
+		def pb = borrower.read([objid: ledger.acctid]);
 		def producttype = product_type.read([name: ledger.producttypeid]);
+
+		def spousename = "";
+		if(pb.spouse.objid) spousename = pb.spouse.lastname+', '+pb.spouse.firstname+' '+(pb.spouse.middlename? pb.spouse.middlename : '');
+
+		def comakers = comakerSvc.open([objid: ledger.appid]).comakers;
+		def comaker = [:];
+		if (comakers) {
+			comaker.putAll(comakers[0]);
+			comaker.name = comaker.lastname+', '+comaker.firstname+' '+(comaker.middlename? comaker.middlename : '');
+		}
+
+		def businesses = business.getList([parentid: ledger.appid]);
+		def firm = [:];
+		if (businesses) firm.putAll(businesses[0]);
 
 		def data = [
 			borrowername	: ledger.acctname,
+			spousename 		: spousename,
+			borroweraddress	: pb.address,
+			borrowertelno 	: pb.contactno,
+			comakername 	: comaker?.name,
+			comakeraddress 	: comaker?.address,
+			comakertelno 	: comaker?.contactno,
+			officename 		: firm?.tradename,
+			officeaddress 	: firm?.address,
+			officetelno 	: firm?.contactno,
 			originalamtloan	: ledger.totalprincipal,
 			dategranted		: dateSvc.add(ledger.dtstarted, "-1"),
 			datematurity	: ledger.dtmatured,
@@ -77,11 +110,16 @@ class LoanLedgerReportService
 				prevrefno = it.refno;
 				prevbal = it.balance;
 			} else {
+				if(itm.penaltycharge == 0) itm.penaltycharge = null;
 				itm.receiptno = null;
 				itm.datepaid = null;
 			}
 			data.payments.add(itm);
 		}
+
+		def list = data.payments.findAll{ it.penaltycharge != null }
+		data.totalcharges = list.penaltycharge.sum();
+		if (!data.totalcharges) data.totalcharges = 0.00;
 
 		return data;
 	}

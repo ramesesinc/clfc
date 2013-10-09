@@ -14,11 +14,24 @@ class LoanLedgerService extends ActiveListService
 	@Service('LoanPaymentService')
 	def paymentSvc;
 
+	@ProxyMethod
+	public def getColumns( params ) {
+		return [
+			[name:'appno', caption:'App. No.', width:150],
+			[name:'borrower.name', caption:'Borrower Name', width:250],
+			[name:'dailydue', caption:'Daily Due', width:100],
+			[name:'interest', caption:'Interest', width:100],
+			[name:'dtstarted', caption:'Date Started', width:100],
+			[name:'dtmatured', caption:'Date Matured', width:100]
+		]
+	}
+
 	@ProxyMethod 
 	public def create(data) { 
 		def loancount = em.findLoanCountByAcctid([acctid: data.acctid]).loancount; 
 		data.loancount = loancount+1;
-		data.totalprincipal = data.loanamount; 
+		data.totalprincipal = data.loanamount;
+		data.balance = data.loanamount;
 		data.dailydue = computeDailyDue(data);
 		data.interestamount = computeInterestAmount(data);
 		data.absentpenalty = computeAbsentPenalty(data);
@@ -39,7 +52,8 @@ class LoanLedgerService extends ActiveListService
 		}
 	}
 
-	private def roundOffAmount(amt) {
+	@ProxyMethod
+	public def roundOffAmount(amt) {
 		def amount = amt+'';
 		def result = 0;
 		def ld = Integer.parseInt(amount[amount.length()-1]);

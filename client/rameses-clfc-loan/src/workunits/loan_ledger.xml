@@ -1,0 +1,37 @@
+<workunit extends="wtemplates/ListController.xml">
+    <invokers>
+        <invoker folderid="explorer/txn/loan" caption="Loan Ledgers" role="LOAN_ACCOUNTING"/>
+        <!--
+        <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W" visibleWhen="#{mode == 'mgmt'}"/>
+        -->
+        <invoker type="loanledger:formActions" action="adjust" caption="Adjust Payments" mnemonic="a" shortcut="ctrl A" visibleWhen="mode == 'mgmt'"/>
+        <invoker type="loanledger:formActions" action="view" caption="View" mnemonic="v" shortcut="ctrl V" icon="images/toolbars/chart.png" visibleWhen="#{mode == 'mgmt'}"/>
+    </invokers>
+    <!--
+    <code class="com.rameses.clfc.report.controller.LoanLedgerReportController"/>
+    -->
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+
+        class LoanLedgerListController extends ListController
+        {
+            String serviceName = "LoanLedgerService";
+            String formName = "loanledger";
+            String entityName = "loanledger";
+
+            boolean allowCreate = false;
+            
+            def getOpenerParams() {
+                return [entity: selectedEntity];
+            }
+        }
+    </code>
+    <!--
+    <pages>
+        <page template="" name="queryform"/>
+    </pages>
+    -->
+</workunit>
