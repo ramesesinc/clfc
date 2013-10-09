@@ -25,9 +25,13 @@ public class PopupMasterController
         entity = createEntity()
     }
     
+    public void afterCreate(data) {        
+    }
+    
     public def create() {
         init()
         mode = 'create'
+        afterCreate(entity); 
         return null
     }
     

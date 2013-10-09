@@ -133,7 +133,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="50" green="50" red="50" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Quick Preview"/>
+                <Property name="text" type="java.lang.String" value="Quick Info"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">

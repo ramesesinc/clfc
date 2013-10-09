@@ -64,17 +64,18 @@ public class VehicleFormPage extends javax.swing.JPanel {
         jPanel1.setLayout(null);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Vehicle Information");
+        xTitledBorder1.setTitle("  General Information  ");
         jPanel1.setBorder(xTitledBorder1);
 
-        xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        xFormPanel1.setPadding(new java.awt.Insets(10, 10, 0, 0));
         xComboBox1.setCaption("Kind of Vehicle");
         xComboBox1.setCaptionWidth(135);
         xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setIndex(-10);
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("kinds");
         xComboBox1.setName("entity.kind");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(0, 22));
         xComboBox1.setRequired(true);
         xFormPanel1.add(xComboBox1);
 
@@ -105,7 +106,7 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xComboBox2.setItemKey("value");
         xComboBox2.setItems("uses");
         xComboBox2.setName("entity.usetype");
-        xComboBox2.setPreferredSize(new java.awt.Dimension(120, 20));
+        xComboBox2.setPreferredSize(new java.awt.Dimension(0, 22));
         xComboBox2.setRequired(true);
         xFormPanel1.add(xComboBox2);
 
@@ -132,34 +133,35 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xTextField6.setCaption("Chassis No.");
         xTextField6.setCaptionWidth(135);
         xTextField6.setName("entity.chassisno");
-        xTextField6.setPreferredSize(new java.awt.Dimension(150, 20));
+        xTextField6.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField6.setRequired(true);
         xFormPanel1.add(xTextField6);
 
         xTextField7.setCaption("Plate No.");
         xTextField7.setCaptionWidth(135);
         xTextField7.setName("entity.plateno");
-        xTextField7.setPreferredSize(new java.awt.Dimension(150, 20));
+        xTextField7.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField7.setRequired(true);
         xFormPanel1.add(xTextField7);
 
         xTextField8.setCaption("Engine No.");
         xTextField8.setCaptionWidth(135);
         xTextField8.setName("entity.engineno");
-        xTextField8.setPreferredSize(new java.awt.Dimension(150, 20));
+        xTextField8.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField8.setRequired(true);
         xFormPanel1.add(xTextField8);
 
         xDecimalField1.setCaption("Market/Appraisal Value");
         xDecimalField1.setCaptionWidth(135);
         xDecimalField1.setName("entity.marketvalue");
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xDecimalField1.setRequired(true);
         xFormPanel1.add(xDecimalField1);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 20, 330, 270);
+        xFormPanel1.setBounds(10, 20, 345, 280);
 
-        xFormPanel2.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        xFormPanel2.setPadding(new java.awt.Insets(10, 0, 0, 0));
         xCheckBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         xCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
         xCheckBox1.setName("orcr");
@@ -202,48 +204,42 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xDecimalField2.setCaptionWidth(110);
         xDecimalField2.setDepends(new String[] {"orcr"});
         xDecimalField2.setName("entity.orcr.pistondisplacement");
-        xDecimalField2.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xDecimalField2);
 
         xDecimalField3.setCaption("No. of cylinders");
         xDecimalField3.setCaptionWidth(110);
         xDecimalField3.setDepends(new String[] {"orcr"});
         xDecimalField3.setName("entity.orcr.noofcylinders");
-        xDecimalField3.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xDecimalField3);
 
         xDecimalField4.setCaption("Net Wt.");
         xDecimalField4.setCaptionWidth(110);
         xDecimalField4.setDepends(new String[] {"orcr"});
         xDecimalField4.setName("entity.orcr.netwt");
-        xDecimalField4.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xDecimalField4);
 
         xDecimalField5.setCaption("Gross Wt.");
         xDecimalField5.setCaptionWidth(110);
         xDecimalField5.setDepends(new String[] {"orcr"});
         xDecimalField5.setName("entity.orcr.grosswt");
-        xDecimalField5.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xDecimalField5);
 
         xDecimalField6.setCaption("Net Capacity");
         xDecimalField6.setCaptionWidth(110);
         xDecimalField6.setDepends(new String[] {"orcr"});
         xDecimalField6.setName("entity.orcr.netcapacity");
-        xDecimalField6.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xDecimalField6);
 
         xDecimalField7.setCaption("Shipping Wt.");
         xDecimalField7.setCaptionWidth(110);
         xDecimalField7.setDepends(new String[] {"orcr"});
         xDecimalField7.setName("entity.orcr.shippingwt");
-        xDecimalField7.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xDecimalField7);
 
         jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(350, 20, 220, 270);
+        xFormPanel2.setBounds(380, 20, 280, 275);
 
-        xFormPanel3.setPadding(new java.awt.Insets(7, 0, 0, 0));
+        xFormPanel3.setPadding(new java.awt.Insets(0, 10, 0, 0));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 80));
         xTextArea1.setCaption("Remarks");
         xTextArea1.setCaptionWidth(135);
@@ -256,7 +252,7 @@ public class VehicleFormPage extends javax.swing.JPanel {
         xFormPanel3.add(jScrollPane1);
 
         jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 280, 560, 90);
+        xFormPanel3.setBounds(10, 300, 650, 85);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -264,15 +260,15 @@ public class VehicleFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 583, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     

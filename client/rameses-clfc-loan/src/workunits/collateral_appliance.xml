@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="loanapp-collateral:plugin" caption=" Appliance(s)   " index="-100"/>
+        <invoker type="loanapp-collateral:plugin" caption=" Appliances   " index="-100"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.collateral.CollateralApplianceController"/>

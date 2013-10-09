@@ -68,7 +68,7 @@
                           <Component id="xButton3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="xButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="380" max="32767" attributes="0"/>
+                          <EmptySpace pref="392" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -113,7 +113,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="50" green="50" red="50" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Business(es)"/>
+                    <Property name="text" type="java.lang.String" value="Businesses"/>
                   </Properties>
                 </Component>
                 <Component class="com.rameses.rcp.control.XButton" name="xButton2">

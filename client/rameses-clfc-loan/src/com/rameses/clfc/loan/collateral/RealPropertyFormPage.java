@@ -36,7 +36,7 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
         xTextField1 = new com.rameses.rcp.control.XTextField();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xIntegerField1 = new com.rameses.rcp.control.XIntegerField();
         xComboBox2 = new com.rameses.rcp.control.XComboBox();
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
@@ -51,71 +51,70 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         jPanel1.setLayout(null);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Real Property Information");
+        xTitledBorder1.setTitle("  General Information  ");
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xComboBox1.setCaption("Classification");
         xComboBox1.setCaptionWidth(140);
         xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setIndex(-10);
         xComboBox1.setItemKey("value");
         xComboBox1.setItems("classifications");
         xComboBox1.setName("entity.classification");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(120, 19));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(0, 22));
         xComboBox1.setRequired(true);
         xFormPanel1.add(xComboBox1);
 
         xTextField1.setCaption("Location");
         xTextField1.setCaptionWidth(140);
         xTextField1.setName("entity.location");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
+        xTextField1.setPreferredSize(new java.awt.Dimension(0, 22));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(10, 20, 380, 40);
+        xFormPanel1.setBounds(20, 30, 485, 50);
 
         xFormPanel2.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
         xFormPanel2.setPadding(new java.awt.Insets(2, 0, 0, 0));
-        xNumberField1.setCaption("Area");
-        xNumberField1.setCaptionWidth(140);
-        xNumberField1.setFieldType(BigDecimal.class);
-        xNumberField1.setName("entity.areavalue");
-        xNumberField1.setPattern("#,##0.00");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(100, 19));
-        xNumberField1.setRequired(true);
-        xFormPanel2.add(xNumberField1);
+        xIntegerField1.setCaption("Area");
+        xIntegerField1.setCaptionWidth(140);
+        xIntegerField1.setName("entity.areavalue");
+        xIntegerField1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xIntegerField1.setRequired(true);
+        xFormPanel2.add(xIntegerField1);
 
         xComboBox2.setCaption("Unit of Measure");
         xComboBox2.setExpression("#{item.value}");
         xComboBox2.setItemKey("value");
         xComboBox2.setItems("uomList");
         xComboBox2.setName("entity.areauom");
-        xComboBox2.setPreferredSize(new java.awt.Dimension(100, 19));
         xComboBox2.setRequired(true);
         xComboBox2.setShowCaption(false);
         xFormPanel2.add(xComboBox2);
 
         jPanel1.add(xFormPanel2);
-        xFormPanel2.setBounds(10, 60, 380, 30);
+        xFormPanel2.setBounds(20, 76, 485, 25);
 
-        xFormPanel3.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xDecimalField1.setCaption("Zonal Value");
         xDecimalField1.setCaptionWidth(140);
         xDecimalField1.setName("entity.zonalvalue");
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(120, 20));
         xDecimalField1.setRequired(true);
         xFormPanel3.add(xDecimalField1);
 
         xDateField1.setCaption("Date Acquired");
         xDateField1.setCaptionWidth(140);
         xDateField1.setName("entity.dtacquired");
-        xDateField1.setPreferredSize(new java.awt.Dimension(100, 19));
+        xDateField1.setPreferredSize(new java.awt.Dimension(120, 20));
         xFormPanel3.add(xDateField1);
 
         xTextField3.setCaption("Acquired From");
         xTextField3.setCaptionWidth(140);
         xTextField3.setName("entity.acquiredfrom");
-        xTextField3.setPreferredSize(new java.awt.Dimension(160, 19));
+        xTextField3.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField3.setRequired(true);
         xFormPanel3.add(xTextField3);
 
@@ -125,14 +124,14 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xComboBox3.setItemKey("value");
         xComboBox3.setItems("modesOfAcquisition");
         xComboBox3.setName("entity.modeofacquisition");
-        xComboBox3.setPreferredSize(new java.awt.Dimension(150, 19));
+        xComboBox3.setPreferredSize(new java.awt.Dimension(0, 22));
         xComboBox3.setRequired(true);
         xFormPanel3.add(xComboBox3);
 
         xTextField4.setCaption("Reigstered Name");
         xTextField4.setCaptionWidth(140);
         xTextField4.setName("entity.registeredname");
-        xTextField4.setPreferredSize(new java.awt.Dimension(160, 19));
+        xTextField4.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField4.setRequired(true);
         xFormPanel3.add(xTextField4);
 
@@ -155,7 +154,7 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
         xFormPanel3.add(jScrollPane1);
 
         jPanel1.add(xFormPanel3);
-        xFormPanel3.setBounds(10, 80, 380, 220);
+        xFormPanel3.setBounds(20, 100, 485, 220);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -163,14 +162,14 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -188,7 +187,7 @@ public class RealPropertyFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XFormPanel xFormPanel3;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
+    private com.rameses.rcp.control.XIntegerField xIntegerField1;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField3;

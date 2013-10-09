@@ -32,9 +32,10 @@ public class SiblingsFormPage extends javax.swing.JPanel {
     private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
-        xTextField1 = new com.rameses.rcp.control.XTextField();
-        xTextField2 = new com.rameses.rcp.control.XTextField();
+        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
+        xTextField3 = new com.rameses.rcp.control.XTextField();
         xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xTextField2 = new com.rameses.rcp.control.XTextField();
         jPanel2 = new javax.swing.JPanel();
         xDataTable2 = new com.rameses.rcp.control.XDataTable();
         xButton1 = new com.rameses.rcp.control.XButton();
@@ -51,12 +52,30 @@ public class SiblingsFormPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xTextField1.setCaption("Name");
-        xTextField1.setCaptionWidth(70);
-        xTextField1.setName("entity.name");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 19));
-        xTextField1.setRequired(true);
-        xFormPanel1.add(xTextField1);
+
+        xFormPanel2.setCellspacing(30);
+        xFormPanel2.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xFormPanel2.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel2.setShowCaption(false);
+        xTextField3.setCaption("Name");
+        xTextField3.setCaptionWidth(70);
+        xTextField3.setIndex(-10);
+        xTextField3.setName("entity.name");
+        xTextField3.setPreferredSize(new java.awt.Dimension(250, 20));
+        xTextField3.setRequired(true);
+        xFormPanel2.add(xTextField3);
+
+        xNumberField1.setCaption("Age");
+        xNumberField1.setCaptionWidth(50);
+        xNumberField1.setFieldType(Integer.class);
+        xNumberField1.setName("entity.age");
+        xNumberField1.setPattern("#,##0");
+        xNumberField1.setPreferredSize(new java.awt.Dimension(50, 20));
+        xNumberField1.setRequired(true);
+        xFormPanel2.add(xNumberField1);
+
+        xFormPanel1.add(xFormPanel2);
 
         xTextField2.setCaption("Address");
         xTextField2.setCaptionWidth(70);
@@ -65,17 +84,8 @@ public class SiblingsFormPage extends javax.swing.JPanel {
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
-        xNumberField1.setCaption("Age");
-        xNumberField1.setCaptionWidth(70);
-        xNumberField1.setFieldType(Integer.class);
-        xNumberField1.setName("entity.age");
-        xNumberField1.setPattern("#,##0");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(50, 20));
-        xNumberField1.setRequired(true);
-        xFormPanel1.add(xNumberField1);
-
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(15, 25, 485, 80);
+        xFormPanel1.setBounds(15, 25, 450, 55);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder2 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder2.setTitle("  Employments  ");
@@ -234,19 +244,19 @@ public class SiblingsFormPage extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -267,9 +277,10 @@ public class SiblingsFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable2;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
+    private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XNumberField xNumberField1;
-    private com.rameses.rcp.control.XTextField xTextField1;
     private com.rameses.rcp.control.XTextField xTextField2;
+    private com.rameses.rcp.control.XTextField xTextField3;
     // End of variables declaration//GEN-END:variables
     
 }

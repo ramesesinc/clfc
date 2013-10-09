@@ -56,9 +56,11 @@ class LoanAppController
         [name:'attachment', caption:'Attachments'], 
         [name:'comment', caption:'Comments'],
         [name:'recommendation', caption:'Recommendations'],
+        /*
         [name:'fla', caption:'FLA'],
         [name:'prevfla', caption:'Previous FLA'],
         [name:'summary', caption:'Summary'] 
+         */
     ];
     
     def selectedMenu;

@@ -43,55 +43,56 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle("Appliance Information");
+        xTitledBorder1.setTitle("  General Information  ");
         jPanel1.setBorder(xTitledBorder1);
 
-        xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
+        xFormPanel1.setPadding(new java.awt.Insets(10, 10, 10, 10));
         xTextField1.setCaption("Type");
-        xTextField1.setCaptionWidth(135);
+        xTextField1.setCaptionWidth(150);
+        xTextField1.setIndex(-10);
         xTextField1.setName("entity.type");
-        xTextField1.setPreferredSize(new java.awt.Dimension(170, 20));
+        xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField1.setRequired(true);
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("Brand");
-        xTextField2.setCaptionWidth(135);
+        xTextField2.setCaptionWidth(150);
         xTextField2.setName("entity.brand");
-        xTextField2.setPreferredSize(new java.awt.Dimension(250, 20));
+        xTextField2.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
         xDateField1.setCaption("Date Acquired");
-        xDateField1.setCaptionWidth(135);
+        xDateField1.setCaptionWidth(150);
         xDateField1.setName("entity.dtacquired");
-        xDateField1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDateField1.setPreferredSize(new java.awt.Dimension(150, 20));
         xDateField1.setRequired(true);
         xFormPanel1.add(xDateField1);
 
         xTextField3.setCaption("Model No.");
-        xTextField3.setCaptionWidth(135);
+        xTextField3.setCaptionWidth(150);
         xTextField3.setName("entity.modelno");
-        xTextField3.setPreferredSize(new java.awt.Dimension(150, 20));
+        xTextField3.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField3.setRequired(true);
         xFormPanel1.add(xTextField3);
 
         xTextField4.setCaption("Serial No");
-        xTextField4.setCaptionWidth(135);
+        xTextField4.setCaptionWidth(150);
         xTextField4.setName("entity.serialno");
-        xTextField4.setPreferredSize(new java.awt.Dimension(150, 20));
+        xTextField4.setPreferredSize(new java.awt.Dimension(0, 20));
         xTextField4.setRequired(true);
         xFormPanel1.add(xTextField4);
 
         xDecimalField1.setCaption("Market/Appraisal Value");
-        xDecimalField1.setCaptionWidth(135);
+        xDecimalField1.setCaptionWidth(150);
         xDecimalField1.setName("entity.marketvalue");
-        xDecimalField1.setPreferredSize(new java.awt.Dimension(120, 20));
+        xDecimalField1.setPreferredSize(new java.awt.Dimension(150, 20));
         xDecimalField1.setRequired(true);
         xFormPanel1.add(xDecimalField1);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 100));
         xTextArea1.setCaption("Remarks");
-        xTextArea1.setCaptionWidth(135);
+        xTextArea1.setCaptionWidth(150);
         xTextArea1.setHint("Specify remarks here.");
         xTextArea1.setName("entity.remarks");
         xTextArea1.setRequired(true);
@@ -105,15 +106,15 @@ public class ApplianceFormPage extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -122,15 +123,15 @@ public class ApplianceFormPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     

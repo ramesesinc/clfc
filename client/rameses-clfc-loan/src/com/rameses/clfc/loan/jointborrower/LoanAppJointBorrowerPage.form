@@ -36,7 +36,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                <EmptyBorder bottom="0" left="5" right="10" top="0"/>
+                <EmptyBorder bottom="0" left="0" right="10" top="0"/>
               </Border>
             </Property>
           </Properties>
@@ -82,7 +82,7 @@
                           <Component id="xButton1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="xButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="384" max="32767" attributes="0"/>
+                          <EmptySpace pref="389" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -91,7 +91,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="xButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="xButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="xLabel2" alignment="3" pref="23" max="32767" attributes="0"/>
+                          <Component id="xLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -126,7 +126,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                <EmptyBorder bottom="0" left="5" right="10" top="0"/>
+                <EmptyBorder bottom="0" left="0" right="10" top="0"/>
               </Border>
             </Property>
           </Properties>

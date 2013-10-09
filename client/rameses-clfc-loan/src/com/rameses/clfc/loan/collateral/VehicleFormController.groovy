@@ -19,8 +19,13 @@ class VehicleFormController extends PopupMasterController
         }
     ]
 
+    public void afterCreate(data) {
+        if (entity.orcr == null) entity.orcr = [:];
+    }
+            
     public def open() {
-        if( !entity.orcr?.crno ) orcr = false;
+        if (entity.orcr == null) entity.orcr = [:];
+        if (!entity.orcr.crno) orcr = false;
         return null;
     }
 }

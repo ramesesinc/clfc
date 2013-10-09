@@ -57,7 +57,7 @@ public class LoanAppBusinessPage extends javax.swing.JPanel {
         xLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 2, 0));
         xLabel2.setFontStyle("font-weight:bold;font-size:12");
         xLabel2.setForeground(new java.awt.Color(80, 80, 80));
-        xLabel2.setText("Business(es)");
+        xLabel2.setText("Businesses");
 
         xButton2.setDepends(new String[] {"selectedBusiness"});
         xButton2.setDisableWhen("#{loanapp.state != 'FOR_INSPECTION' || selectedBusiness == null || caller.mode == 'read'}");
@@ -76,7 +76,7 @@ public class LoanAppBusinessPage extends javax.swing.JPanel {
                 .addComponent(xButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(xButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(380, Short.MAX_VALUE))
+                .addContainerGap(392, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

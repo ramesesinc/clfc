@@ -16,9 +16,9 @@ import com.rameses.rcp.ui.annotations.Template;
  */
 @StyleSheet
 @Template(OKCancelPage.class)
-public class ChildFormPage extends javax.swing.JPanel {
+public class ChildFormPage extends javax.swing.JPanel 
+{
     
-    /** Creates new form ChildrenFormPage */
     public ChildFormPage() {
         initComponents();
     }
@@ -30,10 +30,12 @@ public class ChildFormPage extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
+        xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         jPanel1 = new javax.swing.JPanel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
-        xTextField1 = new com.rameses.rcp.control.XTextField();
-        xNumberField1 = new com.rameses.rcp.control.XNumberField();
+        xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
+        xTextField2 = new com.rameses.rcp.control.XTextField();
+        xNumberField2 = new com.rameses.rcp.control.XNumberField();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -54,22 +56,30 @@ public class ChildFormPage extends javax.swing.JPanel {
         jPanel1.setBorder(xTitledBorder1);
 
         xFormPanel1.setPadding(new java.awt.Insets(3, 0, 0, 0));
-        xTextField1.setCaption("Name");
-        xTextField1.setCaptionWidth(100);
-        xTextField1.setIndex(-10);
-        xTextField1.setName("entity.name");
-        xTextField1.setPreferredSize(new java.awt.Dimension(0, 20));
-        xTextField1.setRequired(true);
-        xFormPanel1.add(xTextField1);
 
-        xNumberField1.setCaption("Age");
-        xNumberField1.setCaptionWidth(100);
-        xNumberField1.setFieldType(Integer.class);
-        xNumberField1.setName("entity.age");
-        xNumberField1.setPattern("#,##0");
-        xNumberField1.setPreferredSize(new java.awt.Dimension(80, 20));
-        xNumberField1.setRequired(true);
-        xFormPanel1.add(xNumberField1);
+        xFormPanel3.setCellspacing(30);
+        xFormPanel3.setOrientation(com.rameses.rcp.constant.UIConstants.HORIZONTAL);
+        xFormPanel3.setPadding(new java.awt.Insets(0, 0, 0, 0));
+        xFormPanel3.setPreferredSize(new java.awt.Dimension(0, 20));
+        xFormPanel3.setShowCaption(false);
+        xTextField2.setCaption("Name");
+        xTextField2.setCaptionWidth(100);
+        xTextField2.setIndex(-10);
+        xTextField2.setName("entity.name");
+        xTextField2.setPreferredSize(new java.awt.Dimension(250, 20));
+        xTextField2.setRequired(true);
+        xFormPanel3.add(xTextField2);
+
+        xNumberField2.setCaption("Age");
+        xNumberField2.setCaptionWidth(60);
+        xNumberField2.setFieldType(Integer.class);
+        xNumberField2.setName("entity.age");
+        xNumberField2.setPattern("#,##0");
+        xNumberField2.setPreferredSize(new java.awt.Dimension(80, 20));
+        xNumberField2.setRequired(true);
+        xFormPanel3.add(xNumberField2);
+
+        xFormPanel1.add(xFormPanel3);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 45));
         xTextArea1.setCaption("<html>Educational <br>Attainment :</html>");
@@ -90,7 +100,7 @@ public class ChildFormPage extends javax.swing.JPanel {
         xFormPanel1.add(jScrollPane2);
 
         jPanel1.add(xFormPanel1);
-        xFormPanel1.setBounds(15, 30, 555, 150);
+        xFormPanel1.setBounds(15, 30, 520, 120);
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder2 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder2.setTitle(" Employments ");
@@ -252,16 +262,16 @@ public class ChildFormPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -284,10 +294,12 @@ public class ChildFormPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDataTable xDataTable2;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
-    private com.rameses.rcp.control.XNumberField xNumberField1;
+    private com.rameses.rcp.control.XFormPanel xFormPanel2;
+    private com.rameses.rcp.control.XFormPanel xFormPanel3;
+    private com.rameses.rcp.control.XNumberField xNumberField2;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextArea xTextArea2;
-    private com.rameses.rcp.control.XTextField xTextField1;
+    private com.rameses.rcp.control.XTextField xTextField2;
     // End of variables declaration//GEN-END:variables
     
 }
