@@ -11,6 +11,7 @@ class LoanLedgerReportController extends ReportModel
     @Service('LoanLedgerReportService')
     def reportSvc;
 
+    String title = "Loan Ledger";
     def entity;
     
     void preview() {
