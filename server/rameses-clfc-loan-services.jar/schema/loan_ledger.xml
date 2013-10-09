@@ -7,7 +7,8 @@
 		<field name="appid" required="true"/> 
 		<field name="producttypeid" required="true"/> 
 		<field name="loancount" required="true"/> 
-		<field name="term" required="true"/> 
+		<field name="term" required="true"/>
+		<field name="balance"/>
 		<field name="dailydue" required="true"/> 
 		<field name="interestamount" required="true"/> 
 		<field name="overduepenalty" /> 
@@ -19,6 +20,16 @@
 		<field name="dtmatured" required="true"/> 
 		<field name="dtlastpaid"/> 
 	</element> 
+
+	<element name="balance" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="balance" required="true"/>
+	</element>
+
+	<element name="overduepenalty" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="overduepenalty" required="true"/>
+	</element>
 
 	<element name="overpayment" tablename="loan_ledger">
 		<field name="objid" primary="true"/>

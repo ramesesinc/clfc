@@ -264,11 +264,11 @@ rule "amountPaid less than totalPayment"
 		}
 		if( amountPaid == 0 ) {
 			if( td > 1 ) totalPenalty += (td-1)*ap;
-			System.out.println("total penalty1 = "+totalPenalty);
+			//System.out.println("total penalty1 = "+totalPenalty);
 			if( hasSunday == "true" ) totalPenalty -= ap;
-			System.out.println("total penalty2 = "+totalPenalty);
+			//System.out.println("total penalty2 = "+totalPenalty);
 			if( noOfHolidays > 0 ) totalPenalty -= (noOfHolidays*ap);
-			System.out.println("total penalty3 = "+totalPenalty);
+			//System.out.println("total penalty3 = "+totalPenalty);
 			if( totalPenalty < 0 ) totalPenalty = 0;
 		}
 		//if( days == td ) amountPaid = 0;
@@ -711,8 +711,8 @@ rule "offset last payment within term, trialAndError equal to 0"
 		listItem.put("penalty", "");
 		listItem.put("payment", "");
 		listItem.put("interestPaid", i);
-		/*System.out.println("last day: "+lastDay+" current day: "+currentDay);
-		//System.out.println("days: "+lastDay+" total days: "+totaldays);*/
+		//System.out.println("last day: "+lastDay+" current day: "+currentDay);
+		//System.out.println("days: "+lastDay+" total days: "+totaldays);
 		if( (currentDay-1) == lastDay && days <= totaldays ) {
 			item.put("day", lastDay);
 			item.put("partialPayment", "");

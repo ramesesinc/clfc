@@ -12,11 +12,17 @@ class DeviceLoanBillingService
 	@ActiveDB(value="batch_payment")
 	def batch_payment;
 
+	@ActiveDB(value="loan_product_type")
+	def product_type;
+
 	@Service('DateService')
 	def dateSvc;
 
 	@Service('SequenceService') 
 	def seqSvc;
+
+	@Service("LoanLedgerService")
+	def ledgerSvc;
 
 	@ProxyMethod
 	public def getRoutes(params) {
@@ -29,16 +35,23 @@ class DeviceLoanBillingService
 
 	@ProxyMethod
 	public def downloadBilling(params) {
-		if(!params.route_code) throw new Exception('Please specify route code');
+		if (!params.route_code) throw new Exception('Please specify route code');
 		def unpostedpayment = batch_payment.findUnpostedPayment(params);
 		if(unpostedpayment) throw new Exception('Cannot download billing. There are still unposted payments.');
 
 		def result = ledger.getCollectionsheets(params);
-		if(!result) throw new Exception("No billing for route code $params.route_code.");
+		if (!result) throw new Exception("No billing for route code $params.route_code.");
 		def currentDate = dateSvc.parseCurrentDate().date;
 		def days;
 		def list = [];
 		result.each{
+			if (currentDate > it.dtmatured && it.overduepenalty == 0) {
+				def producttype = product_type.read([name: it.producttypeid]);
+				def overduepenalty = (it.balance*producttype.pastduerate)/30;
+				if(overduepenalty > 0) overduepenalty = ledgerSvc.roundOffAmount(overduepenalty);
+				it.overduepenalty = overduepenalty;
+				ledger.update(it, "overduepenalty");
+			}
 			def dtlastpaid;
 			if(!it.dtlastpaid)
 				dtlastpaid = dateSvc.add(it.dtstarted, "-1");
@@ -50,7 +63,8 @@ class DeviceLoanBillingService
 			it.amountdue = it.dailydue*days;
 			list.add(it);
 		}
-		def map = [sessionid: new java.rmi.server.UID().toString(), list: list, serverdate: dateSvc.serverDate];
+		def sessionid = new java.rmi.server.UID().toString()
+		def map = [sessionid: sessionid, list: list, serverdate: currentDate];
 		return map;
 	}
 

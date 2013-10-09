@@ -19,8 +19,8 @@ WHERE appid=$P{appid} AND parentid=$P{parentid}
 
 [findUnpostedPayment]
 SELECT * FROM batch_payment bp
-INNER JOIN batch_payment_detail bpt ON bp.objiD=bpt.parentid
-WHERE bp.state='DRAFT'AND bp.route_code=$P{route_code}
+INNER JOIN batch_payment_detail bpt ON bp.objid=bpt.parentid
+WHERE bp.state='DRAFT' AND bp.route_code=$P{route_code}
 LIMIT 1
 
 [changeStateApproved]

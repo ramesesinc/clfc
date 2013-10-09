@@ -174,9 +174,9 @@ class LoanPaymentService
 			paymentFact.lackingInterest = ledgeritem.interestbal;
 			paymentFact.lackingPenalty = ledgeritem.penaltybal;
 			referencesFact.amountPaid = item.amountPaid;
+			lastPayment.days = data.days-1;
 			if(item.trialAndError == 0) paymentFact.days = 1;
-
-			lastPayment.days = data.days+1;
+			else if(item.lackingInterest > 0) lastPayment.days++;
 			lastPayment.currentDay = ledgeritem.day;
 			lastPayment.totaldays = item.totaldays;
 			lastPayment.amountPaid = data.amountPaid;
@@ -208,11 +208,12 @@ class LoanPaymentService
 		def lastitem;
 		if(results.size() > 0) {
 			lastitem = results[results.size()-1];
-			lastitem.refno = params.refno;
-			lastitem.dtpaid = txndate;
+			//lastitem.refno = params.refno;
+			//lastitem.dtpaid = txndate;
 			lastitem.interestbal = new BigDecimal(floating.lackingInterest).setScale(2, BigDecimal.ROUND_HALF_UP)
 			lastitem.penaltybal = new BigDecimal(floating.lackingPenalty).setScale(2, BigDecimal.ROUND_HALF_UP);
 			lastitem.paytype = params.paytype;
+			if(lastitem.balance) ledgerdb.update([objid: ledger.objid, balance:lastitem.balance], "balance");
 		}
 
 		results.each{
@@ -238,17 +239,17 @@ class LoanPaymentService
 			itm.interestbal = it.interestbal? it.interestbal : 0.00;
 			itm.penaltybal = it.penaltybal? it.penaltybal : 0.00;
 
-			itm.dtpaid = it.dtpaid? it.dtpaid : null;
-			itm.refno = it.refno? it.refno : null;
+			itm.dtpaid = params.refno;//it.dtpaid? it.dtpaid : null;
+			itm.refno = txndate;//it.refno? it.refno : null;
 			itm.day = it.day? it.day : data.currentDay;
 			itm.balance = it.balance? it.balance : ref.balance;
 			itm.balance = new BigDecimal(itm.balance).setScale(2, BigDecimal.ROUND_HALF_UP);
 			itm.partialpayment = it.partialPayment? new BigDecimal(it.partialPayment).setScale(2, BigDecimal.ROUND_HALF_UP) : 0.00;
-			//println 'item-> '+itm;
 			itm.paytype = it.paytype;
 			itm.txndate = new Date();
+			//println 'item = '+itm;
 			ledgerdb.create(itm, "detail");
-		}		
+		}
 		ledgerdb.update([objid: ledger.objid, dtlastpaid: txndate], "dtlastpaid");
 		if(ledger.overpaymentamount == 0 && params.paytype == "over")
 			ledgerdb.update([objid: ledger.objid, overpaymentamount: params.payamount], "overpayment");
