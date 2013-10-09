@@ -22,7 +22,7 @@ class LoanLedgerReportController extends ReportModel
     }
     
     def viewHistory() {
-        return InvokerUtil.lookupOpener("loanledger:history", [ledgerid: selectedLedger.ledgerid]);
+        return InvokerUtil.lookupOpener("loanledger:history", [ledgerid: entity.ledgerid]);
     }
 
     public Map getParameters() {

@@ -131,7 +131,6 @@
 						width="232"
 						height="11"
 						key="textField-3"
-						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<box leftPadding="4">					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
@@ -157,21 +156,20 @@
 					</textElement>
 				<text><![CDATA[Address :]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" pattern="MMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="47"
 						y="33"
 						width="81"
 						height="11"
 						key="textField"
-						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<box leftPadding="4">					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.util.Date"><![CDATA[$F{birthdate}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{birthdate}? (new java.text.SimpleDateFormat("MMM dd, yyyy").format($F{birthdate})) : ""]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -188,53 +186,50 @@
 					</textElement>
 				<text><![CDATA[Citizenship :]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="359"
 						y="20"
-						width="135"
+						width="171"
 						height="11"
 						key="textField-8"
-						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<box leftPadding="4">					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{citizenship}? $F{citizenship} : ""]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{citizenship}? $F{citizenship} : " "]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="45"
 						y="46"
-						width="462"
+						width="485"
 						height="11"
 						key="textField-11"
-						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<box leftPadding="4">					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{address}? $F{address} : ""]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{address}? $F{address} : " "]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="164"
 						y="33"
 						width="55"
 						height="11"
 						key="textField"
-						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<box leftPadding="4">					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$V{age}? $V{age}+" yrs. old" : null]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{age}? $V{age}+" yrs. old" : ""]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
@@ -255,21 +250,20 @@
 					<dataSourceExpression><![CDATA[$F{residency}]]></dataSourceExpression>
 					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{RESIDENCY}]]></subreportExpression>
 				</subreport>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="382"
 						y="33"
-						width="135"
+						width="148"
 						height="11"
 						key="textField-12"
-						isRemoveLineWhenBlank="true"
 						isPrintWhenDetailOverflows="true"/>
 					<box leftPadding="4">					<bottomPen lineWidth="0.5"/>
 </box>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{contactno}? $F{contactno} : ""]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{contactno}? $F{contactno} : " "]]></textFieldExpression>
 				</textField>
 			</band>
 		</columnHeader>

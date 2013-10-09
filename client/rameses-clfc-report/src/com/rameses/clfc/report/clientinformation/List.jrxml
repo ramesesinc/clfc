@@ -404,7 +404,7 @@
 					<reportElement
 						x="52"
 						y="6"
-						width="460"
+						width="478"
 						height="11"
 						key="textField-1"/>
 					<box>					<bottomPen lineWidth="0.5"/>
@@ -458,7 +458,7 @@
 					<reportElement
 						x="52"
 						y="29"
-						width="460"
+						width="478"
 						height="11"
 						key="textField-3"/>
 					<box>					<bottomPen lineWidth="0.5"/>
@@ -498,7 +498,7 @@
 					<reportElement
 						x="184"
 						y="17"
-						width="328"
+						width="346"
 						height="11"
 						key="textField-14"/>
 					<box>					<bottomPen lineWidth="0.5"/>

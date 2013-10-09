@@ -383,7 +383,7 @@
 					<reportElement
 						x="316"
 						y="60"
-						width="212"
+						width="213"
 						height="11"
 						key="textField-10"
 						positionType="Float"/>
@@ -398,7 +398,7 @@
 					<reportElement
 						x="188"
 						y="50"
-						width="74"
+						width="73"
 						height="11"
 						key="textField-11"
 						positionType="Float"/>
@@ -407,13 +407,13 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$V{residencyyears}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{residencyyears}? $V{residencyyears}+" Yr/Yrs." : ""]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="453"
 						y="50"
-						width="78"
+						width="76"
 						height="11"
 						key="textField-12"
 						positionType="Float"/>
@@ -422,7 +422,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$V{occupancyyears}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{occupancyyears}? $V{occupancyyears}+" Yr/Yrs." : ""]]></textFieldExpression>
 				</textField>
 			</band>
 		</columnHeader>
