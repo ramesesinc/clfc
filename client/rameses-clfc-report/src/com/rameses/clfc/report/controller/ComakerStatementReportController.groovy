@@ -14,6 +14,7 @@ class ComakerStatementReportController extends ReportModel
     @Service("ComakerService")
     def comakerSvc;
     
+    String title = "Co-Maker's Statement"
     def loanappid;
     def comaker;
     def mode = 'init';

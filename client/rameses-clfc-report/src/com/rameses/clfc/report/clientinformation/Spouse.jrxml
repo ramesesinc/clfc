@@ -140,7 +140,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{name}? $F{name} : ""]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
@@ -202,7 +202,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{citizenship}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{citizenship}? $F{citizenship} : ""]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -218,7 +218,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{address}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{address}? $F{address} : ""]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -234,7 +234,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$V{age}+" yrs. old"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{age}? $V{age}+" yrs. old" : null]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
@@ -269,7 +269,7 @@
 					<textElement>
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{contactno}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{contactno}? $F{contactno} : ""]]></textFieldExpression>
 				</textField>
 			</band>
 		</columnHeader>

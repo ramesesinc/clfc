@@ -11,6 +11,7 @@ class ClientInformationSheetReportController extends ReportModel
     @Service("ClientInformationSheetReportService")
     def service;
     
+    String title = "Client Information Sheet";
     def loanappid;
     
     def close() {

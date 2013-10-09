@@ -11,6 +11,7 @@ class LoanapplicationReportController extends ReportModel
     @Service("LoanAppReportService")
     def service;
     
+    String title = "Loan Application";
     def loanappid;
     
     def close() {

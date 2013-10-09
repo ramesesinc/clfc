@@ -393,7 +393,7 @@
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="123"
+						x="126"
 						y="86"
 						width="59"
 						height="11"
@@ -435,20 +435,6 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="103"
-						y="86"
-						width="20"
-						height="11"
-						key="staticText-52"/>
-					<box>					<bottomPen lineWidth="0.5"/>
-</box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<text><![CDATA[Php]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
 						x="277"
 						y="21"
 						width="79"
@@ -460,7 +446,7 @@
 					</textElement>
 				<text><![CDATA[Business Started :]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" pattern="MMMMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="true" pattern="MMM dd, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="356"
 						y="21"
@@ -501,6 +487,20 @@
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{avgsales}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="102"
+						y="86"
+						width="28"
+						height="11"
+						key="textField-27"/>
+					<box>					<bottomPen lineWidth="0.5"/>
+</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{occupancy}.source?.rentamount? "Php. " : ""]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
