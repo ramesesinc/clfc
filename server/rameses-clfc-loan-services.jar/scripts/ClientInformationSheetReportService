@@ -98,6 +98,7 @@ class ClientInformationSheetReportService
 		def app = loanapp.read([objid: params.loanappid]);
 		def pb = borrower.read(app.borrower);
 		def currentdate = dateSvc.parseCurrentDate();
+        if (!pb.name) pb.name = pb.lastname+', '+pb.firstname+' '+(pb.middlename? pb.middlename : '');
 		pb.age = 0
 		if (pb.birthdate) pb.age = currentdate.year - dateSvc.parseDate(pb.birthdate, null).year
 		pb.spouse.name;
