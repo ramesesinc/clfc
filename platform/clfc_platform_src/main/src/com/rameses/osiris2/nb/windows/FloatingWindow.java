@@ -10,6 +10,7 @@ package com.rameses.osiris2.nb.windows;
 import com.rameses.osiris2.nb.NBManager;
 import com.rameses.osiris2.nb.NBPlatform;
 import com.rameses.platform.interfaces.SubWindow;
+import com.rameses.platform.interfaces.SubWindowListener;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -27,9 +28,8 @@ import javax.swing.JPanel;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-
-public class FloatingWindow extends JPanel implements SubWindow, Draggable {
-    
+public class FloatingWindow extends JPanel implements SubWindow, Draggable 
+{
     private String windowId;
     private Map properties;
     private Rectangle handle;
@@ -39,7 +39,6 @@ public class FloatingWindow extends JPanel implements SubWindow, Draggable {
     private boolean focusTargetOnClose = true;
     private Component parent;
     private EventSupport eventSupport = new EventSupport();
-    
     
     public FloatingWindow(String id, JComponent target, Map properties) {
         this.windowId = id;
@@ -57,47 +56,16 @@ public class FloatingWindow extends JPanel implements SubWindow, Draggable {
         
     }
     
-    public void closeWindow() {
-        Toolkit.getDefaultToolkit().removeAWTEventListener(eventSupport);
-        
-        if ( target != null) {
-            if ( focusTargetOnClose ) {
-                EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        target.requestFocusInWindow();
-                    }
-                });
-            }
-        }
-        Container parent = getParent();
-        if ( parent != null ) {
-            setVisible(false);
-            parent.remove(this);
-        }
-    }
-    
     protected void addImpl(Component comp, Object constraints, int index) {
         super.addImpl(comp, constraints, index);
+    }
         
-    }
+    // <editor-fold defaultstate="collapsed" desc=" Getters / Setters ">
     
+    public JComponent getTarget() { return target; }    
+    public void setTarget(JComponent target) { this.target = target; }
     
-    //<editor-fold defaultstate="collapsed" desc="  getters/setters  ">
-    public void setTitle(String title) {
-    }
-    
-    public JComponent getTarget() {
-        return target;
-    }
-    
-    public void setTarget(JComponent target) {
-        this.target = target;
-    }
-    
-    public Map getProperties() {
-        return properties;
-    }
-    
+    public Map getProperties() { return properties; }    
     public void setProperties(Map properties) {
         this.properties = properties;
     }
@@ -110,23 +78,17 @@ public class FloatingWindow extends JPanel implements SubWindow, Draggable {
         return properties == null || !"false".equals(properties.get("draggable")+"");
     }
     
-    public Rectangle getHandleBounds() {
-        return handle;
-    }
+    public Rectangle getHandleBounds() { return handle; }
     
-    public Point getAnchorPoint() {
-        return anchor;
-    }
+    public Point getAnchorPoint() { return anchor; }    
+    public void setAnchorPoint(Point p) { this.anchor = p; }
     
-    public void setAnchorPoint(Point p) {
-        this.anchor = p;
-    }
-    //</editor-fold>
+    // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc=" EventSupport (class) ">
     
-    //<editor-fold defaultstate="collapsed" desc="  EventSupport (class)  ">
-    private class EventSupport implements AncestorListener, AWTEventListener {
-        
+    private class EventSupport implements AncestorListener, AWTEventListener 
+    {        
         public void ancestorMoved(AncestorEvent event) {}
         
         public void ancestorAdded(AncestorEvent event) {
@@ -159,7 +121,41 @@ public class FloatingWindow extends JPanel implements SubWindow, Draggable {
                 closeWindow();
             }
         }
-    }
-    //</editor-fold>
+    } 
     
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc=" SubWindow implementation ">
+    
+    public void setListener(SubWindowListener listener) {
+    }
+    
+    public String getName() { return windowId; }     
+    
+    public String getTitle() { return null; } 
+    public void setTitle(String title) {} 
+    
+    public void closeWindow() {
+        Toolkit.getDefaultToolkit().removeAWTEventListener(eventSupport);
+        
+        if (target != null) {
+            if (focusTargetOnClose) {
+                EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        target.requestFocusInWindow();
+                    }
+                });
+            }
+        }
+        Container parent = getParent();
+        if (parent != null) {
+            setVisible(false);
+            parent.remove(this);
+        }
+    }
+    
+    public void update(Map windowAttributes) {
+    }    
+    
+    // </editor-fold>        
 }

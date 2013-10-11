@@ -12,11 +12,9 @@ import com.rameses.osiris2.nb.windows.NBMainWindow;
 import com.rameses.osiris2.nb.windows.NBPopup;
 import com.rameses.osiris2.nb.windows.NBSubWindow;
 import com.rameses.osiris2.nb.windows.StartupWindow;
-import com.rameses.osiris2.nb.windows.TransparentGlassPane;
 import com.rameses.platform.interfaces.MainWindow;
 import com.rameses.platform.interfaces.Platform;
 import com.rameses.platform.interfaces.SubWindow;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
@@ -39,13 +37,12 @@ import org.openide.windows.Mode;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
-public class NBPlatform implements Platform {
-    
+public class NBPlatform implements Platform 
+{    
     private TopComponent startupWindow;
     private NBMainWindow mainWindow;
     private Hashtable windows = new Hashtable();
-    
-    
+        
     public NBPlatform(NBMainWindow mainWindow, TopComponent startupWindow) {
         this.mainWindow = mainWindow;
         this.startupWindow = startupWindow;

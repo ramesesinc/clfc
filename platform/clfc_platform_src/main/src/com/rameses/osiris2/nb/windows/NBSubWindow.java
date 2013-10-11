@@ -2,19 +2,21 @@ package com.rameses.osiris2.nb.windows;
 
 import com.rameses.osiris2.nb.*;
 import com.rameses.platform.interfaces.SubWindow;
+import com.rameses.platform.interfaces.SubWindowListener;
 import com.rameses.platform.interfaces.ViewContext;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.openide.windows.TopComponent;
 
-public class NBSubWindow extends TopComponent implements SubWindow {
-    
+public class NBSubWindow extends TopComponent implements SubWindow 
+{    
     private NBPlatform nbPlatform;
     private NBMainWindow mainWindow;
     private String preferredID;
@@ -90,6 +92,41 @@ public class NBSubWindow extends TopComponent implements SubWindow {
         nbPlatform.unregisterWindow(preferredID);
     }
     
+    public void forceClose() {
+        bypassVerifyClose = true;
+        close();
+    }
+    
+    private ViewContext getViewContext() {
+        Component c = content;
+        if (c instanceof ViewContext) {
+            ViewContext vc = (ViewContext) c;
+            if (vc.getSubWindow() == null) {
+                vc.setSubWindow(this);
+            } 
+            return vc;
+        } 
+        return null; 
+    }
+    
+    
+    // <editor-fold defaultstate="collapsed" desc=" SubWindow implementation ">
+    
+    private SubWindowListener listener;
+    
+    public void setListener(SubWindowListener listener) {
+        this.listener = listener;
+    }
+    
+    public String getName() { return preferredID(); }     
+    
+    public String getTitle() { 
+        return getDisplayName(); 
+    } 
+    public void setTitle(String title) {
+        setDisplayName(title);
+    } 
+    
     public void closeWindow() {
         if (canClose()) {
             try {
@@ -105,22 +142,16 @@ public class NBSubWindow extends TopComponent implements SubWindow {
         }
     }
     
-    public void forceClose() {
-        bypassVerifyClose = true;
-        close();
-    }
+    public void update(Map attrs) {
+        if (attrs == null || attrs.isEmpty()) return;
+        
+        Object oid = attrs.remove("id");
+        if (oid != null) this.preferredID = oid.toString();
+        
+        Object otitle = attrs.remove("title");
+        if (otitle != null) setTitle(otitle.toString());
+    }    
     
-    private ViewContext getViewContext() {
-        Component c = content;
-        if (c instanceof ViewContext) {
-            ViewContext vc = (ViewContext) c;
-            if ( vc.getSubWindow() == null ) vc.setSubWindow(this);
-            return vc;
-        }
-        return null;
-    }
+    // </editor-fold>
     
-    public void setTitle(String title) {
-        setDisplayName(title);
-    }
 }
