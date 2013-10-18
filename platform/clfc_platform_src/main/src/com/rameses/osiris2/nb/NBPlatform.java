@@ -12,16 +12,20 @@ import com.rameses.osiris2.nb.windows.NBMainWindow;
 import com.rameses.osiris2.nb.windows.NBPopup;
 import com.rameses.osiris2.nb.windows.NBSubWindow;
 import com.rameses.osiris2.nb.windows.StartupWindow;
+import com.rameses.platform.interfaces.ContentPane;
 import com.rameses.platform.interfaces.MainWindow;
 import com.rameses.platform.interfaces.Platform;
 import com.rameses.platform.interfaces.SubWindow;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -31,6 +35,8 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.openide.windows.Mode;
@@ -42,10 +48,14 @@ public class NBPlatform implements Platform
     private TopComponent startupWindow;
     private NBMainWindow mainWindow;
     private Hashtable windows = new Hashtable();
-        
+    
     public NBPlatform(NBMainWindow mainWindow, TopComponent startupWindow) {
         this.mainWindow = mainWindow;
         this.startupWindow = startupWindow;
+        
+        if (startupWindow instanceof NBTopComponentSelector) {
+            ((NBTopComponentSelector) startupWindow).setNBPlatform(this); 
+        }
     }
     
     // <editor-fold defaultstate="collapsed" desc="  show top component  ">
@@ -102,8 +112,10 @@ public class NBPlatform implements Platform
                     winmode.dockInto(win);
                     win.putClientProperty("netbeans.winsys.tc.dragging_disabled", Boolean.TRUE);
                 }
+            }            
+            if (win instanceof NBTopComponentSelector) {
+                ((NBTopComponentSelector) win).setNBPlatform(this); 
             }
-            
             win.open();
         } else {
             win = (NBSubWindow) windows.get(id);
@@ -145,17 +157,35 @@ public class NBPlatform implements Platform
             popup.setTitle(title);
             popup.setModal(modal);
             popup.setContentPane(comp);
+            popup.pack();
+            
+            Dimension dim = popup.getSize();
+            int width = toInt(properties.get("width"));
+            int height = toInt(properties.get("height"));
+            int pWidth = (width<=0? dim.width: width);
+            int pHeight = (height<=0? dim.height: height); 
+            popup.setSize(pWidth, pHeight); 
+            popup.setLocationRelativeTo(parent);
+            popup.setSource(actionSource);
+
+            if ("false".equals(properties.get("resizable")+"")) popup.setResizable(false);
+            if ("true".equals(properties.get("alwaysOnTop")+"")) popup.setAlwaysOnTop(true);
+            if ("true".equals(properties.get("undecorated")+"")) popup.setUndecorated(true); 
+            
+            KeyStroke ks = KeyStroke.getKeyStroke("ctrl shift I");  
+            ActionListener al = new ShowInfoAction(comp); 
+            JRootPane rootPane = popup.getRootPane(); 
+            rootPane.registerKeyboardAction(al, ks, JComponent.WHEN_IN_FOCUSED_WINDOW); 
+        
+            final Window win = popup;
+            EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    win.setVisible(true);
+                }
+            }); 
+            
             windows.put(id, popup);
             
-            popup.pack();
-            popup.setLocationRelativeTo(parent);
-            
-            final Window d = popup;
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    d.setVisible(true);
-                }
-            });
         } else {
             ((Component) windows.get(id)).requestFocus();
         }
@@ -256,6 +286,20 @@ public class NBPlatform implements Platform
     } 
     
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc=" TopComponent tracker ">
+    
+    private TopComponent selectedTopComponent;
+    
+    public TopComponent getSelectedTopComponent() {
+        return selectedTopComponent; 
+    }
+    public void setSelectedTopComponent(TopComponent selectedTopComponent) {
+        this.selectedTopComponent = selectedTopComponent;
+    }
+    
+    // </editor-fold>
+    
     
     public MainWindow getMainWindow() {
         return mainWindow;
@@ -380,4 +424,37 @@ public class NBPlatform implements Platform
 //        JFrame frame = (JFrame)mainWindow.getComponent();
 //        frame.setGlassPane(origGlassPane);
     }
+    
+    private int toInt(Object value) 
+    {
+        if (value == null) 
+            return -1; 
+        else if (value instanceof Number)
+            return ((Number) value).intValue();
+        
+        try {
+            return Integer.parseInt(value.toString()); 
+        } catch(Exception ex) {
+            return -1; 
+        } 
+    }    
+    
+    // <editor-fold defaultstate="collapsed" desc=" ShowInfoAction ">
+    
+    private class ShowInfoAction implements ActionListener 
+    {
+        private Component source;
+        
+        ShowInfoAction(Component source) {
+            this.source = source; 
+        }
+        
+        public void actionPerformed(ActionEvent e) { 
+            if (!(source instanceof ContentPane.View)) return; 
+            
+            ((ContentPane.View) source).showInfo(); 
+        } 
+    }
+    
+    // </editor-fold>    
 }

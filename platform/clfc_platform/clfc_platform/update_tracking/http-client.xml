@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="http.client">
-<module_version install_time="1381483064372" last="true" origin="installer" specification_version="1.0">
+<module_version install_time="1382063766901" last="true" origin="installer" specification_version="1.0">
 <file crc="154240107" name="config/Modules/http-client.xml"/>
 <file crc="1389511016" name="modules/ext/commons-codec-1.6.jar"/>
 <file crc="3077296198" name="modules/ext/commons-logging-1.1.1.jar"/>
@@ -9,6 +9,6 @@
 <file crc="4119428374" name="modules/ext/httpclient-cache-4.2.1.jar"/>
 <file crc="452146462" name="modules/ext/httpcore-4.2.1.jar"/>
 <file crc="557685274" name="modules/ext/httpmime-4.2.1.jar"/>
-<file crc="3662496908" name="modules/http-client.jar"/>
+<file crc="1154874911" name="modules/http-client.jar"/>
 </module_version>
 </module>

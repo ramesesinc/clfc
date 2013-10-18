@@ -1,6 +1,7 @@
 package com.rameses.osiris2.nb.windows;
 
 import com.rameses.osiris2.nb.*;
+import com.rameses.platform.interfaces.ContentPane;
 import com.rameses.platform.interfaces.SubWindow;
 import com.rameses.platform.interfaces.SubWindowListener;
 import com.rameses.platform.interfaces.ViewContext;
@@ -8,6 +9,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
@@ -15,7 +18,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.openide.windows.TopComponent;
 
-public class NBSubWindow extends TopComponent implements SubWindow 
+public class NBSubWindow extends TopComponent implements SubWindow, NBTopComponentSelector 
 {    
     private NBPlatform nbPlatform;
     private NBMainWindow mainWindow;
@@ -26,7 +29,7 @@ public class NBSubWindow extends TopComponent implements SubWindow
     private JLayeredPane contentPane;
     private JComponent glassPane;
     private Component content;
-    
+    private Component child;
     
     public NBSubWindow(NBPlatform nbPlatform, NBMainWindow mainWindow, String preferredID) {
         this.nbPlatform = nbPlatform;
@@ -47,6 +50,19 @@ public class NBSubWindow extends TopComponent implements SubWindow
             public void actionPerformed(ActionEvent e) { closeWindow(); }
         };
         registerKeyboardAction(closeAction, KeyStroke.getKeyStroke("ctrl W"), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        
+        contentPane.addContainerListener(new ContainerListener() {
+            public void componentAdded(ContainerEvent e) {
+                if (e.getChild() instanceof ContentPane.View) {
+                    child = e.getChild();
+                }
+            }
+            public void componentRemoved(ContainerEvent e) {
+                if (child != null && child.equals(e.getChild())) {
+                    child = null; 
+                }
+            }
+        });        
     }
     
     protected void addImpl(Component comp, Object constraints, int index) {
@@ -109,6 +125,31 @@ public class NBSubWindow extends TopComponent implements SubWindow
         return null; 
     }
     
+    // <editor-fold defaultstate="collapsed" desc=" NBTopComponentSelector implementation "> 
+    
+    private NBPlatform nbplatform;
+    
+    public void setNBPlatform(NBPlatform nbplatform) {
+        this.nbplatform = nbplatform; 
+    }
+    
+    public void showInfo() {
+        if (child instanceof ContentPane.View) {
+            ((ContentPane.View) child).showInfo(); 
+        } 
+    }
+    
+    protected void componentActivated() {
+        super.componentActivated(); 
+        if (nbplatform != null) nbplatform.setSelectedTopComponent(this);
+    }
+
+    protected void componentDeactivated() {         
+        super.componentDeactivated(); 
+        if (nbplatform != null) nbplatform.setSelectedTopComponent(null);
+    }    
+    
+    // </editor-fold>    
     
     // <editor-fold defaultstate="collapsed" desc=" SubWindow implementation ">
     

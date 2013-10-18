@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="com.rameses.osiris2.nb">
-<module_version install_time="1381483063940" last="true" origin="installer" specification_version="1.0">
+<module_version install_time="1382063766429" last="true" origin="installer" specification_version="1.0">
 <file crc="310063785" name="config/Modules/com-rameses-osiris2-nb.xml"/>
-<file crc="3080313986" name="modules/com-rameses-osiris2-nb.jar"/>
+<file crc="1545531773" name="modules/com-rameses-osiris2-nb.jar"/>
 </module_version>
 </module>

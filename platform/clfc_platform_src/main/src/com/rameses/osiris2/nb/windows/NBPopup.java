@@ -24,7 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
 
-public class NBPopup extends JDialog implements SubWindow 
+public class NBPopup extends JDialog implements SubWindow  
 {    
     private NBPlatform platform;
     private ViewContext viewContext;
@@ -118,7 +118,9 @@ public class NBPopup extends JDialog implements SubWindow
     // <editor-fold defaultstate="collapsed" desc=" NBPopupAdapter ">
     
     private class NBPopupAdapter extends WindowAdapter 
-    {        
+    {
+        NBPopup root = NBPopup.this;
+        
         public void windowClosing(WindowEvent e) {
             closeWindow();
         }
@@ -126,6 +128,7 @@ public class NBPopup extends JDialog implements SubWindow
         public void windowOpened(WindowEvent e) {
             if (viewContext != null) {
                 viewContext.display();
+                viewContext.setSubWindow(root);
             }
         }
     }

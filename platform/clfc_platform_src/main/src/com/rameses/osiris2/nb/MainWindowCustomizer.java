@@ -415,7 +415,6 @@ public class MainWindowCustomizer
             try 
             {
                 String dir = System.getProperty("netbeans.dirs", System.getProperty("user.dir"));
-                System.out.println("dir=" + dir);
                 ImageIcon icon = new ImageIcon(dir + "/app_icon.gif");
                 image = icon.getImage();
             }

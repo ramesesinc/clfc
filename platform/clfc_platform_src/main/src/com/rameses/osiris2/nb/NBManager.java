@@ -2,11 +2,15 @@ package com.rameses.osiris2.nb;
 
 import com.rameses.osiris2.nb.windows.NBMainWindow;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
@@ -44,7 +48,23 @@ public final class NBManager {
         nbMainWindow = new NBMainWindow(nbFrame);
         nbPlatform = new NBPlatform(nbMainWindow, startup);
         MainWindowCustomizer.customize(nbFrame);
+        
+        KeyStroke ks = KeyStroke.getKeyStroke("ctrl shift I"); 
+        ActionListener al = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showInfo(e); 
+            }
+        };
+        JRootPane rootPane = nbFrame.getRootPane();
+        rootPane.registerKeyboardAction(al, ks, JComponent.WHEN_IN_FOCUSED_WINDOW);                 
     }
+    
+    private void showInfo(ActionEvent e) {
+        TopComponent tc = nbPlatform.getSelectedTopComponent();
+        if (tc instanceof NBTopComponentSelector) {
+            ((NBTopComponentSelector) tc).showInfo(); 
+        }
+    }   
     
     //<editor-fold defaultstate="collapsed" desc=" Getter/Setter ">
     public NBMainWindow getMainWindow() {
