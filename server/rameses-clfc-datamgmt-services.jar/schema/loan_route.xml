@@ -5,12 +5,5 @@
 		<field name="description" required="true"/>
 		<field name="area" required="true"/>
 	</element>
-
-	<element name="route_collector" tablename="loan_route_collector">
-		<field name="objid" primary="true"/>
-		<field name="parentid" required="true"/>
-		<field name="user_objid" required="true"/>
-		<field name="user_name" required="true"/>
-	</element>	
 	
 </schema>

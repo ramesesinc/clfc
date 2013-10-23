@@ -17,28 +17,4 @@ class LoanRouteService extends ActiveCrudListService
 		]
 
 	}
-
-	@ProxyMethod
-	public def getCollectors( params ) {
-		if (!params.code) throw new Exception('Please specify code');
-
-		return em.getCollectors([parentid: params.code]); 
-	}
-
-	@ProxyMethod 
-	public void addCollector(params) {
-		def data = [
-			objid: 		'RCOLL' + new UID(), 
-			parentid: 	params.parentid, 
-			user: 		[objid: params.objid, name: params.name] 
-		];
-		em.create(data, 'route_collector'); 
-	}
-
-	@ProxyMethod 
-	public void removeCollector(params) {
-		if (!params.objid) throw new Exception('Please specify objid'); 
-
-		em.removeCollector(params); 
-	} 
 }
