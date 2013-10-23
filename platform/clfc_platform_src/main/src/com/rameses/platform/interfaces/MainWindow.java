@@ -18,4 +18,3 @@ public interface MainWindow {
     void close();
     void show();
 }
-

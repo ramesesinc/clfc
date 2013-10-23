@@ -4,6 +4,8 @@ import java.util.Map;
 
 public interface SubWindow 
 {    
+    static final long serialVersionUID = 1L;
+    
     String getName();
     
     String getTitle();
@@ -14,4 +16,5 @@ public interface SubWindow
     void setListener(SubWindowListener listener);
     
     void update(Map windowAttributes);
+    
 }
