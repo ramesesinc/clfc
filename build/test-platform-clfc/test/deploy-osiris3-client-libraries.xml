@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="deploy-osiris3-client-libraries" default="all" basedir=".">
+    
+    <target name="all">
+        <!-- TODO define script. See Help menu or http://ant.apache.org/ -->
+    </target>
+    
+    <target name="init-deployer">
+        <property file="${basedir}/deployer.properties"/>
+    </target>
+    
+    <target name="build-shared-libs" depends="init-deployer">
+        <copy file="${shared.project.dir}/client/client-system/dist/client-system.jar" todir="${shared.project.dir}/client/client-libs"/> 
+        <copy file="${shared.project.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-accounts/dist/rameses-enterprise-accounts.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-treasury/dist/rameses-enterprise-treasury.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <!-- 
+        <copy file="${shared.project.dir}/client/rameses-gov-lgu/dist/rameses-gov-lgu.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-lgu-treasury/dist/rameses-gov-lgu-treasury.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-treasury/dist/rameses-gov-treasury.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rameses-rules-developer/dist/rameses-rules-developer.jar" todir="${shared.project.dir}/client/client-libs"/>
+        <copy file="${shared.project.dir}/client/rulemgmt/dist/rulemgmt.jar" todir="${shared.project.dir}/client/client-libs"/>
+        --> 
+    </target>    
+    
+    <target name="deploy-core-libraries" depends="init-deployer">
+        <copy file="${dev.incubation.dir}/osiris2-client-themes/dist/osiris2-client-themes.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/osiris2-client-ui/dist/osiris2-client-ui.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/osiris2-framework/dist/osiris2-framework.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/osiris2-test-platform/dist/osiris2-test-platform.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/osiris2-report/dist/osiris2-report.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/rameses-client-ui/dist/rameses-client-ui.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/rameses-client-ui-support/dist/rameses-client-ui-support.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/rameses-common2/dist/rameses-common2.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${dev.incubation.dir}/rameses-custom-impl/dist/rameses-custom-impl.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        
+        <copy file="${shared.project.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+        <copy file="${shared.project.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${rameses.projects.dir}/dev-libs"/> 
+    </target>  
+    
+    <target name="deploy-osiris3-modules-to-workspace" depends="init-deployer">
+        <copy file="${dev.incubation.dir}/osiris2-client-themes/dist/osiris2-client-themes.jar" todir="${workspace.osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-client-ui/dist/osiris2-client-ui.jar" todir="${workspace.osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-framework/dist/osiris2-framework.jar" todir="${workspace.osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-report/dist/osiris2-report.jar" todir="${workspace.osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-client-ui/dist/rameses-client-ui.jar" todir="${workspace.osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-common2/dist/rameses-common2.jar" todir="${workspace.osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-custom-impl/dist/rameses-custom-impl.jar" todir="${workspace.osiris3.modules.dir}/core"/> 
+        
+        <copy file="${shared.project.dir}/client/client-system/dist/client-system.jar" todir="${workspace.osiris3.modules.dir}/shared"/> 
+        <copy file="${shared.project.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${workspace.osiris3.modules.dir}/shared"/> 
+        <copy file="${shared.project.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-accounts/dist/rameses-enterprise-accounts.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-treasury/dist/rameses-enterprise-treasury.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-lgu/dist/rameses-gov-lgu.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-treasury/dist/rameses-gov-treasury.jar" todir="${workspace.osiris3.modules.dir}/shared"/>
+    </target>    
+        
+    <target name="deploy-osiris3-modules" depends="init-deployer">
+        <copy file="${dev.incubation.dir}/osiris2-client-themes/dist/osiris2-client-themes.jar" todir="${osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-client-ui/dist/osiris2-client-ui.jar" todir="${osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-framework/dist/osiris2-framework.jar" todir="${osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-report/dist/osiris2-report.jar" todir="${osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-client-ui/dist/rameses-client-ui.jar" todir="${osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-common2/dist/rameses-common2.jar" todir="${osiris3.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-custom-impl/dist/rameses-custom-impl.jar" todir="${osiris3.modules.dir}/core"/> 
+        
+        <copy file="${shared.project.dir}/client/client-system/dist/client-system.jar" todir="${osiris3.modules.dir}/shared"/> 
+        <copy file="${shared.project.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${osiris3.modules.dir}/shared"/> 
+        <copy file="${shared.project.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-accounts/dist/rameses-enterprise-accounts.jar" todir="${osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-treasury/dist/rameses-enterprise-treasury.jar" todir="${osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-lgu/dist/rameses-gov-lgu.jar" todir="${osiris3.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-treasury/dist/rameses-gov-treasury.jar" todir="${osiris3.modules.dir}/shared"/>
+    </target>     
+
+    <target name="deploy-jars-to-testplatform" depends="init-deployer">
+        <copy file="${dev.incubation.dir}/osiris2-client-themes/dist/osiris2-client-themes.jar" todir="${dev.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-client-ui/dist/osiris2-client-ui.jar" todir="${dev.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-framework/dist/osiris2-framework.jar" todir="${dev.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-report/dist/osiris2-report.jar" todir="${dev.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-client-ui/dist/rameses-client-ui.jar" todir="${dev.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-common2/dist/rameses-common2.jar" todir="${dev.modules.dir}/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-custom-impl/dist/rameses-custom-impl.jar" todir="${dev.modules.dir}/core"/> 
+        
+        <copy file="${shared.project.dir}/client/client-system/dist/client-system.jar" todir="${dev.modules.dir}/shared"/> 
+        <copy file="${shared.project.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${dev.modules.dir}/shared"/> 
+        <copy file="${shared.project.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${dev.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${dev.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${dev.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${dev.modules.dir}/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-lgu/dist/rameses-gov-lgu.jar" todir="${dev.modules.dir}/shared"/>
+    </target> 
+    
+    <target name="deploy-jars-to-etracs2_5_platform" depends="init-deployer">
+        <copy file="${dev.incubation.dir}/osiris2-client-themes/dist/osiris2-client-themes.jar" todir="${etracs.platform.dir}/downloads/modules/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-client-ui/dist/osiris2-client-ui.jar" todir="${etracs.platform.dir}/downloads/modules/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-framework/dist/osiris2-framework.jar" todir="${etracs.platform.dir}/downloads/modules/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-report/dist/osiris2-report.jar" todir="${etracs.platform.dir}/downloads/modules/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-client-ui/dist/rameses-client-ui.jar" todir="${etracs.platform.dir}/downloads/modules/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-common2/dist/rameses-common2.jar" todir="${etracs.platform.dir}/downloads/modules/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-custom-impl/dist/rameses-custom-impl.jar" todir="${etracs.platform.dir}/downloads/modules/core"/> 
+        
+        <copy file="${shared.project.dir}/client/client-system/dist/client-system.jar" todir="${etracs.platform.dir}/downloads/modules/shared"/> 
+        <copy file="${shared.project.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${etracs.platform.dir}/downloads/modules/shared"/> 
+        <copy file="${shared.project.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${etracs.platform.dir}/downloads/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${etracs.platform.dir}/downloads/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${etracs.platform.dir}/downloads/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${etracs.platform.dir}/downloads/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-lgu/dist/rameses-gov-lgu.jar" todir="${etracs.platform.dir}/downloads/modules/shared"/>
+        
+        <copy file="${dev.incubation.dir}/osiris2-client-themes/dist/osiris2-client-themes.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-client-ui/dist/osiris2-client-ui.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-framework/dist/osiris2-framework.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/core"/> 
+        <copy file="${dev.incubation.dir}/osiris2-report/dist/osiris2-report.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-client-ui/dist/rameses-client-ui.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-common2/dist/rameses-common2.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/core"/> 
+        <copy file="${dev.incubation.dir}/rameses-custom-impl/dist/rameses-custom-impl.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/core"/> 
+        
+        <copy file="${shared.project.dir}/client/client-system/dist/client-system.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/shared"/> 
+        <copy file="${shared.project.dir}/client/client-ui-extended/dist/client-ui-extended.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/shared"/> 
+        <copy file="${shared.project.dir}/client/rameses-client-menu/dist/rameses-client-menu.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-client-report/dist/rameses-client-report.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-admin/dist/rameses-enterprise-admin.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/shared"/>
+        <copy file="${shared.project.dir}/client/rameses-gov-lgu/dist/rameses-gov-lgu.jar" todir="${etracs.platform.dir}/bin/osiris2/modules/shared"/>        
+    </target> 
+    
+    <target name="deploy-server-core-libraries" depends="init-deployer">
+        <copy file="${dev.incubation.dir}/rameses-common2/dist/rameses-common2.jar" todir="${dev.osiris3.dir}/lib"/> 
+        <copy file="${dev.incubation.dir}/rameses-custom-impl/dist/rameses-custom-impl.jar" todir="${dev.osiris3.dir}/lib"/> 
+        
+        <copy file="${dev.incubation.dir}/anubis-cms2/dist/anubis-cms2.jar" todir="${dev.osiris3.dir}/lib"/> 
+        <copy file="${dev.incubation.dir}/rameses-osiris3-core2/dist/rameses-osiris3-core2.jar" todir="${dev.osiris3.dir}/lib"/> 
+        <copy file="${dev.incubation.dir}/rameses-osiris3-server/dist/rameses-osiris3-server.jar" todir="${dev.osiris3.dir}/lib"/> 
+        <copy file="${dev.incubation.dir}/rameses-osiris3-mail/dist/rameses-osiris3-mail.jar" todir="${dev.osiris3.dir}/lib"/> 
+        <copy file="${dev.incubation.dir}/rameses-osiris3-rules/dist/rameses-osiris3-rules.jar" todir="${dev.osiris3.dir}/lib"/> 
+        <copy file="${dev.incubation.dir}/rameses-services-extended/dist/rameses-services-extended.jar" todir="${dev.osiris3.dir}/lib"/> 
+        <copy file="${dev.incubation.dir}/rameses-websocket2/dist/rameses-websocket2.jar" todir="${dev.osiris3.dir}/lib"/> 
+    </target> 
+        
+    <target name="deploy-rameses-gov-libraries" depends="init-deployer">
+        <copy file="${etracs.project.dir}/client/rameses-enterprise-entity/dist/rameses-enterprise-entity.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-enterprise-treasury/dist/rameses-enterprise-treasury.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-enterprise-treasury-collection/dist/rameses-enterprise-treasury-collection.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-entity/dist/rameses-gov-entity.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-etracs-bpls/dist/rameses-gov-etracs-bpls.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-etracs-ctc/dist/rameses-gov-etracs-ctc.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-etracs-mtop/dist/rameses-gov-etracs-mtop.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-etracs-treasury/dist/rameses-gov-etracs-treasury.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-etracs-treasury-collection/dist/rameses-gov-etracs-treasury-collection.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-lgu/dist/rameses-gov-lgu.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-ngas/dist/rameses-gov-ngas.jar" todir="${dev.modules.dir}/etracs"/> 
+        <copy file="${etracs.project.dir}/client/rameses-gov-sre/dist/rameses-gov-sre.jar" todir="${dev.modules.dir}/etracs"/> 
+    </target>     
+</project>

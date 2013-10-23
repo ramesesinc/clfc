@@ -1,0 +1,69 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/transaction" caption="Basic List"/>
+        <invoker folderid="/master/test" caption="Basic List"/>
+    </invokers>
+    
+    <code>
+    <![CDATA[
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class SampleBasicListController 
+    {        
+        def selectedRow = [:]; 
+        def itemStatus;
+        def list = [
+            [name:'name1', value:100.00], 
+            [name:'name2', value:200.00], 
+            [name:'name3', value:300.00],
+            [name:'name4', value:10],
+        ];
+        
+        def lookupHandler = InvokerUtil.lookupOpener('var:lookup', [
+            onselect: {o-> 
+                selectedRow.name = o.name;
+            }, 
+            onempty: {
+                selectedRow.name = null;
+            } 
+        ]);
+        
+        def listHandler = [
+            getColumnList: {
+                return [
+                    [name:'name', caption:'Name', editable:true],
+                    [name:'value', caption:'Value', editable:true],
+                    [name:'description', caption:'Description', editable:true] 
+                ];
+            }, 
+            
+            fetchList: { 
+                return list; 
+            }, 
+            
+            validate: {li-> 
+                println 'validate-> item:'+li.item;
+            }
+        ] as EditorListModel 
+        
+        void showInfo() {
+            MsgBox.alert(selectedRow);
+        } 
+        
+        def doTestOpener() 
+        {
+            return InvokerUtil.lookupOpener("sampleform:open", [
+                bean:[lname:'flores', fname:'w']
+            ]);
+        }
+    }
+    ]]>
+    </code>
+    
+    <pages>
+        <page template="test.list.BasicListPage"/> 
+    </pages>
+</workunit>

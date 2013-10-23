@@ -1,0 +1,6 @@
+<workunit>
+    <invokers>
+        <invoker type="formActions" caption="Template Action 1"/> 
+        <invoker type="formActions" caption="Template Action 2"/> 
+    </invokers>
+</workunit>

@@ -1,0 +1,15 @@
+<folders>
+    <folder id="menu">
+        <folder id="transaction" caption="Test"/>
+    </folder>
+    
+    <folder id="master">
+        <folder id="test" caption="Test"/> 
+    </folder>
+    
+    <folder id="explorer">
+        <folder id="master">
+            <folder id="rules" caption="Rules"/> 
+        </folder>    
+    </folder>     
+</folders>

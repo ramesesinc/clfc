@@ -1,0 +1,28 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/transaction" caption="Test Lookup"/>
+    </invokers>
+    
+    <code>
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class TestLookupController 
+    {
+        def oRecord = [:];
+        
+        def lookupTaxpayer = InvokerUtil.lookupOpener('test:search', [:]); 
+        
+        void inspectBean() {
+            MsgBox.alert(oRecord); 
+        } 
+    }
+    </code>
+    
+    <pages>
+        <page template="test.lookup.TestLookupPage"/> 
+    </pages>
+
+</workunit>

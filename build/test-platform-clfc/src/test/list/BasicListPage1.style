@@ -1,0 +1,8 @@
+"listHandler:item.*" [item.value == 100.00] {
+    background: red;
+} 
+"listHandler:item.value" [item.value == 100.00] {
+    background: cyan; color: #fff; 
+    text-decoration: underline; 
+    text-decoration: strikethrough;
+} 

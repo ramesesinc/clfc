@@ -1,0 +1,47 @@
+<workunit extends="workunits/templateform.xml"> 
+    <invokers>
+        <invoker folderid="/menu/transaction" caption="Sample Form"/>
+        <invoker folderid="/master/test" caption="Sample Form"/>
+        
+        <invoker type="formActions" caption="Action 1"/>
+        <invoker type="formActions" caption="Action 2"/>
+    </invokers>
+    
+    <code>
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class SampleFormController implements ViewHandler
+    {        
+        def entity = [:];
+        
+        void doSearch() {
+            MsgBox.alert("invoking doSearch " + entity);
+        } 
+        
+        def showPage2() { 
+            return new Opener(outcome:'page2');
+        }    
+        
+        def showDefaultPage() {
+            return new Opener(outcome:'default'); 
+        } 
+        
+        void activatePage(binding, pagename) {
+            println 'activatePage: binding->'+binding + ', pagename->'+pagename;
+        } 
+        
+        void afterRefresh(binding, pagename) { 
+            println 'afterRefresh: binding->'+binding + ', pagename->'+pagename;    
+            if (pagename == 'page2') binding.requestFocus('entity.text2'); 
+        } 
+    }
+    </code>
+    
+    <pages>
+        <page template="test.form.SamplePage"/> 
+        <page template="test.form.SamplePage2" name="page2"/> 
+    </pages>
+</workunit>

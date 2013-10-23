@@ -1,0 +1,62 @@
+<workunit>
+    <invokers>        
+        <invoker folderid="/menu/transaction" caption="Test HTML" target="popup"/>
+        <invoker type="quick_launcher" code="HTML" caption="Test HTML" target="popup"/> 
+    </invokers>
+    
+    <pages>
+        <page template="test.pane.TestHtmlPage"/> 
+    </pages>
+    
+    <code>
+    <![CDATA[ 
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class TestHtmlController 
+    {
+       def htmlview = ''' 
+        <html>
+        <table border="0" width="100%">
+        <tr>
+            <td style="white-space:nowrap;">
+                <a href="showPage" style="text-decoration:none;">Principal Borrower</a>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="showPage">Loan Details</a></td>
+        </tr>        
+        <tr>
+            <td>Business</td>
+        </tr>        
+        <tr>
+            <td>Collateral</td>
+        </tr>        
+        <tr>
+            <td>Other Lending</td>
+        </tr>        
+        <tr>
+            <td>Joint Borrower</td>
+        </tr>        
+        <tr>
+            <td>Co-Maker</td>
+        </tr>        
+        <tr>
+            <td>Attachments</td>
+        </tr>        
+        <tr>
+            <td>Comments</td>
+        </tr>        
+        <tr>
+            <td>Summary</td>
+        </tr>         
+        </table>
+        </html>
+       ''';       
+    }
+    ]]>
+    </code>
+    
+</workunit>
