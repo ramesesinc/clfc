@@ -10,8 +10,8 @@ class RouteController extends CRUDController
     String serviceName = 'LoanRouteService';
     String entityName = 'route';
 
-    String createFocusComponent = 'entity.code';
-    String editFocusComponent = 'entity.description';             
+    String createFocusComponent = 'entity.collector';
+    String editFocusComponent = 'entity.collector';             
     boolean showConfirmOnSave = false;
     boolean allowApprove = false;
 
