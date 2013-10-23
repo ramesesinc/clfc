@@ -1,0 +1,30 @@
+<schema>
+
+	<element name="loan_ledger_billing" tablename="loan_ledger_billing">
+		<field name="objid" primary="true"/>
+		<field name="state" required="true"/>
+		<field name="dtcreated" required="true"/>
+		<field name="createby" required="true"/>
+		<field name="dtmodified" required="true"/>
+		<field name="route_code" required="true"/>
+		<field name="collector_objid" required="true"/>
+		<field name="collector_username" required="true"/>
+		<field name="billdate" required="true"/>
+	</element>
+
+	<element name="detail" tablename="loan_ledger_billing_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/>
+		<field name="ledgerid" required="true"/>
+		<field name="acctid" required="true"/>
+		<field name="acctname" required="true"/>
+		<field name="loanamount" required="true"/>
+		<field name="dailydue" required="true"/>
+		<field name="amountdue" required="true"/>
+		<field name="overpaymentamount" required="true"/>
+		<field name="balance" required="true"/>
+		<field name="refno" required="true"/>
+		<field name="txndate" required="true"/>
+	</element>
+
+</shema>

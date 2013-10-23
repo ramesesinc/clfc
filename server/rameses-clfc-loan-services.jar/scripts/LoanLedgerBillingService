@@ -1,0 +1,23 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+import java.rmi.server.UID;
+
+class LoanLedgerBillingService extends ActiveCrudListService
+{
+	@ActiveDB(value="loan_ledger_billing")
+	def ledger_billing;
+
+	@ProxyMethod
+	public def getColumns( params ) {
+		return [
+			[name:'route_code', caption:'Route Code'],
+			[name:'collector_username', caption:'Collector'],
+			[name:'billdate', caption:'Billing Date']
+		]
+	}
+
+	void beforeCreate( data ) {
+		println 'data-> '+data;
+	}
+}
