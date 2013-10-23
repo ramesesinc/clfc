@@ -1,6 +1,6 @@
 <workunit extends="wtemplates/ListController.xml">
     <invokers>
-        <invoker folderid="explorer/txn/loan" caption="Loan Ledgers" role="LOAN_ACCOUNTING"/>
+        <invoker folderid="explorer/txn/loan" caption="Loan Ledgers" role="LOAN_ACCT_OFFICER"/>
         <!--
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W" visibleWhen="#{mode == 'mgmt'}"/>
         -->

@@ -1,0 +1,12 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/txn/loan" action="create" caption="Ledger Billing"/>
+        <invoker type="ledgerbilling:open" action="open" target="popup"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.billing.LoanLedgerBillingController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.billing.LoanLedgerBillingPage"/>
+    </pages>
+</workunit>
