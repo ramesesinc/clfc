@@ -15,6 +15,9 @@ class DeviceLoanBillingService
 	@ActiveDB(value="loan_product_type")
 	def product_type;
 
+	@ActiveDB(value="loan_ledger_billing")
+	def ledger_billing;
+
 	@Service('DateService')
 	def dateSvc;
 
@@ -36,12 +39,25 @@ class DeviceLoanBillingService
 	@ProxyMethod
 	public def downloadBilling(params) {
 		if (!params.route_code) throw new Exception('Please specify route code');
-		def unpostedpayment = batch_payment.findUnpostedPayment(params);
-		if(unpostedpayment) throw new Exception('Cannot download billing. There are still unposted payments.');
+		if (!params.billingid) throw new Exception('Please specify billingid');
 
-		def result = ledger.getCollectionsheets(params);
-		if (!result) throw new Exception("No billing for route code $params.route_code.");
-		def currentDate = dateSvc.parseCurrentDate().date;
+		if (ledger_billing.findBillingLock([billingid: params.billingid, routecode: params.route_code])) 
+			throw new Exception('This billing has already been downloaded.');
+
+		def unpostedpayment = batch_payment.findUnpostedPayment(params);
+		if (unpostedpayment) throw new Exception('Cannot download billing. There are still unposted payments.');
+
+		def result = ledger_billing.getBillingDetailByRoutecode(params);
+		if (!result) throw new Exception('No billing for route '+params.route_description+' - '+params.route_area);
+
+		def list = [];
+		result.each{
+			list.add(it);
+		}
+		//ledger_billing.create(params, "lock");
+		//def result = ledger.getCollectionsheets(params);
+		//if (!result) throw new Exception('No billing for route '+params.route_description+' - '+params.route_area);
+		/*def currentDate = dateSvc.parseCurrentDate().date;
 		def days;
 		def list = [];
 		result.each{
@@ -62,10 +78,9 @@ class DeviceLoanBillingService
 			it.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8); 
 			it.amountdue = it.dailydue*days;
 			list.add(it);
-		}
-		def sessionid = new java.rmi.server.UID().toString()
-		def map = [sessionid: sessionid, list: list, serverdate: currentDate];
-		return map;
+		}*/
+
+		return [list: list];
 	}
 
 	@ProxyMethod

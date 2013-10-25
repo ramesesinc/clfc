@@ -1,0 +1,39 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.util.*;
+
+class DeviceLoginService
+{
+	@ActiveDB(value="device_login")
+	def device_login;
+
+	@ActiveDB(value="loan_ledger_billing")
+	def ledger_billing;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def login( params ) {
+		if (!params.username) throw new Exception('Please specify username.');
+		if (!params.password) throw new Exception('Please specify password.');
+
+		def user = device_login.findFieldCollectorByUsername(params);
+		def encval = Encoder.MD5.encode(params.password, params.username)
+		def routes = [];
+		def billing;
+		if (encval == user.pwd) {
+			//Get Routes
+			def date = dateSvc.parseCurrentDate();
+			def d = date.year+'-'+date.month+'-'+date.day;
+			billing = ledger_billing.findBillingByCollectorid([collectorid: user.objid, billdate: d]);
+			if (!billing) throw new Exception('You have no billing to download for today.');
+
+			def list = ledger_billing.getRoutesByBillingid([billingid: billing.objid]);
+			list.each{ routes.add(it); }
+
+		} else throw new Exception('Username/Password is incorrect!');
+
+		return [ routes: routes, billingid: billing.objid, serverdate: dateSvc.serverDate];
+	}
+}

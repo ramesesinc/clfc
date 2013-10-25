@@ -39,8 +39,10 @@ class LoanLedgerAdjustmentService
 
 		def list = ledger.getLedgerDetailsByLedgerid([parentid: adjustment.ledgerid]);
 		def idx = adjustment.payments.findIndexOf{ it.adjusted == true }
-		def payment = adjustment.payments[(idx > 0)? (idx-1) : 0];
+		idx = (idx > 0)? (idx-1) : 0;
+		def payment = adjustment.payments[idx];
 		def startIndex =  list.findIndexOf{ it.paytype != null && it.refno == payment.refno }
+		if (startIndex == 0) startIndex = -1;
 
 		def serverdate = dateSvc.serverDate;
 		list.eachWithIndex{item, index-> 
@@ -54,6 +56,14 @@ class LoanLedgerAdjustmentService
 		}
 
 		ledger.removeLedgerDetail([parentid: adjustment.ledgerid]);
+
+		def dtlastpaid;
+		if (idx == 0) {
+			def l = ledger.read([objid: adjustment.ledgerid]);
+			dtlastpaid = dateSvc.add(l.dtstarted, "-1");
+		} else dtlastpaid = adjustment.payments[idx-1];
+		ledger.update([objid: adjustment.ledgerid, dtlastpaid: dtlastpaid], "dtlastpaid");
+
 		adjustment.payments.each{
 			paymentSvc.postPayment(it);
 		}

@@ -88,7 +88,7 @@ class LoanPaymentService
 		def ledgeritem = ledgerdb.findLastLedgerItemByParentId([parentid: ledger.objid]);
 		//println 'ledger item = '+ledgeritem;
 		def interval = 0;
-		def lastscheduledate = dateSvc.add(ledger.dtstarted, "-1");;
+		def lastscheduledate = dateSvc.add(ledger.dtstarted, "-1");
 		if(ledgeritem) interval = ledgeritem.day;
 
 		lastscheduledate = dateSvc.add(lastscheduledate, (interval+1)+'');
@@ -113,6 +113,7 @@ class LoanPaymentService
 		data.lackingPenalty = 0;
 		data.type = params.paytype;
 		data.isCompromise = isCompromise? 1 : 0;
+
 		if(ledgeritem) {
 			data.lackingInterest = ledgeritem.interestbal;
 			data.lackingPenalty = ledgeritem.penaltybal;
@@ -125,6 +126,7 @@ class LoanPaymentService
 		if(!data.currentDay || data.currentDay == 0) data.currentDay = 1;
 		data.amountPaid = params.payamount;
 		def req = new RuleRequest("loan");
+
 		def paymentFact = [
 			days: 1,
 			balance: ref.balance,
@@ -137,6 +139,7 @@ class LoanPaymentService
 			overduePenalty: ledger.overduepenalty,
 			amountDue: ledger.dailydue
 		];
+
 		def compromiseFact = [:];
 		def results = [];
 		def lastPayment = [:];

@@ -8,7 +8,8 @@ SELECT ll.objid AS objid, la.objid AS loanappid, la.appno AS appno,
 		ll.dtlastpaid AS dtlastpaid, ll.dtstarted AS dtstarted,
 		ll.overduepenalty AS overduepenalty, ll.dtmatured AS dtmatured,
 		ll.producttypeid AS producttypeid, ll.balance AS balance,
-		ll.overpaymentamount AS overpaymentamount
+		ll.overpaymentamount AS overpaymentamount, la.loanamount AS loanamount,
+		ll.absentpenalty AS absentpenalty, ll.dtmatured AS dtmatured
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
 WHERE la.route_code=$P{route_code}
