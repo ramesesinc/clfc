@@ -7,17 +7,21 @@ import com.rameses.osiris2.common.*;
 
 class LoanLedgerBillingController extends CRUDController
 {
+    @Service("LoanLedgerBillingService")
+    def service;
+    
     String serviceName = 'LoanLedgerBillingService';
     String entityName = 'ledgerbilling';
     def collectorLookupHandler = InvokerUtil.lookupOpener('route-collector:lookup', [:]);
     
     String createFocusComponent = 'entity.code';
-    String editFocusComponent = 'entity.description';  
+    String editFocusComponent = 'entity.code';  
     boolean showConfirmOnSave = false;
     boolean allowApprove = false;
+    boolean allowCreate = false;
     
     Map createEntity() {
-        return [ routes:[] ];
+        return [ objid:'LB'+new java.rmi.server.UID(), routes:[] ];
     }
     
     def selectedItem;
@@ -46,4 +50,8 @@ class LoanLedgerBillingController extends CRUDController
             listHandler.reload();
         }
     }   
+
+    void reset() {
+        service.resetBilling(entity);
+    }
 }

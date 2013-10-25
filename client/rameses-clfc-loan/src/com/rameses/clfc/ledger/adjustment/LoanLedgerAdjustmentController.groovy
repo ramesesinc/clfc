@@ -30,7 +30,7 @@ class LoanLedgerAdjustmentController
     ] as EditorListModel
             
     def save() {
-        adjustmentSvc.create([ledgerid: ledger.ledgerid, payments: payments]);
+        adjustmentSvc.create([ledgerid: entity.ledgerid, payments: payments]);
         return close();
     }
     

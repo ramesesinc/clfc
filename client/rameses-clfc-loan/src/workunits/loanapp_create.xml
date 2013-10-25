@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/LoanAppController.xml">
     <invokers>
         <invoker folderid="/menu/txn/loan" caption="New Application" action="init" 
-            role="LOAN_CAO_OFFICER"/>
+            role="LOAN_CAO_OFFICER" index="0"/>
         
         <invoker type="loanapp:create" caption="Loan Application" action="init"/>
     </invokers>
