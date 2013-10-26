@@ -19,6 +19,8 @@
             boolean allowCreate = false;
             boolean allowOpen = false;
             
+            protected boolean onOpen(Map map) { return false; }
+            
             protected void onbeforeFetchList(Map map) {
                 map.searchtext = searchtext;
                 map.parentid = ledgerid;

@@ -12,7 +12,8 @@
         {
             String serviceName = 'LoanLedgerBillingService';
             String entityName = 'ledgerbilling';
-            boolean isAllowCreate() { return false; }
+            
+            boolean allowCreate = false;
         }
     </code>
 </workunit>
