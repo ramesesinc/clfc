@@ -33,6 +33,10 @@ class LoanLedgerBillingService extends ActiveCrudListService
 		]
 	}
 
+	void beforeList( data ) {
+		data.searchtext = data.searchtext? data.searchtext+'%' : '%';
+	}
+
 	void beforeCreate( data ) {
 		def currentDate = dateSvc.serverDate.toString().split(" ")[0];
 		if (data.billdate.compareTo(currentDate) < 0) throw new Exception('Bill date should be greater than or equal to current date.');

@@ -54,7 +54,7 @@ class DeviceLoanBillingService
 		result.each{
 			list.add(it);
 		}
-		//ledger_billing.create(params, "lock");
+		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
 		//def result = ledger.getCollectionsheets(params);
 		//if (!result) throw new Exception('No billing for route '+params.route_description+' - '+params.route_area);
 		/*def currentDate = dateSvc.parseCurrentDate().date;
@@ -84,9 +84,9 @@ class DeviceLoanBillingService
 	}
 
 	@ProxyMethod
-	public def uploadPayments(params) {
-		if(!params.sessionid) throw new Exception('Session ID is required.');
-		if(!params.payments) throw new Exception('Payments are required.');
+	public def uploadPayments( params ) {
+		if (!params.sessionid) throw new Exception('Session ID is required.');
+		if (!params.payments) throw new Exception('Payments are required.');
 		createBatchPaymentHeader(params);
 
 		def data = batch_payment.read([objid: params.sessionid]);

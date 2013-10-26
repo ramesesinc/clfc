@@ -1,5 +1,7 @@
 [getList]
 SELECT * FROM loan_ledger_billing
+WHERE createdby LIKE $P{searchtext} OR collector_username LIKE $P{searchtext}
+ORDER BY billdate
 
 [getRoutesByBillingid]
 SELECT lr.* FROM loan_ledger_billing_route llbr

@@ -79,38 +79,42 @@ class LoanLedgerReportService
 				receiptno			: it.refno,
 				datepaid			: it.dtpaid
 			];
-			if(it.state != "OFFSET") {
-				if(it.balance == ledger.totalprincipal) {
+			if (it.state != "OFFSET") {
+				if (it.balance == ledger.totalprincipal) {
 					itm.balanceamount = null;
 				}
-				if(it.balance == prevbal) {
+				if (it.balance == prevbal) {
 					itm.balanceamount = null;
 				}
-				if(it.partialpayment == 0) {
+				if (it.partialpayment == 0) {
 					itm.partialpayment = null;
 				}
-				if(!flag && it.interestbal == 0 && it.penaltybal == 0) {
+				if (!flag && it.interestbal == 0 && it.penaltybal == 0) {
 					itm.originalamount = ledger.totalprincipal;
 					flag = true;
 				}
-				if(it.refno == prevrefno) {
+				if (it.refno == prevrefno) {
 					itm.receiptno = null;
 					itm.datepaid = null
 				}
-				if(it.interestbal > 0) {
+				if (it.interestbal > 0) {
 					if(!itm.remarks) itm.remarks = '';
 					itm.remarks += 'lacking interest: '+it.interestbal;
 				}
-				if(it.penaltybal > 0) {
+				if (it.penaltybal > 0) {
 					if(!itm.remarks) itm.remarks = '';
 					else itm.remarks += '\n';
 					itm.remarks += 'lacking penalty: '+it.penaltybal;
 				}
-				if(it.penaltypaid == 0) itm.penaltycharge = null;
-				prevrefno = it.refno;
+				if (it.penaltypaid == 0) itm.penaltycharge = null;
+				if (it.amtpaid != 0) prevrefno = it.refno;
+				else {
+					itm.receiptno = null;
+					itm.datepaid = null;
+				}
 				prevbal = it.balance;
 			} else {
-				if(itm.penaltycharge == 0) itm.penaltycharge = null;
+				if (itm.penaltycharge == 0) itm.penaltycharge = null;
 				itm.receiptno = null;
 				itm.datepaid = null;
 			}
