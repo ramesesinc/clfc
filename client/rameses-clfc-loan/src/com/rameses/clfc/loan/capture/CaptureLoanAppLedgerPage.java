@@ -38,6 +38,7 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField3 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField4 = new com.rameses.rcp.control.XDecimalField();
+        xComboBox1 = new com.rameses.rcp.control.XComboBox();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xLabel1 = new com.rameses.rcp.control.XLabel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
@@ -52,9 +53,9 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "refno"}
                 , new Object[]{"caption", "Txn No."}
-                , new Object[]{"width", 150}
+                , new Object[]{"width", 200}
                 , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 150}
+                , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", true}
                 , new Object[]{"resizable", true}
                 , new Object[]{"nullWhenEmpty", true}
@@ -66,9 +67,9 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "txndate"}
                 , new Object[]{"caption", "Txn Date"}
-                , new Object[]{"width", 100}
+                , new Object[]{"width", 200}
                 , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 100}
+                , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", true}
                 , new Object[]{"resizable", true}
                 , new Object[]{"nullWhenEmpty", true}
@@ -78,23 +79,9 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.DateColumnHandler("yyyy-MM-dd", "yyyy-MM-dd", "yyyy-MM-dd")}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "type"}
-                , new Object[]{"caption", "Payment Type"}
-                , new Object[]{"width", 100}
-                , new Object[]{"minWidth", 0}
-                , new Object[]{"maxWidth", 0}
-                , new Object[]{"required", true}
-                , new Object[]{"resizable", true}
-                , new Object[]{"nullWhenEmpty", true}
-                , new Object[]{"editable", true}
-                , new Object[]{"editableWhen", null}
-                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.ComboBoxColumnHandler("paymentTypes", "value", "#{item.name}")}
-            }),
-            new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "amount"}
                 , new Object[]{"caption", "Payment Amount"}
-                , new Object[]{"width", 100}
+                , new Object[]{"width", 200}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", true}
@@ -155,6 +142,16 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
         xDecimalField4.setFontStyle("font-size:14;");
         xDecimalField4.setName("entity.overduerate");
         xFormPanel1.add(xDecimalField4);
+
+        xComboBox1.setCaption("Payment Method");
+        xComboBox1.setCaptionWidth(160);
+        xComboBox1.setExpression("#{item.name}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("paymentTypes");
+        xComboBox1.setName("entity.paymentmethod");
+        xComboBox1.setPreferredSize(new java.awt.Dimension(0, 20));
+        xComboBox1.setRequired(true);
+        xFormPanel1.add(xComboBox1);
 
         xFormPanel2.setPadding(new java.awt.Insets(5, 5, 0, 20));
         xLabel1.setBackground(new java.awt.Color(250, 250, 250));
@@ -251,6 +248,7 @@ public class CaptureLoanAppLedgerPage extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private com.rameses.rcp.control.XComboBox xComboBox1;
     private com.rameses.rcp.control.XDataTable xDataTable1;
     private com.rameses.rcp.control.XDateField xDateField3;
     private com.rameses.rcp.control.XDateField xDateField4;

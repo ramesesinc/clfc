@@ -166,7 +166,7 @@ class LoanUtil
     public static def getPaymentTypes() {
         if(paymentTypes == null) {
             paymentTypes = [
-                [name:'Schedule/Advance', value:'advance'],
+                [name:'Schedule/Advance', value:'schedule'],
                 [name:'Overpayment', value:'over']
             ]
         }
