@@ -8,6 +8,7 @@
 		<field name="producttypeid" required="true"/> 
 		<field name="loancount" required="true"/> 
 		<field name="term" required="true"/>
+		<field name="paymentmethod" required="true"/>
 		<field name="balance"/>
 		<field name="dailydue" required="true"/> 
 		<field name="interestamount" required="true"/> 
@@ -20,6 +21,11 @@
 		<field name="dtmatured" required="true"/> 
 		<field name="dtlastpaid"/> 
 	</element> 
+
+	<element name="method" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="paymentmethod" required="true"/>
+	</element>
 
 	<element name="balance" tablename="loan_ledger">
 		<field name="objid" primary="true"/>
@@ -59,8 +65,9 @@
 		<field name="day" required="true"/>
 		<field name="balance" required="true"/>
 		<field name="partialpayment" required="true"/>
-		<field name="paytype"/>
 		<field name="txndate" required="true"/>
+		<field name="baseamount" required="true"/>
+		<field name="groupbaseamount" required="true"/>
 	</element> 
 
 </schema>

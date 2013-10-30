@@ -76,10 +76,10 @@ class LoanLedgerBillingService extends ActiveCrudListService
 					loanamount: it.loanamount,
 					appno: it.appno,
 					overpaymentamount: it.overpaymentamount,
-					balance: it.balance,
 					txndate: currentDate,
 					dailydue: it.dailydue,
-					dtmatured: it.dtmatured
+					dtmatured: it.dtmatured,
+					producttypeid: it.producttypeid
 				];
 				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8);
 				def dtlastpaid;
@@ -89,10 +89,28 @@ class LoanLedgerBillingService extends ActiveCrudListService
 					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;
 				days = dateSvc.getDaysDiff(dtlastpaid, currentDate)-1;
 				detail.amountdue = it.dailydue*days;
-				detail.penalty = it.absentpenalty*(days-1);
+				detail.penalty = it.absentpenalty*(days-1);				
+				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");
 			}
 		}
+	}
+
+	private def getBalance( params, balance ) {
+		def bal = balance? balance : 0.00;
+		if (balance == params.loanamount) {
+			def producttype = product_type.read([name: params.producttypeid]);
+			bal = params.loanamount*(producttype.term/100);
+			params.isfirstbill = 1;
+		} else {
+			def ledgeritem = loan_ledger.findLastLedgerItemByParentId([parentid: params.ledgerid]);
+			if (ledgeritem.interestbal > 0) bal += ledgeritem.interestbal;
+			if (ledgeritem.penaltybal > 0) bal += ledgeritem.penaltybal;
+			if (params.penalty > 0) bal += params.penalty;
+			params.isfirstbill = 0;
+		}
+		bal = new BigDecimal(bal+'').setScale(2);
+		return bal;
 	}
 
 	void updateRoute( data ) {

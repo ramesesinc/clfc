@@ -41,6 +41,20 @@ declare Compromise
 	isCompromise	: int
 end
 
+rule "amountPaid equals to balance"
+	salience 40
+	when
+		References( amtPaid: amountPaid )
+		p: Payment( balance == amtPaid )
+	then
+		System.out.println("Full Payment");
+		double amountPaid = p.getAmountPaid();
+		amountPaid = 0;
+
+		p.setAmountPaid( amountPaid );
+		update( p );
+end
+
 rule "overpayment"
 	salience 35
 	when
@@ -48,13 +62,14 @@ rule "overpayment"
 		References( isOverdue == 0 && type == "over" && trialAndError == 0, ad: amountDue, i: interest, tp: totalPayment, td: totalDays, ap: absentPenalty, offset: isOffset, oa: overpaymentAmt )
 		p: Payment( amountPaid > 0 && balance > 0 )
 	then
-		//System.out.println("overpayment");
+		System.out.println("overpayment");
 		java.util.Map listItem = new java.util.HashMap();
 		double amountPaid = p.getAmountPaid();
 		double totalInterest = p.getTotalInterest();
 		double totalPenalty = p.getTotalPenalty();
 		int currentDay = p.getCurrentDay();
 		
+		//System.out.println("overpayment amount-> "+oa);
 		totalInterest += td*i;
 		totalPenalty += (td-1)*ap;
 		
@@ -72,7 +87,7 @@ rule "overpayment"
 			results.add( listItem );
 		}
 		else {
-			listItem = (java.util.Map) results.get( results.size()-1 );
+			//listItem = (java.util.Map) results.get( results.size()-1 );
 			totalInterest -= td*i;
 			totalPenalty -= (td-1)*ap;
 			amountPaid = 0;
@@ -295,20 +310,25 @@ rule "trial and error"
 		double totalInterest = p.getTotalInterest();
 		double totalPenalty = p.getTotalPenalty();
 		double lackingPenalty = p.getLackingPenalty();
+		double lackingInterest = p.getLackingInterest();
 		int currentDay = p.getCurrentDay();
-		//System.out.println("days: "+days+" current day: "+currentDay);		
-		if( days <= td ) totalInterest+=i;
-		if( days >= td && t == 1 ) 
-			totalPenalty = totalPenalty+(td*ap);
-		else if( days >= td && t == 2 )
-			totalPenalty = totalPenalty+((td-1)*ap);
 			
 		if( days >= td ) {
-			totalPenalty+=((ad*td)-amtPaid)*ur;
-			double a = totalPenalty+totalInterest;
-			if( a > amtPaid ) {
-				lackingPenalty = a-amtPaid;
-				totalPenalty-=lackingPenalty;
+			totalInterest = td*i;
+			if (totalInterest > amountPaid) {
+				lackingInterest = totalInterest-amountPaid;
+				totalInterest -= lackingInterest;
+				i -= lackingInterest;
+				amountPaid = 0;
+			} 
+			//System.out.println("total interest-> "+totalInterest+" lacking interest-> "+lackingInterest+" interest-> "+i);
+			totalPenalty = td*ap;
+			if (t == 2) totalPenalty -= ap;
+			totalPenalty += ((ad*td)-amtPaid)*ur;
+			//System.out.println("total penalty-> "+totalPenalty+" amount paid-> "+amtPaid+" amount due-> "+ad+" total days-> "+td+" underpayment rate-> "+ur);
+			if (totalPenalty > amountPaid) {
+				lackingPenalty = totalPenalty-amountPaid;
+				totalPenalty -= lackingPenalty;
 			}
 			amountPaid = 0;
 		}
@@ -328,6 +348,7 @@ rule "trial and error"
 		p.setTotalInterest( totalInterest );
 		p.setAmountPaid( amountPaid );
 		p.setLackingPenalty( lackingPenalty );
+		p.setLackingInterest( lackingInterest );
 		update( p );
 end
 

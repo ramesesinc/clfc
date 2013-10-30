@@ -28,6 +28,8 @@
 		<field name="refno" required="true"/>
 		<field name="txndate" required="true"/>
 		<field name="dtmatured" required="true"/>
+		<field name="isfirstbill" required="true"/>
+		<field name="paymentmethod" required="true"/>
 	</element>
 
 	<element name="billing_route" tablename="loan_ledger_billing_route">

@@ -45,7 +45,6 @@ class LoanLedgerService extends ActiveListService
 			    borrowername: data.borrower.name,
 			    refno: it.refno,
 			    txndate: it.txndate,
-			    paytype: it.type,
 			    payamount: it.amount
 			]
 			paymentSvc.postPayment(itm);
@@ -73,7 +72,8 @@ class LoanLedgerService extends ActiveListService
 		if(!params.loanamount) throw new Exception('Please specify loan amount');
 		if(!params.term) throw new Exception('Please specify term');
 		def result = new BigDecimal(params.loanamount+'');
-		result = result.setScale(2, BigDecimal.ROUND_HALF_UP).multiply(1.2);
+		def term = new BigDecimal(params.term+'').divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+		result = result.setScale(2, BigDecimal.ROUND_HALF_UP).multiply(term);
 		result = result.divide(new BigDecimal(params.term+'')).setScale(2, BigDecimal.ROUND_HALF_UP); 
 		return result;
 	}

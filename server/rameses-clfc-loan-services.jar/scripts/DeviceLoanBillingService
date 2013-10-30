@@ -51,9 +51,7 @@ class DeviceLoanBillingService
 		if (!result) throw new Exception('No billing for route '+params.route_description+' - '+params.route_area);
 
 		def list = [];
-		result.each{
-			list.add(it);
-		}
+		result.each{ list.add(it); }
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
 		//def result = ledger.getCollectionsheets(params);
 		//if (!result) throw new Exception('No billing for route '+params.route_description+' - '+params.route_area);
@@ -79,7 +77,6 @@ class DeviceLoanBillingService
 			it.amountdue = it.dailydue*days;
 			list.add(it);
 		}*/
-
 		return [list: list];
 	}
 
@@ -87,6 +84,7 @@ class DeviceLoanBillingService
 	public def uploadPayments( params ) {
 		if (!params.sessionid) throw new Exception('Session ID is required.');
 		if (!params.payments) throw new Exception('Payments are required.');
+		println 'params-> '+params;
 		createBatchPaymentHeader(params);
 
 		def data = batch_payment.read([objid: params.sessionid]);
@@ -99,8 +97,8 @@ class DeviceLoanBillingService
 					parentid: 	data.objid,
 					refno: 		it.refno,
 					appid: 		it.loanappid,
-					paytype: 	it.type,
-					payamount: 	it.amount
+					paytype: 	it.paytype,
+					payamount: 	it.payamount
 				]
 				batch_payment.create(itm, "detail");
 			}
