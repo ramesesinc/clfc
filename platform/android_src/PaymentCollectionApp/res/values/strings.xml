@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Payment Collection</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="txt_appno">App. No.</string>
+    <string name="txt_acctname">Acct. Name</string>
+    <string name="txt_loanamount">Loan Amount</string>
+    <string name="txt_balance">Balance</string>
+    <string name="txt_dailydue">Daily Due</string>
+    <string name="txt_amountdue">Amount Due</string>
+    <string name="txt_overpayment">Overpayment</string>
+    <string name="txt_penalty">Penalty</string>
+    <string name="txt_dtmatured">Maturity Date</string>
+    <string name="txt_empty"></string>
+    <string name="txt_refno">Ref. No.</string>
+    <string name="txt_txndate">Txn Date</string>
+    <string name="txt_type">Type</string>
+    <string name="txt_amount">Amount</string>
+    <string name="txt_info_general">General</string>
+    <string name="txt_info_payment">Payment</string>
+    <string name="semicolon">:</string>
+    <string name="img_check_ico">check icon</string>
+    <string name="txt_ip_host">Host Address</string>
+    <string name="txt_ip_port">Port</string>
+    <string name="txt_btn_cancel">Cancel</string>
+    <string name="txt_btn_login">Login</string>
+    <string name="txt_hint_username">USERNAME</string>
+    <string name="txt_hint_password">PASSWORD</string>
+    <string name="txt_hint_search">Search</string>
+    <string name="txt_btn_ok">OK</string>
+    <string name="txt_payment_schedule">Schedule/Advance</string>
+    <string name="txt_payment_over">Overpayment</string>
+    <string name="txt_term_schedule">Schedule</string>
+    <string name="txt_term_overpayment">Overpayment</string>
+
+</resources>
