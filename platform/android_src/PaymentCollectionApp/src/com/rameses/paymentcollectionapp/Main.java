@@ -292,6 +292,7 @@ public class Main extends Activity {
 				Map<String, Object> params=new HashMap<String, Object>();
 				params.put("username", username);
 				params.put("password", password);
+				System.out.println("username-> "+username+" password-> "+password);
 				Object response = proxy.invoke("login", new Object[]{params});
 				Map<String, Object> result = (Map<String, Object>) response;
 				
@@ -438,7 +439,6 @@ public class Main extends Activity {
 				m.put("paytype", result.getString(result.getColumnIndex("paymenttype")));
 				m.put("payamount", result.getDouble(result.getColumnIndex("paymentamount")));
 				m.put("isfirstbill", result.getInt(result.getColumnIndex("isfirstbill")));
-				System.out.println(m);
 				list.add(m);
 			} while(result.moveToNext());
 		}
@@ -500,9 +500,7 @@ public class Main extends Activity {
 					params.put("routecode", routecode);
 					params.put("totalcount", payments.size());
 					params.put("totalamount", totalamount);
-					System.out.println("pass 1");
 					Object response = svcProxy.invoke("uploadPayments", new Object[]{params});
-					System.out.println("pass 2");
 					Map<String, Object> result = (Map<String, Object>) response;
 					bundle.putStringArrayList("list", ((ArrayList<String>) result.get("list")));
 					status = "ok";

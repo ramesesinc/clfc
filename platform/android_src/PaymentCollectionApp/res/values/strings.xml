@@ -34,5 +34,7 @@
     <string name="txt_payment_over">Overpayment</string>
     <string name="txt_term_schedule">Schedule</string>
     <string name="txt_term_overpayment">Overpayment</string>
+    <string name="txt_lacking_interest">Lacking Interest</string>
+    <string name="txt_lacking_penalty">Lacking Penalty</string>
 
 </resources>

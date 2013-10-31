@@ -23,7 +23,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String TABLE_HOST = "host";
 	private static final String TABLE_ROUTE = "route";
 	
-	private static final String CREATE_TABLE_COLLECTIONSHEET = "CREATE TABLE COLLECTIONSHEET(loanappid text PRIMARY KEY, appno text, acctname text, amountdue numeric, overpaymentamount numeric, refno text, routecode text, loanamount numeric, dailydue numeric, balance numeric, penalty numeric, duedate text, isfirstbill numeric);";
+	private static final String CREATE_TABLE_COLLECTIONSHEET = "CREATE TABLE COLLECTIONSHEET(loanappid text PRIMARY KEY, appno text, acctname text, amountdue numeric, overpaymentamount numeric, lackinginterest numeric, lackingpenalty numeric, refno text, routecode text, loanamount numeric, dailydue numeric, balance numeric, penalty numeric, duedate text, isfirstbill numeric);";
 	private static final String CREATE_TABLE_PAYMENT = "CREATE TABLE PAYMENT(refno text, txndate text, paymenttype text, paymentamount numeric, loanappid text, routecode text, isfirstbill numeric);";
 	private static final String CREATE_TABLE_UPLOADEDPAYMENT = "CREATE TABLE UPLOADED(loanappid text)";
 	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(sessionid text, serverdate text)";
@@ -74,6 +74,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		values.put("amountdue", Double.parseDouble(params.get("amountdue").toString()));
 		values.put("penalty", Double.parseDouble(params.get("penalty").toString()));
 		values.put("overpaymentamount", Double.parseDouble(params.get("overpaymentamount").toString()));
+		values.put("lackinginterest", Double.parseDouble(params.get("lackinginterest").toString()));
+		values.put("lackingpenalty", Double.parseDouble(params.get("lackingpenalty").toString()));
 		values.put("refno", params.get("refno").toString());
 		values.put("routecode", params.get("routecode").toString());
 		values.put("duedate", params.get("dtmatured").toString());

@@ -31,7 +31,9 @@ public class CollectionSheetInfo extends Activity {
 	private String routecode = "";
 	private String refno = "";
 	private String paymenttype = "";
+	private int totaldays = 0;
 	private Cursor payment;
+	private int isfirstbill = 0;
 	private RelativeLayout rl_general = null;
 	private RelativeLayout rl_payment = null;
 	
@@ -52,10 +54,11 @@ public class CollectionSheetInfo extends Activity {
 		loanappid = intent.getStringExtra("loanappid");
 		routecode = intent.getStringExtra("routecode");
 		paymenttype = intent.getStringExtra("paymenttype");
+		isfirstbill = intent.getIntExtra("isfirstbill", 0);
 		db.openDb();
 		Cursor result = db.getCollectionsheetByLoanappid(loanappid);
 		db.closeDb();
-		
+				
 		String acctname = "";
 		String appno = "";
 		BigDecimal amountdue = new BigDecimal("0").setScale(2);
@@ -63,6 +66,8 @@ public class CollectionSheetInfo extends Activity {
 		BigDecimal balance = new BigDecimal("0").setScale(2);
 		BigDecimal dailydue = new BigDecimal("0").setScale(2);
 		BigDecimal penalty = new BigDecimal("0").setScale(2);
+		BigDecimal lackinginterest = new BigDecimal("0").setScale(2);
+		BigDecimal lackingpenalty = new BigDecimal("0").setScale(2);
 		String duedate = "";
 		
 		if(result != null && result.getCount() > 0) {
@@ -78,6 +83,10 @@ public class CollectionSheetInfo extends Activity {
 			dailydue = new BigDecimal(amt).setScale(2);
 			amt = result.getString(result.getColumnIndex("penalty"));
 			penalty = new BigDecimal(amt).setScale(2);
+			amt = result.getDouble(result.getColumnIndex("lackinginterest"))+"";
+			lackinginterest = new BigDecimal(amt).setScale(2);
+			amt = result.getDouble(result.getColumnIndex("lackingpenalty"))+"";
+			lackingpenalty = new BigDecimal(amt).setScale(2);
 			amt = result.getDouble(result.getColumnIndex("overpaymentamount"))+"";
 			overpayment = new BigDecimal(amt).setScale(2);
 			refno = result.getString(result.getColumnIndex("refno"));
@@ -93,6 +102,7 @@ public class CollectionSheetInfo extends Activity {
 			}				
 			SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
 			duedate = df.format(c.getTime());
+			totaldays = amountdue.divide(dailydue).intValue();
 		}
 		
 		TextView tv_info_acctname = (TextView) findViewById(R.id.tv_info_acctname);
@@ -104,6 +114,8 @@ public class CollectionSheetInfo extends Activity {
 		TextView tv_info_penalty = (TextView) findViewById(R.id.tv_info_penalty);
 		TextView tv_info_overpayment = (TextView) findViewById(R.id.tv_info_overpayment);
 		TextView tv_info_duedate = (TextView) findViewById(R.id.tv_info_duedate);
+		TextView tv_info_lackinginterest = (TextView) findViewById(R.id.tv_info_lackinginterest);
+		TextView tv_info_lackingpenalty = (TextView) findViewById(R.id.tv_info_lackingpenalty);
 		
 		tv_info_acctname.setText(acctname);
 		tv_info_appno.setText(appno);
@@ -114,6 +126,8 @@ public class CollectionSheetInfo extends Activity {
 		tv_info_penalty.setText(formatValue(penalty));
 		tv_info_overpayment.setText(formatValue(overpayment));
 		tv_info_duedate.setText(duedate);
+		tv_info_lackinginterest.setText(formatValue(lackinginterest));
+		tv_info_lackingpenalty.setText(formatValue(lackingpenalty));
 		
 		db.openDb();
 		payment = db.getPayment(loanappid);
@@ -170,6 +184,8 @@ public class CollectionSheetInfo extends Activity {
 		Intent intent = new Intent(context, Payment.class);
 		intent.putExtra("loanappid", loanappid);
 		intent.putExtra("routecode", routecode);
+		intent.putExtra("totaldays", totaldays);
+		intent.putExtra("isfirstbill", isfirstbill);
 		switch(item.getItemId()) {
 			case R.id.payment_addpayment:
 					intent.putExtra("refno", refno);

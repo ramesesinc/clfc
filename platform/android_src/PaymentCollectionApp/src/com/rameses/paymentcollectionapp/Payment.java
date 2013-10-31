@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,10 +30,12 @@ public class Payment extends Activity {
 	private TextView tv_txndate;
 	private String type = "";
 	private EditText et_amount;
+	private EditText et_overpayment;
 	private RadioButton rbtn_advance;
 	private RadioButton rbtn_over;
 	private String routecode = "";
 	private int isfirstbill = 0;
+	private int totaldays = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +47,14 @@ public class Payment extends Activity {
 		routecode = intent.getStringExtra("routecode");
 		type = intent.getStringExtra("paymenttype");
 		isfirstbill = intent.getIntExtra("isfirstbill", 0);
-		db = new MySQLiteHelper(context);
-		
+		totaldays = intent.getIntExtra("totaldays", 0);
+		db = new MySQLiteHelper(context);		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+
 		Calendar c = Calendar.getInstance();
 		if(!db.isOpen) db.openDb();
 		try {
@@ -53,6 +64,15 @@ public class Payment extends Activity {
 		db.closeDb();			
 		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
 		String formattedDate = df.format(c.getTime());
+		
+		RelativeLayout rl_overpayment = (RelativeLayout) findViewById(R.id.rl_overpayment);
+		rl_overpayment.setVisibility(View.GONE);
+		if (type.equals("over")) rl_overpayment.setVisibility(View.VISIBLE);
+		
+		et_overpayment = (EditText) findViewById(R.id.et_overpayment);
+		et_overpayment.setEnabled(false);
+		System.out.println("is first bill: "+isfirstbill);
+		if (isfirstbill == 1) et_overpayment.setEnabled(true);
 		
 		tv_refno = (TextView) findViewById(R.id.tv_payment_refno);
 		tv_txndate = (TextView) findViewById(R.id.tv_payment_txndate);
@@ -70,42 +90,62 @@ public class Payment extends Activity {
 				if(amount == null || amount.equals("")) {
 					showError("Amount is required.");
 				} else {
-					db.openDb();
-					Map<String, Object> payment = new HashMap<String, Object>();
-					payment.put("loanappid", loanappid);
-					payment.put("refno", tv_refno.getText());
-					payment.put("txndate", tv_txndate.getText());
-					payment.put("amount", et_amount.getText());
-					payment.put("routecode", routecode);
-					payment.put("type", type);
-					payment.put("isfirstbill", isfirstbill);
-					db.insertPayment(payment);
-					db.closeDb();
-
-					finish();
+					boolean flag = true;
+					BigDecimal amt = new BigDecimal(amount).setScale(2);
+					BigDecimal amt2 = new BigDecimal(0).setScale(2);
+					if (type.equals("over")) {
+						amt2 = new BigDecimal(et_overpayment.getText().toString()).setScale(2);
+						if (isfirstbill == 1) {
+							int td = amt.divide(amt2).intValue();
+							if (td < totaldays) {
+								Toast.makeText(context, "Amount paid could not cover up to current date based on overpayment amount.", Toast.LENGTH_SHORT).show();
+								flag = false;
+							}
+						}
+					}
+					if (flag == true) {
+						Map<String, Object> params = new HashMap<String, Object>();
+						params.put("amount", amt.toString());
+						params.put("overpayment", amt2.toString());
+						showConfirmationDialog(params);					
+					}
 				}
 			}
 		});
 	}
 	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		if(!db.isOpen) db.openDb();
-		Cursor result = db.getPayment(loanappid);	
-		db.closeDb();
-		
-		if(result != null && result.getCount() > 0) {
-			tv_refno.setText(result.getString(result.getColumnIndex("refno")));
-			tv_txndate.setText(result.getString(result.getColumnIndex("txndate")));
-			String type = result.getString(result.getColumnIndex("paymenttype"));
-			if(type.equals("advance")) {
-				rbtn_advance.setChecked(true);
-			} else {
-				rbtn_over.setChecked(true);
+	private void showConfirmationDialog(Map<String, Object> params) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		String message = "Amount Paid: "+params.get("amount").toString();
+		if (type.equals("over") && isfirstbill == 1) message += "\nOverpayment: "+params.get("overpayment").toString();
+		message += "\n\nAre all the information correct?";
+		builder.setMessage(message);
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {			
+			@Override
+			public void onClick(DialogInterface d, int which) {
+				// TODO Auto-generated method stub
+				savePayment();
 			}
-			et_amount.setText(result.getDouble(result.getColumnIndex("paymentamount"))+"");
-		}
+		});
+		builder.setNegativeButton("No", null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	private void savePayment() {
+		db.openDb();
+		Map<String, Object> payment = new HashMap<String, Object>();
+		payment.put("loanappid", loanappid);
+		payment.put("refno", tv_refno.getText());
+		payment.put("txndate", tv_txndate.getText());
+		payment.put("amount", et_amount.getText());
+		payment.put("routecode", routecode);
+		payment.put("type", type);
+		payment.put("isfirstbill", isfirstbill);
+		db.insertPayment(payment);
+		db.closeDb();
+
+		finish();
 	}
 	
 	private void showError(String errmsg) {
