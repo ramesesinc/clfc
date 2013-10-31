@@ -79,7 +79,11 @@ class LoanLedgerBillingService extends ActiveCrudListService
 					txndate: currentDate,
 					dailydue: it.dailydue,
 					dtmatured: it.dtmatured,
-					producttypeid: it.producttypeid
+					producttypeid: it.producttypeid,
+					paymentmethod: it.paymentmethod,
+					interest: it.interestamount,
+					lackinginterest: 0.00,
+					lackingpenalty: 0.00
 				];
 				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8);
 				def dtlastpaid;
@@ -89,7 +93,7 @@ class LoanLedgerBillingService extends ActiveCrudListService
 					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;
 				days = dateSvc.getDaysDiff(dtlastpaid, currentDate)-1;
 				detail.amountdue = it.dailydue*days;
-				detail.penalty = it.absentpenalty*(days-1);				
+				detail.penalty = it.absentpenalty*(days-1);
 				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");
 			}
@@ -104,11 +108,21 @@ class LoanLedgerBillingService extends ActiveCrudListService
 			params.isfirstbill = 1;
 		} else {
 			def ledgeritem = loan_ledger.findLastLedgerItemByParentId([parentid: params.ledgerid]);
+			def avgamount = params.dailydue;
+			if (params.paymentmethod == 'over') avgamount = em.findAvgOverpaymentAmount([parentid: params.ledgerid]).groupbaseamount;
+			BigDecimal b = new BigDecimal(avgamount+'').setScale(2);
+			b = b.subtract(new BigDecimal(params.interest+'').setScale(2));
+			BigDecimal bd = new BigDecimal(balance+'').setScale(2)
+			bd = bd.divide(b, BigDecimal.ROUND_HALF_UP);
+			bal += (bd.setScale(0, BigDecimal.ROUND_HALF_UP)*params.interest);
+
+			params.lackingpenalty = ledgeritem.penaltybal;
+			params.lackinginterest = ledgeritem.interestbal;
 			if (ledgeritem.interestbal > 0) bal += ledgeritem.interestbal;
 			if (ledgeritem.penaltybal > 0) bal += ledgeritem.penaltybal;
-			if (params.penalty > 0) bal += params.penalty;
 			params.isfirstbill = 0;
 		}
+		if (params.penalty > 0) bal += params.penalty;
 		bal = new BigDecimal(bal+'').setScale(2);
 		return bal;
 	}

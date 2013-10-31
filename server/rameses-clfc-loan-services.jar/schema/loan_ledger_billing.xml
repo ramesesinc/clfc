@@ -24,6 +24,8 @@
 		<field name="amountdue" required="true"/>
 		<field name="penalty" required="true"/>
 		<field name="overpaymentamount" required="true"/>
+		<field name="lackinginterest" required="true"/>
+		<field name="lackingpenalty" required="true"/>
 		<field name="balance" required="true"/>
 		<field name="refno" required="true"/>
 		<field name="txndate" required="true"/>

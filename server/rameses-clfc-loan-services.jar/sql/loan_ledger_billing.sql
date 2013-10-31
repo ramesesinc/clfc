@@ -35,3 +35,13 @@ SELECT * FROM loan_ledger_billing_lock WHERE billingid=$P{billingid} AND routeco
 
 [removeBillingLockByBillingid]
 DELETE FROM loan_ledger_billing_lock WHERE billingid=$P{billingid}
+
+[findAvgOverpaymentAmount]
+SELECT MAX(sq.count) AS max, sq.groupbaseamount FROM (
+	SELECT COUNT(ll.groupbaseamount) AS count, ll.groupbaseamount 
+	FROM loan_ledger_detail ll
+	WHERE ll.parentid=$P{parentid}
+	GROUP BY ll.groupbaseamount
+) sq
+GROUP BY sq.groupbaseamount
+LIMIT 1
