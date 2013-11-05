@@ -103,6 +103,7 @@ public class CollectionSheetInfo extends Activity {
 			SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
 			duedate = df.format(c.getTime());
 			totaldays = amountdue.divide(dailydue).intValue();
+			if (paymenttype.equals(null) || paymenttype.equals("")) paymenttype = result.getString(result.getColumnIndex("paymentmethod"));
 		}
 		
 		TextView tv_info_acctname = (TextView) findViewById(R.id.tv_info_acctname);
@@ -157,7 +158,7 @@ public class CollectionSheetInfo extends Activity {
 		tv_refno.setText(refno);
 		tv_txndate.setText(txndate);
 		tv_paymenttype.setText(paymenttype);
-		tv_paymentamount.setText(paymentamount.toString());
+		tv_paymentamount.setText(formatValue(paymentamount));
 	}
 	
 	private String formatValue(Object number) {
@@ -190,6 +191,7 @@ public class CollectionSheetInfo extends Activity {
 			case R.id.payment_addpayment:
 					intent.putExtra("refno", refno);
 					intent.putExtra("paymenttype", paymenttype);
+					intent.putExtra("overpayment", overpayment.toString());
 					startActivity(intent);
 					break;
 		}
