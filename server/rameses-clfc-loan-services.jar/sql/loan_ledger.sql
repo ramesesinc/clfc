@@ -14,6 +14,7 @@ SELECT ll.objid AS objid, la.objid AS loanappid, la.appno AS appno,
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
 WHERE la.route_code=$P{route_code}
+	AND ll.state='OPEN'
 
 [findByAppId]
 SELECT * FROM loan_ledger
@@ -41,7 +42,7 @@ SELECT ll.objid AS ledgerid, la.borrower_objid AS borrower_objid,
 	ll.producttypeid AS producctypeid, la.appno AS appno, 
 	la.route_code AS route_code, ll.dailydue AS dailydue,
 	ll.dtstarted AS dtstarted, ll.dtmatured AS dtmatured,
-	ll.interestamount AS interest
+	ll.interestamount AS interest, ll.state AS state
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
 WHERE la.state IN('RELEASED','CLOSED')
@@ -54,13 +55,18 @@ ORDER BY day, refno, txndate, state
 
 [getPaymentsFromLedgerDetail]
 SELECT ll.appid AS appid, lld.refno, lld.dtpaid AS txndate, 
-	lld.paytype, lld.amtpaid AS payamount
+		lld.amtpaid AS payamount
 FROM loan_ledger_detail lld
 INNER JOIN loan_ledger ll ON lld.parentid=ll.objid
-WHERE lld.paytype IS NOT NULL
-	AND lld.parentid=$P{parentid}
+WHERE lld.parentid=$P{parentid} 
+	AND lld.amtpaid > 0 
+	AND lld.state='RECEIVED'
 ORDER BY lld.dtpaid, lld.refno
 
 [removeLedgerDetail]
 DELETE FROM loan_ledger_detail
 WHERE parentid=$P{parentid}
+
+[closeLedger]
+UPDATE loan_ledger SET state='CLOSED'
+WHERE objid=$P{objid}

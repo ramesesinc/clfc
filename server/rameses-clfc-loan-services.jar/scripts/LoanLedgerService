@@ -11,6 +11,9 @@ class LoanLedgerService extends ActiveListService
 	@ActiveDB(value='batch_payment')
 	def batch_payment;
 
+	@ActiveDB(value='loan_ledger_billing')
+	def ledger_billing;
+
 	@Service('LoanPaymentService')
 	def paymentSvc;
 
@@ -18,6 +21,7 @@ class LoanLedgerService extends ActiveListService
 	public def getColumns( params ) {
 		return [
 			[name:'appno', caption:'App. No.', width:150],
+			[name:'state', caption:'State', width: 100],
 			[name:'borrower.name', caption:'Borrower Name', width:250],
 			[name:'dailydue', caption:'Daily Due', width:100],
 			[name:'interest', caption:'Interest', width:100],
@@ -37,6 +41,7 @@ class LoanLedgerService extends ActiveListService
 		data.absentpenalty = computeAbsentPenalty(data);
 		data.overduepenalty = 0.0;
 		data.totaldue = 0.0;
+		data.state = 'OPEN';
 		em.create(data);
 		data.payments.each{
 			def itm = [
@@ -99,8 +104,9 @@ class LoanLedgerService extends ActiveListService
 
 	@ProxyMethod
 	public def approveBatchPayment( params ) {
-		if(!params.objid) throw new Exception('Please specify objid');
+		if (!params.objid) throw new Exception('Please specify objid');
 		batch_payment.changeStateApproved(params);
+		ledger_billing.changeStateCompleted(params);
 		return params;
 	}
 }

@@ -1,5 +1,11 @@
 [getList]
 SELECT * FROM loan_ledger_billing
+WHERE (createdby LIKE $P{searchtext} OR collector_username LIKE $P{searchtext})
+	AND state=$P{state}
+ORDER BY billdate
+
+[getDefaultList]
+SELECT * FROM loan_ledger_billing
 WHERE createdby LIKE $P{searchtext} OR collector_username LIKE $P{searchtext}
 ORDER BY billdate
 
@@ -45,3 +51,11 @@ SELECT MAX(sq.count) AS max, sq.groupbaseamount FROM (
 ) sq
 GROUP BY sq.groupbaseamount
 LIMIT 1
+
+[getStates]
+SELECT DISTINCT state 
+FROM loan_ledger_billing
+
+[changeStateCompleted]
+UPDATE loan_ledger_billing SET state="COMPLETED"
+WHERE objid=$P{objid}

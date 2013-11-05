@@ -114,9 +114,10 @@ class LoanPaymentService
 		data.totalDays = days;
 		data.lackingInterest = 0;
 		data.lackingPenalty = 0;
+		data.type = ledger.paymentmethod;
 
-		if (data.totalDays == 1 && params.payamount > ledger.dailydue) data.type = ledger.paymentmethod
-		else data.type = 'schedule';
+		/*if (data.totalDays == 1 && params.payamount > ledger.dailydue) data.type = 'over';
+		else data.type = 'schedule';*/
 
 		//println 'payment type-> '+data.type;
 		data.isCompromise = isCompromise? 1 : 0;
@@ -162,12 +163,14 @@ class LoanPaymentService
 
 		lastPayment.datePaid = ledger.dtlastpaid? dateSvc.parseDate(ledger.dtlastpaid, null).date : null;
 
-		referencesFact.type = data.type;
 		referencesFact.interest = ref.interest;
 		referencesFact.hasSunday = "false";
 		def cal = Calendar.getInstance();
 		cal.setTime(txndate);
-		if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) referencesFact.hasSunday = "true";
+		if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) {
+			ref.hasSunday = true;
+			referencesFact.hasSunday = "true";
+		}
 		compromiseFact.isCompromise = data.isCompromise;
 
 		if (txndate == lastPayment.datePaid) {
@@ -210,6 +213,9 @@ class LoanPaymentService
 		item.hasSunday = referencesFact.hasSunday;
 		item.noOfHolidays = calendarSvc.getNoOfHolidays([item: item, lastscheduledate: lastscheduledate]);
 
+		referencesFact.isFullPayment = checkIsFullPayment(item, ref);
+		referencesFact.type = getPaymentType(item, referencesFact);
+
 		paymentFact.amountPaid = item.amountPaid;
 		referencesFact.totalPayment = item.totalPayment;
 		referencesFact.totalDays = item.totalDays;
@@ -234,14 +240,21 @@ class LoanPaymentService
 				lastitem.groupbaseamount = lastitem.baseamount+r[1];
 			}
 
-			if (lastitem.balance) ledgerdb.update([objid: ledger.objid, balance:lastitem.balance], "balance");
+			if (lastitem.balance) {
+				ledgerdb.update([objid: ledger.objid, balance:lastitem.balance], "balance");
+				def xledger = ledgerdb.read(ledger);
+				if (xledger.balance == 0) ledgerdb.closeLedger(xledger);
+			}
 		}
 		//results.each{ println it; }
 		//throw new Exception('stopping');
 
 		def groupbaseamount = 0;
-		if (data.type == 'schedule' || data.payamount < ledger.dailydue) groupbaseamount = ledger.dailydue;
-		if (data.type == 'over') groupbaseamount = (ledger.overpaymentamount != 0)? ledger.overpaymentamount : params.payamount;
+		if (item.type == 'schedule' || item.amountPaid < ledger.dailydue) groupbaseamount = ledger.dailydue;
+		if (item.type == 'over') groupbaseamount = (ledger.overpaymentamount != 0)? ledger.overpaymentamount : params.payamount;
+
+		//results.each{ println it }
+		//throw new Exception('stopping')
 
 		results.each{
 			//if(it.penalty) it.penalty = new BigDecimal(it.penalty+'').setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -294,10 +307,48 @@ class LoanPaymentService
 		]
 	}
 
+	private boolean checkIsFullPayment( item, ref ) {
+		def flag = false;
+		def balance = ref.balance;
+		def days = item.totalDays;
+		days -= item.noOfHolidays;
+		if (item.hasSunday == "true") days--;
+		balance += ref.absentPenalty*(days-1);
+		if (item.lackingInterest > 0) balance += item.lackingInterest;
+		if (item.lackingPenalty > 0) balance += item.lackingPenalty
+		if (item.amountPaid >= balance) {
+			def a = new BigDecimal((item.amountPaid - balance)+'').setScale(2);
+			def i = new BigDecimal(ref.interest+'').setScale(2);
+			def d = a.divideAndRemainder(i);
+			if (d[1] == 0.00) {
+				flag = true;
+				//item.totalDays = d[0];
+				//if (item.type == 'schedule') item.totalDays = ref.term;
+			}
+		}
+		return flag;
+	}
+
+	private def getPaymentType( item, referencesFact ) {
+		def type = 'schedule';
+		if (referencesFact.isFullPayment == false) {
+			if (item.trialAndError == 0 && item.type == 'over') {
+				def oa = new BigDecimal(referencesFact.overpaymentAmt+'').setScale(2);
+				def ap = new BigDecimal(item.amountPaid+'').setScale(2);
+				def days = ap.divideAndRemainder(oa)[0];
+				if (days > 0) {
+					item.totalDays = days;
+					type = 'over';
+				}
+			}
+		}
+		return type;
+	}
+
 	private def preComputation( params, ref ) {
 		def item = params;
 		//println 'pass 1'
-		if( params.totalDays <= ref.term ) {
+		if ( params.totalDays <= ref.term ) {
 			def totaldays = params.totalDays-(params.currentDay-1);
 			if( totaldays < 1 ) totaldays = 1;
 			item.totalDays = totaldays;
@@ -327,8 +378,7 @@ class LoanPaymentService
 				item.totalDays = td;
 				item.totalPayment = item.amountPaid;
 			}
-		} 
-		else {
+		} else {
 		//println 'pass 3'
 			item.isOverdue = 1;
 			def totaldays = params.totalDays-(params.currentDay-1);
@@ -368,7 +418,7 @@ class LoanPaymentService
 		itm.day = ledgeritem.day;
 		itm.balance = ledgeritem.balance - (ledgeritem.balance*2);
 		itm.partialpayment = ledgeritem.partialpayment - (ledgeritem.partialpayment*2);
-		itm.txndate = dataSvc.serverDate;	
+		itm.txndate = dateSvc.serverDate;	
 		ledgerdb.create(itm, 'detail');
 
 		def item = params.item;

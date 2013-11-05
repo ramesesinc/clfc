@@ -31,6 +31,7 @@ declare References
 	type			: String
 	hasSunday		: String
 	noOfHolidays	: int
+	isFullPayment	: boolean
 	overpaymentAmt	: double
 end
 
@@ -41,17 +42,59 @@ declare Compromise
 	isCompromise	: int
 end
 
-rule "amountPaid equals to balance"
+rule "full payment"
 	salience 40
 	when
-		References( amtPaid: amountPaid )
-		p: Payment( balance == amtPaid )
+		Compromise( isCompromise == 0 )
+		References( isFullPayment == true, isOverdue == 0, i: interest, offset: isOffset, trm: term, td: totalDays, hasSunday: hasSunday, noOfHolidays: noOfHolidays, ab: absentPenalty )
+		p: Payment( amountPaid > 0 )
 	then
-		System.out.println("Full Payment");
+		//System.out.println("Full Payment");
+		java.util.Map listItem = new java.util.HashMap();
 		double amountPaid = p.getAmountPaid();
-		amountPaid = 0;
+		double totalInterest = p.getTotalInterest();
+		double totalPenalty = p.getTotalPenalty();
+		double balance = p.getBalance();
+		int currentDay = p.getCurrentDay();
+		int days = p.getDays();	
 
+		double interest = (days*i) + p.getLackingInterest();
+		totalPenalty += p.getLackingPenalty();
+		td -= noOfHolidays;
+		if (hasSunday == "true") td--;
+		totalPenalty += ab*(td-1);
+		if (totalPenalty < 0) totalPenalty = 0;
+
+		double amt = balance + interest + totalPenalty;
+		if (amt <= amountPaid) {
+			listItem.put("interestPaid", i);
+			listItem.put("penalty", "");
+			listItem.put("payment", "");
+			listItem.put("balance", "");
+			listItem.put("day", "");
+			if (offset == 0) {
+				listItem.put("day", currentDay);
+				currentDay++;
+				days++;
+				totalInterest += i;
+			}
+			results.add(listItem);
+		} else if (amt > amountPaid) {
+			totalInterest += p.getLackingInterest();
+			System.out.println("total interest = "+totalInterest);
+			/*totalPenalty += p.getLackingPenalty();
+			td -= noOfHolidays;
+			if (hasSunday == "true") td--;
+			totalPenalty += ab*(td-1);
+			if (totalPenalty < 0) totalPenalty = 0;*/
+			amountPaid = 0;
+			p.setTotalPenalty( totalPenalty );
+		}		
+
+		p.setDays( days );
+		p.setCurrentDay( currentDay );
 		p.setAmountPaid( amountPaid );
+		p.setTotalInterest( totalInterest );
 		update( p );
 end
 
@@ -59,7 +102,7 @@ rule "overpayment"
 	salience 35
 	when
 		Compromise( isCompromise == 0 )
-		References( isOverdue == 0 && type == "over" && trialAndError == 0, ad: amountDue, i: interest, tp: totalPayment, td: totalDays, ap: absentPenalty, offset: isOffset, oa: overpaymentAmt )
+		References( isOverdue == 0 && type == "over" && trialAndError == 0, isFullPayment == false, ad: amountDue, i: interest, tp: totalPayment, td: totalDays, ap: absentPenalty, offset: isOffset, oa: overpaymentAmt )
 		p: Payment( amountPaid > 0 && balance > 0 )
 	then
 		System.out.println("overpayment");
@@ -107,7 +150,7 @@ rule "currentDay greater than term"
 	salience 21
 	when
 		Compromise( isCompromise == 0 )
-		References( isOverdue == 0 && type != 'over', trm: term, amtPaid: amountPaid, ad: amountDue, ap: absentPenalty, td: totalDays, offset: isOffset, i: interest )
+		References( isOverdue == 0 && type != 'over', isFullPayment == false, trm: term, amtPaid: amountPaid, ad: amountDue, ap: absentPenalty, td: totalDays, offset: isOffset, i: interest )
 		p: Payment( amountPaid > 0 && currentDay > trm  && balance > 0 )
 	then
 		//System.out.println("passing 10"	);
@@ -151,20 +194,20 @@ rule "currentDay greater than term"
 				listItem = (java.util.HashMap) results.get( results.size()-1 );
 				listItem.put("partialPayment", balance);
 			}
-			amountPaid-=tempBalance;
+			amountPaid -= tempBalance;
 			balance = 0;
 		}
 		else {
 			if( days == td ) {
 				if( balance >= tempBalance ) {
-					balance-=amountPaid;
+					balance -= amountPaid;
 					if( add == 0 ) results.add( listItem );
 				}
 			}
 			else if( days < td ) {
 				totalInterest = td*i;
 				double a = (ad*td)-(totalInterest+totalPenalty);
-				balance-=a;
+				balance -= a;
 				p.setTotalInterest( totalInterest );
 				p.setTotalPenalty( totalPenalty );
 				listItem.put("interestPaid", i);
@@ -181,7 +224,7 @@ rule "amountPaid greater than equal to totalPayment"
 	salience 19
 	when
 		Compromise( isCompromise == 0 )
-		References( isOffset == 0 && trialAndError == 0 && isOverdue == 0 && type != 'over', tp: totalPayment, ap: absentPenalty, ad: amountDue, i: interest, trm: term, offset: isOffset, amtPaid: amountPaid, hasSunday: hasSunday, td: totalDays, noOfHolidays: noOfHolidays )
+		References( isOffset == 0 && trialAndError == 0 && isOverdue == 0 && type != 'over', isFullPayment == false, tp: totalPayment, ap: absentPenalty, ad: amountDue, i: interest, trm: term, offset: isOffset, amtPaid: amountPaid, hasSunday: hasSunday, td: totalDays, noOfHolidays: noOfHolidays )
 		p: Payment( amountPaid >= tp && currentDay <= trm && balance > 0 && lackingInterest == 0 && lackingPenalty == 0 )
 	then
 		//System.out.println("passing 1..");
@@ -237,7 +280,7 @@ rule "amountPaid less than totalPayment"
 	salience 18
 	when
 		Compromise( isCompromise == 0 )
-		References( trialAndError == 0 && isOffset == 0 && isOverdue == 0 && type != 'over', tp: totalPayment, ad: amountDue, i: interest, td: totalDays, ap: absentPenalty, trm: term, hasSunday: hasSunday, noOfHolidays: noOfHolidays )
+		References( trialAndError == 0 && isOffset == 0 && isOverdue == 0 && type != 'over', isFullPayment == false, tp: totalPayment, ad: amountDue, i: interest, td: totalDays, ap: absentPenalty, trm: term, hasSunday: hasSunday, noOfHolidays: noOfHolidays )
 		p: Payment( amountPaid < tp && amountPaid > i && balance > 0 && currentDay <= trm && lackingInterest == 0 && lackingPenalty == 0 )
 	then
 		//System.out.println("passing 2");
@@ -300,7 +343,7 @@ rule "trial and error"
 	salience 17
 	when
 		Compromise( isCompromise == 0 )
-		References( trialAndError > 0 && isOffset == 0 && amountPaid == totalPayment && type != 'over', ad: amountDue, td: totalDays, i: interest, t: trialAndError, ap: absentPenalty, ur: underpaymentRate, amtPaid: amountPaid, trm: term )
+		References( trialAndError > 0 && isOffset == 0 && amountPaid == totalPayment && type != 'over', isFullPayment == false, ad: amountDue, td: totalDays, i: interest, t: trialAndError, ap: absentPenalty, ur: underpaymentRate, amtPaid: amountPaid, trm: term )
 		p: Payment( amountPaid > i && currentDay <= trm && balance > 0, lackingInterest == 0 && lackingPenalty == 0 )
 	then
 		//System.out.println("passing 3");
@@ -355,7 +398,7 @@ end
 rule "amountPaid less than equal to interest"
 	when
 		Compromise( isCompromise == 0 )
-		References( isOverdue == 0 && type != 'over', i: interest, td: totalDays, ap: absentPenalty, ur: underpaymentRate, ad: amountDue, trm: term )
+		References( isOverdue == 0 && type != 'over', isFullPayment == false, i: interest, td: totalDays, ap: absentPenalty, ur: underpaymentRate, ad: amountDue, trm: term )
 		p: Payment( amountPaid <= i && amountPaid > 0 && balance > 0 && currentDay <= trm && lackingInterest == 0 && lackingPenalty == 0 )
 	then
 		//System.out.println("passing 4");
@@ -400,7 +443,7 @@ rule "amountPaid greater than 0 and lacking penalty greater than 0: payment made
 	salience 20
 	when
 		Compromise( isCompromise == 0 )
-		References( isOffset == 0 && isOverdue == 0 && type != 'over', ap: absentPenalty, ur: underpaymentRate, amtPaid: amountPaid, ad: amountDue, i: interest, td: totalDays )
+		References( isOffset == 0 && isOverdue == 0 && type != 'over', isFullPayment == false, ap: absentPenalty, ur: underpaymentRate, amtPaid: amountPaid, ad: amountDue, i: interest, td: totalDays )
 		p: Payment( amountPaid > 0 && lackingPenalty > 0 && balance > 0 )
 	then
 		//System.out.println("passing 5");
@@ -489,7 +532,7 @@ rule "amountPaid greater than 0 and lacking penalty greater than 0: payment made
 	salience 10
 	when
 		Compromise( isCompromise == 0 )
-		References( isOffset == 0 && isOverdue > 0 && type != 'over', op: overduePenalty, i: interest )
+		References( isOffset == 0 && isOverdue > 0 && type != 'over', isFullPayment == false, op: overduePenalty, i: interest )
 		p: Payment( amountPaid > 0 && lackingPenalty > 0 && balance > 0 )
 	then
 		//System.out.println("passing 6");
@@ -554,7 +597,7 @@ rule "amountPaid greater than equal to interest+overdue penalty"
 	salience 9
 	when
 		Compromise( isCompromise == 0 )
-		References( isOffset == 0 && isOverdue > 0 && type != 'over', i: interest, op: overduePenalty, td: totalDays )
+		References( isOffset == 0 && isOverdue > 0 && type != 'over', isFullPayment == false, i: interest, op: overduePenalty, td: totalDays )
 		p: Payment( amountPaid >= (i+op) && balance > 0 )
 	then
 		//System.out.println("passing 7");
@@ -617,7 +660,7 @@ rule "amountPaid less than interest+overdue penalty"
 	salience 8
 	when
 		Compromise( isCompromise == 0 )
-		References( isOffset == 0 && isOverdue > 0 && type != 'over', i: interest, op: overduePenalty, ap: amountPaid )
+		References( isOffset == 0 && isOverdue > 0 && type != 'over', isFullPayment == false, i: interest, op: overduePenalty, ap: amountPaid )
 		p: Payment( amountPaid < (i+op) && amountPaid > 0 && balance > 0 && lackingInterest == 0 && lackingPenalty == 0 )
 	then
 		//System.out.println("passing 8");
@@ -679,7 +722,7 @@ end
 rule "amountPaid greater than 0 and balance equal to 0"
 	when
 		Compromise( isCompromise == 0 )
-		References( i: interest )
+		References( isFullPayment == false, i: interest )
 		p: Payment( amountPaid > 0 && balance == 0 )
 	then
 		//System.out.println("passing 9");
@@ -711,7 +754,7 @@ rule "offset last payment within term, trialAndError equal to 0"
 	salience 29
 	when
 		Compromise( isCompromise == 0 )
-		References( trialAndError == 0 && isOffset > 0 && isOverdue == 0 && type != 'over', trm: term, i: interest, ad: amountDue, td: totalDays, ap: absentPenalty, tp: totalPayment )
+		References( trialAndError == 0 && isOffset > 0 && isOverdue == 0 && type != 'over', isFullPayment == false, trm: term, i: interest, ad: amountDue, td: totalDays, ap: absentPenalty, tp: totalPayment )
 		p: Payment( amountPaid > i && balance > 0 && currentDay <= trm )
 	then
 		java.util.Map listItem = new java.util.HashMap();
@@ -783,7 +826,7 @@ rule "offset last payment and payment made within term, trialAndError greater th
 	salience 28
 	when
 		Compromise( isCompromise == 0 )
-		References( trialAndError > 0 && isOffset > 0 && isOverdue == 0 && type != 'over', td: totalDays, i: interest, ap: absentPenalty, ur: underpaymentRate, ad: amountDue, te: trialAndError, trm: term, amtPaid: amountPaid )
+		References( trialAndError > 0 && isOffset > 0 && isOverdue == 0 && type != 'over', isFullPayment == false, td: totalDays, i: interest, ap: absentPenalty, ur: underpaymentRate, ad: amountDue, te: trialAndError, trm: term, amtPaid: amountPaid )
 		p: Payment( amountPaid > i && balance > 0 && currentDay <= trm )
 	then
 		java.util.Map listItem = new java.util.HashMap();
@@ -883,7 +926,7 @@ end
 rule "offset last payment and payment made beyond maturity"
 	when
 		Compromise( isCompromise == 0 )
-		References( isOffset > 0 && isOverdue > 0 && type != 'over', td: totalDays, i: interest, op: overduePenalty )
+		References( isOffset > 0 && isOverdue > 0 && type != 'over', isFullPayment == false, td: totalDays, i: interest, op: overduePenalty )
 		p: Payment( amountPaid > 0 && balance > 0 )
 	then
 		//System.out.println("passing 16");
@@ -991,12 +1034,12 @@ rule "terminating rule"
 					totalPenalty = 0;
 				
 				if( partialPayment > (totalInterest+totalPenalty) ) 
-					partialPayment-=(totalInterest+totalPenalty);
+					partialPayment -= (totalInterest+totalPenalty);
 				else if( partialPayment <= (totalInterest+totalPenalty) ) 
 					partialPayment = 0;
 				
 				if( balance > partialPayment )
-					balance-=partialPayment;
+					balance -= partialPayment;
 					
 				listItem.put("penalty", totalPenalty);
 				
@@ -1015,8 +1058,8 @@ rule "terminating rule"
 				double totalInterest = p.getTotalInterest();
 				double totalPenalty = p.getTotalPenalty();
 				
-				partialPayment-=(totalInterest+totalPenalty);
-				balance-=partialPayment;
+				partialPayment -= (totalInterest+totalPenalty);
+				balance -= partialPayment;
 				
 				if( partialPayment > 0 ) {
 					listItem.put("partialPayment", partialPayment);
