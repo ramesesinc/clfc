@@ -84,7 +84,6 @@ class DeviceLoanBillingService
 	public def uploadPayments( params ) {
 		if (!params.sessionid) throw new Exception('Session ID is required.');
 		if (!params.payments) throw new Exception('Payments are required.');
-		println 'params-> '+params;
 		createBatchPaymentHeader(params);
 
 		def data = batch_payment.read([objid: params.sessionid]);

@@ -30,7 +30,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -42,6 +44,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,14 +64,15 @@ public class Main extends Activity {
 	private String ipaddress = "";
 	private String port = "";
 	private ProgressDialog progressDialog;
-	private Dialog dialog;
+	//private Dialog dialog;
+	private AlertDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setTitle("Payment Collection");
-		dialog = new Dialog(context, android.R.style.Theme_WallpaperSettings);
+		//dialog = new Dialog(context, android.R.style.Theme_WallpaperSettings);
 	}
 	
 	private Map buildConfig() {
@@ -124,9 +128,7 @@ public class Main extends Activity {
 							if(p.getCount() > 0) {
 								Toast.makeText(context, "There are still payments to upload. Please upload the payments before downloading current billing.", Toast.LENGTH_LONG).show();
 							} else {
-								//AlertDialog.Build
 								showLoginDialog();
-								//getRoutes();
 							}
 						} else if(opt.equals("Upload Payments")) {
 							if(p.getCount() == 0) {
@@ -188,50 +190,15 @@ public class Main extends Activity {
 		return true;
 	}
 	
-	@SuppressLint("NewApi")
 	private void showLoginDialog() {
-		/*if (Configuration.ORIENTATION_LANDSCAPE == i) {
-			
-		}
-		else if (Configuration.ORIENTATION_PORTRAIT == i) {
-			
-		}*/
-		
-		int width = 0;
-		int height = 0;
-		Display display = getWindowManager().getDefaultDisplay();
-		
-		if (Build.VERSION.SDK_INT < 13) {			
-			width  = display.getWidth();
-			height = display.getHeight();
-		} else {
-			Point size = new Point();
-			display.getSize(size);
-			width = size.x;
-			height = size.y;
-		}
-		
-		dialog.setContentView(R.layout.dialog_login);
-		dialog.setTitle("Login");
-		dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
-		int xHeight = dialog.getWindow().getAttributes().height;
-		int xWidth = dialog.getWindow().getAttributes().width;
-
-		if (width > xWidth) width = xWidth;
-		width -= 10;
-
-		if (height > xHeight) height = xHeight;
-		height -= 10;
-		
-		dialog.getWindow().setLayout(width, height);
-		Button btn_login = (Button) dialog.findViewById(R.id.btn_dialog_login);
-		btn_login.setOnClickListener(new View.OnClickListener() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("Login");
+		View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_login, null);
+		builder.setView(view);
+		builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {			
 			@Override
-			public void onClick(View v) {
+			public void onClick(DialogInterface d, int which) {
 				// TODO Auto-generated method stub
-				if(progressDialog.isShowing()) progressDialog.dismiss();
-				progressDialog.setMessage("Getting routes from server.");
-				progressDialog.show();
 				EditText et_username = (EditText) dialog.findViewById(R.id.login_username);
 				EditText et_password = (EditText) dialog.findViewById(R.id.login_password);
 				
@@ -240,18 +207,11 @@ public class Main extends Activity {
 				if (progressDialog.isShowing()) progressDialog.dismiss();
 				progressDialog.setMessage("Getting information from server.");
 				progressDialog.show();
-				Executors.newSingleThreadExecutor().submit(new LoginRunnable(username, password));
+				Executors.newSingleThreadExecutor().submit(new LoginRunnable(username, password));				
 			}
 		});
-		
-		Button btn_cancel = (Button) dialog.findViewById(R.id.btn_dialog_cancel);
-		btn_cancel.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
-			}
-		});
+		builder.setNegativeButton("Cancel", null);
+		dialog = builder.create();		
 		dialog.show();
 	}
 	
@@ -259,10 +219,10 @@ public class Main extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			Bundle bundle = msg.getData();
-			if(!db.isOpen) db.openDb();
+			if (!db.isOpen) db.openDb();
 			db.emptySystemTable();
 			db.insertSystem(bundle.getString("billingid"), bundle.getString("serverdate"));
-			db.closeDb();
+			if (db.isOpen) db.closeDb();
 			Intent intent=new Intent(context, Route.class);
 			intent.putExtra("bundle", bundle);
 			if (progressDialog.isShowing()) progressDialog.dismiss();

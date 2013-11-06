@@ -63,17 +63,15 @@ public final class R {
         public static final int TextView12=0x7f09001d;
         public static final int TextView13=0x7f09001e;
         public static final int TextView14=0x7f090021;
-        public static final int btn_dialog_cancel=0x7f090044;
-        public static final int btn_dialog_login=0x7f090043;
         public static final int btn_payment_ok=0x7f090040;
         public static final int et_ipaddress=0x7f090037;
         public static final int et_ipport=0x7f090038;
         public static final int et_overpayment=0x7f09003f;
         public static final int et_payment_amount=0x7f09003d;
         public static final int et_search=0x7f090002;
-        public static final int ip_settings=0x7f09004a;
-        public static final int ipsetting_save=0x7f090049;
-        public static final int iv_info_paid=0x7f090046;
+        public static final int ip_settings=0x7f090048;
+        public static final int ipsetting_save=0x7f090047;
+        public static final int iv_info_paid=0x7f090044;
         public static final int layout_info_general=0x7f090006;
         public static final int layout_info_payment=0x7f090029;
         public static final int login_password=0x7f090042;
@@ -81,7 +79,7 @@ public final class R {
         public static final int lv_collectionsheet=0x7f090004;
         public static final int lv_route=0x7f090041;
         public static final int optionList=0x7f090039;
-        public static final int payment_addpayment=0x7f09004b;
+        public static final int payment_addpayment=0x7f090049;
         public static final int rl_overpayment=0x7f09003e;
         public static final int scrollView1=0x7f090005;
         public static final int textView10=0x7f090009;
@@ -111,17 +109,17 @@ public final class R {
         public static final int tv_info_lackinginterest=0x7f09001f;
         public static final int tv_info_lackingpenalty=0x7f090022;
         public static final int tv_info_loanamount=0x7f090010;
-        public static final int tv_info_name=0x7f090045;
+        public static final int tv_info_name=0x7f090043;
         public static final int tv_info_overpayment=0x7f090025;
         public static final int tv_info_paymentamount=0x7f090036;
         public static final int tv_info_paymenttype=0x7f090033;
         public static final int tv_info_penalty=0x7f09001c;
         public static final int tv_info_refno=0x7f09002c;
         public static final int tv_info_txndate=0x7f090030;
-        public static final int tv_item_str=0x7f090048;
+        public static final int tv_item_str=0x7f090046;
         public static final int tv_payment_refno=0x7f09003a;
         public static final int tv_payment_txndate=0x7f09003c;
-        public static final int tv_str2=0x7f090047;
+        public static final int tv_str2=0x7f090045;
         public static final int view1=0x7f090003;
     }
     public static final class layout {

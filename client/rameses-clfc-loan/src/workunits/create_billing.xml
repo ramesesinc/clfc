@@ -3,7 +3,7 @@
         <invoker folderid="/menu/txn/loan" action="create" caption="Ledger Billing" index="4"/>
         
         <invoker type="ledgerbilling:open" action="open" caption="Ledger Billing" target="popup" resizable="false"/>
-        <invoker type="formActions" action="reset" caption="Reset" mnemonic="r" visibleWhen="#{mode == 'read'}"/>
+        <invoker type="formActions" action="reset" caption="Reset" mnemonic="r" visibleWhen="#{mode == 'read' &amp; entity.state == 'DRAFT'}"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.billing.LoanLedgerBillingController"/>

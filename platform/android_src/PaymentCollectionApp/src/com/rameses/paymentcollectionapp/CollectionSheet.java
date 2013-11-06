@@ -97,7 +97,6 @@ public class CollectionSheet extends Activity {
 		});
 	}
 	
-	@SuppressLint("NewApi")
 	private void showDialog(CollectionSheetParcelable c) {
 		final CollectionSheetParcelable cs = c;
 		CharSequence[] items = {"Schedule", "Overpayment"};

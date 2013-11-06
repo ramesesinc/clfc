@@ -1,6 +1,8 @@
 package com.rameses.paymentcollectionapp;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -36,6 +38,7 @@ public class Payment extends Activity {
 	private String routecode = "";
 	private int isfirstbill = 0;
 	private int totaldays = 0;
+	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class Payment extends Activity {
 		type = intent.getStringExtra("paymenttype");
 		isfirstbill = intent.getIntExtra("isfirstbill", 0);
 		totaldays = intent.getIntExtra("totaldays", 0);
+		String amt = intent.getStringExtra("overpayment");
+		overpayment = new BigDecimal(amt).setScale(2);
 		db = new MySQLiteHelper(context);		
 	}
 	
@@ -71,8 +76,14 @@ public class Payment extends Activity {
 		
 		et_overpayment = (EditText) findViewById(R.id.et_overpayment);
 		et_overpayment.setEnabled(false);
-		System.out.println("is first bill: "+isfirstbill);
 		if (isfirstbill == 1) et_overpayment.setEnabled(true);
+		if (overpayment.compareTo(new BigDecimal("0").setScale(2)) > 0) {
+			DecimalFormat decf = new DecimalFormat("#,##0.00");
+			StringBuffer sb = new StringBuffer();
+			FieldPosition fp = new FieldPosition(0);
+			decf.format(overpayment, sb, fp);
+			et_overpayment.setText(sb.toString());
+		}
 		
 		tv_refno = (TextView) findViewById(R.id.tv_payment_refno);
 		tv_txndate = (TextView) findViewById(R.id.tv_payment_txndate);

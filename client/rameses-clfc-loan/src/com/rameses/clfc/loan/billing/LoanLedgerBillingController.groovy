@@ -14,11 +14,12 @@ class LoanLedgerBillingController extends CRUDController
     String entityName = 'ledgerbilling';
     def collectorLookupHandler = InvokerUtil.lookupOpener('route-collector:lookup', [:]);
     
-    String createFocusComponent = 'entity.code';
-    String editFocusComponent = 'entity.code';  
+    String createFocusComponent = 'entity.collector';
+    String editFocusComponent = 'entity.collector';  
     boolean showConfirmOnSave = false;
     boolean allowApprove = false;
     boolean allowCreate = false;
+    boolean allowDelete = false;
     
     Map createEntity() {
         return [ objid:'LB'+new java.rmi.server.UID(), routes:[] ];
