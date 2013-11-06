@@ -85,7 +85,5 @@ public class UpdateCenter {
     
     public Map getEnv() {
         return env;
-    }
-    
-    
+    }        
 }
