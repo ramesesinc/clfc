@@ -32,7 +32,7 @@ class UserAdminService extends AbstractCrudListService {
 		o.name = o.lastname + ", "+ o.firstname;
 		if (o.middlename) o.name = o.name + " " + o.middlename;
 		
-		o.pwd = Encoder.MD5.encode('etracs1234', o.username); 
+		o.pwd = Encoder.MD5.encode('1234', o.username); 
 	}
 
 	public void afterOpen( entity ) {
