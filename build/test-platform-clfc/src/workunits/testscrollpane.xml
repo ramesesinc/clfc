@@ -1,0 +1,24 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/transaction" caption="Test ScrollPane"/>
+        <invoker folderid="/master/test" caption="Test ScrollPane"/>
+    </invokers>
+    
+    <code>
+    <![CDATA[
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class TestScrollPaneController 
+    {        
+        def entity = [:];
+    }
+    ]]>
+    </code>
+    
+    <pages>
+        <page template="test.pane.TestScrollPane"/> 
+    </pages>
+</workunit>

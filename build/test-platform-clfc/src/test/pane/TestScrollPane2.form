@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="xScrollPane1" pref="474" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="xScrollPane1" pref="151" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="com.rameses.rcp.control.XScrollPane" name="xScrollPane1">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="jPanel1">
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="xButton4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="xButton3" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="xButton2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="xButton1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="xTextField1" alignment="0" min="-2" pref="245" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="176" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                      <Component id="xTextField1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                      <Component id="xButton1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                      <Component id="xButton2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                      <Component id="xButton3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                      <Component id="xButton4" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="81" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="com.rameses.rcp.control.XTextField" name="xTextField1">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="entity.name"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XButton" name="xButton1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="xButton1"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XButton" name="xButton2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="xButton2"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XButton" name="xButton3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="xButton3"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XButton" name="xButton4">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="xButton4"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>
