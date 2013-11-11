@@ -1,0 +1,6 @@
+"selectedDenomination" [mode == 'read'] {
+    readonly: true;
+}
+"selectedDenomination" [mode != 'read'] {
+    readonly: false;
+}

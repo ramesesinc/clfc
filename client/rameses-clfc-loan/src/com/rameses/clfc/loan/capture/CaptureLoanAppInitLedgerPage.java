@@ -57,10 +57,11 @@ public class CaptureLoanAppInitLedgerPage extends javax.swing.JPanel {
         xLabel4.setCaption("Borrower Name");
         xLabel4.setCaptionWidth(115);
         xLabel4.setDepends(new String[] {"entity"});
-        xLabel4.setExpression("#{entity.borrower.name}");
-        xLabel4.setName("");
+        xLabel4.setExpression("#{item.name}");
+        xLabel4.setName("entity.borrower");
         xLabel4.setOpaque(true);
         xLabel4.setPreferredSize(new java.awt.Dimension(0, 20));
+        xLabel4.setVarName("item");
         xFormPanel2.add(xLabel4);
 
         xLabel5.setBackground(new java.awt.Color(250, 250, 250));
@@ -70,9 +71,11 @@ public class CaptureLoanAppInitLedgerPage extends javax.swing.JPanel {
         xLabel5.setCaption("Borrower Address");
         xLabel5.setCaptionWidth(115);
         xLabel5.setDepends(new String[] {"entity"});
-        xLabel5.setExpression("#{entity.borrower.address}");
+        xLabel5.setExpression("#{item.address}");
+        xLabel5.setName("entity.borrower");
         xLabel5.setOpaque(true);
         xLabel5.setPreferredSize(new java.awt.Dimension(0, 20));
+        xLabel5.setVarName("item");
         xFormPanel2.add(xLabel5);
 
         xLabel1.setBackground(new java.awt.Color(250, 250, 250));

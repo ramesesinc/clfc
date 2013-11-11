@@ -8,7 +8,6 @@ import com.rameses.clfc.loan.controller.*;
 
 class NewCaptureLoanAppController extends AbstractLoanAppController
 {
-    @Service('CaptureLoanAppService')
     def service; 
     
     @PropertyChangeListener
@@ -20,6 +19,15 @@ class NewCaptureLoanAppController extends AbstractLoanAppController
             } 
         }
     ]
+            
+    NewCaptureLoanAppController() {
+        try {
+            service = InvokerProxy.instance.create("CaptureLoanAppService");
+        } catch (e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
     
     void init() {
         entity = service.initEntity();

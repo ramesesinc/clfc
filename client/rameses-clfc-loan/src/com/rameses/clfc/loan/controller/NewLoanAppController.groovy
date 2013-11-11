@@ -10,8 +10,16 @@ import com.rameses.clfc.controller.*;
 
 class NewLoanApplicationController extends AbstractLoanAppController
 {
-    @Service('NewLoanAppService')
     def service; 
+    
+    NewLoanApplicationController() {
+        try {
+            service = InvokerProxy.instance.create("NewLoanAppService");
+        } catch (ConnectException ce) {
+            ce.printStackTrace();
+            throw ce;
+        }
+    }
     
     void init() {
         entity = service.initEntity();

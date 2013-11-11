@@ -12,7 +12,6 @@ class LoanAppCaptureLedgerController
     @Binding
     def binding;
     
-    @Service('LoanLedgerService')
     def service;
 
     def paymentTypes = LoanUtil.paymentTypes;    
@@ -20,13 +19,19 @@ class LoanAppCaptureLedgerController
     def entity;
     def mode = 'read';
     def title = 'Capture Ledger';
-      
+    
+    LoanAppCaptureLedgerController() {
+        try {
+            service = InvokerProxy.instance.create("LoanLedgerService");
+        } catch (ConnectException ce) {
+            ce.printStackTrace();
+            throw ce;
+        }
+    }
+    
     void init() {
         mode = 'read';
-        entity = [
-            objid: 'LEDGER'+new UID(),
-            payments: []
-        ]
+        entity = [ objid: 'LEDGER'+new UID() ]
     }
     
     def close() {
@@ -35,6 +40,8 @@ class LoanAppCaptureLedgerController
     
     def next() {
         mode = 'create';
+        entity.payments = [];
+        entity.paymentmethod = null;
         return 'main';
     }
     
@@ -44,6 +51,9 @@ class LoanAppCaptureLedgerController
     }
     
     def save() {
+        if (paymentsHandler.hasUncommittedData())
+            throw new Exception('Please commit table data before saving.');
+        
         entity.acctid = entity.borrower.objid;
         entity.acctname = entity.borrower.name;
         entity = service.create(entity);

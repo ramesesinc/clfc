@@ -3,16 +3,22 @@
         <invoker folderid="/menu/txn/loan" caption="Post Payments" role="LOAN_CAO_OFFICER" index="3"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
-            shortcut="ctrl W" visibleWhen="#{mode == 'read'}" immediate="true"/>
+            shortcut="ctrl W" visibleWhen="#{mode == 'init'}" immediate="true"/>
             
         <invoker type="formActions" action="next" caption="Next" mnemonic="n" 
-            shortcut="ctrl N" visibleWhen="#{mode == 'read'}"/>
+            shortcut="ctrl N" visibleWhen="#{mode == 'init'}"/>
         
         <invoker type="formActions" action="back" caption="Back" mnemonic="b" 
-            shortcut="ctrl B" visibleWhen="#{mode == 'mgmt'}"/>
+            shortcut="ctrl B" visibleWhen="#{mode != 'init' &amp;&amp; mode != 'edit'}"/>
+        <invoker type="formActions" action="edit" caption="Edit" shortcut="ctrl E" 
+            visibleWhen="#{isAllowEdit}" role="LOAN_FIELD_COLLECTOR"/>
+        <invoker type="formActions" action="cancel" caption="Cancel" 
+            visibleWhen="#{mode == 'edit'}" role="LOAN_FIELD_COLLECTOR"/>
+        <invoker type="formActions" action="save" caption="Save" mnemonic="s"
+            shortcut="ctrl S" visibleWhen="#{isAllowSave}" role="LOAN_FIELD_COLLECTOR"/>
         <invoker type="formActions" action="post" caption="Post" mnemonic="p" 
-            shortcut="ctrl P" visibleWhen="#{isAllowPost}" 
-            icon="images/toolbars/save.png"/>
+            shortcut="ctrl P" icon="images/toolbars/save.png"
+             visibleWhen="#{isAllowPost}" role="LOAN_ACCT_OFFICER"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.payment.PostPaymentController"/>

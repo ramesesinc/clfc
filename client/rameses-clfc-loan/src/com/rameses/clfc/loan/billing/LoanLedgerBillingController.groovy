@@ -7,7 +7,6 @@ import com.rameses.osiris2.common.*;
 
 class LoanLedgerBillingController extends CRUDController
 {
-    @Service("LoanLedgerBillingService")
     def service;
     
     String serviceName = 'LoanLedgerBillingService';
@@ -20,6 +19,15 @@ class LoanLedgerBillingController extends CRUDController
     boolean allowApprove = false;
     boolean allowCreate = false;
     boolean allowDelete = false;
+    
+    LoanLedgerBillingController() {
+        try {
+            service = InvokerProxy.instance.create('LoanLedgerBillingService');
+        } catch (ConnectException ce) {
+            ce.printStackTrace();
+            throw ce;
+        }
+    }
     
     Map createEntity() {
         return [ objid:'LB'+new java.rmi.server.UID(), routes:[] ];

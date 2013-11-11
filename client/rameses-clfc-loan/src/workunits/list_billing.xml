@@ -1,20 +1,5 @@
 <workunit extends="wtemplates/InboxController.xml" serviceName="LoanLedgerBillingService" defaultFileType="ledgerbilling">
     <invokers>
-        <invoker folderid="/explorer/txn/loan" caption="Ledger Billings"/>
+        <invoker folderid="/explorer/txn/loan" caption="Ledger Billings" role="LOAN_ACCT_OFFICER"/>
     </invokers>
-    <!--
-    <code>
-        import com.rameses.rcp.common.*;
-        import com.rameses.rcp.annotations.*;
-        import com.rameses.osiris2.common.*;
-        
-        class LoanLedgerBillingListController extends ListController
-        {
-            String serviceName = 'LoanLedgerBillingService';
-            String entityName = 'ledgerbilling';
-            
-            boolean allowCreate = false;
-        }
-    </code>
-    -->
 </workunit>
