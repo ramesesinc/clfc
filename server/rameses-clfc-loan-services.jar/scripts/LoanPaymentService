@@ -28,6 +28,42 @@ class LoanPaymentService
 	def calendarSvc;
 
 	@ProxyMethod
+	public def getCashBreakdown( params ) {
+		if (!params.objid) throw new Exception('Please specify objid.');
+		def list = batch_payment.getCashBreakdown([parentid: params.objid]);
+
+		return list;
+	}
+
+	@ProxyMethod
+	public def saveCashBreakdown( params ) {
+		if (!params.objid) throw new Exception('Please specify objid.');
+		if (!params.cashbreakdown) throw new Exception('Please specify denominations.');
+		params.cashbreakdown.each{ 
+			def itm = [
+				objid: 'BPCB'+new UID(),
+				parentid: params.objid,
+				caption: it.caption,
+				denomination: it.denomination? it.denomination : 0.00,
+				qty: it.qty? it.qty : 0,
+				amount: it.amount? it.amount : 0.00
+			]
+			batch_payment.create(itm, 'cashbreakdown'); 
+		}
+		return params;
+	}
+
+	@ProxyMethod
+	public def updateCashBreakdown( params ) {
+		if (!params.objid) throw new Exception('Please specify objid.');
+		if (!params.cashbreakdown) throw new Exception('Please specify cashbreakdown.');
+		params.cashbreakdown.each{ 
+			batch_payment.update(it, 'cashbreakdown'); 
+		}
+		return params;
+	}
+
+	@ProxyMethod
 	public def getUnpostedPayments( params ) {
 		if(!params.route_code) throw new Exception('Route code is required');
 		def bp = batch_payment.findByRoutecode(params);
@@ -59,7 +95,7 @@ class LoanPaymentService
 	private void createPaymentHeader(params) {
 		def data = params.entity;
 		def itm = loan_payment.read(data);
-		if(!itm) {
+		if (!itm) {
 			itm = [
 				objid: 			data.objid,
 				txndate: 		data.txndate,
@@ -84,15 +120,17 @@ class LoanPaymentService
 
 		def data = [:];
 		def ledger = ledgerdb.findByAppId(params);
-		if (params.isfirstbill && params.isfirstbill == 1) 
+		if (params.isfirstbill && params.isfirstbill == 1) {
 			ledgerdb.update([objid: ledger.objid, paymentmethod: params.paytype]);
+			ledger = ledgerdb.read(ledger);
+		}
 
 		def producttype = product_type.read([name: ledger.producttypeid]);
 		def ledgeritem = ledgerdb.findLastLedgerItemByParentId([parentid: ledger.objid]);
 		//println 'ledger item = '+ledgeritem;
 		def interval = 0;
 		def lastscheduledate = dateSvc.add(ledger.dtstarted, "-1");
-		if(ledgeritem) interval = ledgeritem.day;
+		if (ledgeritem) interval = ledgeritem.day;
 
 		lastscheduledate = dateSvc.add(lastscheduledate, (interval+1)+'');
 		txndate = dateSvc.parseDate(txndate, null).date;
@@ -146,7 +184,7 @@ class LoanPaymentService
 			absentPenalty: ledger.absentpenalty,
 			overduePenalty: ledger.overduepenalty,
 			amountDue: ledger.dailydue,
-			overpaymentAmt: (ledger.overpaymentamount != 0)? ledger.overpaymentamount : params.payamount 
+			overpaymentAmt: (ledger.overpaymentamount > 0)? ledger.overpaymentamount : params.payamount 
 		];
 
 		def compromiseFact = [:];
@@ -223,6 +261,8 @@ class LoanPaymentService
 		referencesFact.isOverdue = item.isOverdue;
 		referencesFact.noOfHolidays = item.noOfHolidays;
 		ruleSvc.execute( req );
+		//results.each{ println it; }
+		//throw new Exception('stopping');
 		def lastitem;
 		if (results.size() > 0) {
 			lastitem = results[results.size()-1];
@@ -232,8 +272,8 @@ class LoanPaymentService
 			lastitem.penaltybal = new BigDecimal(floating.lackingPenalty).setScale(2, BigDecimal.ROUND_HALF_UP);
 			//lastitem.paytype = params.paytype;
 			lastitem.baseamount = ledger.dailydue;
-			if (data.type == 'over') {
-				lastitem.baseamount = (ledger.overpaymentamount != 0)? ledger.overpaymentamount : params.payamount;
+			if (item.type == 'over') {
+				lastitem.baseamount = (ledger.overpaymentamount > 0)? ledger.overpaymentamount : params.payamount;
 				def bd = new BigDecimal(params.payamount+'').setScale(2);
 				def r = bd.divideAndRemainder(new BigDecimal(lastitem.baseamount+'').setScale(2));
 				//def mod = params.payamount%lastitem.baseamount;
@@ -292,9 +332,11 @@ class LoanPaymentService
 			//println 'item = '+itm;
 			ledgerdb.create(itm, "detail");
 		}
+		//println 'overpayment amount = '+ledger.overpaymentamount;
+		//println 'type = '+item.type;
 		//throw new Exception('stopping');
 		ledgerdb.update([objid: ledger.objid, dtlastpaid: txndate], "dtlastpaid");
-		if (ledger.overpaymentamount == 0 && data.type == "over")
+		if (ledger.overpaymentamount == 0 && item.type == "over")
 			ledgerdb.update([objid: ledger.objid, overpaymentamount: params.payamount], "overpayment");
 		//payment_temp.removeByAppId(params);
 	}
@@ -335,11 +377,14 @@ class LoanPaymentService
 			if (item.trialAndError == 0 && item.type == 'over') {
 				def oa = new BigDecimal(referencesFact.overpaymentAmt+'').setScale(2);
 				def ap = new BigDecimal(item.amountPaid+'').setScale(2);
-				def days = ap.divideAndRemainder(oa)[0];
+				def d = ap.divideAndRemainder(oa);
+				//println d
+				def days = d[0]
 				if (days > 0) {
-					item.totalDays = days;
+					//item.totalDays = days;
 					type = 'over';
 				}
+				if (days == 0 && item.amountPaid > referencesFact.amountDue) type = 'over';
 			}
 		}
 		return type;
@@ -348,7 +393,7 @@ class LoanPaymentService
 	private def preComputation( params, ref ) {
 		def item = params;
 		//println 'pass 1'
-		if ( params.totalDays <= ref.term ) {
+		if (params.totalDays <= ref.term) {
 			def totaldays = params.totalDays-(params.currentDay-1);
 			if( totaldays < 1 ) totaldays = 1;
 			item.totalDays = totaldays;
@@ -418,7 +463,9 @@ class LoanPaymentService
 		itm.day = ledgeritem.day;
 		itm.balance = ledgeritem.balance - (ledgeritem.balance*2);
 		itm.partialpayment = ledgeritem.partialpayment - (ledgeritem.partialpayment*2);
-		itm.txndate = dateSvc.serverDate;	
+		itm.txndate = dateSvc.serverDate;
+		itm.baseamount = 0.00;
+		itm.groupbaseamount = 0.00
 		ledgerdb.create(itm, 'detail');
 
 		def item = params.item;

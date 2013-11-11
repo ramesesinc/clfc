@@ -12,7 +12,8 @@
 		<field name="paymentmethod" required="true"/>
 		<field name="balance"/>
 		<field name="dailydue" required="true"/> 
-		<field name="interestamount" required="true"/> 
+		<field name="interestamount" required="true"/>
+		<field name="overpaymentamount"/>
 		<field name="overduepenalty" /> 
 		<field name="absentpenalty" required="true"/> 
 		<field name="totalprincipal" required="true"/> 

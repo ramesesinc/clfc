@@ -22,5 +22,14 @@
 		<field name="appid" required="true"/>
 		<field name="paytype" required="true"/>
 		<field name="payamount" required="true"/>
-	</element>	
+	</element>
+
+	<element name="cashbreakdown" tablename="batch_payment_cashbreakdown">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/>
+		<field name="caption" required="true"/>
+		<field name="denomination" required="true"/>
+		<field name="qty" required="true"/>
+		<field name="amount" required="true"/>
+	</element>
 </schema>

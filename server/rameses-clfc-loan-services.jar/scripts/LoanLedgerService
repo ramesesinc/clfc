@@ -39,9 +39,11 @@ class LoanLedgerService extends ActiveListService
 		data.dailydue = computeDailyDue(data);
 		data.interestamount = computeInterestAmount(data);
 		data.absentpenalty = computeAbsentPenalty(data);
-		data.overduepenalty = 0.0;
-		data.totaldue = 0.0;
+		data.overpaymentamount = 0.00
+		data.overduepenalty = 0.00;
+		data.totaldue = 0.00;
 		data.state = 'OPEN';
+		throw new Exception('stopping')
 		em.create(data);
 		data.payments.each{
 			def itm = [

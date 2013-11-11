@@ -26,3 +26,8 @@ LIMIT 1
 [changeStateApproved]
 UPDATE batch_payment SET state='APPROVED'
 WHERE objid=$P{objid}
+
+[getCashBreakdown]
+SELECT * FROM batch_payment_cashbreakdown
+WHERE parentid=$P{parentid}
+ORDER BY denomination DESC

@@ -102,44 +102,53 @@ rule "overpayment"
 	salience 35
 	when
 		Compromise( isCompromise == 0 )
-		References( isOverdue == 0 && type == "over" && trialAndError == 0, isFullPayment == false, ad: amountDue, i: interest, tp: totalPayment, td: totalDays, ap: absentPenalty, offset: isOffset, oa: overpaymentAmt )
+		References( isOverdue == 0 && type == "over" && trialAndError == 0, isFullPayment == false, ad: amountDue, i: interest, tp: totalPayment, td: totalDays, ap: absentPenalty, offset: isOffset, oa: overpaymentAmt, noOfHolidays: noOfHolidays, hasSunday: hasSunday )
 		p: Payment( amountPaid > 0 && balance > 0 )
 	then
 		System.out.println("overpayment");
 		java.util.Map listItem = new java.util.HashMap();
 		double amountPaid = p.getAmountPaid();
 		double totalInterest = p.getTotalInterest();
-		double totalPenalty = p.getTotalPenalty();
 		int currentDay = p.getCurrentDay();
 		
 		//System.out.println("overpayment amount-> "+oa);
-		totalInterest += td*i;
-		totalPenalty += (td-1)*ap;
+		//totalInterest += td*i;
+		//totalPenalty += (td-1)*ap;
 		
 		listItem.put("interestPaid", i);
 		listItem.put("penalty", "");
 		listItem.put("payment", "");
 		listItem.put("balance", "");
-		if( offset == 0 ) {
+		listItem.put("day", "");
+		if (offset == 0) {
 			listItem.put("day", currentDay);
 			currentDay++;
 		}
-		else listItem.put("day", "");
-		if( amountPaid >= oa ) {
+		if (amountPaid >= oa) {
 			amountPaid -= oa;
-			results.add( listItem );
-		}
-		else {
-			//listItem = (java.util.Map) results.get( results.size()-1 );
-			totalInterest -= td*i;
-			totalPenalty -= (td-1)*ap;
+			totalInterest += i;
+			results.add(listItem);
+		} else if (amountPaid > ad) {
+			amountPaid -= ad;
+			totalInterest += i;
+			results.add(listItem);
+		} else {
 			amountPaid = 0;
 		}
-		if( oa == 0 ) amountPaid = 0;
+		if (oa == 0) amountPaid = 0;
+		if (amountPaid == 0) {
+			double totalPenalty = p.getTotalPenalty();
+			
+			totalInterest += p.getLackingInterest();
+			totalPenalty += p.getLackingPenalty();	
+			td -= noOfHolidays;
+			if (hasSunday == "true") td--;
+			totalPenalty += (td-1)*ap;
+			p.setTotalPenalty( totalPenalty );			
+		}
 		p.setAmountPaid( amountPaid );
 		p.setCurrentDay( currentDay );
 		p.setTotalInterest( totalInterest );
-		p.setTotalPenalty( totalPenalty );
 		update( p );
 end
 
@@ -1024,7 +1033,7 @@ rule "terminating rule"
 			int isOverdue = r.getIsOverdue();
 			listItem.put("partialPayment", "");
 			listItem.put("balance", "");
-			if( balance > 0 && isOverdue == 0 ) {
+			if (balance > 0 && isOverdue == 0) {
 				double partialPayment = r.getAmountPaid();
 			
 				double totalInterest = p.getTotalInterest();			
@@ -1052,8 +1061,7 @@ rule "terminating rule"
 				}
 				floating.put("totalInterest", totalInterest);
 				floating.put("totalPenalty", totalPenalty);
-			}
-			if( balance >  0 && isOverdue > 0 ) {
+			} else if(balance >  0 && isOverdue > 0) {
 				double partialPayment = r.getAmountPaid();
 				double totalInterest = p.getTotalInterest();
 				double totalPenalty = p.getTotalPenalty();
