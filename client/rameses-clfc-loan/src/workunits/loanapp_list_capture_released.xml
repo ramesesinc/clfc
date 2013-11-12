@@ -19,7 +19,7 @@
         
         boolean allowCreate = false;
                 
-        List fetchList( params ) {
+        List fetchList( Map params ) {
             params.appmode = 'CAPTURE'; 
             return super.fetchList(params);
         } 
