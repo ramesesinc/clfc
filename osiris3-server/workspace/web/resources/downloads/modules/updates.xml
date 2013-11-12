@@ -35,6 +35,7 @@
 		<module file="rameses-clfc-customer.jar" />
 		<module file="rameses-clfc-datamgmt.jar" />
 		<module file="rameses-clfc-loan.jar" />
+		<module file="rameses-clfc-report.jar" />
     </modules>
 </app>
 

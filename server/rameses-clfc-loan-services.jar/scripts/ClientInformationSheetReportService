@@ -25,6 +25,9 @@ class ClientInformationSheetReportService
 	@Service("DateService")
 	def dateSvc;
 
+    @Env 
+    def env;
+
 	private def getSiblings( parent ) {
 		def list = borrower.getSiblings([parentid: parent.objid]);
 		list.each{
@@ -96,6 +99,19 @@ class ClientInformationSheetReportService
 		if (!params.loanappid) throw new Exception('Please specify loanappid');
 
 		def app = loanapp.read([objid: params.loanappid]);
+        if (app.appmode == 'CAPTURE') {
+            def ext = loanapp.findCapture([objid: app.objid]);
+            if (ext != null) app.putAll(ext); 
+
+        } else if (app.apptype == 'NEW') {
+            def ext = loanapp.findNew([objid: app.objid]);
+            if (ext != null) app.putAll(ext); 
+
+        } else if (app.apptype == 'RENEW') {
+            def ext = loanapp.findRenew([objid: app.objid]);
+            if (ext != null) app.putAll(ext); 
+        } 
+
 		def pb = borrower.read(app.borrower);
 		def currentdate = dateSvc.parseCurrentDate();
         if (!pb.name) pb.name = pb.lastname+', '+pb.firstname+' '+(pb.middlename? pb.middlename : '');
@@ -118,41 +134,44 @@ class ClientInformationSheetReportService
 
         //TEMP DATA
         def data = [
-            branchname	: 'BRANCH NAME',
-            dtfiled		: new Date(),
-            filedby		: 'FILED BY',
-            caoname		: 'CAO NAME',
+            branchname	: app.branch?.name, 
+            dtfiled		: dateSvc.serverDate, 
+            filedby		: app.createdby,
+            caoname		: app.caoname, 
             appno		: app.appno,//'APP. NO',
             apptype		: app.apptype,//'APP. TYPE',
             state		: app.state,//'STATE',
-            marketer	: 'MARKETER',
-            modifiedby	: 'MODIFIED BY',
-            marketedby	: 'MARKETED BY',
-            printedby	: 'PRINTED BY',
+            marketer	: app.marketer,
+            modifiedby	: app.modifiedby, 
+            marketedby	: app.marketedby,
+            printedby	: env.USER, 
             dtprinted	: currentdate.date,
-            route		: [code:'ROUTE CODE', description:'ROUTE DESCRIPTION'],
+            route		: [
+                code        : app.route?.code,
+                description : app.route?.description 
+            ], 
             borrower	: pb,
             jointborrowers : getJointBorrowers(app, currentdate),
             comakers : getComakers(app, currentdate),
             businesses : business.getList([parentid: app.objid]),
             otherlendings : otherlending.getList([parentid: app.objid]),
             loaninfo : [
-                loanamount	: 1000.00,
-                purpose	: 'LOAN PURPOSE',
-                marketedby	: 'MARKETED BY',
-                clienttype	: 'CLIENT TYPE',
+                loanamount	: app.loanamount, 
+                purpose	    : app.purpose, 
+                marketedby	: app.marketedby,
+                clienttype	: app.clienttype,
                 producttype	: [
-                    code : 'CODE',
-                    term : 2
+                    code : app.productype?.name,
+                    term : app.productype?.term
                 ],
                 approval	: [
-                    amount		: 1000.00,
-                    absencetype	: 'ABSENCE TYPE',
-                    absencepolicy 	 : 'ABSENCE POLICY',
-                    absenceprovision : 'ABSENCE PROVISION',
-                    remarks		: 'REMARKS',
-                    creditlimit     : 50000.00,
-                    increase        : 5000.00,
+                    amount		: app.approval?.amount, 
+                    absencetype	: app.approval?.absencetype,
+                    absencepolicy 	 : app.approval?.absencepolicy,
+                    absenceprovision : app.approval?.absenceprovision,
+                    remarks		    : app.remarks,
+                    creditlimit     : app.approval?.creditlimit,
+                    increase        : app.approval?.increase,
                     mustcollateral  : [
                         appliancelist   : [id:1, must:true],
                         propertylist    : [id:2, must:true],

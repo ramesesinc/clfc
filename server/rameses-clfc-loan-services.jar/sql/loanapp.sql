@@ -87,4 +87,11 @@ SELECT * FROM loanapp_recommendation WHERE objid=$P{objid}
 [removeRecommendation]
 DELETE FROM loanapp_recommendation WHERE objid=$P{objid}  
 
+[findNew]
+SELECT * FROM loanapp_new WHERE objid=$P{objid}  
 
+[findRenew]
+SELECT * FROM loanapp_renew WHERE objid=$P{objid}  
+
+[findCapture]
+SELECT * FROM loanapp_capture WHERE objid=$P{objid}  
