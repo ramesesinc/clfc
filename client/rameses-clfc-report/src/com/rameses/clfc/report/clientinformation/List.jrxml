@@ -204,37 +204,21 @@
 			<band height="315"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="83"
-						y="295"
-						width="397"
-						height="11"
-						key="textField-30"
-						positionType="Float">
-							<printWhenExpression><![CDATA[$F{otheraccts}? true : false]]></printWhenExpression>
-						</reportElement>
-					<box>					<bottomPen lineWidth="0.0"/>
-</box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{otheraccts}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
 						x="10"
 						y="295"
-						width="77"
+						width="470"
 						height="11"
-						key="textField-31"
-						positionType="Float">
+						key="textField-30"
+						positionType="Float"
+						isRemoveLineWhenBlank="true">
 							<printWhenExpression><![CDATA[$F{otheraccts}? true : false]]></printWhenExpression>
 						</reportElement>
 					<box>					<bottomPen lineWidth="0.0"/>
 </box>
-					<textElement>
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					<textElement markup="html">
+						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Other Accounts:"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["<b>Other Accounts:</b> "+$F{otheraccts}]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
