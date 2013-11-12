@@ -299,7 +299,8 @@
 						y="1"
 						width="62"
 						height="11"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.0"/>
 </box>
@@ -314,7 +315,8 @@
 						y="1"
 						width="96"
 						height="11"
-						key="textField-5"/>
+						key="textField-5"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.0"/>
 </box>
@@ -329,7 +331,8 @@
 						y="1"
 						width="110"
 						height="11"
-						key="textField-3"/>
+						key="textField-3"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2" rightPadding="2">					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
 					<rightPen lineWidth="0.0"/>
@@ -345,7 +348,8 @@
 						y="1"
 						width="79"
 						height="11"
-						key="textField-7"/>
+						key="textField-7"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement>
@@ -359,7 +363,8 @@
 						y="1"
 						width="54"
 						height="11"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement>
@@ -373,7 +378,8 @@
 						y="1"
 						width="45"
 						height="11"
-						key="textField"/>
+						key="textField"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement>
@@ -387,7 +393,8 @@
 						y="1"
 						width="50"
 						height="11"
-						key="textField-8"/>
+						key="textField-8"
+						stretchType="RelativeToBandHeight"/>
 					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement textAlignment="Center">
@@ -401,8 +408,9 @@
 						y="1"
 						width="44"
 						height="11"
-						key="textField-9"/>
-					<box leftPadding="2" rightPadding="3">					<bottomPen lineWidth="0.25"/>
+						key="textField-9"
+						stretchType="RelativeToBandHeight"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
 </box>
 					<textElement textAlignment="Center">
 						<font size="8"/>
