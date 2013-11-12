@@ -6,7 +6,7 @@
     </target>
         
     <target name="cleanup" depends="init">
-        <delete dir="${workspace.platform.dir}/bin/osiris2" failonerror="false"/>
+        <delete dir="${workspace.platform.dir}/osiris2" failonerror="false"/>
         <delete dir="${workspace.platform.dir}/downloads" failonerror="false"/>
     </target>
     
@@ -84,8 +84,8 @@
     = COPY CLFC PLATFORM
     =======================================================-->
     <target name="copy-clfc-platform" depends="init">
-        <copy todir="${workspace.dir}/clfc_platform">
-            <fileset dir="${clfc.project.dir}/platform/clfc_platform"/>
+        <copy todir="${workspace.dir}/clfc2_platform_thin">
+            <fileset dir="${clfc.project.dir}/platform/clfc2_platform_thin"/>
         </copy>
     </target>
     
