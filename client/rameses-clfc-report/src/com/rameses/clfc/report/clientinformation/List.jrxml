@@ -209,7 +209,9 @@
 						width="397"
 						height="11"
 						key="textField-30"
-						positionType="Float"/>
+						positionType="Float">
+							<printWhenExpression><![CDATA[$F{otheraccts}? true : false]]></printWhenExpression>
+						</reportElement>
 					<box>					<bottomPen lineWidth="0.0"/>
 </box>
 					<textElement>
