@@ -12,7 +12,7 @@ public class PopupMasterController
     @ChangeLog
     def changeLog
     
-    def entity
+    def entity = [:];
     def handler
     def mode
     def caller
