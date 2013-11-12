@@ -57,7 +57,8 @@
 						y="1"
 						width="110"
 						height="11"
-						key="textField-3"/>
+						key="textField-3"
+						stretchType="RelativeToBandHeight"/>
 					<box>					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
 					<rightPen lineWidth="0.0"/>
@@ -75,7 +76,8 @@
 						y="1"
 						width="218"
 						height="11"
-						key="textField-4"/>
+						key="textField-4"
+						stretchType="RelativeToBandHeight"/>
 					<box>					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
 					<rightPen lineWidth="0.0"/>
@@ -96,8 +98,9 @@
 						y="1"
 						width="96"
 						height="11"
-						key="textField-5"/>
-					<box rightPadding="5">					<leftPen lineWidth="0.0"/>
+						key="textField-5"
+						stretchType="RelativeToBandHeight"/>
+					<box>					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
 					<rightPen lineWidth="0.0"/>
 </box>
