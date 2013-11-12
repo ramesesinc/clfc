@@ -115,7 +115,8 @@
 						y="0"
 						width="77"
 						height="11"
-						key="textField-1"/>
+						key="textField-1"
+						stretchType="RelativeToBandHeight"/>
 					<box rightPadding="6">					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.0"/>
 </box>
@@ -130,7 +131,8 @@
 						y="0"
 						width="317"
 						height="11"
-						key="textField-2"/>
+						key="textField-2"
+						stretchType="RelativeToBandHeight"/>
 					<box>					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.0"/>
 </box>
@@ -145,7 +147,8 @@
 						y="0"
 						width="120"
 						height="11"
-						key="textField-3"/>
+						key="textField-3"
+						stretchType="RelativeToBandHeight"/>
 					<box>					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
 					<rightPen lineWidth="0.0"/>
