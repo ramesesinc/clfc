@@ -31,11 +31,15 @@ class LoanAppCoMakerController
     void save() {
         def data = [ objid: loanapp.objid, borrowers: borrowers ]
         service.update(data); 
+        borrowers.each { 
+            it.remove('_isnew'); 
+        }        
     }
 
     def addCoMaker() {
         def params = createOpenerParams()
         params.callBackHandler = {comaker->
+            comaker._isnew = true;
             borrowers.add(comaker);
             coMakerHandler.reload();
         };

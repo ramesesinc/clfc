@@ -1,8 +1,8 @@
 <workunit>
     <invokers>
-        <invoker type="comaker:create" action="init" caption="Co-Maker Information" 
+        <invoker type="comaker:create" action="create" caption="Co-Maker Information" 
             target="popup" width="700" height="625"/>
-        <invoker type="comaker:open" action="init" caption="Co-Maker Information" 
+        <invoker type="comaker:open" action="open" caption="Co-Maker Information" 
             target="popup" width="700" height="625"/>/>
     </invokers>
     
