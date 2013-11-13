@@ -17,3 +17,6 @@ ORDER BY r.name
 DELETE FROM customer_connection 
 WHERE principalid=$P{principalid} AND relationship='SPOUSE'
 
+[removeConnection]
+DELETE FROM customer_connection 
+WHERE principalid=$P{principalid} AND relaterid=$P{relaterid} 

@@ -22,6 +22,11 @@ class BorrowerInterceptor
 			} 
 
 			if (result.type != 'PRINCIPAL') { 
+				customer.removeConnection([
+					principalid: result.principalid, 
+					relaterid: 	 result.objid
+				]); 
+
 				def o = [
 					principalid:  result.principalid, 
 					relaterid:    result.objid, 
