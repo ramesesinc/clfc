@@ -31,12 +31,16 @@ class LoanAppJointBorrowerController
     void save() {
         def data = [ objid: loanapp.objid, borrowers: borrowers ]
         service.update(data); 
+        borrowers.each { 
+            it.remove('_isnew'); 
+        }
     }
 
     def addJointBorrower() {
         def params = createOpenerParams()
-        params.callBackHandler = {jointborrower->
-            borrowers.add(jointborrower);
+        params.callBackHandler = {joint->
+            joint._isnew = true;
+            borrowers.add(joint);
             jointBorrowerHandler.reload();
         };
         return InvokerUtil.lookupOpener("jointborrower:create", params)
@@ -44,11 +48,11 @@ class LoanAppJointBorrowerController
     
     def createOpenerParams() {
         return [
-                loanapp: [:],
-                caller: caller, 
-                service: service, 
-                beforeSaveHandlers: beforeSaveHandlers,
-                dataChangeHandlers: dataChangeHandlers
+            loanapp: [:],
+            caller: caller, 
+            service: service, 
+            beforeSaveHandlers: beforeSaveHandlers,
+            dataChangeHandlers: dataChangeHandlers
         ]
     }
     

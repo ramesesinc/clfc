@@ -1,9 +1,9 @@
 <workunit>
     <invokers>
-        <invoker type="jointborrower:create" action="init" target="popup" 
+        <invoker type="jointborrower:create" action="create" target="popup" 
             caption="Joint Borrower Information" width="700" height="625"/>
             
-        <invoker type="jointborrower:open" action="init" target="popup" 
+        <invoker type="jointborrower:open" action="open" target="popup" 
             caption="Joint Borrower Information" width="700" height="625"/>
     </invokers>
     
