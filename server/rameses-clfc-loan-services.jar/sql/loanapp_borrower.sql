@@ -8,7 +8,8 @@ WHERE lb.parentid=$P{parentid} AND lb.type='PRINCIPAL'
 DELETE FROM loanapp_borrower WHERE parentid=$P{parentid} AND type='PRINCIPAL' 
 
 [getJointBorrowers]
-SELECT lb.type, lb.relation, b.* 
+SELECT b.*, 
+	lb.objid AS refid, lb.type, lb.relation, lb.principalid, lb.relaterid 
 FROM loanapp_borrower lb 
 	INNER JOIN borrower b ON lb.borrowerid=b.objid 
 WHERE lb.parentid=$P{parentid} AND lb.type='JOINT' 

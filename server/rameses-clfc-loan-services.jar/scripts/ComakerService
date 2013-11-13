@@ -40,6 +40,7 @@ class ComakerService
 		def borrowers = params.remove('borrowers'); 
 		for (o in borrowers) {
 			o.name = borrowerService.createFullName(o.lastname, o.firstname, o.middlename); 
+			o.principalid = data.borrower.objid; 
 			borrowerService.update(o); 
 		}
 

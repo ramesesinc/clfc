@@ -14,6 +14,9 @@ class JointBorrowerService
 	@Service('BorrowerService') 
 	def borrowerService; 
 
+	@Service 
+	def self;
+
 	@ProxyMethod 
 	public def open( params ) { 
 		if (!params.objid) throw new Exception('Please specify objid'); 
