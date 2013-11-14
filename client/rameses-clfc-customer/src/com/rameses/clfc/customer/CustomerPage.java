@@ -6,12 +6,14 @@
 
 package com.rameses.clfc.customer;
 
+import com.rameses.rcp.ui.annotations.StyleSheet;
 import com.rameses.rcp.ui.annotations.Template;
 
 /**
  *
  * @author  wflores
  */
+@StyleSheet
 @Template(CustomerTemplatePage.class)
 public class CustomerPage extends javax.swing.JPanel 
 {
