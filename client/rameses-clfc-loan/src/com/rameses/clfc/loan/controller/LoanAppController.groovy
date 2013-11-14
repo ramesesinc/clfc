@@ -78,7 +78,9 @@ class LoanAppController
             def data = service.open([objid: loanappid, name:o?.name]);
             entity.clear();
             entity.putAll(data);
-            if(o.opener != null && o.dataChangeHandler != null) o.dataChangeHandler();
+            if (o.opener != null && o.dataChangeHandler != null) {
+                o.dataChangeHandler();
+            }
             subFormHandler.reload();
         } 
     ] as ListPaneModel;

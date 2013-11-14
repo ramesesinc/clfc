@@ -6,10 +6,13 @@
 
 package com.rameses.clfc.loan;
 
+import com.rameses.rcp.ui.annotations.StyleSheet;
+
 /**
  *
  * @author  wflores
  */
+@StyleSheet
 public class LoanAppPage extends javax.swing.JPanel {
     
     public LoanAppPage() {
