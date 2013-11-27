@@ -5,6 +5,7 @@ build/*/dist
 build/*/build
 build/*/build.xml
 build/*/nbproject/private
+build/*/nbproject/genfiles.properties
 build/*/.terminal
 client/*/dist
 client/*/build
