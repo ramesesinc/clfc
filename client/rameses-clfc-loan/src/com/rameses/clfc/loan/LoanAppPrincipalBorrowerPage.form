@@ -24,7 +24,7 @@
   <SubComponents>
     <Container class="com.rameses.rcp.control.XTabbedPane" name="xTabbedPane1">
       <Properties>
-        <Property name="name" type="java.lang.String" value="tabHandler"/>
+        <Property name="handler" type="java.lang.String" value="tabHandler"/>
       </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>

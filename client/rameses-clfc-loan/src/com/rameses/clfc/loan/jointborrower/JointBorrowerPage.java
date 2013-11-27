@@ -33,7 +33,7 @@ public class JointBorrowerPage extends javax.swing.JPanel
         xTabbedPane1 = new com.rameses.rcp.control.XTabbedPane();
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        xTabbedPane1.setName("tabHandler");
+        xTabbedPane1.setHandler("tabHandler");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

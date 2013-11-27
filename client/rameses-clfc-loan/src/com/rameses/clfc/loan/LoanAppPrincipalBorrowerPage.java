@@ -25,7 +25,7 @@ public class LoanAppPrincipalBorrowerPage extends javax.swing.JPanel {
     private void initComponents() {
         xTabbedPane1 = new com.rameses.rcp.control.XTabbedPane();
 
-        xTabbedPane1.setName("tabHandler");
+        xTabbedPane1.setHandler("tabHandler");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
