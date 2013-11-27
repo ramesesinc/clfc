@@ -1,6 +1,5 @@
 @echo off
-set JAVA_HOME = "C:/Program Files/Java/jdk1.6.0_32"
-echo %JAVA_HOME%
+echo JAVA_HOME: %JAVA_HOME% 
 
 rem This will be the run directory
 set RUN_DIR=%cd%
