@@ -7,12 +7,10 @@
 
 package test;
 
-import java.awt.Font;
-import java.awt.font.TextAttribute;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.BorderLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import junit.framework.*;
 
@@ -34,12 +32,23 @@ public class NewEmptyJUnitTest extends TestCase {
     }
     
     public void test0() throws Exception {
+        JPanel pnl = new JPanel(new BorderLayout());
+        pnl.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        
+        CTabbedPane ctab = new CTabbedPane();
+        pnl.add(ctab); 
+        
+        ctab.addTab("Tab#1", new TestPanel(ctab));
+        ctab.addTab("Tab#2", new TestPanel(ctab));
+        ctab.addTab("Tab#3", new TestPanel(ctab));
+        
         JDialog d = new JDialog();
         d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         d.setModal(true);        
-        d.setContentPane(new TestPanel()); 
+        d.setContentPane(pnl); 
         d.pack();
         d.setVisible(true); 
     }
 
+    
 }

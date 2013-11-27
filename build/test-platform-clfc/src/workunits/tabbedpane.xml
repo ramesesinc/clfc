@@ -1,0 +1,42 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/transaction" caption="Tabbed Pane"/>
+    </invokers>
+    
+    <code>
+    <![CDATA[
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class SampleTabbedPaneController 
+    {   
+        def selectedTab;
+        def openers = [
+            new Opener(outcome:'tab1', caption:'Tab#1'),
+            new Opener(outcome:'tab2', caption:'Tab#2') 
+        ];
+        
+        def tabHandler = [
+            getOpeners: {
+                return [
+                    new Opener(outcome:'tab1', caption:'Tab#3'),
+                    new Opener(outcome:'tab2', caption:'Tab#4') 
+                ];
+            } 
+        ] as TabbedPaneModel 
+        
+        void showInfo() {
+            println 'selectedTab-> ' + selectedTab;
+        } 
+    }
+    ]]>
+    </code>
+    
+    <pages>
+        <page template="test.pane.TestTabbedPane"/> 
+        <page template="test.pane.TestTab1Page" name="tab1"/> 
+        <page template="test.pane.TestTab2Page" name="tab2"/> 
+    </pages>
+</workunit>

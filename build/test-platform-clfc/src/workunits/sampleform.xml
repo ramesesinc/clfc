@@ -3,8 +3,18 @@
         <invoker folderid="/menu/transaction" caption="Sample Form"/>
         <invoker folderid="/master/test" caption="Sample Form"/>
         
-        <invoker type="formActions" caption="Action 1"/>
-        <invoker type="formActions" caption="Action 2"/>
+        <invoker type="formActions" caption="State=0" action="state0"/>
+        <invoker type="formActions" caption="State=1" action="state1"/>
+        <invoker type="formActions" caption="State=null" action="stateNull"/>
+        
+        <invoker type="formActions" caption="Print" action="print"/>
+        <invoker type="formActions" caption="Export NP" action="export"/>
+        <invoker type="formActions" caption="Import NP" action="import"/>
+        
+        <invoker type="formActions" caption="Export CAO" action="export" 
+            domain="LOAN" role="LOAN_CAO_OFFICER" visibleWhen="#{entity.state == 0}"/>
+        <invoker type="formActions" caption="Import CI" action="import" 
+            domain="LOAN" role="LOAN_CI_OFFICER" visibleWhen="#{entity.state == 1}"/>
     </invokers>
     
     <code>
@@ -37,6 +47,17 @@
             println 'afterRefresh: binding->'+binding + ', pagename->'+pagename;    
             if (pagename == 'page2') binding.requestFocus('entity.text2'); 
         } 
+        
+        def state0() {
+            entity.state = 0;
+            return Inv.lookupOpener('var:lookup', [:]); 
+        } 
+        void state1() {
+            entity.state = 1;
+        } 
+        void stateNull() {
+            entity.state = null;
+        }         
     }
     </code>
     

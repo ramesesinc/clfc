@@ -1,0 +1,61 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/transaction" caption="List Pane"/>
+    </invokers>
+    
+    <code>
+    <![CDATA[
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+
+    class SampleListPaneController 
+    {        
+        def mode = 'read';
+        
+        def menuItems =  [
+            [name:'principalborrower', caption:'Principal Borrower'], 
+            [name:'loandetail', caption:'Loan Details'], 
+            [name:'business', caption:'Business'], 
+            [name:'collateral', caption:'Collateral'], 
+            [name:'otherlending', caption:'Other Lending'], 
+            [name:'jointborrower', caption:'Joint Borrower'],
+            [name:'comaker', caption:'Co-Maker'], 
+            [name:'attachment', caption:'Attachments'], 
+            [name:'comment', caption:'Comments'],
+            [name:'recommendation', caption:'Recommendations'],
+        ];
+
+        def selectedMenu;
+        def listHandler = [
+            getDefaultIcon: {
+                return 'Tree.closedIcon'; 
+            }, 
+            getItems: { 
+                return menuItems;
+            },
+            xbeforeSelect: {o-> 
+                return (mode == 'read');
+            }, 
+            onselect: {o->
+                println 'onselect-> ' + o;
+            } 
+        ] as ListPaneModel;        
+        
+        
+        void toggleMode() {
+            if (mode == 'read') {
+                mode = 'edit';  
+            } else { 
+                mode = 'read';
+            } 
+        } 
+    }
+    ]]>
+    </code>
+    
+    <pages>
+        <page template="test.list.ListPanePage"/> 
+    </pages>
+</workunit>

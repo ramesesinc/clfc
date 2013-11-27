@@ -6,9 +6,7 @@
 
 package test;
 
-import java.io.IOException;
-import java.net.URL;
-import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -16,21 +14,15 @@ import javax.swing.text.html.HTMLEditorKit;
  */
 public class TestPanel extends javax.swing.JPanel 
 {
+    private JTabbedPane jtab;
     
     public TestPanel() {
         initComponents();
-        
-        HTMLEditorKit kit = new HTMLEditorKit();
-        kit.getStyleSheet().addRule(".xkey {padding-left:10px; }");
-        
-        jEditorPane1.setEditorKit(kit);
-        
-        try {
-            URL url = TestPanel.class.getResource("test.xhtml");
-            jEditorPane1.setPage(url);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    }
+    
+    public TestPanel(JTabbedPane jtab) {
+        this.jtab = jtab;
+        initComponents();
     }
     
     /** This method is called from within the constructor to
@@ -40,18 +32,102 @@ public class TestPanel extends javax.swing.JPanel
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        xLabel1 = new com.rameses.rcp.control.XLabel();
+        txtTitle = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        btnUpdate = new javax.swing.JButton();
+        btnToggleEnableAt = new javax.swing.JButton();
+        btnToggleEnable = new javax.swing.JButton();
 
-        setLayout(new java.awt.BorderLayout());
+        jLabel1.setText("Title");
 
-        xLabel1.setText("<html> <head> \t<style>  \t\t#value { \t\t\tbackground-color:yellow; \t\t\tborder:1px solid #000000; \t\t} \t</style> </head> <body> <div id=\"value\">Value</div>\t </body> </html>");
-        add(xLabel1, java.awt.BorderLayout.CENTER);
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
+        btnToggleEnableAt.setText("Toggle EnableAt");
+        btnToggleEnableAt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnToggleEnableAtActionPerformed(evt);
+            }
+        });
+
+        btnToggleEnable.setText("Toggle Enable");
+        btnToggleEnable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnToggleEnableActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnUpdate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnToggleEnableAt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnToggleEnable))
+                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(55, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnToggleEnableAt)
+                    .addComponent(btnToggleEnable))
+                .addContainerGap(199, Short.MAX_VALUE))
+        );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnToggleEnableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleEnableActionPerformed
+
+        boolean enabled = jtab.isEnabled();
+        jtab.setEnabled(!enabled); 
+        
+    }//GEN-LAST:event_btnToggleEnableActionPerformed
+
+    private void btnToggleEnableAtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleEnableAtActionPerformed
+
+        int selIndex = jtab.getSelectedIndex(); 
+        boolean enabled = jtab.isEnabledAt(selIndex); 
+        jtab.setEnabledAt(selIndex, !enabled); 
+        
+    }//GEN-LAST:event_btnToggleEnableAtActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+
+        String title = txtTitle.getText();
+        if (title == null || title.length() == 0) title = "[No Caption]";
+        
+        int selIndex = jtab.getSelectedIndex(); 
+        jtab.setTitleAt(selIndex, title); 
+        
+        
+    }//GEN-LAST:event_btnUpdateActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.rameses.rcp.control.XLabel xLabel1;
+    private javax.swing.JButton btnToggleEnable;
+    private javax.swing.JButton btnToggleEnableAt;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
-    
+
 }

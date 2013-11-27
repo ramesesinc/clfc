@@ -7,9 +7,4 @@
         <folder id="test" caption="Test"/> 
     </folder>
     
-    <folder id="explorer">
-        <folder id="master">
-            <folder id="rules" caption="Rules"/> 
-        </folder>    
-    </folder>     
 </folders>

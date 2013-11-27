@@ -37,8 +37,9 @@ public class Main
         
         roles.put("DATAMGMT.LOAN_DATAMGMT_AUTHOR", null);
         roles.put("LOAN.LOAN_CAO_OFFICER", null);
-        //roles.put("LOAN.LOAN_CI_OFFICER", null);
-        //roles.put("LOAN.LOAN_CRECOM_OFFICER", null);
+        roles.put("LOAN.LOAN_CI_OFFICER", null);
+        roles.put("LOAN.LOAN_CRECOM_OFFICER", null);
+        roles.put("LOAN.LOAN_ACCT_OFFICER", null);
         OsirisTestPlatform.runTest(env, roles, profile); 
     }
 
