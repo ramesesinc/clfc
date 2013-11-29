@@ -19,6 +19,8 @@
         <invoker type="formActions" action="post" caption="Post" mnemonic="p" 
             shortcut="ctrl P" icon="images/toolbars/save.png"
              visibleWhen="#{isAllowPost}" role="LOAN_ACCT_OFFICER"/>
+        <invoker type="formActions" action="viewExemptions" caption="Exemptions"
+            visibleWhen="#{mode != 'init'}"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.payment.PostPaymentController"/>

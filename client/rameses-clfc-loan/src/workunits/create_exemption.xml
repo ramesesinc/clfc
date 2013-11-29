@@ -1,0 +1,14 @@
+<workunit>
+    <invokers>
+        <invoker type="exemption:create" action="init" caption="Exemption" target="popup"/>
+        
+        <invoker type="formActions" action="close" caption="Close" mnemonic="c" immediate="true"/>
+        <invoker type="formActions" action="save" caption="Save" visibleWhen="#{mode != 'read'}"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.exemption.LoanExemptionController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.exemption.LoanExemptionPage"/>
+    </pages>
+</workunit>

@@ -98,6 +98,10 @@ class PostPaymentController
         return 'default';
     }
     
+    def viewExemptions() {
+        return InvokerUtil.lookupOpener('exemptions:view', [list: unpostedPayments]);
+    }
+    
     def close() {
         return '_close';
     }
