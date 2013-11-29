@@ -23,8 +23,37 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String TABLE_HOST = "host";
 	private static final String TABLE_ROUTE = "route";
 	
-	private static final String CREATE_TABLE_COLLECTIONSHEET = "CREATE TABLE COLLECTIONSHEET(loanappid text PRIMARY KEY, appno text, acctname text, amountdue numeric, overpaymentamount numeric, lackinginterest numeric, lackingpenalty numeric, refno text, routecode text, loanamount numeric, dailydue numeric, balance numeric, penalty numeric, duedate text, isfirstbill numeric, paymentmethod text);";
-	private static final String CREATE_TABLE_PAYMENT = "CREATE TABLE PAYMENT(refno text, txndate text, paymenttype text, paymentamount numeric, loanappid text, routecode text, isfirstbill numeric);";
+	private static final String CREATE_TABLE_COLLECTIONSHEET = "" +
+			"CREATE TABLE COLLECTIONSHEET(" +
+			"loanappid text PRIMARY KEY, " +
+			"detailid text,"+
+			"appno text, " +
+			"acctname text, " +
+			"amountdue numeric, " +
+			"overpaymentamount numeric, " +
+			"lackinginterest numeric, " +
+			"lackingpenalty numeric, " +
+			"refno text, " +
+			"routecode text, " +
+			"loanamount numeric, " +
+			"dailydue numeric, " +
+			"balance numeric, " +
+			"penalty numeric, " +
+			"duedate text, " +
+			"isfirstbill numeric, " +
+			"paymentmethod text" +
+			");";
+	private static final String CREATE_TABLE_PAYMENT = "" +
+			"CREATE TABLE PAYMENT(" +
+			"refno text, " +
+			"txndate text, " +
+			"paymenttype text, " +
+			"paymentamount numeric, " +
+			"loanappid text, " +
+			"detailid text, "+
+			"routecode text, " +
+			"isfirstbill numeric" +
+			");";
 	private static final String CREATE_TABLE_UPLOADEDPAYMENT = "CREATE TABLE UPLOADED(loanappid text)";
 	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(sessionid text, serverdate text)";
 	private static final String CREATE_TABLE_HOST = "CREATE TABLE HOST(ipaddress text, port text);";
@@ -66,6 +95,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public void insertCollectionsheet(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
 		values.put("loanappid", params.get("acctid").toString());
+		values.put("detailid", params.get("objid").toString());
 		values.put("appno", params.get("appno").toString());
 		values.put("acctname", params.get("acctname").toString());
 		values.put("loanamount", Double.parseDouble(params.get("loanamount").toString()));
@@ -87,6 +117,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public void insertPayment(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
 		values.put("loanappid", params.get("loanappid").toString());
+		values.put("detailid", params.get("detailid").toString());
 		values.put("refno", params.get("refno").toString());
 		values.put("txndate", params.get("txndate").toString());
 		values.put("paymentamount", Double.parseDouble(params.get("amount").toString()));

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class CollectionSheetParcelable implements Parcelable {
 	private String loanappid = "";
+	private String detailid = "";
 	private String appno = "";
 	private String acctname = "";
 	private Double amountdue = 0.0;
@@ -13,6 +14,7 @@ public class CollectionSheetParcelable implements Parcelable {
 	public CollectionSheetParcelable() {}
 	public CollectionSheetParcelable(Parcel source) {
 		this.loanappid = source.readString();
+		this.detailid = source.readString();
 		this.appno = source.readString();
 		this.acctname = source.readString();
 		this.amountdue = source.readDouble();
@@ -21,6 +23,10 @@ public class CollectionSheetParcelable implements Parcelable {
 	
 	public void setLoanappid(String loanappid) {
 		this.loanappid = loanappid;
+	}
+	
+	public void setDetailid(String detailid) {
+		this.detailid = detailid;
 	}
 	
 	public void setAppno(String appno) {
@@ -40,6 +46,7 @@ public class CollectionSheetParcelable implements Parcelable {
 	}
 	
 	public String getLoanappid() { return this.loanappid; }
+	public String getDetailid() { return this.detailid; }
 	public String getAppno() { return appno; }
 	public String getAcctname() { return this.acctname; }
 	public Double getAmountdue() { return this.amountdue; }
@@ -55,6 +62,7 @@ public class CollectionSheetParcelable implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		// TODO Auto-generated method stub
 		dest.writeString(loanappid);
+		dest.writeString(detailid);
 		dest.writeString(appno);
 		dest.writeString(acctname);
 		dest.writeDouble(amountdue);

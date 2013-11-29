@@ -27,6 +27,7 @@ public class CollectionSheetInfo extends Activity {
 	private Context context = this;
 	private MySQLiteHelper db;
 	private String loanappid = "";
+	private String detailid = "";
 	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
 	private String routecode = "";
 	private String refno = "";
@@ -52,6 +53,8 @@ public class CollectionSheetInfo extends Activity {
 		super.onStart();
 		Intent intent = getIntent();
 		loanappid = intent.getStringExtra("loanappid");
+		detailid = intent.getStringExtra("detailid");
+		System.out.println("billing detail id = "+detailid);
 		routecode = intent.getStringExtra("routecode");
 		paymenttype = intent.getStringExtra("paymenttype");
 		isfirstbill = intent.getIntExtra("isfirstbill", 0);
@@ -184,6 +187,7 @@ public class CollectionSheetInfo extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(context, Payment.class);
 		intent.putExtra("loanappid", loanappid);
+		intent.putExtra("detailid", detailid);
 		intent.putExtra("routecode", routecode);
 		intent.putExtra("totaldays", totaldays);
 		intent.putExtra("isfirstbill", isfirstbill);

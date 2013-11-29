@@ -27,6 +27,7 @@ public class Payment extends Activity {
 	private Context context = this;
 	private MySQLiteHelper db;
 	private String loanappid = "";
+	private String detailid = "";
 	private String refno = "";
 	private TextView tv_refno;
 	private TextView tv_txndate;
@@ -46,6 +47,7 @@ public class Payment extends Activity {
 		setContentView(R.layout.activity_payment);
 		Intent intent = getIntent();
 		loanappid = intent.getStringExtra("loanappid");
+		detailid = intent.getStringExtra("detailid");
 		refno = intent.getStringExtra("refno");
 		routecode = intent.getStringExtra("routecode");
 		type = intent.getStringExtra("paymenttype");
@@ -147,6 +149,7 @@ public class Payment extends Activity {
 		db.openDb();
 		Map<String, Object> payment = new HashMap<String, Object>();
 		payment.put("loanappid", loanappid);
+		payment.put("detailid", detailid);
 		payment.put("refno", tv_refno.getText());
 		payment.put("txndate", tv_txndate.getText());
 		payment.put("amount", et_amount.getText());

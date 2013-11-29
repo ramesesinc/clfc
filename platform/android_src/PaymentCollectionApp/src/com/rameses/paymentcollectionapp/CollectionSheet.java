@@ -141,6 +141,7 @@ public class CollectionSheet extends Activity {
 		Intent intent = new Intent(context, CollectionSheetInfo.class);
 		intent.putExtra("acctname", cs.getAcctname());
 		intent.putExtra("loanappid", cs.getLoanappid());
+		intent.putExtra("detailid", cs.getDetailid());
 		intent.putExtra("appno", cs.getAppno());
 		intent.putExtra("amountdue", cs.getAmountdue());
 		intent.putExtra("routecode", routecode);
@@ -157,6 +158,7 @@ public class CollectionSheet extends Activity {
 			do {
 				cs=new CollectionSheetParcelable();
 				cs.setLoanappid(list.getString(list.getColumnIndex("loanappid")));
+				cs.setDetailid(list.getString(list.getColumnIndex("detailid")));
 				cs.setAppno(list.getString(list.getColumnIndex("appno")));
 				cs.setAcctname(list.getString(list.getColumnIndex("acctname")));
 				cs.setAmountdue(list.getDouble(list.getColumnIndex("amountdue")));

@@ -394,6 +394,7 @@ public class Main extends Activity {
 			do {
 				m = new HashMap<String, Object>();
 				m.put("loanappid", result.getString(result.getColumnIndex("loanappid")));
+				m.put("detailid", result.getString(result.getColumnIndex("detailid")));
 				m.put("refno", result.getString(result.getColumnIndex("refno")));
 				m.put("txndate", result.getString(result.getColumnIndex("txndate")));
 				m.put("paytype", result.getString(result.getColumnIndex("paymenttype")));
@@ -445,6 +446,7 @@ public class Main extends Activity {
 				BigDecimal totalamount = new BigDecimal("0").setScale(2);
 				for(int i=0; i<payments.size(); i++) {
 					map = (Map<String, Object>) payments.get(i);
+					System.out.println(map);
 					totalamount = totalamount.add(new BigDecimal(map.get("payamount").toString()));
 				}
 				
