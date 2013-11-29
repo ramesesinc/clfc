@@ -11,15 +11,15 @@
             tooltip="Submit For Inspection"/>
         
         <invoker type="formActions" caption="Submit" action="submitForCrecom" 
-            role="LOAN_CI_OFFICER" icon="images/toolbars/approve.png" 
+            role="CI_OFFICER" icon="images/toolbars/approve.png" 
             tooltip="Submit For CRECOM" visibleWhen="#{isForInspection}"/>
                     
         <invoker type="formActions" caption="Submit" action="submitForApproval" 
-            role="LOAN_CRECOM_OFFICER" icon="images/toolbars/approve.png" 
+            role="CRECOM_OFFICER" icon="images/toolbars/approve.png" 
             tooltip="Submit For Approval" visibleWhen="#{isForCrecom}"/>
                     
         <invoker type="formActions" caption="Return For CI" action="returnForCi" 
-            role="LOAN_CRECOM_OFFICER" icon="images/toolbars/approve.png" 
+            role="CRECOM_OFFICER" icon="images/toolbars/approve.png" 
             tooltip="Return For CI" visibleWhen="#{isForCrecom}"/>
                     
         <invoker type="formActions" caption="Back Out" action="backOut" tooltip="Back Out"

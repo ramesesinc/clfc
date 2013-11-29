@@ -2,7 +2,7 @@
     
     <invokers>
         <invoker folderid="/explorer/txn/afterfla" caption="Approved" 
-            role="LOAN_CAO_OFFICER" index="0"/>
+            role="CAO_OFFICER" index="0"/>
     </invokers>
    
     <code>

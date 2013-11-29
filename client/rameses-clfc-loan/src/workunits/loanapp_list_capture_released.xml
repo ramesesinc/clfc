@@ -2,7 +2,7 @@
     
     <invokers>
         <invoker folderid="/explorer/txn/capture" caption="Released" 
-            role="LOAN_CAO_OFFICER" index="0"/>
+            role="CAO_OFFICER" index="0"/>
    </invokers>
    
     <code>

@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/LoanAppController.xml">
     <invokers>
         <invoker folderid="/menu/txn/loan" caption="Capture Application" 
-            role="LOAN_CAO_OFFICER" action="init" index="1"/>
+            role="CAO_OFFICER" action="init" index="1"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.capture.NewCaptureLoanAppController"/>

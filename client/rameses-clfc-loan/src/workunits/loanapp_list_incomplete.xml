@@ -3,6 +3,6 @@
     
     <invokers>
         <invoker folderid="/explorer/txn/loan" caption="Incomplete Applications" 
-            role="LOAN_CAO_OFFICER" index="0"/>
+            role="CAO_OFFICER" index="0"/>
    </invokers>
 </workunit>

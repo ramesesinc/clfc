@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
         <invoker folderid="/menu/txn/loan" caption="Capture Ledger" 
-            role="LOAN_CAO_OFFICER" action="init" index="2"/>
+            role="CAO_OFFICER" action="init" index="2"/>
             
         <invoker type="captureledger:create" caption="Capture Ledger" action="init"/>
         

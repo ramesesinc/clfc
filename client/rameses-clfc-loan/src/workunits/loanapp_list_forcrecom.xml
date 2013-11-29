@@ -2,7 +2,7 @@
     
     <invokers>
         <invoker folderid="/explorer/txn/loan" caption="For CRECOM" 
-            role="LOAN_CAO_OFFICER,LOAN_CRECOM_OFFICER" index="3"/>
+            role="CAO_OFFICER,CRECOM_OFFICER" index="3"/>
    </invokers>
    
     <code>

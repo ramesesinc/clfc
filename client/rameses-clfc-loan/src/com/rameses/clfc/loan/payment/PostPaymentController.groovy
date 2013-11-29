@@ -45,7 +45,7 @@ class PostPaymentController
     }
     
     def next() {
-        iscollector = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.LOAN_FIELD_COLLECTOR');
+        iscollector = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.FIELD_COLLECTOR');
         def data = paymentSvc.getUnpostedPayments([route_code: route]);
         entity = data.entity;
         unpostedPayments = data.list;

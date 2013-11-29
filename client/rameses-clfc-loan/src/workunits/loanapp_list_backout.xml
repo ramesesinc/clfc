@@ -2,7 +2,7 @@
     
     <invokers>
         <invoker folderid="/explorer/txn/afterfla" caption="Back Out" 
-            role="LOAN_CAO_OFFICER" index="6"/>
+            role="CAO_OFFICER" index="6"/>
     </invokers>
    
     <code>
