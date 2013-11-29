@@ -10,7 +10,8 @@ SELECT ll.objid AS objid, la.objid AS loanappid, la.appno AS appno,
 		ll.producttypeid AS producttypeid, ll.balance AS balance,
 		ll.overpaymentamount AS overpaymentamount, la.loanamount AS loanamount,
 		ll.absentpenalty AS absentpenalty, ll.dtmatured AS dtmatured,
-		ll.paymentmethod AS paymentmethod, ll.interestamount AS interestamount
+		ll.paymentmethod AS paymentmethod, ll.interestamount AS interestamount,
+		ll.dtcurrentschedule AS dtcurrentschedule
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
 WHERE la.route_code=$P{route_code}
@@ -66,7 +67,3 @@ ORDER BY lld.dtpaid, lld.refno
 [removeLedgerDetail]
 DELETE FROM loan_ledger_detail
 WHERE parentid=$P{parentid}
-
-[closeLedger]
-UPDATE loan_ledger SET state='CLOSED'
-WHERE objid=$P{objid}

@@ -17,6 +17,9 @@ class LoanLedgerBillingService extends ActiveCrudService
 	@ActiveDB(value="loan_product_type")
 	def product_type;
 
+	@ActiveDB(value="loan_exemption")
+	def exemption;
+
 	@Service("DateService")
 	def dateSvc;
 
@@ -83,7 +86,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 			def list = loan_ledger.getCollectionsheets([route_code: o.code]);
 			def days = 0;
 			list.each{
-				def currentDate = dateSvc.serverDate;
+				def currentDate = dateSvc.parseDate(data.billdate, null).date;
 				def detail = [
 					objid: 'LLBD'+new UID(),
 					parentid: data.objid,
@@ -104,19 +107,20 @@ class LoanLedgerBillingService extends ActiveCrudService
 					lackingpenalty: 0.00
 				];
 				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8);
-				def dtlastpaid;
+				/*def dtschedule;
 				if (!it.dtlastpaid)
 					dtlastpaid = dateSvc.add(it.dtstarted, "-1");
 				else 
-					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;
-				days = dateSvc.getDaysDiff(dtlastpaid, currentDate)-1;
+					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;*/
+				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
 				detail.amountdue = it.dailydue*days;
-				def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: dtlastpaid, item:[trialAndError: 0, totalDays: days]])
+				def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
 				days -= noofholidays;
 				def cal = Calendar.getInstance();
 				cal.setTime(currentDate);
 				if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
-				detail.penalty = it.absentpenalty*(days-1);
+				days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
+				detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
 				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");
 			}

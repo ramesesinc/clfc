@@ -21,7 +21,8 @@
 		<field name="compromiseid"/> 
 		<field name="dtstarted" required="true"/> 
 		<field name="dtmatured" required="true"/> 
-		<field name="dtlastpaid"/> 
+		<field name="dtlastpaid"/>
+		<field name="dtcurrentschedule" required="true"/>
 	</element> 
 
 	<element name="method" tablename="loan_ledger">
@@ -47,6 +48,11 @@
 	<element name="dtlastpaid" tablename="loan_ledger">
 		<field name="objid" primary="true"/>
 		<field name="dtlastpaid" required="true"/>
+	</element>
+
+	<element name="dtcurrentschedule" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="dtcurrentschedule" required="true"/>
 	</element>
 
 	<element name="detail" tablename="loan_ledger_detail">

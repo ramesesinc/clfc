@@ -20,6 +20,9 @@ DELETE FROM loan_ledger_billing_route WHERE billingid=$P{billingid}
 [removeBillingDetailByParentid]
 DELETE FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
 
+[getBillingDetailByParentid]
+SELECT * FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
+
 [findBillingByCollectorid]
 SELECT * FROM loan_ledger_billing WHERE collector_objid=$P{collectorid} AND billdate=$P{billdate}
 

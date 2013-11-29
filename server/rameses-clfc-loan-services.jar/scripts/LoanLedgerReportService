@@ -8,6 +8,9 @@ class LoanLedgerReportService
 	@ActiveDB(value="loan_product_type")
 	def product_type;
 
+	@ActiveDB(value="loan_exemption")
+	def exemption;
+
 	@ActiveDB(value="borrower")
 	def borrower;
 
@@ -67,6 +70,8 @@ class LoanLedgerReportService
 		def flag = false;
 		def prevrefno;
 		def prevbal;
+		def exemptedamt = 0;
+		def lastday = 0;
 		payments.each{
 			def itm = [
 				paymentschedule 	: dateSvc.add(data.dategranted, it.day+''),
@@ -80,6 +85,11 @@ class LoanLedgerReportService
 				datepaid			: it.dtpaid
 			];
 			if (it.state != "OFFSET") {
+				def e = exemption.findExemptionByDateAndLedgerid([txndate: itm.paymentschedule, ledgerid: ledger.objid]);
+				if (e) {
+					exemptedamt += ledger.absentpenalty;
+					itm.remarks = 'WAIVED By '+e.createdby;
+				}
 				if (it.balance == ledger.totalprincipal) {
 					itm.balanceamount = null;
 				}
@@ -98,7 +108,8 @@ class LoanLedgerReportService
 					itm.datepaid = null
 				}
 				if (it.interestbal > 0) {
-					if(!itm.remarks) itm.remarks = '';
+					if (!itm.remarks) itm.remarks = '';
+					else itm.remarks += '\n';
 					itm.remarks += 'lacking interest: '+it.interestbal;
 				}
 				if (it.penaltybal > 0) {
@@ -107,7 +118,15 @@ class LoanLedgerReportService
 					itm.remarks += 'lacking penalty: '+it.penaltybal;
 				}
 				if (it.penaltypaid == 0) itm.penaltycharge = null;
-				if (it.amtpaid != 0) prevrefno = it.refno;
+				if (it.amtpaid != 0) {
+					def total = (it.day - lastday)*ledger.dailydue;
+					if (it.amtpaid == total && itm.penaltycharge) {
+						itm.penaltycharge -= exemptedamt;
+					}
+					lastday = it.day;
+					prevrefno = it.refno;
+					exemptedamt = 0;
+				}
 				else {
 					itm.receiptno = null;
 					itm.datepaid = null;

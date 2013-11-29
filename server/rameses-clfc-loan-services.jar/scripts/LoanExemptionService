@@ -1,0 +1,71 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+
+class LoanExemptionService extends ActiveCrudListService
+{
+	@Env
+	def env;
+
+	@ActiveDB(value="loan_exemption")
+	def em;
+
+	@ActiveDB(value="loan_ledger_billing")
+	def billing;
+
+	@Service('DateService')
+	def dateSvc;
+
+	@ProxyMethod
+	public def getColumns( params ) {
+		return [
+			[name:'state', caption:'State'],
+			[name:'dtcreated', caption:'Date Created'],
+			[name:'createdby', caption:'Created By'],
+			[name:'reason', caption:'Reason'],
+		];
+	}
+
+	@ProxyMethod
+	public def createMultiple( data ) {
+		if (!data.forexemptions) throw new Exception('For Exemptions are required.');
+		if (!data.forexemptions.find{ it.select = true }) throw new Exception('At least 1 item should be exempted.');
+
+		def date = dateSvc.serverDate;
+		data.forexemptions.each{
+			def itm = [
+				objid: it.objid,
+				state: 'APPROVED',
+				ledgerid: it.ledgerid,
+				batchpaymentid: it.parentid,
+				txndate: it.txndate,
+				dtcreated: date,
+				createdby: env.USER,
+				reason: data.reason
+			]
+			em.create(itm);
+		}
+		return data;
+	}
+
+	public def getList( params ) {
+		if (!params.batchpaymentid) throw new Exception('Batch Payment ID is required.');
+
+		return em.getList(params);
+	}
+
+	@ProxyMethod
+	public def getForExemptions( params ) {
+		if (!params.batchpaymentid) throw new Exception('Batch Payment ID is required.');
+		if (!params.txndate) throw new Exception('Txndate is required.');
+
+		def list = em.getForExemptions([parentid: params.batchpaymentid, txndate: params.txndate]);
+		def list2 = getList([batchpaymentid: params.batchpaymentid]);
+		list2.each{itm->
+			def f = list.find{ it.objid == itm.objid }
+			if (f) list.remove(f);
+		}
+		list.each{ it.selected = true; }
+		return list;
+	}
+}

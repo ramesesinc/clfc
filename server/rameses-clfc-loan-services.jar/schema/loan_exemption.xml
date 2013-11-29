@@ -1,0 +1,14 @@
+<schema>
+
+	<element name="loan_exemption" tablename="loan_exemption">
+		<field name="objid" primary="true"/>
+		<field name="state" required="true"/>
+		<field name="ledgerid" required="true"/>
+		<field name="batchpaymentid" required="true"/>
+		<field name="txndate" required="true"/>
+		<field name="dtcreated" required="true"/>
+		<field name="createdby" required="true"/>
+		<field name="reason" required="true"/>
+	</element>
+
+</schema>

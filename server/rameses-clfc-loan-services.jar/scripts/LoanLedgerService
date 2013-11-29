@@ -43,7 +43,7 @@ class LoanLedgerService extends ActiveListService
 		data.overduepenalty = 0.00;
 		data.totaldue = 0.00;
 		data.state = 'OPEN';
-		throw new Exception('stopping')
+		data.dtcurrentschedule = data.dtstarted;
 		em.create(data);
 		data.payments.each{
 			def itm = [

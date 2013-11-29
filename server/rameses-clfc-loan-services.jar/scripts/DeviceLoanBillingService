@@ -53,30 +53,6 @@ class DeviceLoanBillingService
 		def list = [];
 		result.each{ list.add(it); }
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
-		//def result = ledger.getCollectionsheets(params);
-		//if (!result) throw new Exception('No billing for route '+params.route_description+' - '+params.route_area);
-		/*def currentDate = dateSvc.parseCurrentDate().date;
-		def days;
-		def list = [];
-		result.each{
-			if (currentDate > it.dtmatured && it.overduepenalty == 0) {
-				def producttype = product_type.read([name: it.producttypeid]);
-				def overduepenalty = (it.balance*producttype.pastduerate)/30;
-				if(overduepenalty > 0) overduepenalty = ledgerSvc.roundOffAmount(overduepenalty);
-				it.overduepenalty = overduepenalty;
-				ledger.update(it, "overduepenalty");
-			}
-			def dtlastpaid;
-			if(!it.dtlastpaid)
-				dtlastpaid = dateSvc.add(it.dtstarted, "-1");
-			else 
-				dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;
-
-			days = dateSvc.getDaysDiff(dtlastpaid, currentDate)-1;
-			it.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8); 
-			it.amountdue = it.dailydue*days;
-			list.add(it);
-		}*/
 		return [list: list];
 	}
 
@@ -89,10 +65,10 @@ class DeviceLoanBillingService
 		def data = batch_payment.read([objid: params.sessionid]);
 		def list = [];
 		params.payments.each{
-			def itm = batch_payment.findDetailByAppIdAndParentId([appid: it.loanappid, parentid: data.objid]);
-			if(!itm) {
+			def itm = batch_payment.read([objid: it.detailid], 'detail');//batch_payment.findDetailByAppIdAndParentId([appid: it.loanappid, parentid: data.objid]);
+			if (!itm) {
 				itm = [
-					objid: 		'BPDTL'+new java.rmi.server.UID(),
+					objid: 		it.detailid,//'BPDTL'+new java.rmi.server.UID(),
 					parentid: 	data.objid,
 					refno: 		it.refno,
 					appid: 		it.loanappid,
@@ -108,7 +84,7 @@ class DeviceLoanBillingService
 
 	private void createBatchPaymentHeader( params ) {
 		def itm = batch_payment.read([objid: params.sessionid]);
-		if(!itm) {
+		if (!itm) {
 			def txndate = dateSvc.parse("yyyy-mm-dd", params.txndate);
 			itm = [
 				objid: 			params.sessionid,

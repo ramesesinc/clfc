@@ -6,6 +6,9 @@ import java.rmi.server.UID;
 
 class LoanPaymentService
 {
+	@ActiveDB(value="loanapp")
+	def loanapp;
+
 	@ActiveDB(value="batch_payment")
 	def batch_payment;
 
@@ -68,7 +71,7 @@ class LoanPaymentService
 		if(!params.route_code) throw new Exception('Route code is required');
 		def bp = batch_payment.findByRoutecode(params);
 		def list = []
-		if(bp) {
+		if (bp) {
 			list = batch_payment.getDetailsByParentId([parentid: bp.objid]);
 			if(bp.totalcount != list.size()) 
 				throw new Exception('Payments for this route was not uploaded successfully.');
@@ -280,11 +283,20 @@ class LoanPaymentService
 				lastitem.groupbaseamount = lastitem.baseamount+r[1];
 			}
 
+			def xledger = ledgerdb.read(ledger);
 			if (lastitem.balance) {
-				ledgerdb.update([objid: ledger.objid, balance:lastitem.balance], "balance");
-				def xledger = ledgerdb.read(ledger);
-				if (xledger.balance == 0) ledgerdb.closeLedger(xledger);
+				ledgerdb.update([objid: ledger.objid, balance: lastitem.balance], "balance");
+				if (xledger.balance == 0) {
+					xledger.state = 'CLOSED';
+					ledgerdb.update(xledger);
+					loanapp.update([objid: xledger.appid, state: xledger.state]);
+					loanapp.update([objid: xledger.appid, state: xledger.state], 'loanapp_search');
+				}	
 			}
+			def day = data.currentDay;
+			if (lastitem.day) day = lastitem.day;
+			xledger.dtcurrentschedule = xledger.dtstarted+day;
+			ledgerdb.update(xledger, "dtcurrentschedule");
 		}
 		//results.each{ println it; }
 		//throw new Exception('stopping');
