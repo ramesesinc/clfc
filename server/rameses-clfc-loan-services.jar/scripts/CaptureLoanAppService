@@ -56,7 +56,7 @@ class CaptureLoanAppService
 			throw new Exception('Please specify marketedby'); 
 
 		data.branch = [code: env.ORGID, name: env.ORGNAME];
-		data.dtcreated = dateSvc.serverDate.toString();
+		data.dtcreated = data.dtreleased.toString();
 		data.createdby = env.USER; 
 		
 		createPreviousLoans(data); 
@@ -96,7 +96,7 @@ class CaptureLoanAppService
 			o.appno = o.loanno; 
 			o.apptype = 'CAPTURE';
 			o.appmode = 'CAPTURE'; 
-			o.dtcreated = data.dtcreated;
+			o.dtcreated = data.dtreleased.toString();
 			o.createdby = data.createdby;
 			o.borrower = data.borrower;
 			loanapp.create(o, 'loanapp_previous');
