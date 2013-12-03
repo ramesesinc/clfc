@@ -2,7 +2,7 @@
 
 [Setup]
 AppName=CLFC
-AppVersion=1.0
+AppVersion=2.0
 DefaultDirName=C:\CLFC
 Compression=lzma2
 SolidCompression=yes
