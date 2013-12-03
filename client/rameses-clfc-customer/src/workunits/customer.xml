@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="quick_launcher" code="NEWC" caption="Customer Information" action="create"/>
+        <invoker type="quick_launcher" code="NEWC" caption="Customer Information" action="create" permission="system"/>
         <invoker type="customer:create" caption="Customer Information" action="create"/>
         <invoker type="customer:open" caption="Customer Information" action="open"/>
         
