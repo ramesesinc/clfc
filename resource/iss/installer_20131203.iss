@@ -2,9 +2,8 @@
 
 [Setup]
 AppName=CLFC
-AppVersion=2.0
-AppPublisher=Rameses Systems, Inc.
-DefaultDirName=C:\CLFC
+AppVersion=1.0
+DefaultDirName={pf}\Rameses Systems Inc.\CLFC
 Compression=lzma2
 SolidCompression=yes
 OutputDir=userdocs:Inno Setup Examples Output
@@ -17,14 +16,10 @@ Source: "platform\clfc2_platform_thin\lib\*.*"; DestDir: "{app}\lib"
 Name: "{commondesktop}\CLFC 2"; Filename: "{app}\clfc2_platform.bat"; IconFilename: "{app}\shortcut.ico";
 Name: "{commonstartmenu}\CLFC 2"; Filename: "{app}\clfc2_platform.bat"; IconFilename: "{app}\shortcut.ico";
 
-[Run]
-Filename: "{app}\clfc2_platform.bat"; Description: "Launch Application"; Flags: postinstall nowait skipifsilent;
-
 [Code]
 #include <it_download.iss>
 #define MinJRE "1.6"
-#define WebJRE64 "http://dl.filehorse.com/win/browsers-and-plugins/java-runtime-64/Java-Runtime-Environment-1.6.0.45-(64-bit).exe?st=4JME8hKSPEd34kWqMamJiQ&e=1386057111&fn=jre-6u45-windows-x64.exe"
-#define WebJRE32 "http://dl.filehorse.com/win/browsers-and-plugins/java-runtime-32/Java-Runtime-Environment-1.6.0.45-(32-bit).exe?st=jCyKWxEigOuyJui5yGtO7A&e=1386056774&fn=jre-6u45-windows-i586.exe"
+#define WebJRE "http://download688.mediafire.com/5pjr10iyqmdg/bni6z8l8zt3wiwz/jre-6u45-windows-i586.exe"
 
 function IsJREInstalled: Boolean;
 var
@@ -49,10 +44,7 @@ begin
   begin
     //ITD_AddFile('http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jre-6u45-windows-i586.exe', ExpandConstant('{tmp}\jdk_1.5.exe'));
     //Log('{#WebJRE}');
-    if isWin64() = True then
-      ITD_AddFile('{#WebJRE64}', ExpandConstant('{tmp}\jre_1.6_64.exe'));
-    if isWin64 = False then
-      ITD_AddFile('{#WebJRE32}', ExpandConstant('{tmp}\jre_1.6_32.exe'));
+    ITD_AddFile('{#WebJRE}', ExpandConstant('{tmp}\jre_1.6.exe'));
     ITD_DownloadAfter(wpReady); 
   end;
 end;
@@ -62,9 +54,6 @@ var
   ResultCode: Integer;
 begin
   if CurStep=ssInstall then begin //Lets install those files that were downloaded for us
-    if isWin64() = True then
-      Exec(ExpandConstant('{tmp}\jre_1.6_64.exe'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
-    if isWin64() = False then
-      Exec(ExpandConstant('{tmp}\jre_1.6_32.exe'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+    Exec(ExpandConstant('{tmp}\jre_1.6.exe'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
   end;
 end;
