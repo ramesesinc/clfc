@@ -6,8 +6,7 @@
             immediate="true" visibleWhen="#{editButtonVisible == true}"/>
             
         <invoker type="formActions" caption="Reports" action="viewReport" 
-            icon="images/toolbars/chart.png"  immediate="true" 
-            visibleWhen="#{editableMode == false}"/>
+            immediate="true" visibleWhen="#{editableMode == false}"/>
             
         <invoker type="formActions" caption="Cancel" action="cancel" 
             immediate="true" visibleWhen="#{editableMode == true}"/>

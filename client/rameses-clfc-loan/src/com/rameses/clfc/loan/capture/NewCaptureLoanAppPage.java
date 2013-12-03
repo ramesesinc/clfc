@@ -255,7 +255,7 @@ public class NewCaptureLoanAppPage extends javax.swing.JPanel {
 
         xLookupField2.setCaption("Route");
         xLookupField2.setCaptionWidth(100);
-        xLookupField2.setExpression("#{item.code}");
+        xLookupField2.setExpression("#{item.description} - #{item.area}");
         xLookupField2.setHandler("routeLookupHandler");
         xLookupField2.setName("entity.route");
         xLookupField2.setPreferredSize(new java.awt.Dimension(0, 20));

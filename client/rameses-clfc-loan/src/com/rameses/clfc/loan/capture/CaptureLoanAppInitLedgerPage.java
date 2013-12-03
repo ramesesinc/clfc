@@ -85,7 +85,7 @@ public class CaptureLoanAppInitLedgerPage extends javax.swing.JPanel {
         xLabel1.setCaption("Route");
         xLabel1.setCaptionWidth(115);
         xLabel1.setDepends(new String[] {"entity"});
-        xLabel1.setExpression("#{item.code} - #{item.description} #{item.area}");
+        xLabel1.setExpression("#{item.description} - #{item.area}");
         xLabel1.setName("entity.route");
         xLabel1.setOpaque(true);
         xLabel1.setPreferredSize(new java.awt.Dimension(0, 20));
