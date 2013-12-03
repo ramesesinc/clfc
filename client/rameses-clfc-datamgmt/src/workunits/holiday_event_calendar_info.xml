@@ -1,11 +1,11 @@
 <workunit>
     <invokers>
         <invoker type="holidayevent:create" action="create" caption="Holiday Event" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="holidayevent.create" 
+            role="DATAMGMT_AUTHOR" permission="holidayevent.create" 
             target="popup" resizable="false"/>
             
         <invoker type="holidayevent:open" action="open" caption="Holiday Event" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="holidayevent.read" 
+            role="DATAMGMT_AUTHOR" permission="holidayevent.read" 
             target="popup" resizable="false"/>
     </invokers>
     <code>

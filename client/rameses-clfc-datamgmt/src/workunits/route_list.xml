@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/ListController.xml">
     <invokers>
         <invoker folderid="/explorer/master/loan" caption="Routes" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="route.read"/> 
+            role="DATAMGMT_AUTHOR" permission="route.read"/> 
     </invokers>
     
     <code>
@@ -15,8 +15,8 @@
         String serviceName = 'LoanRouteService';
         String entityName  = 'route';
         
-        Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'route.create']; 
-        Map readPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'route.read']; 
+        Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.create']; 
+        Map readPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.read']; 
     } 
     </code>
     

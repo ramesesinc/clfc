@@ -1,11 +1,11 @@
 <workunits>
     <invokers>
         <invoker type="producttype:create" action="create" caption="Product Type" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="producttype.create" 
+            role="DATAMGMT_AUTHOR" permission="producttype.create" 
             target="popup" resizable="false"/>
             
         <invoker type="producttype:open" action="open" caption="Product Type" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="producttype.read" 
+            role="DATAMGMT_AUTHOR" permission="producttype.read" 
             target="popup" resizable="false"/>
             
     </invokers>

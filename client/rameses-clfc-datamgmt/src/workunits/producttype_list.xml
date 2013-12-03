@@ -1,7 +1,7 @@
 <workunit extends="wtemplates/ListController.xml">
     <invokers>
         <invoker folderid="/explorer/master/loan" caption="Product Types" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="producttype.read"/>
+            role="DATAMGMT_AUTHOR" permission="producttype.read"/>
     </invokers>
     
     <code>
@@ -15,8 +15,8 @@
         String serviceName = 'LoanProductTypeService';
         String entityName  = 'producttype';
         
-        Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.create']; 
-        Map readPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.read']; 
+        Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.create']; 
+        Map readPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.read']; 
     } 
     </code>    
 </workunit>

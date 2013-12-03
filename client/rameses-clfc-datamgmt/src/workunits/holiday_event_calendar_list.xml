@@ -2,7 +2,7 @@
     
     <invokers>
         <invoker folderid="/explorer/master/loan" caption="Holiday Events" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="holidayevent.read"/>
+            role="DATAMGMT_AUTHOR" permission="holidayevent.read"/>
     </invokers>
    
     <code>
@@ -16,8 +16,8 @@
         String serviceName = 'HolidayEventCalendarService';
         String entityName  = 'holidayevent';
         
-        Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.create']; 
-        Map readPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.read']; 
+        Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'holidayevent.create']; 
+        Map readPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'holidayevent.read']; 
     } 
     </code>   
 </workunit>

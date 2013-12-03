@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
         <invoker type="route:create" action="create" caption="Route" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="route.create" 
+            role="DATAMGMT_AUTHOR" permission="route.create" 
             target="popup" resizable="false"/> 
             
         <invoker type="route:open" action="open" caption="Route" 
