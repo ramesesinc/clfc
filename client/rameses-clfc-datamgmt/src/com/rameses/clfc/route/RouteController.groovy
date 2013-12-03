@@ -15,10 +15,10 @@ class RouteController extends CRUDController
     boolean showConfirmOnSave = false;
     boolean allowApprove = false;
 
-    Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'route.create']; 
-    Map editPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'route.edit']; 
-    Map deletePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'route.delete']; 
-    Map approvePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'route.approve']; 
+    Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.create']; 
+    Map editPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.edit']; 
+    Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.delete']; 
+    Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.approve']; 
     
     Map createEntity() {
         def sid = new java.rmi.server.UID().toString();

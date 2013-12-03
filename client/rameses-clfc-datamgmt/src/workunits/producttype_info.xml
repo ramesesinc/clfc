@@ -26,10 +26,10 @@
             boolean showConfirmOnSave = false;
             boolean allowApprove = false;
 
-            Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.create']; 
-            Map editPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.edit']; 
-            Map deletePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.delete']; 
-            Map approvePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'producttype.approve']; 
+            Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.create']; 
+            Map editPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.edit']; 
+            Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.delete']; 
+            Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.approve']; 
         } 
     </code>
     

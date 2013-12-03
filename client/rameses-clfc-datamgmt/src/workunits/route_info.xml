@@ -5,7 +5,7 @@
             target="popup" resizable="false"/> 
             
         <invoker type="route:open" action="open" caption="Route" 
-            role="LOAN_DATAMGMT_AUTHOR" permission="route.read" 
+            role="DATAMGMT_AUTHOR" permission="route.read" 
             target="popup" resizable="false"/>             
     </invokers>     
     

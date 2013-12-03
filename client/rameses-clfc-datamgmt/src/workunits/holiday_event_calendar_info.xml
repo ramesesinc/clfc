@@ -22,10 +22,10 @@
             boolean showConfirmOnSave = false;
             boolean allowApprove = false;
             
-            Map createPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.create']; 
-            Map editPermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.edit']; 
-            Map deletePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.delete']; 
-            Map approvePermission = [domain:'DATAMGMT', role:'LOAN_DATAMGMT_AUTHOR', permission:'holidayevent.approve'];             
+            Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'holidayevent.create']; 
+            Map editPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'holidayevent.edit']; 
+            Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'holidayevent.delete']; 
+            Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'holidayevent.approve'];             
         }
     </code>
     <pages>
