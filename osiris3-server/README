@@ -1,0 +1,24 @@
+==========================
+ SETTING UP CLFC SERVER   
+==========================
+1) Open the file bin/server.conf and change the directory paths of home.url property.  
+
+2) Open the file workspace/web/anubis.hosts and change the directory paths. 
+
+3) Go to the directory workspace/services/datasources to locate all datasource files. 
+   Open each file and setup the correct database connection settings. 
+
+   Notes: 
+	  For database accounts we recommend the root account to be binded to all application servers. 
+	  The root account will only used for administrators and application servers and bind to specific IPs.
+   
+4) To run the server, go to the bin/ directory and execute the following command:
+
+   [root@centOS]$ chmod +x *.sh
+   [root@centOS]$ ./run.sh 
+   
+   Notes: 
+	  The first command is executed only once to give the file a permission to execute. 
+	  The second command will be used always every time you run the server. 
+	  The user must be a sudoer to properly run the server since I/O operations are done always. 
+
