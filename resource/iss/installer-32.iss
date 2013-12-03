@@ -3,7 +3,7 @@
 [Setup]
 AppName=CLFC
 AppVersion=1.0
-DefaultDirName={pf}\Rameses Systems Inc.\CLFC
+DefaultDirName=C:\CLFC
 Compression=lzma2
 SolidCompression=yes
 OutputDir=userdocs:Inno Setup Examples Output
