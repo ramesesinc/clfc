@@ -45,7 +45,7 @@
         <Component class="com.rameses.rcp.control.XTextField" name="xTextField1">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Name"/>
-            <Property name="captionWidth" type="int" value="135"/>
+            <Property name="captionWidth" type="int" value="160"/>
             <Property name="index" type="int" value="-10"/>
             <Property name="name" type="java.lang.String" value="entity.name"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -57,7 +57,7 @@
         <Component class="com.rameses.rcp.control.XTextField" name="xTextField2">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Description"/>
-            <Property name="captionWidth" type="int" value="135"/>
+            <Property name="captionWidth" type="int" value="160"/>
             <Property name="name" type="java.lang.String" value="entity.description"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[300, 20]"/>
@@ -68,7 +68,7 @@
         <Component class="com.rameses.rcp.control.XIntegerField" name="xIntegerField1">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Term"/>
-            <Property name="captionWidth" type="int" value="135"/>
+            <Property name="captionWidth" type="int" value="160"/>
             <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
             <Property name="name" type="java.lang.String" value="entity.term"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -80,7 +80,7 @@
         <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField2">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Interest Rate"/>
-            <Property name="captionWidth" type="int" value="135"/>
+            <Property name="captionWidth" type="int" value="160"/>
             <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
             <Property name="name" type="java.lang.String" value="entity.interestrate"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -92,7 +92,7 @@
         <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField3">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Past Due Rate"/>
-            <Property name="captionWidth" type="int" value="135"/>
+            <Property name="captionWidth" type="int" value="160"/>
             <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
             <Property name="name" type="java.lang.String" value="entity.pastduerate"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -103,8 +103,8 @@
         </Component>
         <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField4">
           <Properties>
-            <Property name="caption" type="java.lang.String" value="Underpayment Penalty"/>
-            <Property name="captionWidth" type="int" value="135"/>
+            <Property name="caption" type="java.lang.String" value="Underpayment Penalty Rate"/>
+            <Property name="captionWidth" type="int" value="160"/>
             <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
             <Property name="name" type="java.lang.String" value="entity.underpaymentpenalty"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -113,22 +113,10 @@
             <Property name="required" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField5">
-          <Properties>
-            <Property name="caption" type="java.lang.String" value="Surcharge Rate"/>
-            <Property name="captionWidth" type="int" value="135"/>
-            <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
-            <Property name="name" type="java.lang.String" value="entity.surchargerate"/>
-            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[150, 20]"/>
-            </Property>
-            <Property name="required" type="boolean" value="true"/>
-          </Properties>
-        </Component>
         <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField6">
           <Properties>
-            <Property name="caption" type="java.lang.String" value="Absent Penalty"/>
-            <Property name="captionWidth" type="int" value="135"/>
+            <Property name="caption" type="java.lang.String" value="Absent Penalty Rate"/>
+            <Property name="captionWidth" type="int" value="160"/>
             <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
             <Property name="name" type="java.lang.String" value="entity.absentpenalty"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">

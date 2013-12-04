@@ -36,7 +36,6 @@ public class ProductTypePage extends javax.swing.JPanel
         xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField3 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField4 = new com.rameses.rcp.control.XDecimalField();
-        xDecimalField5 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField6 = new com.rameses.rcp.control.XDecimalField();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
@@ -44,7 +43,7 @@ public class ProductTypePage extends javax.swing.JPanel
         xFormPanel1.setBorder(xTitledBorder1);
         xFormPanel1.setPadding(new java.awt.Insets(10, 15, 10, 20));
         xTextField1.setCaption("Name");
-        xTextField1.setCaptionWidth(135);
+        xTextField1.setCaptionWidth(160);
         xTextField1.setIndex(-10);
         xTextField1.setName("entity.name");
         xTextField1.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -52,14 +51,14 @@ public class ProductTypePage extends javax.swing.JPanel
         xFormPanel1.add(xTextField1);
 
         xTextField2.setCaption("Description");
-        xTextField2.setCaptionWidth(135);
+        xTextField2.setCaptionWidth(160);
         xTextField2.setName("entity.description");
         xTextField2.setPreferredSize(new java.awt.Dimension(300, 20));
         xTextField2.setRequired(true);
         xFormPanel1.add(xTextField2);
 
         xIntegerField1.setCaption("Term");
-        xIntegerField1.setCaptionWidth(135);
+        xIntegerField1.setCaptionWidth(160);
         xIntegerField1.setFontStyle("font-size:14");
         xIntegerField1.setName("entity.term");
         xIntegerField1.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -67,7 +66,7 @@ public class ProductTypePage extends javax.swing.JPanel
         xFormPanel1.add(xIntegerField1);
 
         xDecimalField2.setCaption("Interest Rate");
-        xDecimalField2.setCaptionWidth(135);
+        xDecimalField2.setCaptionWidth(160);
         xDecimalField2.setFontStyle("font-size:14");
         xDecimalField2.setName("entity.interestrate");
         xDecimalField2.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -75,31 +74,23 @@ public class ProductTypePage extends javax.swing.JPanel
         xFormPanel1.add(xDecimalField2);
 
         xDecimalField3.setCaption("Past Due Rate");
-        xDecimalField3.setCaptionWidth(135);
+        xDecimalField3.setCaptionWidth(160);
         xDecimalField3.setFontStyle("font-size:14");
         xDecimalField3.setName("entity.pastduerate");
         xDecimalField3.setPreferredSize(new java.awt.Dimension(150, 20));
         xDecimalField3.setRequired(true);
         xFormPanel1.add(xDecimalField3);
 
-        xDecimalField4.setCaption("Underpayment Penalty");
-        xDecimalField4.setCaptionWidth(135);
+        xDecimalField4.setCaption("Underpayment Penalty Rate");
+        xDecimalField4.setCaptionWidth(160);
         xDecimalField4.setFontStyle("font-size:14");
         xDecimalField4.setName("entity.underpaymentpenalty");
         xDecimalField4.setPreferredSize(new java.awt.Dimension(150, 20));
         xDecimalField4.setRequired(true);
         xFormPanel1.add(xDecimalField4);
 
-        xDecimalField5.setCaption("Surcharge Rate");
-        xDecimalField5.setCaptionWidth(135);
-        xDecimalField5.setFontStyle("font-size:14");
-        xDecimalField5.setName("entity.surchargerate");
-        xDecimalField5.setPreferredSize(new java.awt.Dimension(150, 20));
-        xDecimalField5.setRequired(true);
-        xFormPanel1.add(xDecimalField5);
-
-        xDecimalField6.setCaption("Absent Penalty");
-        xDecimalField6.setCaptionWidth(135);
+        xDecimalField6.setCaption("Absent Penalty Rate");
+        xDecimalField6.setCaptionWidth(160);
         xDecimalField6.setFontStyle("font-size:14");
         xDecimalField6.setName("entity.absentpenalty");
         xDecimalField6.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -129,7 +120,6 @@ public class ProductTypePage extends javax.swing.JPanel
     private com.rameses.rcp.control.XDecimalField xDecimalField2;
     private com.rameses.rcp.control.XDecimalField xDecimalField3;
     private com.rameses.rcp.control.XDecimalField xDecimalField4;
-    private com.rameses.rcp.control.XDecimalField xDecimalField5;
     private com.rameses.rcp.control.XDecimalField xDecimalField6;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XIntegerField xIntegerField1;
