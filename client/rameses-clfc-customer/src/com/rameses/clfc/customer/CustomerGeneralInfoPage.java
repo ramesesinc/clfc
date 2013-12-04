@@ -99,6 +99,7 @@ public class CustomerGeneralInfoPage extends javax.swing.JPanel
         xDateField1.setCaption("Birth Date");
         xDateField1.setName("entity.birthdate");
         xDateField1.setPreferredSize(new java.awt.Dimension(90, 20));
+        xDateField1.setRequired(true);
         xFormPanel3.add(xDateField1);
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
