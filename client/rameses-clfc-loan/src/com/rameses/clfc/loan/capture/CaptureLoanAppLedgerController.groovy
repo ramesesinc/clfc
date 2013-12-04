@@ -31,7 +31,10 @@ class LoanAppCaptureLedgerController
     
     void init() {
         mode = 'read';
-        entity = [ objid: 'LEDGER'+new UID() ]
+        entity = [ 
+            objid: 'LEDGER'+new UID(),
+            txnmode: 'CAPTURE'
+        ]
     }
     
     def close() {

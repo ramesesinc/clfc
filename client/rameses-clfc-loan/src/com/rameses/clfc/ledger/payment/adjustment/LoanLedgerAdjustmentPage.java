@@ -4,7 +4,7 @@
  * Created on October 2, 2013, 9:43 AM
  */
 
-package com.rameses.clfc.ledger.adjustment;
+package com.rameses.clfc.ledger.payment.adjustment;
 
 import com.rameses.osiris2.themes.FormPage;
 import com.rameses.rcp.ui.annotations.Template;

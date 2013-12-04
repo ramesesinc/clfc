@@ -87,11 +87,7 @@ class PostPaymentController
     }
     
     def post() {
-        unpostedPayments.each{
-            it.entity = entity;
-            paymentSvc.postPayment(it);
-        }
-        ledgerSvc.approveBatchPayment(entity);
+        ledgerSvc.approveBatchPayment([entity: entity, unpostedpayments: unpostedPayments]);
         route = null;
         mode = 'init';
         MsgBox.alert('Transaction has been successfully posted'); 

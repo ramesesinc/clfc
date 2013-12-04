@@ -4,7 +4,7 @@
  * Created on October 2, 2013, 2:01 PM
  */
 
-package com.rameses.clfc.ledger.adjustment;
+package com.rameses.clfc.ledger.payment.adjustment;
 
 /**
  *
