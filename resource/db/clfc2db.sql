@@ -782,7 +782,6 @@ CREATE TABLE `loan_product_type` (
 
 LOCK TABLES `loan_product_type` WRITE;
 /*!40000 ALTER TABLE `loan_product_type` DISABLE KEYS */;
-INSERT INTO `loan_product_type` VALUES ('DAILY','DAILY SCHEDULE PAYMENT OPTION',120,'0.05','0.06','0.03','3.00','3.00');
 /*!40000 ALTER TABLE `loan_product_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
