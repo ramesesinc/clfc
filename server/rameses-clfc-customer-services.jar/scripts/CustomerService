@@ -1,6 +1,7 @@
 import com.rameses.annotations.*;
 import com.rameses.common.*;
 import com.rameses.services.extended.*;
+import org.joda.time.*;
 
 class CustomerService 
 {	
@@ -28,6 +29,11 @@ class CustomerService
 	@ProxyMethod
 	public def create(data) {
 		data.dtcreated = dateSvc.serverDate.toString(); 
+		LocalDate start = new LocalDate(data.birthdate);
+		LocalDate end = new LocalDate(data.dtcreated.split(' ')[0]);
+		int years = Years.yearsBetween(start, end).getYears();
+		if (years < 18) throw new Exception('Customer must be 18 and above.');
+		
 		data.type = 'INDIVIDUAL';
 		data.state = 'ACTIVE';
 		data.mode = 'ONLINE';
