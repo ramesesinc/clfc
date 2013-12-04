@@ -234,7 +234,7 @@ public class NewCaptureLoanAppPage extends javax.swing.JPanel {
         xNumberField1.setName("entity.producttype.term");
         xNumberField1.setPattern("#,##0");
         xNumberField1.setPreferredSize(new java.awt.Dimension(0, 20));
-        xNumberField1.setRequired(true);
+        xNumberField1.setReadonly(true);
         xFormPanel5.add(xNumberField1);
 
         xDecimalField1.setCaption("Amount Applied");

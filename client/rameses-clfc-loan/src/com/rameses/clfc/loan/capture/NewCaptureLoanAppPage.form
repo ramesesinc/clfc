@@ -416,7 +416,7 @@
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 20]"/>
                 </Property>
-                <Property name="required" type="boolean" value="true"/>
+                <Property name="readonly" type="boolean" value="true"/>
               </Properties>
             </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField1">
