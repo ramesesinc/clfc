@@ -7,7 +7,6 @@
 		<field name="interestrate" required="true"/>
 		<field name="pastduerate" required="true"/>
 		<field name="underpaymentpenalty" required="true"/>
-		<field name="surchargerate" required="true"/>
 		<field name="absentpenalty" required="true"/>
 	</element>
 

@@ -15,9 +15,8 @@ class LoanProductTypeService extends ActiveCrudListService
 			[name:'term', caption:'Term', type:'integer', width:50, maxWidth:50],
 			[name:'interestrate', caption:'Interest Rate', type:'decimal', width:80, maxWidth:80],
 			[name:'pastduerate', caption:'Past Due Rate', type:'decimal', width:80, maxWidth:80],
-			[name:'underpaymentpenalty', caption:'Underpayment Penalty', type:'decimal', width:130, maxWidth:130],
-			[name:'surchargerate', caption:'Surcharge Rate', type:'decimal', width:100, maxWidth:100],
-			[name:'absentpenalty', caption:'Absent Penalty'],
+			[name:'underpaymentpenalty', caption:'Underpayment Penalty Rate', type:'decimal', width:130, maxWidth:130],
+			[name:'absentpenalty', caption:'Absent Penalty Rate', type:'decimal', width:130, maxWidth:130],
 		]
 
 	}
