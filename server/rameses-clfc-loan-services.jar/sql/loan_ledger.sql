@@ -67,3 +67,10 @@ ORDER BY lld.dtpaid, lld.refno
 [removeLedgerDetail]
 DELETE FROM loan_ledger_detail
 WHERE parentid=$P{parentid}
+
+[findLedgerById]
+SELECT ll.*, la.appno, la.loanamount
+FROM loan_ledger ll
+INNER JOIN loanapp la
+ON ll.appid=la.objid
+WHERE ll.objid=$P{ledgerid}

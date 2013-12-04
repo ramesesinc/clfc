@@ -25,10 +25,10 @@ class LoanLedgerReportService
 
 	@ProxyMethod
 	public def getReportData( params ) {
-		if (!params.ledgerid) throw new Exception('Please specify ledgerid');
+		if (!params.objid) throw new Exception('Please specify objid');
 		if (!params.appid) throw new Exception('Please specify appid');
 
-		def ledger = ledgerdb.read([objid: params.ledgerid]);
+		def ledger = ledgerdb.read(params);
 		def pb = borrower.read([objid: ledger.acctid]);
 		def producttype = product_type.read([name: ledger.producttypeid]);
 

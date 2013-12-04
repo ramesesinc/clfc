@@ -17,6 +17,9 @@ class LoanLedgerService extends ActiveListService
 	@Service('LoanPaymentService')
 	def paymentSvc;
 
+	@Service('LoanLedgerAdjustmentService')
+	def adjustmentSvc;
+
 	@ProxyMethod
 	public def getColumns( params ) {
 		return [
@@ -30,8 +33,46 @@ class LoanLedgerService extends ActiveListService
 		]
 	}
 
+	@ProxyMethod
+	public def open( data ) {
+		data = em.findLedgerById(data);
+		if (!data) throw new Exception('Record does not exist or has already been deleted.');
+
+		data.paymentmethod = (data.paymentmethod == 'schedule'? 'Schedule/Advance' : 'Overpayment');
+		data.payments = adjustmentSvc.getPayments([ledgerid: data.objid]);	
+		return data;	
+	}
+
+	@ProxyMethod
+	public def rebuild( data ) {
+		em.removeLedgerDetail([parentid: data.objid]);
+		def ledger = em.read(data);
+		ledger.balance = data.loanamount;
+		ledger.overpaymentamount = 0.00;
+		ledger.overduepenalty = 0.00;
+		ledger.dtlastpaid = null;
+		ledger.dtcurrentschedule = ledger.dtstarted
+		em.update(ledger);
+		data.payments.sort{ it.txndate.toString()+''+it.refno }
+		data.payments.each{
+			def itm = [
+			    appno: data.appno,
+			    appid: data.appid,
+			    borrowername: data.acctname,
+			    refno: it.refno,
+			    txndate: it.txndate,
+			    payamount: it.payamount
+			]
+			paymentSvc.postPayment(itm);
+		}
+		data.ledgerid = data.objid;
+		return open(data);
+	}
+
 	@ProxyMethod 
 	public def create(data) { 
+		if (!data.txnmode) throw new Exception('Please specify txnmode.');
+
 		def loancount = em.findLoanCountByAcctid([acctid: data.acctid]).loancount; 
 		data.loancount = loancount+1;
 		data.totalprincipal = data.loanamount;
@@ -44,6 +85,7 @@ class LoanLedgerService extends ActiveListService
 		data.totaldue = 0.00;
 		data.state = 'OPEN';
 		data.dtcurrentschedule = data.dtstarted;
+		data.updatetype = (data.txnmode == 'CAPTURE'? 0 : 1);
 		em.create(data);
 		data.payments.each{
 			def itm = [
@@ -94,9 +136,9 @@ class LoanLedgerService extends ActiveListService
 	}
 
 	private def computeAbsentPenalty(params) {
-		if(!params.dailydue) throw new Exception('Please specify daily due');
-		if(!params.underpaymentrate) throw new Exception('Please specify underpayment rate');
-		def result = new BigDecimal(params.dailydue+'').setScale(2).multiply(new BigDecimal(params.underpaymentrate+'').setScale(2));
+		if(!params.dailydue) throw new Exception('Please specify daily due.');
+		if(!params.absentpenalty) throw new Exception('Please specify absent penalty rate.');
+		def result = new BigDecimal(params.dailydue+'').setScale(2).multiply(new BigDecimal(params.absentpenalty+'').setScale(2));
 		return roundOffAmount(result.setScale(2));
 	}
 
@@ -106,9 +148,25 @@ class LoanLedgerService extends ActiveListService
 
 	@ProxyMethod
 	public def approveBatchPayment( params ) {
-		if (!params.objid) throw new Exception('Please specify objid');
-		batch_payment.changeStateApproved(params);
-		ledger_billing.changeStateCompleted(params);
+		if (!params.unpostedpayments) throw new Exception('Please specify unposted payments');
+		if (!params.entity) throw new Exception('Please specify entity');
+
+		def m;
+		def ledger;
+		params.unpostedpayments.each{
+			m = ledger_billing.read(it, 'detail');
+			if (!m) throw new Exception('No ledger for billing no. '+it.refno);
+
+			ledger = em.read([objid: m.ledgerid]);
+			if (ledger.updatetype == 0) {
+				ledger.updatetype = 1;
+				em.update(ledger, 'updatetype');
+			}
+			it.entity = params.entity;
+			paymentSvc.postPayment(it);
+		}
+		batch_payment.changeStateApproved(params.entity);
+		ledger_billing.changeStateCompleted(params.entity);
 		return params;
 	}
 }
