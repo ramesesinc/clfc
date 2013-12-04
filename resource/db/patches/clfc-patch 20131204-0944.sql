@@ -6,3 +6,10 @@ ADD INDEX `ix_dtcurrentschedule` (`dtcurrentschedule`);
 
 ALTER TABLE loan_product_type
 DROP `surchargerate`;
+
+ALTER TABLE loan_ledger_billing_detail
+DROP `penalty`,
+DROP `lackinginterest`,
+DROP `lackingpenalty`,
+ADD `loandate` DATE,
+ADD `term` SMALLINT(10);
