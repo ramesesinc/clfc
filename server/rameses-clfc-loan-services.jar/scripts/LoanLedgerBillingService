@@ -95,6 +95,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 					acctid: it.loanappid,
 					acctname: it.acctname,
 					loanamount: it.loanamount,
+					loandate: it.loandate,
+					term: it.term,
 					appno: it.appno,
 					overpaymentamount: it.overpaymentamount,
 					txndate: currentDate,
@@ -106,21 +108,23 @@ class LoanLedgerBillingService extends ActiveCrudService
 					lackinginterest: 0.00,
 					lackingpenalty: 0.00
 				];
-				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill', 8);
+				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+o.code, 8);
 				/*def dtschedule;
 				if (!it.dtlastpaid)
 					dtlastpaid = dateSvc.add(it.dtstarted, "-1");
 				else 
 					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;*/
 				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
-				detail.amountdue = it.dailydue*days;
+				def amt = it.dailydue;
+				if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
+				detail.amountdue = amt*days;
 				def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
 				days -= noofholidays;
 				def cal = Calendar.getInstance();
 				cal.setTime(currentDate);
 				if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
 				days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
-				detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
+				detail.amountdue += it.absentpenalty*(days > 0? days-1 : 0);
 				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");
 			}
@@ -143,8 +147,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 			bd = bd.divide(b, BigDecimal.ROUND_HALF_UP);
 			bal += (bd.setScale(0, BigDecimal.ROUND_HALF_UP)*params.interest);
 
-			params.lackingpenalty = ledgeritem.penaltybal;
-			params.lackinginterest = ledgeritem.interestbal;
+			params.amountdue += ledgeritem.penaltybal;
+			params.amountdue += ledgeritem.interestbal;
 			if (ledgeritem.interestbal > 0) bal += ledgeritem.interestbal;
 			if (ledgeritem.penaltybal > 0) bal += ledgeritem.penaltybal;
 			params.isfirstbill = 0;

@@ -1,0 +1,20 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+
+class LoanLedgerBillingTask
+{
+	@ActiveDB(value="loan_ledger_billing")
+	def ledger_billing;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
+	public void test( task ) {
+		def list = ledger_billing.getPastDraftBillings([date: dateSvc.serverDate]);
+		list.each{
+			it.state = 'CANCELLED';
+			ledger_billing.update(it);
+		}
+	}
+}

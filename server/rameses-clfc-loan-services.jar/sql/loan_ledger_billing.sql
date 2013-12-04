@@ -62,3 +62,8 @@ FROM loan_ledger_billing
 [changeStateCompleted]
 UPDATE loan_ledger_billing SET state="COMPLETED"
 WHERE objid=$P{objid}
+
+[getPastDraftBillings]
+SELECT * FROM loan_ledger_billing
+WHERE state='DRAFT'
+	AND billdate < $P{date}

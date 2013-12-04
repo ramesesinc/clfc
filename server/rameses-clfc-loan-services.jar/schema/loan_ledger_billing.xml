@@ -19,13 +19,12 @@
 		<field name="acctid" required="true"/>
 		<field name="acctname" required="true"/>
 		<field name="loanamount" required="true"/>
+		<field name="loandate" required="true"/>
+		<field name="term" required="true"/>
 		<field name="appno" required="true"/>
 		<field name="dailydue" required="true"/>
 		<field name="amountdue" required="true"/>
-		<field name="penalty" required="true"/>
 		<field name="overpaymentamount" required="true"/>
-		<field name="lackinginterest" required="true"/>
-		<field name="lackingpenalty" required="true"/>
 		<field name="balance" required="true"/>
 		<field name="refno" required="true"/>
 		<field name="txndate" required="true"/>
