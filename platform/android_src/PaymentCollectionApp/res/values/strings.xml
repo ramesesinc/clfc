@@ -7,7 +7,7 @@
     <string name="txt_appno">App. No.</string>
     <string name="txt_acctname">Acct. Name</string>
     <string name="txt_loanamount">Loan Amount</string>
-    <string name="txt_balance">Balance</string>
+    <string name="txt_balance">Total Balance</string>
     <string name="txt_dailydue">Daily Due</string>
     <string name="txt_amountdue">Amount Due</string>
     <string name="txt_overpayment">Overpayment</string>
@@ -34,7 +34,10 @@
     <string name="txt_payment_over">Overpayment</string>
     <string name="txt_term_schedule">Schedule</string>
     <string name="txt_term_overpayment">Overpayment</string>
-    <string name="txt_lacking_interest">Lacking Interest</string>
-    <string name="txt_lacking_penalty">Lacking Penalty</string>
-
+    <string name="txt_address_home">Home Address</string>
+    <string name="txt_address_collection">Collection Address</string>
+    <string name="txt_interest">Unpaid Interest</string>
+	<string name="txt_info_penalty">Penalty</string>
+	<string name="txt_others">Others</string>
+	<string name="txt_term">Term</string>
 </resources>

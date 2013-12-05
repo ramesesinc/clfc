@@ -26,22 +26,26 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_COLLECTIONSHEET = "" +
 			"CREATE TABLE COLLECTIONSHEET(" +
 			"loanappid text PRIMARY KEY, " +
-			"detailid text,"+
+			"detailid text," +
+			"seqno numeric, " +
 			"appno text, " +
 			"acctname text, " +
 			"amountdue numeric, " +
 			"overpaymentamount numeric, " +
-			"lackinginterest numeric, " +
-			"lackingpenalty numeric, " +
 			"refno text, " +
 			"routecode text, " +
+			"term numeric, " +
 			"loanamount numeric, " +
 			"dailydue numeric, " +
 			"balance numeric, " +
+			"interest numeric, "+
 			"penalty numeric, " +
+			"others numeric, " +
 			"duedate text, " +
 			"isfirstbill numeric, " +
-			"paymentmethod text" +
+			"paymentmethod text," +
+			"homeaddress text, " +
+			"collectionaddress text" +
 			");";
 	private static final String CREATE_TABLE_PAYMENT = "" +
 			"CREATE TABLE PAYMENT(" +
@@ -94,23 +98,27 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	public void insertCollectionsheet(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
-		values.put("loanappid", params.get("acctid").toString());
+		values.put("loanappid", params.get("loanappid").toString());
 		values.put("detailid", params.get("objid").toString());
+		values.put("seqno", Integer.parseInt(params.get("seqno").toString()));
 		values.put("appno", params.get("appno").toString());
 		values.put("acctname", params.get("acctname").toString());
 		values.put("loanamount", Double.parseDouble(params.get("loanamount").toString()));
+		values.put("term", Integer.parseInt(params.get("term").toString()));
 		values.put("balance", Double.parseDouble(params.get("balance").toString()));
 		values.put("dailydue", Double.parseDouble(params.get("dailydue").toString()));
 		values.put("amountdue", Double.parseDouble(params.get("amountdue").toString()));
+		values.put("interest" ,Double.parseDouble(params.get("interest").toString()));
 		values.put("penalty", Double.parseDouble(params.get("penalty").toString()));
+		values.put("others", Double.parseDouble(params.get("others").toString()));
 		values.put("overpaymentamount", Double.parseDouble(params.get("overpaymentamount").toString()));
-		values.put("lackinginterest", Double.parseDouble(params.get("lackinginterest").toString()));
-		values.put("lackingpenalty", Double.parseDouble(params.get("lackingpenalty").toString()));
 		values.put("refno", params.get("refno").toString());
 		values.put("routecode", params.get("routecode").toString());
 		values.put("duedate", params.get("dtmatured").toString());
 		values.put("isfirstbill", Integer.parseInt(params.get("isfirstbill").toString()));
 		values.put("paymentmethod", params.get("paymentmethod").toString());
+		values.put("homeaddress", params.get("homeaddress").toString());
+		values.put("collectionaddress", params.get("collectionaddress").toString());
 		db.insert(TABLE_COLLECTIONSHEET, null, values);
 	}
 	
@@ -210,7 +218,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 	
 	public Cursor getCollectionsheets(String routecode) {
-		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_COLLECTIONSHEET+" WHERE routecode='"+routecode+"' ORDER BY acctname", null);
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_COLLECTIONSHEET+" WHERE routecode='"+routecode+"' ORDER BY seqno", null);
 		
 		if (result != null) result.moveToFirst();
 		return result;

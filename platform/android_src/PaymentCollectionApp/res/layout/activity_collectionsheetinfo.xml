@@ -41,11 +41,12 @@
 
                       <TextView
                           android:id="@+id/textView3"
-                          android:layout_width="135dp"
+                          android:layout_width="150dp"
                           android:layout_height="wrap_content"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_appno"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/textView10"
@@ -54,7 +55,8 @@
                           android:layout_marginLeft="0dp"
                           android:layout_toRightOf="@+id/textView3"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_appno"
@@ -65,7 +67,10 @@
                           android:layout_marginLeft="5dp"
                           android:layout_toRightOf="@+id/textView10"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp"
+                          android:textStyle="bold" />
+
                   </RelativeLayout>
 
                   <RelativeLayout
@@ -74,11 +79,12 @@
 
                       <TextView
                           android:id="@+id/textView4"
-                          android:layout_width="135dp"
+                          android:layout_width="150dp"
                           android:layout_height="wrap_content"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_acctname"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/textView11"
@@ -86,7 +92,8 @@
                           android:layout_height="wrap_content"
                           android:layout_toRightOf="@+id/textView4"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_acctname"
@@ -97,7 +104,87 @@
                           android:layout_marginLeft="5dp"
                           android:layout_toRightOf="@+id/textView11"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp"
+                          android:textStyle="bold" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/TextView15"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_address_home"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView16"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_toRightOf="@+id/TextView15"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_homeaddress"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/TextView16"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/tv_info_collectionaddress"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/TextView07"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView07"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_toRightOf="@+id/TextView08"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView08"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_address_collection"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
                   </RelativeLayout>
 
                   <RelativeLayout
@@ -106,11 +193,12 @@
 
                       <TextView
                           android:id="@+id/textView18"
-                          android:layout_width="135dp"
+                          android:layout_width="150dp"
                           android:layout_height="wrap_content"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_loanamount"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/TextView02"
@@ -119,7 +207,8 @@
                           android:layout_alignParentTop="true"
                           android:layout_toRightOf="@+id/textView18"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_loanamount"
@@ -130,7 +219,9 @@
                           android:layout_marginLeft="5dp"
                           android:layout_toRightOf="@+id/TextView02"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
                   </RelativeLayout>
 
                   <RelativeLayout
@@ -138,237 +229,38 @@
                       android:layout_height="wrap_content" >
 
                       <TextView
-                          android:id="@+id/TextView03"
-                          android:layout_width="135dp"
+                          android:id="@+id/TextView17"
+                          android:layout_width="150dp"
                           android:layout_height="wrap_content"
                           android:layout_alignParentLeft="true"
                           android:layout_alignParentTop="true"
                           android:layout_marginLeft="10dp"
-                          android:text="@string/txt_balance"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:text="@string/txt_term"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
-                          android:id="@+id/TextView04"
+                          android:id="@+id/TextView21"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_alignParentTop="true"
-                          android:layout_toRightOf="@+id/TextView03"
+                          android:layout_toRightOf="@+id/TextView17"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
-                          android:id="@+id/tv_info_balance"
+                          android:id="@+id/tv_info_term"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_alignParentRight="true"
                           android:layout_alignParentTop="true"
                           android:layout_marginLeft="5dp"
-                          android:layout_toRightOf="@+id/TextView04"
+                          android:layout_toRightOf="@+id/TextView21"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-                  </RelativeLayout>
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
-                  <RelativeLayout
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content" >
-
-                      <TextView
-                          android:id="@+id/TextView06"
-                          android:layout_width="135dp"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentLeft="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="10dp"
-                          android:text="@string/txt_dailydue"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/TextView05"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_toRightOf="@+id/TextView06"
-                          android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/tv_info_dailydue"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentRight="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="5dp"
-                          android:layout_toRightOf="@+id/TextView05"
-                          android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-                  </RelativeLayout>
-
-                  <RelativeLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content" >
-
-                      <TextView
-                          android:id="@+id/textView5"
-                          android:layout_width="135dp"
-                          android:layout_height="wrap_content"
-                          android:layout_marginLeft="10dp"
-                          android:text="@string/txt_amountdue"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/textView12"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_toRightOf="@+id/textView5"
-                          android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/tv_info_amountdue"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentRight="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="5dp"
-                          android:layout_toRightOf="@+id/textView12"
-                          android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-                  </RelativeLayout>
-
-                  <RelativeLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content" >
-
-                      <TextView
-                          android:id="@+id/TextView08"
-                          android:layout_width="135dp"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentLeft="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="10dp"
-                          android:text="@string/txt_penalty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/TextView07"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentTop="true"
-                          android:layout_toRightOf="@+id/TextView08"
-                          android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/tv_info_penalty"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentRight="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="5dp"
-                          android:layout_toRightOf="@+id/TextView07"
-                          android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-                  </RelativeLayout>
-
-                  <RelativeLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content" >
-
-                      <TextView
-                          android:id="@+id/TextView12"
-                          android:layout_width="135dp"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentLeft="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="10dp"
-                          android:text="@string/txt_lacking_interest"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/TextView13"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentTop="true"
-                          android:layout_toRightOf="@+id/TextView12"
-                          android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/tv_info_lackinginterest"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentRight="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="5dp"
-                          android:layout_toRightOf="@+id/TextView13"
-                          android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-                  </RelativeLayout>
-
-                  <RelativeLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content" >
-
-                      <TextView
-                          android:id="@+id/TextView11"
-                          android:layout_width="135dp"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentLeft="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="10dp"
-                          android:text="@string/txt_lacking_penalty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/TextView14"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentTop="true"
-                          android:layout_toRightOf="@+id/TextView11"
-                          android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/tv_info_lackingpenalty"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentRight="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="5dp"
-                          android:layout_toRightOf="@+id/TextView14"
-                          android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-                  </RelativeLayout>
-
-                  <RelativeLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content" >
-
-                      <TextView
-                          android:id="@+id/TextView01"
-                          android:layout_width="135dp"
-                          android:layout_height="wrap_content"
-                          android:layout_marginLeft="10dp"
-                          android:text="@string/txt_overpayment"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/textView13"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_toRightOf="@+id/TextView01"
-                          android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                      <TextView
-                          android:id="@+id/tv_info_overpayment"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentRight="true"
-                          android:layout_alignParentTop="true"
-                          android:layout_marginLeft="5dp"
-                          android:layout_toRightOf="@+id/textView13"
-                          android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
                   </RelativeLayout>
 
                   <RelativeLayout
@@ -377,13 +269,14 @@
 
                       <TextView
                           android:id="@+id/TextView10"
-                          android:layout_width="135dp"
+                          android:layout_width="150dp"
                           android:layout_height="wrap_content"
                           android:layout_alignParentLeft="true"
                           android:layout_alignParentTop="true"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_dtmatured"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/TextView09"
@@ -392,7 +285,8 @@
                           android:layout_alignParentTop="true"
                           android:layout_toRightOf="@+id/TextView10"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_duedate"
@@ -403,8 +297,278 @@
                           android:layout_marginLeft="5dp"
                           android:layout_toRightOf="@+id/TextView09"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
                   </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/TextView03"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_balance"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView04"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_toRightOf="@+id/TextView03"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_balance"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/TextView04"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/TextView06"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_dailydue"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView05"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_toRightOf="@+id/TextView06"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_dailydue"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/TextView05"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/TextView01"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_overpayment"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/textView13"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_toRightOf="@+id/TextView01"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_overpayment"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/textView13"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/TextView13"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_interest"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView12"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_toRightOf="@+id/TextView13"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_interest"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/TextView12"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/TextView14"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_info_penalty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_penalty"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/TextView11"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView11"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_toRightOf="@+id/TextView14"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/TextView18"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_others"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/TextView19"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentTop="true"
+                          android:layout_toRightOf="@+id/TextView18"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_others"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/TextView19"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" >
+
+                      <TextView
+                          android:id="@+id/textView5"
+                          android:layout_width="150dp"
+                          android:layout_height="wrap_content"
+                          android:layout_marginLeft="10dp"
+                          android:text="@string/txt_amountdue"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/textView12"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_toRightOf="@+id/textView5"
+                          android:text="@string/semicolon"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
+                      <TextView
+                          android:id="@+id/tv_info_amountdue"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:layout_alignParentTop="true"
+                          android:layout_marginLeft="5dp"
+                          android:layout_toRightOf="@+id/textView12"
+                          android:text="@string/txt_empty"
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp"
+                          android:textStyle="bold" />
+
+                  </RelativeLayout>
+
               </LinearLayout>
 
           </RelativeLayout>
@@ -448,7 +612,8 @@
                           android:layout_alignParentLeft="true"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_refno"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/textView14"
@@ -456,7 +621,8 @@
                           android:layout_height="wrap_content"
                           android:layout_toRightOf="@+id/textView6"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_refno"
@@ -467,7 +633,9 @@
                           android:layout_toRightOf="@+id/textView14"
                           android:paddingLeft="5dp"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
                   </RelativeLayout>
 
                   <RelativeLayout
@@ -480,7 +648,8 @@
                           android:layout_height="wrap_content"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_txndate"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/textView15"
@@ -488,7 +657,8 @@
                           android:layout_height="wrap_content"
                           android:layout_toRightOf="@+id/textView7"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_txndate"
@@ -500,7 +670,9 @@
                           android:layout_toRightOf="@+id/textView15"
                           android:paddingLeft="5dp"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
                   </RelativeLayout>
 
                   <RelativeLayout
@@ -513,7 +685,8 @@
                           android:layout_height="wrap_content"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_type"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/textView16"
@@ -521,7 +694,8 @@
                           android:layout_height="wrap_content"
                           android:layout_toRightOf="@+id/textView8"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_paymenttype"
@@ -533,7 +707,9 @@
                           android:layout_toRightOf="@+id/textView16"
                           android:paddingLeft="5dp"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
                   </RelativeLayout>
 
                   <RelativeLayout
@@ -546,7 +722,8 @@
                           android:layout_height="wrap_content"
                           android:layout_marginLeft="10dp"
                           android:text="@string/txt_amount"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/textView17"
@@ -554,7 +731,8 @@
                           android:layout_height="wrap_content"
                           android:layout_toRightOf="@+id/textView9"
                           android:text="@string/semicolon"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
 
                       <TextView
                           android:id="@+id/tv_info_paymentamount"
@@ -566,7 +744,9 @@
                           android:layout_toRightOf="@+id/textView17"
                           android:paddingLeft="5dp"
                           android:text="@string/txt_empty"
-                          android:textAppearance="?android:attr/textAppearanceMedium" />
+                          android:textAppearance="?android:attr/textAppearanceMedium"
+                          android:textSize="17sp" />
+
                   </RelativeLayout>
               </LinearLayout>
           </RelativeLayout>

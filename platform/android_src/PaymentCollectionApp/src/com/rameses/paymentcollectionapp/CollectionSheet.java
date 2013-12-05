@@ -55,7 +55,7 @@ public class CollectionSheet extends Activity {
 		if(!db.isOpen) db.openDb();
 		final Cursor list = db.getCollectionsheets(routecode);
 		db.closeDb();
-		
+
 		loadCollectionsheets(list);
 		lv_collectionsheet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
