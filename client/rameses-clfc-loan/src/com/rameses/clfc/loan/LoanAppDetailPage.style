@@ -13,7 +13,7 @@
 "data.*" [caller.mode=='edit' && loanapp.appmode=='CAPTURE' && loanapp.state=='RELEASED'] {
     enabled: false; 
 }
-"data.(clienttype|marketedby|route)" [caller.mode=='edit' && loanapp.appmode=='CAPTURE' && loanapp.state=='RELEASED'] {
+"data.(clienttype|marketedby|route|nextto)" [caller.mode=='edit' && loanapp.appmode=='CAPTURE' && loanapp.state=='RELEASED'] {
     enabled: true; 
 }
 "data.producttype.*" [caller.mode=='edit' && loanapp.appmode=='CAPTURE' && loanapp.state=='RELEASED'] {

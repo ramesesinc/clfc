@@ -47,7 +47,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="xDataTable1" alignment="0" pref="725" max="32767" attributes="0"/>
+              <Component id="xDataTable1" alignment="0" pref="760" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -83,11 +83,11 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <Component id="xFormPanel2" min="-2" pref="409" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="xFormPanel1" pref="284" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="xFormPanel1" min="-2" pref="319" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -95,9 +95,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="xFormPanel1" alignment="0" pref="122" max="32767" attributes="1"/>
-                      <Component id="xFormPanel2" alignment="0" min="-2" pref="122" max="-2" attributes="1"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="xFormPanel1" alignment="0" pref="137" max="32767" attributes="1"/>
+                      <Component id="xFormPanel2" alignment="0" pref="137" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -112,24 +112,6 @@
             </Property>
           </Properties>
           <SubComponents>
-            <Component class="com.rameses.rcp.control.XIntegerField" name="xIntegerField1">
-              <Properties>
-                <Property name="caption" type="java.lang.String" value="Term"/>
-                <Property name="captionWidth" type="int" value="160"/>
-                <Property name="enabled" type="boolean" value="false"/>
-                <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
-                <Property name="name" type="java.lang.String" value="entity.term"/>
-              </Properties>
-            </Component>
-            <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField1">
-              <Properties>
-                <Property name="caption" type="java.lang.String" value="Underpayment Penalty Rate"/>
-                <Property name="captionWidth" type="int" value="160"/>
-                <Property name="enabled" type="boolean" value="false"/>
-                <Property name="fontStyle" type="java.lang.String" value="font-size:14;"/>
-                <Property name="name" type="java.lang.String" value="entity.underpaymentrate"/>
-              </Properties>
-            </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField3">
               <Properties>
                 <Property name="caption" type="java.lang.String" value="Interest Rate"/>
@@ -137,6 +119,24 @@
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="fontStyle" type="java.lang.String" value="font-size:14;"/>
                 <Property name="name" type="java.lang.String" value="entity.interestrate"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField1">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Absent Penalty Rate"/>
+                <Property name="captionWidth" type="int" value="160"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="fontStyle" type="java.lang.String" value="font-size:14;"/>
+                <Property name="name" type="java.lang.String" value="entity.absentrate"/>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField5">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Underpayment Penalty Rate"/>
+                <Property name="captionWidth" type="int" value="160"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="fontStyle" type="java.lang.String" value="font-size:14;"/>
+                <Property name="name" type="java.lang.String" value="entity.underpaymentrate"/>
               </Properties>
             </Component>
             <Component class="com.rameses.rcp.control.XDecimalField" name="xDecimalField4">
@@ -253,6 +253,15 @@
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[150, 20]"/>
                 </Property>
+              </Properties>
+            </Component>
+            <Component class="com.rameses.rcp.control.XIntegerField" name="xIntegerField1">
+              <Properties>
+                <Property name="caption" type="java.lang.String" value="Term"/>
+                <Property name="captionWidth" type="int" value="90"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="fontStyle" type="java.lang.String" value="font-size:14"/>
+                <Property name="name" type="java.lang.String" value="entity.term"/>
               </Properties>
             </Component>
           </SubComponents>

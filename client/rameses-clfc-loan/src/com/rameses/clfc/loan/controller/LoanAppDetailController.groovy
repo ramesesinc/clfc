@@ -15,10 +15,12 @@ class LoanAppDetailController
     def service;
 
     def clientTypes = LoanUtil.clientTypes; 
-    def productTypes; 
+    def productTypes;   
+    def routeLookupHandler = InvokerUtil.lookupOpener("route:lookup", [:]);    
+    def borrowerLookupHandler
     
     def data = [:];
-    
+
     void init() {
         selectedMenu.saveHandler = { save(); }
         selectedMenu.dataChangeHandler = { dataChange(); }
@@ -27,7 +29,18 @@ class LoanAppDetailController
         loanapp.putAll(data);
         productTypes = service.getProductTypes(); 
         data.producttype = productTypes.find{ it.name == data.producttype?.name } 
-        if (data.producttype == null) data.producttype = [:]; 
+        if (data.producttype == null) data.producttype = [:];
+        def handler = {o->            
+            if (o.objid == data.borrower.objid) 
+                throw new Exception('Cannot select prinpical borrower as next to.');
+            data.nextto = o;
+        }
+        
+        borrowerLookupHandler = InvokerUtil.lookupOpener("loanappborrower:lookup", [
+            'query.routecode': data.route.code, 
+            'query.borrowerid': data.borrower.objid, 
+            onselect: handler
+        ]);
     }
 
     void dataChange() {
@@ -42,8 +55,5 @@ class LoanAppDetailController
             throw new Exception("Route is required.")
         
         service.update(data);
-    }    
-    
-    def routeLookupHandler = InvokerUtil.lookupOpener("route:lookup", [:]);    
-        
+    }   
 }

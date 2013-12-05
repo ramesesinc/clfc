@@ -82,6 +82,7 @@ class LoanAppCaptureLedgerController
             entity.interestrate = o.producttype?.interestrate;
             entity.overduerate = o.producttype?.overduerate;
             entity.underpaymentrate = o.producttype?.underpaymentpenalty;
+            entity.absentrate = o.producttype?.absentpenalty;
             entity.term = o.producttype?.term;
             entity.route = o.route;
             entity.dtstarted = o.dtstarted;

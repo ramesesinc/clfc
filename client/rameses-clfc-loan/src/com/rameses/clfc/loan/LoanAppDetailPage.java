@@ -42,6 +42,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         xFormPanel3 = new com.rameses.rcp.control.XFormPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
+        xLookupField2 = new com.rameses.rcp.control.XLookupField();
         xFormPanel4 = new com.rameses.rcp.control.XFormPanel();
         xLookupField1 = new com.rameses.rcp.control.XLookupField();
         xLabel6 = new com.rameses.rcp.control.XLabel();
@@ -53,10 +54,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 0, 0));
         jPanel1.setOpaque(false);
 
-        com.rameses.rcp.control.border.XUnderlineBorder xUnderlineBorder1 = new com.rameses.rcp.control.border.XUnderlineBorder();
-        xUnderlineBorder1.setLineColor(new java.awt.Color(192, 192, 192));
-        xUnderlineBorder1.setThickness(1);
-        xFormPanel2.setCaptionBorder(xUnderlineBorder1);
+        xFormPanel2.setCaptionBorder(new com.rameses.rcp.control.border.XUnderlineBorder());
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 10));
         xLabel4.setAntiAliasOn(true);
         xLabel4.setBackground(new java.awt.Color(0, 153, 204));
@@ -188,6 +186,15 @@ public class LoanAppDetailPage extends javax.swing.JPanel
 
         xFormPanel3.add(jScrollPane1);
 
+        xLookupField2.setCaption("Next To");
+        xLookupField2.setCaptionWidth(110);
+        xLookupField2.setExpression("#{item.borrowername}");
+        xLookupField2.setHandler("borrowerLookupHandler");
+        xLookupField2.setName("data.nextto");
+        xLookupField2.setPreferredSize(new java.awt.Dimension(200, 20));
+        xLookupField2.setRequired(true);
+        xFormPanel3.add(xLookupField2);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -204,7 +211,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(xFormPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(xFormPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -251,9 +258,9 @@ public class LoanAppDetailPage extends javax.swing.JPanel
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(xFormPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(xFormPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -262,7 +269,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(xFormPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -286,6 +293,7 @@ public class LoanAppDetailPage extends javax.swing.JPanel
     private com.rameses.rcp.control.XLabel xLabel6;
     private com.rameses.rcp.control.XLabel xLabel7;
     private com.rameses.rcp.control.XLookupField xLookupField1;
+    private com.rameses.rcp.control.XLookupField xLookupField2;
     private com.rameses.rcp.control.XTextArea xTextArea1;
     private com.rameses.rcp.control.XTextField xTextField2;
     // End of variables declaration//GEN-END:variables
