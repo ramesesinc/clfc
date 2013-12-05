@@ -5,6 +5,7 @@ SELECT l.*,
 	lpt.interestrate AS producttype_interestrate, 
 	lpt.pastduerate AS producttype_overduerate, 
 	lpt.underpaymentpenalty AS producttype_underpaymentpenalty,
+	lpt.absentpenalty AS producttype_absentpenalty,
 	lc.dtreleased AS dtreleased
 FROM loanapp_capture_open lco 
 	INNER JOIN loanapp_capture lc ON lco.objid=lc.objid 

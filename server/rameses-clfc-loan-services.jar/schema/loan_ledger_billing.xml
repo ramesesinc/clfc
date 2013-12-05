@@ -31,6 +31,12 @@
 		<field name="dtmatured" required="true"/>
 		<field name="isfirstbill" required="true"/>
 		<field name="paymentmethod" required="true"/>
+		<field name="penalty" required="true"/>
+		<field name="interest" required="true"/>
+		<field name="others" required="true"/>
+		<field name="homeaddress" required="true"/>
+		<field name="collectionaddress"/>
+		<field name="loanappid" required="true"/>
 	</element>
 
 	<element name="billing_route" tablename="loan_ledger_billing_route">

@@ -137,8 +137,8 @@ class LoanLedgerService extends ActiveListService
 
 	private def computeAbsentPenalty(params) {
 		if(!params.dailydue) throw new Exception('Please specify daily due.');
-		if(!params.absentpenalty) throw new Exception('Please specify absent penalty rate.');
-		def result = new BigDecimal(params.dailydue+'').setScale(2).multiply(new BigDecimal(params.absentpenalty+'').setScale(2));
+		if(!params.absentrate) throw new Exception('Please specify absent penalty rate.');
+		def result = new BigDecimal(params.dailydue+'').setScale(2).multiply(new BigDecimal(params.absentrate+'').setScale(2));
 		return roundOffAmount(result.setScale(2));
 	}
 
@@ -154,6 +154,7 @@ class LoanLedgerService extends ActiveListService
 		def m;
 		def ledger;
 		params.unpostedpayments.each{
+			println it;
 			m = ledger_billing.read(it, 'detail');
 			if (!m) throw new Exception('No ledger for billing no. '+it.refno);
 

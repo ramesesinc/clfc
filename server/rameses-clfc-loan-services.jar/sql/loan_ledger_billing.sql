@@ -37,7 +37,11 @@ WHERE lb.collector_objid=$P{collectorid}
 SELECT * FROM loan_ledger_billing WHERE billdate=$P{billdate}
 
 [getBillingDetailByRoutecode]
-SELECT * FROM loan_ledger_billing_detail WHERE parentid=$P{billingid} AND route_code=$P{route_code}
+SELECT llbd.*, lbn.nexttoid AS nextto
+FROM loan_ledger_billing_detail llbd
+LEFT JOIN loanapp_borrower_nextto lbn ON llbd.acctid=lbn.borrowerid
+WHERE parentid=$P{billingid} 
+	AND route_code=$P{route_code}
 
 [findBillingLock]
 SELECT * FROM loan_ledger_billing_lock WHERE billingid=$P{billingid} AND routecode=$P{routecode}

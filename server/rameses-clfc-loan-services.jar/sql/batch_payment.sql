@@ -3,9 +3,8 @@ SELECT * FROM batch_payment
 WHERE route_code=$P{route_code} AND state='DRAFT'
 
 [getDetailsByParentId]
-SELECT l.appno AS appno, l.objid AS appid, 
-	l.borrower_name AS borrowername, bpd.refno AS refno,
-	bpd.paytype AS paytype, bpd.payamount AS payamount
+SELECT bpd.objid, l.objid AS appid, l.borrower_name AS borrowername, 
+	bpd.refno, bpd.paytype, bpd.payamount, l.appno 
 FROM loanapp l
 INNER JOIN batch_payment_detail bpd ON l.objid=bpd.appid
 WHERE bpd.parentid=$P{parentid}

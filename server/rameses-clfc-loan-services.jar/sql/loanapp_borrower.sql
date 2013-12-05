@@ -37,3 +37,37 @@ ORDER BY orderindex
 
 [removeItems]
 DELETE FROM loanapp_borrower WHERE parentid=$P{parentid} 
+
+[findNextto]
+SELECT b.objid, b.lastname, b.firstname, b.address 
+FROM loanapp_borrower_nextto lbn
+INNER JOIN borrower b ON lbn.nexttoid=b.objid
+WHERE lbn.borrowerid=$P{borrowerid}
+
+[getList]
+SELECT b.objid, b.lastname, b.firstname, b.address, lb.borrowername
+FROM loanapp_borrower lb
+INNER JOIN borrower b ON lb.borrowerid=b.objid
+INNER JOIN loanapp la ON lb.parentid=la.objid
+WHERE b.lastname LIKE $P{searchtext}
+	AND la.route_code=$P{routecode}
+	AND lb.borrowerid <> $P{borrowerid}
+
+[getListByNames]
+SELECT b.objid, b.lastname, b.firstname, b.address, lb.borrowername
+FROM loanapp_borrower lb
+INNER JOIN borrower b ON lb.borrowerid=b.objid
+INNER JOIN loanapp la ON lb.parentid=la.objid
+WHERE b.lastname LIKE $P{searchtext}
+	AND la.route_code=$P{routecode}
+	AND lb.borrowerid <> $P{borrowerid}
+
+UNION
+
+SELECT b.objid, b.lastname, b.firstname, b.address, lb.borrowername
+FROM loanapp_borrower lb
+INNER JOIN borrower b ON lb.borrowerid=b.objid
+INNER JOIN loanapp la ON lb.parentid=la.objid
+WHERE b.firstname LIKE $P{searchtext}
+	AND la.route_code=$P{routecode}
+	AND lb.borrowerid <> $P{borrowerid}

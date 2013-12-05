@@ -31,9 +31,11 @@ class LoanLedgerBillingService extends ActiveCrudService
 
 	@ProxyMethod
 	public def getNodes( params) {
-		def list = em.getStates();
-		list.each{ it.caption = it.state }
-		return list;
+		return [
+			[caption: 'DRAFT', state: 'DRAFT'], 
+			[caption: 'CANCELLED', state: 'CANCELLED'], 
+			[caption: 'COMPLETED', state: 'COMPLETED']
+		];
 	}
 
 	@ProxyMethod
@@ -92,7 +94,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 					parentid: data.objid,
 					ledgerid: it.objid,
 					route_code: o.code,
-					acctid: it.loanappid,
+					acctid: it.acctid,
+					loanappid: it.loanappid,
 					acctname: it.acctname,
 					loanamount: it.loanamount,
 					loandate: it.loandate,
@@ -104,9 +107,11 @@ class LoanLedgerBillingService extends ActiveCrudService
 					dtmatured: it.dtmatured,
 					producttypeid: it.producttypeid,
 					paymentmethod: it.paymentmethod,
-					interest: it.interestamount,
-					lackinginterest: 0.00,
-					lackingpenalty: 0.00
+					interestamount: it.interestamount,
+					homeaddress: it.homeaddress,
+					collectionaddress: it.collectionaddress? it.collectionaddress : '',
+					interest: 0.00,
+					others: 0.00
 				];
 				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+o.code, 8);
 				/*def dtschedule;
@@ -117,14 +122,15 @@ class LoanLedgerBillingService extends ActiveCrudService
 				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
 				def amt = it.dailydue;
 				if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
-				detail.amountdue = amt*days;
+				detail.amountdue = (amt*days)+detail.others;
 				def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
 				days -= noofholidays;
 				def cal = Calendar.getInstance();
 				cal.setTime(currentDate);
 				if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
 				days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
-				detail.amountdue += it.absentpenalty*(days > 0? days-1 : 0);
+				detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
+				detail.amountdue += detail.penalty;
 				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");
 			}
@@ -142,15 +148,21 @@ class LoanLedgerBillingService extends ActiveCrudService
 			def avgamount = params.dailydue;
 			if (params.paymentmethod == 'over') avgamount = em.findAvgOverpaymentAmount([parentid: params.ledgerid]).groupbaseamount;
 			BigDecimal b = new BigDecimal(avgamount+'').setScale(2);
-			b = b.subtract(new BigDecimal(params.interest+'').setScale(2));
+			b = b.subtract(new BigDecimal(params.interestamount+'').setScale(2));
 			BigDecimal bd = new BigDecimal(balance+'').setScale(2)
 			bd = bd.divide(b, BigDecimal.ROUND_HALF_UP);
-			bal += (bd.setScale(0, BigDecimal.ROUND_HALF_UP)*params.interest);
-
-			params.amountdue += ledgeritem.penaltybal;
-			params.amountdue += ledgeritem.interestbal;
-			if (ledgeritem.interestbal > 0) bal += ledgeritem.interestbal;
-			if (ledgeritem.penaltybal > 0) bal += ledgeritem.penaltybal;
+			bal += (bd.setScale(0, BigDecimal.ROUND_HALF_UP)*params.interestamount);
+			
+			if (ledgeritem.interestbal > 0) {
+				params.amountdue += ledgeritem.interestbal;
+				bal += ledgeritem.interestbal;
+				params.interest += ledgeritem.interestbal;
+			}
+			if (ledgeritem.penaltybal > 0) {
+				params.amountdue += ledgeritem.penaltybal;
+				bal += ledgeritem.penaltybal;
+				params.penalty += ledgeritem.penaltybal;
+			}
 			params.isfirstbill = 0;
 		}
 		if (params.penalty > 0) bal += params.penalty;

@@ -50,8 +50,35 @@ class DeviceLoanBillingService
 		def result = ledger_billing.getBillingDetailByRoutecode(params);
 		if (!result) throw new Exception('No billing for route '+params.route_description+' - '+params.route_area);
 
+
+		def noNexttoList = result.findAll{ it.nextto == null }
+		def hasNexttoList = result.findAll{ it.nextto != null }
+
+		for(int i=0; i<hasNexttoList.size(); i++) {
+			for(int j=i+1; j<hasNexttoList.size(); j++) {
+				if (hasNexttoList[i].nextto == hasNexttoList[j].acctid) {
+					hasNexttoList.add(i, hasNexttoList.remove(j));
+					i=0;
+					break;
+				}
+			}
+		}
+
 		def list = [];
-		result.each{ list.add(it); }
+		noNexttoList.each{ list.add(it); }
+		def map;
+		hasNexttoList.each{itm->
+			map = noNexttoList.find{ it.acctid == itm.nextto }
+			if (map) {
+				list.remove(map);
+				list.add(map);
+			}
+			list.add(itm);
+		}
+		list.eachWithIndex{itm, idx->
+			itm.seqno = idx+1;
+		}
+		//result.each{ list.add(it); }
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
 		return [list: list];
 	}
