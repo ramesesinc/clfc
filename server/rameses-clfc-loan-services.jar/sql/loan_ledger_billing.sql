@@ -67,6 +67,10 @@ FROM loan_ledger_billing
 UPDATE loan_ledger_billing SET state="COMPLETED"
 WHERE objid=$P{objid}
 
+[changeStateUploaded]
+UPDATE loan_ledger_billing SET state="UPLOADED"
+WHERE objid=$P{objid}
+
 [getPastDraftBillings]
 SELECT * FROM loan_ledger_billing
 WHERE state='DRAFT'

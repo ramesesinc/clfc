@@ -106,6 +106,7 @@ class DeviceLoanBillingService
 			}
 			list.add(it.loanappid); 
 		}
+		ledger_billing.changeStateUploaded([objid: params.sessionid]);
 		return [list: list];
 	}
 

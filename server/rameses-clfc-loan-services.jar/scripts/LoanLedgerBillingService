@@ -34,7 +34,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 		return [
 			[caption: 'DRAFT', state: 'DRAFT'], 
 			[caption: 'CANCELLED', state: 'CANCELLED'], 
-			[caption: 'COMPLETED', state: 'COMPLETED']
+			[caption: 'COMPLETED', state: 'COMPLETED'],
+			[caption: 'UPLOADED', state: 'UPLOADED']
 		];
 	}
 
