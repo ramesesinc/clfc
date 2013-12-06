@@ -62,5 +62,6 @@ class LoanLedgerBillingController extends CRUDController
 
     void reset() {
         service.resetBilling(entity);
+        MsgBox.alert("Successfully reseted billing!");
     }
 }
