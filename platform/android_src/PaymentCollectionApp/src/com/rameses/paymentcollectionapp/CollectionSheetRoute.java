@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 public class CollectionSheetRoute extends Activity {
 	private Context context=this;
 	private MySQLiteHelper db;
+	private View header = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +67,10 @@ public class CollectionSheetRoute extends Activity {
 			} while(cursor.moveToNext());			
 		}
 		tv_billdate.setText(billdate);
-		View header = (View) getLayoutInflater().inflate(R.layout.header_route, null);
-		lv_route.addHeaderView(header, null, false);
+		if (header == null) {
+			header = (View) getLayoutInflater().inflate(R.layout.header_route, null);
+			lv_route.addHeaderView(header, null, false);
+		}
 		lv_route.setAdapter(new RouteAdapter(context, list));
 		lv_route.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -83,7 +87,7 @@ public class CollectionSheetRoute extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		if (!db.isOpen) db.openDb();
 	}
 	
