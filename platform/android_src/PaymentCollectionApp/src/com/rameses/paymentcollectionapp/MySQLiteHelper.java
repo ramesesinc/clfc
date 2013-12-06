@@ -183,7 +183,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public Date getServerDate() throws ParseException {
 		Cursor result = db.rawQuery("SELECT serverdate FROM "+TABLE_SYSTEM, null);
 		
-		if(result != null) {
+		if (result != null && result.getCount() > 0) {
 			result.moveToFirst();
 			Object date = result.getString(result.getColumnIndex("serverdate"));
 			if(!(date instanceof Date))

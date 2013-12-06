@@ -80,16 +80,15 @@ public final class R {
         public static final int iv_info_paid=0x7f09004f;
         public static final int layout_info_general=0x7f090008;
         public static final int layout_info_payment=0x7f090034;
-        public static final int listView1=0x7f090006;
-        public static final int login_password=0x7f09004d;
+        public static final int login_password=0x7f09004c;
         public static final int login_username=0x7f090035;
         public static final int lv_collectionsheet=0x7f090004;
-        public static final int lv_route=0x7f09004c;
+        public static final int lv_route=0x7f090006;
         public static final int optionList=0x7f090044;
         public static final int payment_addpayment=0x7f090054;
         public static final int rl_overpayment=0x7f090049;
         public static final int scrollView1=0x7f090007;
-        public static final int textView1=0x7f090005;
+        public static final int textView1=0x7f09004d;
         public static final int textView10=0x7f09000b;
         public static final int textView11=0x7f09000e;
         public static final int textView12=0x7f090032;
@@ -108,6 +107,7 @@ public final class R {
         public static final int textView7=0x7f090039;
         public static final int textView8=0x7f09003c;
         public static final int textView9=0x7f09003f;
+        public static final int tv_billdate=0x7f090005;
         public static final int tv_info_acctname=0x7f09000f;
         public static final int tv_info_amountdue=0x7f090033;
         public static final int tv_info_appno=0x7f09000c;
@@ -142,9 +142,10 @@ public final class R {
         public static final int activity_payment=0x7f030005;
         public static final int activity_route=0x7f030006;
         public static final int dialog_login=0x7f030007;
-        public static final int item_collectionsheet=0x7f030008;
-        public static final int item_route=0x7f030009;
-        public static final int item_string=0x7f03000a;
+        public static final int header_route=0x7f030008;
+        public static final int item_collectionsheet=0x7f030009;
+        public static final int item_route=0x7f03000a;
+        public static final int item_string=0x7f03000b;
     }
     public static final class menu {
         public static final int empty=0x7f080000;
@@ -155,6 +156,7 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
+        public static final int header_route=0x7f060027;
         public static final int hello_world=0x7f060002;
         public static final int img_check_ico=0x7f060014;
         public static final int semicolon=0x7f060013;

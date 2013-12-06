@@ -40,4 +40,5 @@
 	<string name="txt_info_penalty">Penalty</string>
 	<string name="txt_others">Others</string>
 	<string name="txt_term">Term</string>
+	<string name="header_route">Select a Route:</string>
 </resources>
