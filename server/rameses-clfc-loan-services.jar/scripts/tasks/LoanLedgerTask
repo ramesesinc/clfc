@@ -1,0 +1,29 @@
+import com.rameses.annotations.*;
+
+class LoanLedgerTask
+{
+	@ActiveDB(value="loan_ledger")
+	def ledger;
+
+	@ActiveDB(value="loan_product_type")
+	def product_type;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@Service("LoanLedgerService")
+	def ledgerSvc;
+
+	/*@Schedule(interval=1, timeUnit="DAYS", immediate=true)
+	public void computeOverpaymentPenalty( task ) {
+		def date = dateSvc.serverDate.toString().split(' ')[0];
+		def list = ledger.getOpenLedgersByCurrentDateGreaterThanMaturityDate([date: date]);
+		list.each{itm->
+			if (itm.overduepenalty == 0.00) {
+				def p = product_type.read([name: itm.producttpyeid]);
+				itm.overduepenalty = ledgerSvc.computeOverduePenalty([balance: itm.balance, pastduerate: (p.pastduerate? p.pastduerate : 0.00)]);
+				ledger.update(itm, 'overduepenalty');
+			}
+		}
+	}*/
+}

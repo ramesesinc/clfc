@@ -142,6 +142,15 @@ class LoanLedgerService extends ActiveListService
 		return roundOffAmount(result.setScale(2));
 	}
 
+	@ProxyMethod
+	public def computeOverduePenalty( params ) {
+		if (!params.balance) throw new Exception('Please specify balance.');
+		if (!params.pastduerate) throw new Exception('Please specify past due rate.');
+
+		def result = new BigDecimal(params.balance+'').setScale(2).multiply(new BigDecimal(params.pastduerate+'').setScale(2))
+		return roundOffAmount(result.setScale(2, BigDecimal.ROUND_HALF_UP));
+	}
+
 	void beforeList( params ) {
 		params.searchtext = (params.searchtext? '%'+params.searchtext+'%' : '%');
 	}

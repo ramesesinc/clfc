@@ -50,7 +50,7 @@ WHERE la.state IN('RELEASED','CLOSED')
 [getLedgerDetailsByLedgerid]
 SELECT * FROM loan_ledger_detail
 WHERE parentid=$P{parentid}
-ORDER BY day, refno, txndate, state
+ORDER BY day, refno, txndate, state DESC
 
 [getPaymentsFromLedgerDetail]
 SELECT ll.appid AS appid, lld.refno, lld.dtpaid AS txndate, 
@@ -72,3 +72,8 @@ FROM loan_ledger ll
 INNER JOIN loanapp la
 ON ll.appid=la.objid
 WHERE ll.objid=$P{ledgerid}
+
+[getOpenLedgersByCurrentDateGreaterThanMaturityDate]
+SELECT * FROM loan_ledger
+WHERE state='OPEN'
+	AND $P{date} > dtmatured

@@ -29,6 +29,9 @@ class LoanLedgerBillingService extends ActiveCrudService
 	@Service("HolidayEventCalendarService")
 	def calendarSvc;
 
+	@Service("LoanLedgerService")
+	def ledgerSvc;
+
 	@ProxyMethod
 	public def getNodes( params) {
 		return [
@@ -64,8 +67,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 	void beforeCreate( data ) {
 		def currentDate = dateSvc.serverDate.toString().split(" ")[0];
 		if (data.billdate.compareTo(currentDate) < 0) throw new Exception('Bill date should be greater than or equal to current date.');
-		def o = em.findBillingByBilldate(data);
-		if (o) throw new Exception('Billing for '+data.billdate+' has already been created.');
+		def o = em.findBillingByBilldate([collectorid: data.collector.objid, billdate: data.billdate]);
+		if (o) throw new Exception('Billing '+data.billdate+' for collector '+data.collector.name+' has already been created.');
 
 		data.createdby = env.USER;
 		data.dtcreated = dateSvc.serverDate;
@@ -90,6 +93,12 @@ class LoanLedgerBillingService extends ActiveCrudService
 			def days = 0;
 			list.each{
 				def currentDate = dateSvc.parseDate(data.billdate, null).date;
+				def maturityDate = dateSvc.parseDate(it.dtmatured, null).date;
+				if (currentDate >  maturityDate && it.overduepenalty == 0.00) {
+					def p = product_type.read([name: it.producttypeid])
+					it.overduepenalty = ledgerSvc.computeOverduePenalty([balance: it.balance, pastduerate: (p.pastduerate? p.pastduerate : 0.00)]);
+					loan_ledger.update(it, 'overduepenalty');
+				}
 				def detail = [
 					objid: 'LLBD'+new UID(),
 					parentid: data.objid,
@@ -131,6 +140,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 				if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
 				days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
 				detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
+				if (currentDate > maturityDate) detail.penalty = it.overduepenalty*(days > 0? days : 0);
 				detail.amountdue += detail.penalty;
 				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");

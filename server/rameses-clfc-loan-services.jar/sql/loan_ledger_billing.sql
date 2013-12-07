@@ -34,7 +34,9 @@ FROM loan_ledger_billing lb
 WHERE lb.collector_objid=$P{collectorid}
 
 [findBillingByBilldate]
-SELECT * FROM loan_ledger_billing WHERE billdate=$P{billdate}
+SELECT * FROM loan_ledger_billing 
+WHERE billdate=$P{billdate}
+	AND collector_objid=$P{collectorid}
 
 [getBillingDetailByRoutecode]
 SELECT llbd.*, lbn.nexttoid AS nextto
@@ -60,7 +62,7 @@ GROUP BY sq.groupbaseamount
 LIMIT 1
 
 [getStates]
-SELECT DISTINCT state 
+SELECT DISTINCT statey
 FROM loan_ledger_billing
 
 [changeStateCompleted]
