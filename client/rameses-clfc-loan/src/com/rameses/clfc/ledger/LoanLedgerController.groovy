@@ -59,6 +59,7 @@ class LoanLedgerController extends ReportModel
             
         entity = svc.rebuild(entity);
         paymentsHandler.reload();
+        MsgBox.alert("Successfully rebuilt collection sheet!");
     }
 
     def paymentsHandler = [

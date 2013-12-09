@@ -115,6 +115,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         xFormPanel1.setPadding(new java.awt.Insets(5, 0, 0, 0));
         xIntegerField1.setCaption("Term");
         xIntegerField1.setCaptionWidth(100);
+        xIntegerField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xIntegerField1.setEnabled(false);
         xIntegerField1.setFontStyle("font-size:14");
         xIntegerField1.setName("entity.term");
         xIntegerField1.setReadonly(true);
@@ -122,6 +124,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
 
         xDecimalField1.setCaption("Daily Due");
         xDecimalField1.setCaptionWidth(100);
+        xDecimalField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDecimalField1.setEnabled(false);
         xDecimalField1.setFontStyle("font-size:14;");
         xDecimalField1.setName("entity.dailydue");
         xDecimalField1.setReadonly(true);
@@ -129,6 +133,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
 
         xDecimalField3.setCaption("Interest");
         xDecimalField3.setCaptionWidth(100);
+        xDecimalField3.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDecimalField3.setEnabled(false);
         xDecimalField3.setFontStyle("font-size:14;");
         xDecimalField3.setName("entity.interestamount");
         xDecimalField3.setReadonly(true);
@@ -136,6 +142,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
 
         xDecimalField4.setCaption("Balance");
         xDecimalField4.setCaptionWidth(100);
+        xDecimalField4.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDecimalField4.setEnabled(false);
         xDecimalField4.setFontStyle("font-size:14;");
         xDecimalField4.setName("entity.balance");
         xDecimalField4.setReadonly(true);
@@ -179,6 +187,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
 
         xDecimalField2.setCaption("Loan Amount");
         xDecimalField2.setCaptionWidth(90);
+        xDecimalField2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDecimalField2.setEnabled(false);
         xDecimalField2.setFontStyle("font-size:14;");
         xDecimalField2.setName("entity.loanamount");
         xDecimalField2.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -187,6 +197,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
 
         xDateField3.setCaption("Date Started");
         xDateField3.setCaptionWidth(90);
+        xDateField3.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDateField3.setEnabled(false);
         xDateField3.setFontStyle("font-size:12");
         xDateField3.setName("entity.dtstarted");
         xDateField3.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -195,6 +207,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
 
         xDateField4.setCaption("Date Matured");
         xDateField4.setCaptionWidth(90);
+        xDateField4.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDateField4.setEnabled(false);
         xDateField4.setFontStyle("font-size:12");
         xDateField4.setName("entity.dtmatured");
         xDateField4.setPreferredSize(new java.awt.Dimension(150, 20));
