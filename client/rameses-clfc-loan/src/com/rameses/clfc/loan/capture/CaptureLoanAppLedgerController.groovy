@@ -33,7 +33,8 @@ class LoanAppCaptureLedgerController
         mode = 'read';
         entity = [ 
             objid: 'LEDGER'+new UID(),
-            txnmode: 'CAPTURE'
+            txnmode: 'CAPTURE',
+            payments: []
         ]
     }
     
@@ -43,8 +44,9 @@ class LoanAppCaptureLedgerController
     
     def next() {
         mode = 'create';
-        entity.payments = [];
+        entity.payments.clear();
         entity.paymentmethod = null;
+        paymentsHandler.reload();
         return 'main';
     }
     
