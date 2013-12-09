@@ -135,6 +135,8 @@ class LoanPaymentService
 		def ledgeritem = ledgerdb.findLastLedgerItemByParentId([parentid: ledger.objid]);
 
 		if (dateSvc.parseDate(params.txndate, null).date > ledger.dtmatured && ledger.overduepenalty == 0.00) {	
+			//println 'balance = '+ledger.balance;
+			//println 'past due rate = '+producttype.pastduerate;
 			ledger.overduepenalty = ledgerSvc.computeOverduePenalty([balance: ledger.balance, pastduerate: (producttype.pastduerate? producttype.pastduerate : 0.00)]);
 			//throw new Exception('stop')
 			ledgerdb.update(ledger, 'overduepenalty');
@@ -230,7 +232,7 @@ class LoanPaymentService
 		}
 		compromiseFact.isCompromise = data.isCompromise;
 
-		/*if (params.txndate.toString() == '2013-10-21') {
+		/*if (params.txndate.toString() == '2013-10-25') {
 			println 'data-> '+data;
 		}*/
 		if (txndate == lastPayment.datePaid) {
@@ -285,7 +287,7 @@ class LoanPaymentService
 		referencesFact.isOverdue = item.isOverdue;
 		referencesFact.noOfHolidays = item.noOfHolidays;
 		ruleSvc.execute( req );
-		/*if (params.txndate.toString() == '2013-10-22') {
+		/*if (params.txndate.toString() == '2013-10-25') {
 			results.each{ println it; }
 			throw new Exception('stop')
 		}*/
@@ -475,7 +477,7 @@ class LoanPaymentService
 				if( td == item.totalDays ) item.trialAndError = 2;
 				else {
 					item.trialAndError = 1;
-					td++;
+					//td++;
 				}
 				item.totalDays = td;
 				item.totalPayment = item.amountPaid;
@@ -509,6 +511,8 @@ class LoanPaymentService
 			}
 		} else {
 		//println 'pass 3'
+			///println 'overdue'
+			//println 'overdue penalty = '+ref.overduePenalty;
 			item.isOverdue = 1;
 			def totaldays = params.totalDays-(params.currentDay-1);
 			if( totaldays < 1 ) totaldays = 1;

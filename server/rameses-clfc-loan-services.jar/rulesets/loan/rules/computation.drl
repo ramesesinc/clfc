@@ -105,7 +105,7 @@ rule "overpayment"
 		References( isOverdue == 0 && type == "over" && trialAndError == 0, isFullPayment == false, ad: amountDue, i: interest, tp: totalPayment, td: totalDays, ap: absentPenalty, offset: isOffset, oa: overpaymentAmt, noOfHolidays: noOfHolidays, hasSunday: hasSunday )
 		p: Payment( amountPaid > 0 && balance > 0 )
 	then
-		////System.out.println("overpayment");
+		//System.out.println("overpayment");
 		java.util.Map listItem = new java.util.HashMap();
 		double amountPaid = p.getAmountPaid();
 		double totalInterest = p.getTotalInterest();
@@ -315,6 +315,7 @@ rule "amountPaid less than totalPayment"
 		}
 		else {
 			//System.out.println("current day: "+currentDay);
+			//System.out.println("amount paid = "+amountPaid);
 			if( amountPaid >= ad ) {
 				amountPaid -= ad;
 				listItem.put("day", currentDay);
@@ -325,6 +326,7 @@ rule "amountPaid less than totalPayment"
 				results.add( listItem );
 				totalInterest+=i;
 				currentDay++;
+				if (amountPaid < i) amountPaid = 0;
 			}
 			else if( amountPaid > 0 ) 
 				amountPaid = 0;
@@ -337,6 +339,7 @@ rule "amountPaid less than totalPayment"
 			if( noOfHolidays > 0 ) totalPenalty -= (noOfHolidays*ap);
 			//System.out.println("total penalty3 = "+totalPenalty);
 			if( totalPenalty < 0 ) totalPenalty = 0;
+			//System.out.println("total penalty = "+totalPenalty);
 		}
 		//if( days == td ) amountPaid = 0;
 		
@@ -429,7 +432,7 @@ rule "amountPaid less than equal to interest"
 		References( isOverdue == 0 && type != 'over', isFullPayment == false, i: interest, td: totalDays, ap: absentPenalty, ur: underpaymentRate, ad: amountDue, trm: term )
 		p: Payment( amountPaid <= i && amountPaid > 0 && balance > 0 && currentDay <= trm && lackingInterest == 0 && lackingPenalty == 0 )
 	then
-		//System.out.println("passing 4");
+		System.out.println("passing 4");
 		java.util.Map listItem = new java.util.HashMap();
 		double amountPaid = p.getAmountPaid();
 		double lackingInterest = p.getLackingInterest();

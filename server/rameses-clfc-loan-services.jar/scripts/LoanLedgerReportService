@@ -8,6 +8,9 @@ class LoanLedgerReportService
 	@ActiveDB(value="loan_product_type")
 	def product_type;
 
+	@ActiveDB(value="loanapp")
+	def loanapp;
+
 	@ActiveDB(value="loan_exemption")
 	def exemption;
 
@@ -31,6 +34,7 @@ class LoanLedgerReportService
 		def ledger = ledgerdb.read(params);
 		def pb = borrower.read([objid: ledger.acctid]);
 		def producttype = product_type.read([name: ledger.producttypeid]);
+		def app = loanapp.read([objid: params.appid]);
 
 		def spousename = "";
 		if(pb.spouse.objid) spousename = pb.spouse.lastname+', '+pb.spouse.firstname+' '+(pb.spouse.middlename? pb.spouse.middlename : '');
@@ -57,6 +61,7 @@ class LoanLedgerReportService
 			officename 		: firm?.tradename,
 			officeaddress 	: firm?.address,
 			officetelno 	: firm?.contactno,
+			pn 				: app?.appno,
 			originalamtloan	: ledger.totalprincipal,
 			dategranted		: dateSvc.add(ledger.dtstarted, "-1"),
 			datematurity	: ledger.dtmatured,
