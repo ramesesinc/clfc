@@ -40,6 +40,9 @@ class NewCaptureLoanAppController extends AbstractLoanAppController
         if(entity.apptype != 'NEW' && entity.previousloans.isEmpty())
             throw new Exception('Previous Loans are required.');
         
+        if (previousLoansHandler.hasUncommittedData())
+            throw new Exception('Please commit table data before saving.');
+
         return super.save();
     }
     
