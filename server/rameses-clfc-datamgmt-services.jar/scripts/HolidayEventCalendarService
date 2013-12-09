@@ -36,7 +36,8 @@ class HolidayEventCalendarService extends ActiveCrudListService
 		if (!params.item) throw new Exception('Please specify item')
 
 		def enddate = dateSvc.add(params.lastscheduledate, params.item.totalDays+"");
-		def list = em.getListBetweenStartdateAndEnddate([startdate: params.lastscheduledate, enddate: enddate])
+		def list = em.getListBetweenStartdateAndEnddate([startdate: params.lastscheduledate, enddate: enddate]);
+		list.unique{ it.date }
 		def noofholidays = list.size();
 		def hasSunday = (params.item.hasSunday == "true")? true : false;
 		Calendar cal = Calendar.getInstance();
