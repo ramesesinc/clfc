@@ -590,7 +590,7 @@ rule "amountPaid greater than 0 and lacking penalty greater than 0: payment made
 			listItem.put("day", currentDay);
 			listItem.put("interestPaid", lackingInterest);
 			lackingInterest = 0;
-			currentDay++;
+			//currentDay++;
 		}
 		else if( lackingInterest > 0 ) {
 			totalInterest+=amountPaid;
@@ -598,6 +598,7 @@ rule "amountPaid greater than 0 and lacking penalty greater than 0: payment made
 			listItem.put("interestPaid", amountPaid);
 			amountPaid = 0;
 		}
+		if (lackingInterest == 0) currentDay++;
 		
 		if( amountPaid > 0 ) {
 			if( amountPaid >= lackingPenalty ) {
@@ -614,10 +615,10 @@ rule "amountPaid greater than 0 and lacking penalty greater than 0: payment made
 			}
 		}
 		
+		results.add( listItem );
 		if( amountPaid < (i+op) ) {
 			amountPaid = 0;
 		}
-		results.add( listItem );
 		//System.out.println("passing 6.1");
 		p.setAmountPaid( amountPaid );
 		p.setCurrentDay( currentDay );
@@ -641,12 +642,14 @@ rule "amountPaid greater than equal to interest+overdue penalty"
 		double amountPaid = p.getAmountPaid();
 		double totalInterest = p.getTotalInterest();
 		double totalPenalty = p.getTotalPenalty();
+		double lackingInterest = p.getLackingInterest();
+		double lackingPenalty = p.getLackingPenalty();
 		int days = p.getDays();
 		int currentDay = p.getCurrentDay();
 		
 		listItem.put("day", currentDay);
 		listItem.put("partialPayment", "");
-		if( amountPaid >= balance ) {
+		/*if( amountPaid >= balance ) {
 			double tempAmountPaid = amountPaid-balance;
 			double tempDeductions = (i+op)*td;
 			listItem.put("interestPaid", i);
@@ -665,23 +668,23 @@ rule "amountPaid greater than equal to interest+overdue penalty"
 					amountPaid = 0;
 			}
 		}
-		else {
+		else {*/
 			listItem.put("interestPaid", i);
 			listItem.put("penalty", op);
 			amountPaid-=(i+op);
 			
 			if( days == td ) 
 				amountPaid = 0;
-		}
+		//}
 		
 		totalInterest+=i;
 		totalPenalty+=op;
 		days++;
 		currentDay++;
-		
+
 		listItem.put("payment", "");
 		results.add( listItem );
-		
+
 		p.setAmountPaid( amountPaid );
 		p.setDays( days );
 		p.setCurrentDay( currentDay );
@@ -712,7 +715,7 @@ rule "amountPaid less than interest+overdue penalty"
 		listItem.put("penalty", "");
 		listItem.put("payment", "");
 		listItem.put("partialPayment", "");
-		
+
 		if( amountPaid >= i ) {
 			amountPaid-=i;
 			listItem.put("day", currentDay);
@@ -720,7 +723,7 @@ rule "amountPaid less than interest+overdue penalty"
 			totalInterest+=i;
 			currentDay++;
 		}
-		else {
+		else if (amountPaid > 0) {
 			lackingInterest = i-amountPaid;
 			totalInterest+=amountPaid;
 			lackingPenalty = op;
@@ -740,7 +743,7 @@ rule "amountPaid less than interest+overdue penalty"
 				amountPaid = 0;
 			}
 		}
-		if( ap < (i+op) )
+//		if( ap < (i+op) )
 			results.add( listItem );
 		
 		p.setAmountPaid( amountPaid );
@@ -968,8 +971,23 @@ rule "offset last payment and payment made beyond maturity"
 		java.util.Map listItem = new java.util.HashMap();
 		int days = p.getDays();
 		int currentDay = p.getCurrentDay();
+		int lastDay = Integer.parseInt(lastPayment.get("currentDay").toString());
+		double lackingInterest = p.getLackingInterest();
+		double lackingPenalty = p.getLackingPenalty();
 		
-		if( days <= td ) {
+		//System.out.println("last payment = "+lastPayment);
+		//System.out.println("amount paid = "+p.getAmountPaid());
+		//System.out.println("total pays = "+td);
+		//System.out.println("last day = "+lastDay);
+		if ((currentDay-1) == lastDay) {
+			listItem.put("day", lastDay);
+			listItem.put("interestPaid", i);
+			if (lackingInterest > 0) listItem.put("interestPaid", lackingInterest);
+			listItem.put("penalty", op);
+			if (lackingPenalty > 0) listItem.put("penalty", lackingPenalty);
+			results.add(listItem);
+			lastPayment.put("currentDay", 0);
+		} else if( days <= td ) {
 			listItem.put("day", currentDay);
 			listItem.put("interestPaid", i);
 			listItem.put("penalty", op);
@@ -979,9 +997,9 @@ rule "offset last payment and payment made beyond maturity"
 			currentDay++;
 			days++;
 		}
-		if( days == td ) {
-			double totalInterest = (td*i)+p.getLackingInterest();
-			double totalPenalty = (td*op)+p.getLackingPenalty();
+		if( days >= td ) {
+			double totalInterest = (td*i)+lackingInterest;
+			double totalPenalty = (td*op)+lackingPenalty;
 			
 			p.setTotalInterest( totalInterest );
 			p.setTotalPenalty( totalPenalty );
@@ -1103,6 +1121,7 @@ rule "terminating rule"
 				partialPayment -= (totalInterest+totalPenalty);
 				balance -= partialPayment;
 				
+				//listItem.put("penalty", totalPenalty);
 				if( partialPayment > 0 ) {
 					listItem.put("partialPayment", partialPayment);
 					listItem.put("balance", balance);

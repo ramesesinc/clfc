@@ -141,6 +141,10 @@ class LoanLedgerReportService
 				if (itm.penaltycharge == 0) itm.penaltycharge = null;
 				itm.receiptno = null;
 				itm.datepaid = null;
+				if (itm.partialpayment == 0) {
+					itm.partialpayment = null;
+					itm.balanceamount = null;
+				}
 			}
 			data.payments.add(itm);
 		}

@@ -185,7 +185,7 @@ class LoanPaymentService
 		if (!data.currentDay || data.currentDay == 0) data.currentDay = 1;
 		data.amountPaid = params.payamount;
 		def req = new RuleRequest("loan");
-
+		//println 'data total days = '+data.totalDays;
 		def paymentFact = [
 			days: 1,
 			balance: ref.balance,
@@ -238,6 +238,8 @@ class LoanPaymentService
 		if (txndate == lastPayment.datePaid) {
 			data.amountPaid += ledgeritem.amtpaid;
 			data.totalPayment = ledgeritem.amtdue;
+			data.lackingInterest = ledgeritem.interestbal;
+			data.lackingPenalty = ledgeritem.penaltybal;
 			data.days = ledgeritem.day;
 			paymentFact.balance = ledgeritem.balance;
 			def itm = ledgerdb.findLastLedgerItemNotSameDatePaid([parentid: ledger.objid, dtpaid: txndate]);
@@ -249,8 +251,8 @@ class LoanPaymentService
 			}
 			item = offsetLastPayment([item: data, ref: ref, lastledgeritem: ledgeritem]);
 			referencesFact.isOffset = 1;
-			paymentFact.lackingInterest = ledgeritem.interestbal;
-			paymentFact.lackingPenalty = ledgeritem.penaltybal;
+			paymentFact.lackingInterest = item.lackingInterest;
+			paymentFact.lackingPenalty = item.lackingPenalty;
 			referencesFact.amountPaid = item.amountPaid;
 			lastPayment.days = data.days;
 			if (item.totaldays > 1) lastPayment.days--;
@@ -286,8 +288,10 @@ class LoanPaymentService
 		referencesFact.trialAndError = item.trialAndError;
 		referencesFact.isOverdue = item.isOverdue;
 		referencesFact.noOfHolidays = item.noOfHolidays;
+		//println params.txndate;
 		ruleSvc.execute( req );
-		/*if (params.txndate.toString() == '2013-10-25') {
+		//println params.txndate;
+		/*if (params.txndate.toString() == '2011-08-25') {
 			results.each{ println it; }
 			throw new Exception('stop')
 		}*/
@@ -431,7 +435,8 @@ class LoanPaymentService
 	}
 
 	private def preComputation( params, ref ) {
-		def item = params;
+		def item = [:];
+		item.putAll(params);
 		//println 'pass 1'
 		if (params.totalDays <= ref.term) {
 			def totaldays = params.totalDays-(params.currentDay-1);
@@ -556,7 +561,10 @@ class LoanPaymentService
 		itm.groupbaseamount = 0.00
 		ledgerdb.create(itm, 'detail');
 
-		def item = params.item;
+		def item = [:];
+		item.putAll(params.item);
+		item.lackingInterest -= ledgeritem.interestbal;
+		item.lackingPenalty -= ledgeritem.penaltybal;
 		def ref = params.ref;
 		//println item;
 		//println "item: "+item;
