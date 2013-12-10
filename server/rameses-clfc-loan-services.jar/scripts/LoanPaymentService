@@ -568,7 +568,7 @@ class LoanPaymentService
 			item.isOverdue = 0;
 			item.trialAndError = 0;
 			if( item.amountPaid < item.totalPayment ) {
-				def td = 0;
+				/*def td = 0;
 				def tempAmount = item.amountPaid;
 				if (tempAmount > 0 && item.lackingInterest > 0) tempAmount -= item.lackingInterest;
 				if (tempAmount > 0 && item.lackingPenalty > 0) tempAmount -= item.lackingPenalty;
@@ -586,8 +586,8 @@ class LoanPaymentService
 				if (td == item.totalDays) item.trialAndError = 2;
 				else item.trialAndError = 1;
 				item.totalDays = td;
-				item.totalPayment = item.amountPaid;
-				/*def td = item.totalDays;
+				item.totalPayment = item.amountPaid;*/
+				def td = item.totalDays;
 				def totalInterest;
 				def totalAbsentPenalty;
 				def tempAmount;
@@ -619,7 +619,7 @@ class LoanPaymentService
 				if( td == item.totalDays ) item.trialAndError = 2;
 				else item.trialAndError = 1;
 				item.totalDays = td;
-				item.totalPayment = item.amountPaid;*/
+				item.totalPayment = item.amountPaid;
 			}
 			else item.totalDays = Integer.valueOf((item.amountPaid/ref.amountDue).intValue());
 		} 
