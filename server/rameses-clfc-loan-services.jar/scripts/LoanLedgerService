@@ -147,7 +147,8 @@ class LoanLedgerService extends ActiveListService
 		if (!params.balance) throw new Exception('Please specify balance.');
 		if (!params.pastduerate) throw new Exception('Please specify past due rate.');
 
-		def result = new BigDecimal(params.balance+'').setScale(2).multiply(new BigDecimal(params.pastduerate+'').setScale(2))
+		def result = new BigDecimal(params.balance+'').setScale(2).multiply(new BigDecimal(params.pastduerate+'').setScale(2));
+		result = result.divide(new BigDecimal("30").setScale(2), 2, BigDecimal.ROUND_HALF_UP);
 		return roundOffAmount(result.setScale(2, BigDecimal.ROUND_HALF_UP));
 	}
 
