@@ -65,8 +65,12 @@ class LoanLedgerController extends ReportModel
     def paymentsHandler = [
         fetchList: {
             if (!entity.payments) entity.payments= [];
+            entity.payments.eachWithIndex{itm, idx->
+                itm.objid = idx;
+            }
             return entity.payments;
         },
+        createItem: { return [objid: entity.payments.size()] },
         onAddItem: {o->
             entity.payments.add(o);
         },
