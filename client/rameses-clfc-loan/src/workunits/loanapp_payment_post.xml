@@ -1,6 +1,7 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/loan" caption="Post Payments" role="CAO_OFFICER" index="3"/>
+        <invoker folderid="/menu/txn/collection" caption="Post Payments" role="FIELD_COLLECTOR,CASHIER" index="3"/>
+        <invoker type="quick_launcher" code="PPS" caption="Post Payments" role="FIELD_COLLECTOR,CASHIER"/> 
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
             shortcut="ctrl W" visibleWhen="#{mode == 'init'}" immediate="true"/>
@@ -9,18 +10,16 @@
             shortcut="ctrl N" visibleWhen="#{mode == 'init'}"/>
         
         <invoker type="formActions" action="back" caption="Back" mnemonic="b" 
-            shortcut="ctrl B" visibleWhen="#{mode != 'init' &amp;&amp; mode != 'edit'}"/>
-        <invoker type="formActions" action="edit" caption="Edit" shortcut="ctrl E" 
-            visibleWhen="#{isAllowEdit}" role="FIELD_COLLECTOR"/>
-        <invoker type="formActions" action="cancel" caption="Cancel" 
-            visibleWhen="#{mode == 'edit'}" role="FIELD_COLLECTOR"/>
-        <invoker type="formActions" action="save" caption="Save" mnemonic="s"
-            shortcut="ctrl S" visibleWhen="#{isAllowSave}" role="FIELD_COLLECTOR"/>
-        <invoker type="formActions" action="post" caption="Post" mnemonic="p" 
-            shortcut="ctrl P" icon="images/toolbars/save.png"
-             visibleWhen="#{isAllowPost}" role="ACCT_OFFICER"/>
-        <invoker type="formActions" action="viewExemptions" caption="Exemptions"
-            visibleWhen="#{mode != 'init'}"/>
+            visibleWhen="#{mode != 'init' &amp;&amp; mode != 'edit'}" shortcut="ctrl B"/>
+        <invoker type="formActions" action="edit" caption="Edit"  role="FIELD_COLLECTOR" 
+            visibleWhen="#{isAllowEdit}" shortcut="ctrl E"/>
+        <invoker type="formActions" action="cancel" caption="Cancel" role="FIELD_COLLECTOR" 
+            visibleWhen="#{mode == 'edit'}"/>
+        <invoker type="formActions" action="save" caption="Save" role="FIELD_COLLECTOR"
+            visibleWhen="#{isAllowSave}" mnemonic="s" shortcut="ctrl S"/>
+            
+        <invoker type="formActions" action="post" caption="Post" role="FIELD_COLLECTOR,CASHIER" visibleWhen="#{isAllowPost}" mnemonic="p" shortcut="ctrl P"/>
+        <invoker type="formActions" action="viewExemptions" caption="Exemptions" visibleWhen="#{mode != 'init'}"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.payment.PostPaymentController"/>

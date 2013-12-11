@@ -50,12 +50,12 @@
         <Component class="com.rameses.rcp.control.XComboBox" name="xComboBox1">
           <Properties>
             <Property name="caption" type="java.lang.String" value="Route"/>
-            <Property name="expression" type="java.lang.String" value="#{item.code}"/>
+            <Property name="expression" type="java.lang.String" value="#{item.description} - #{item.area}"/>
             <Property name="itemKey" type="java.lang.String" value="code"/>
             <Property name="items" type="java.lang.String" value="routeList"/>
             <Property name="name" type="java.lang.String" value="route"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[150, 22]"/>
+              <Dimension value="[300, 22]"/>
             </Property>
             <Property name="required" type="boolean" value="true"/>
           </Properties>

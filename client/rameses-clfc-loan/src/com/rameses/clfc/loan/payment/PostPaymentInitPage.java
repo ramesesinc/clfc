@@ -37,11 +37,11 @@ public class PostPaymentInitPage extends javax.swing.JPanel {
         xFormPanel1.setCaptionBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         xFormPanel1.setPadding(new java.awt.Insets(10, 15, 10, 10));
         xComboBox1.setCaption("Route");
-        xComboBox1.setExpression("#{item.code}");
+        xComboBox1.setExpression("#{item.description} - #{item.area}");
         xComboBox1.setItemKey("code");
         xComboBox1.setItems("routeList");
         xComboBox1.setName("route");
-        xComboBox1.setPreferredSize(new java.awt.Dimension(150, 22));
+        xComboBox1.setPreferredSize(new java.awt.Dimension(300, 22));
         xComboBox1.setRequired(true);
         xFormPanel1.add(xComboBox1);
 

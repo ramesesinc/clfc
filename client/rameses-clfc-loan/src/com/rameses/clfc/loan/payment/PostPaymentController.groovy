@@ -50,7 +50,7 @@ class PostPaymentController
         entity = data.entity;
         unpostedPayments = data.list;
         if (!unpostedPayments) {
-            throw new Exception('No unposted payments for this route.')
+            throw new Exception('No unposted payments found for this route.')
             return null;
         }
         mode = 'read';
@@ -116,7 +116,7 @@ class PostPaymentController
     
     def save() {
         if (getTotalamount() != breakdown) 
-            throw new Exception('Total for denomination does not match total amount for unposted payments.');
+            throw new Exception('Total for denomination does not matched with total amount for unposted payments.');
         
         //entity.denominations = denominations;
         if (mode == 'create') {
