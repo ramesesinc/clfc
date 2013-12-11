@@ -1,8 +1,8 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/loan" caption="Capture Ledger" 
-            role="CAO_OFFICER" action="init" index="2"/>
-            
+        <invoker folderid="/menu/txn/collection" caption="Capture Ledger" role="CAO_OFFICER" action="init" index="2"/>
+        <invoker type="quick_launcher" code="CLL" caption="Capture Ledger" role="CAO_OFFICER" action="init"/> 
+        
         <invoker type="captureledger:create" caption="Capture Ledger" action="init"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
