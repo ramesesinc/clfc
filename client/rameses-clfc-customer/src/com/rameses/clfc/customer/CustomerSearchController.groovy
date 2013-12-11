@@ -34,6 +34,7 @@ class CustomerSearchController extends BasicLookupModel
     
     def selectedCustomer; 
     def customerlistHandler = [ 
+        getRows: { return 15; },             
         fetchList: {o-> 
             return service.getList(o);  
         }, 
