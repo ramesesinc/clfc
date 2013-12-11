@@ -1,8 +1,10 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/loan" action="create" caption="Ledger Billing" index="4" role="ACCT_OFFICER"/>
+        <invoker folderid="/menu/txn/collection" caption="New Collection Sheet" action="create" role="ACCT_OFFICER" index="4" separator="before"/>
+        <invoker type="quick_launcher" code="NCS" caption="New Collection Sheet" action="create" role="ACCT_OFFICER"/> 
         
-        <invoker type="ledgerbilling:open" action="open" caption="Ledger Billing" target="popup" resizable="false"/>
+        <invoker type="ledgerbilling:open" action="open" caption="Collection Sheet" target="popup" resizable="false"/>  
+        
         <invoker type="formActions" action="reset" caption="Reset" mnemonic="r" visibleWhen="#{mode == 'read' &amp;&amp; entity.state == 'DRAFT'}"/>
     </invokers>
     

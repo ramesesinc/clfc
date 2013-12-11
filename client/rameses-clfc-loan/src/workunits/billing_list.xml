@@ -1,5 +1,5 @@
 <workunit extends="wtemplates/InboxController.xml" serviceName="LoanLedgerBillingService" defaultFileType="ledgerbilling">
     <invokers>
-        <invoker folderid="/explorer/txn/loan" caption="Ledger Billings" role="ACCT_OFFICER"/>
+        <invoker folderid="/explorer/txn/loan" caption="Collection Sheets" role="ACCT_OFFICER"/>
     </invokers>
 </workunit>

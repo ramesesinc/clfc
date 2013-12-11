@@ -12,7 +12,8 @@ class LoanLedgerBillingController extends CRUDController
     String serviceName = 'LoanLedgerBillingService';
     String entityName = 'ledgerbilling';
     def collectorLookupHandler = InvokerUtil.lookupOpener('route-collector:lookup', [:]);
-    
+
+    String preferredTitle = 'Collection Sheet';    
     String createFocusComponent = 'entity.collector';
     String editFocusComponent = 'entity.collector';  
     boolean showConfirmOnSave = false;
@@ -61,7 +62,9 @@ class LoanLedgerBillingController extends CRUDController
     }   
 
     void reset() {
-        service.resetBilling(entity);
-        MsgBox.alert("Successfully reseted billing!");
+        if (MsgBox.confirm("You are about to reset the billing information. Continue?")) {
+            service.resetBilling(entity);
+            MsgBox.alert("Resetting has been successfully processed.", true);
+        }
     }
 }
