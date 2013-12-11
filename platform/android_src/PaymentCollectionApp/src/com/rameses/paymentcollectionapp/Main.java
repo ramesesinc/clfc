@@ -105,17 +105,17 @@ public class Main extends Activity {
 		
 		ListView optionLv = (ListView)findViewById(R.id.optionList);
 		ArrayList<String> arrlist = new ArrayList<String>();
-		arrlist.add("Download Billing");
-		arrlist.add("Collection Sheet");
-		arrlist.add("Upload Payments");
+		arrlist.add("Download Collection Sheet(s)");
+		arrlist.add("View Collection Sheet(s)");
+		arrlist.add("Upload Collection Sheet(s)");
 		
 		optionLv.setAdapter(new StringAdapter(context, arrlist));
 		optionLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				String opt = parent.getItemAtPosition(position).toString();
-				if(opt.equals("Collection Sheet")) {
+				//String opt = parent.getItemAtPosition(position).toString();
+				if(position == 1) {
 					Intent intent = new Intent(context, CollectionSheetRoute.class);
 					startActivity(intent);
 				} else {
@@ -125,13 +125,13 @@ public class Main extends Activity {
 						if(!db.isOpen) db.openDb();
 						Cursor p = db.getPayments();
 						db.closeDb();
-						if(opt.equals("Download Billing")) {
+						if(position == 0) {
 							if(p.getCount() > 0) {
 								Toast.makeText(context, "There are still payments to upload. Please upload the payments before downloading current billing.", Toast.LENGTH_LONG).show();
 							} else {
 								showLoginDialog();
 							}
-						} else if(opt.equals("Upload Payments")) {
+						} else if(position == 2) {
 							if(p.getCount() == 0) {
 								Toast.makeText(context, "No payments to upload.", Toast.LENGTH_SHORT).show();
 							} else {
@@ -253,7 +253,7 @@ public class Main extends Activity {
 				Map<String, Object> params=new HashMap<String, Object>();
 				params.put("username", username);
 				params.put("password", password);
-				System.out.println("username-> "+username+" password-> "+password);
+				//System.out.println("username-> "+username+" password-> "+password);
 				Object response = proxy.invoke("login", new Object[]{params});
 				Map<String, Object> result = (Map<String, Object>) response;
 				
@@ -447,7 +447,7 @@ public class Main extends Activity {
 				BigDecimal totalamount = new BigDecimal("0").setScale(2);
 				for(int i=0; i<payments.size(); i++) {
 					map = (Map<String, Object>) payments.get(i);
-					System.out.println(map);
+					//System.out.println(map);
 					totalamount = totalamount.add(new BigDecimal(map.get("payamount").toString()));
 				}
 				

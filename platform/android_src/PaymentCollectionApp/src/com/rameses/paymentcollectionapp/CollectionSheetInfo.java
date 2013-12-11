@@ -157,7 +157,7 @@ public class CollectionSheetInfo extends Activity {
 		
 		//ListView lv_info_payments = (ListView) findViewById(R.id.lv_info_payments);
 		LinearLayout ll_info_payments = (LinearLayout) findViewById(R.id.ll_info_payments);
-		ll_info_payments.removeAllViews();
+		ll_info_payments.removeAllViewsInLayout();
 		rl_payment.setVisibility(View.GONE);
 
 		String paymenttype = "";
@@ -167,6 +167,7 @@ public class CollectionSheetInfo extends Activity {
 		TextView tv_info_txndate = null;
 		TextView tv_info_type = null;
 		TextView tv_info_amount = null;
+		System.out.println(payment.getCount());
 		if(payment != null && payment.getCount() > 0) {
 			rl_payment.setVisibility(View.VISIBLE);
 			do {

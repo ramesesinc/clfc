@@ -19,7 +19,7 @@
     <string name="txt_type">Type</string>
     <string name="txt_amount">Amount</string>
     <string name="txt_info_general">General</string>
-    <string name="txt_info_payment">Payment</string>
+    <string name="txt_info_payment">Payment(s)</string>
     <string name="semicolon">:</string>
     <string name="img_check_ico">check icon</string>
     <string name="txt_ip_host">Host Address</string>
