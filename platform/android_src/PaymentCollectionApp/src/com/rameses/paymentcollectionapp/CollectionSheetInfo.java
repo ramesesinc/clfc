@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,11 +19,13 @@ import android.database.Cursor;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -149,34 +152,42 @@ public class CollectionSheetInfo extends Activity {
 		tv_info_term.setText(term+" days");
 		
 		db.openDb();
-		payment = db.getPayment(loanappid);
+		payment = db.getBorrowerPayments(loanappid);
 		db.closeDb();
 		
-		TextView tv_refno = (TextView) findViewById(R.id.tv_info_refno);
-		TextView tv_txndate = (TextView) findViewById(R.id.tv_info_txndate);
-		TextView tv_paymenttype = (TextView) findViewById(R.id.tv_info_paymenttype);
-		TextView tv_paymentamount = (TextView) findViewById(R.id.tv_info_paymentamount);
+		//ListView lv_info_payments = (ListView) findViewById(R.id.lv_info_payments);
+		LinearLayout ll_info_payments = (LinearLayout) findViewById(R.id.ll_info_payments);
+		ll_info_payments.removeAllViews();
 		rl_payment.setVisibility(View.GONE);
 
-		String txndate = "";
 		String paymenttype = "";
 		BigDecimal paymentamount = new BigDecimal("0").setScale(2);
-
+		View child = null;
+		TextView tv_info_refno = null;
+		TextView tv_info_txndate = null;
+		TextView tv_info_type = null;
+		TextView tv_info_amount = null;
 		if(payment != null && payment.getCount() > 0) {
 			rl_payment.setVisibility(View.VISIBLE);
-			refno = payment.getString(payment.getColumnIndex("refno"));
-			txndate = payment.getString(payment.getColumnIndex("txndate"));
-			String type = payment.getString(payment.getColumnIndex("paymenttype"));
-			if (type.equals("advance")) paymenttype = "Schedule/Advance";
-			else paymenttype = "Overpayment";
-			String amt = payment.getDouble(payment.getColumnIndex("paymentamount"))+"";
-			paymentamount = new BigDecimal(amt).setScale(2);
+			do {
+				child = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_payment, null);
+				tv_info_refno = (TextView) child.findViewById(R.id.tv_info_refno);
+				tv_info_refno.setText(payment.getString(payment.getColumnIndex("refno")));
+				tv_info_txndate = (TextView) child.findViewById(R.id.tv_info_txndate);
+				tv_info_txndate.setText(payment.getString(payment.getColumnIndex("txndate")));
+				String type = payment.getString(payment.getColumnIndex("paymenttype"));
+				if (type.equals("schedule")) paymenttype = "Schedule/Advance";
+				else paymenttype = "Overpayment";
+				tv_info_type = (TextView) child.findViewById(R.id.tv_info_paymenttype);
+				tv_info_type.setText(paymenttype);
+				String amt = payment.getDouble(payment.getColumnIndex("paymentamount"))+"";
+				paymentamount = new BigDecimal(amt).setScale(2);
+				tv_info_amount = (TextView) child.findViewById(R.id.tv_info_paymentamount);
+				tv_info_amount.setText(formatValue(paymentamount));
+				ll_info_payments.addView(child);
+				//list.add(pp);
+			} while(payment.moveToNext());
 		}
-		
-		tv_refno.setText(refno);
-		tv_txndate.setText(txndate);
-		tv_paymenttype.setText(paymenttype);
-		tv_paymentamount.setText(formatValue(paymentamount));
 	}
 	
 	private String formatValue(Object number) {
@@ -190,10 +201,10 @@ public class CollectionSheetInfo extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
-		if(payment != null && payment.getCount() > 0) 
+		/*if(payment != null && payment.getCount() > 0) 
 			getMenuInflater().inflate(R.menu.empty, menu);
-		else
-			getMenuInflater().inflate(R.menu.payment, menu);
+		else*/
+		getMenuInflater().inflate(R.menu.payment, menu);
 		
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -206,6 +217,7 @@ public class CollectionSheetInfo extends Activity {
 		intent.putExtra("routecode", routecode);
 		intent.putExtra("totaldays", totaldays);
 		intent.putExtra("isfirstbill", isfirstbill);
+		if (payment.getCount() > 0) refno += (payment.getCount()+1);
 		switch(item.getItemId()) {
 			case R.id.payment_addpayment:
 					intent.putExtra("refno", refno);

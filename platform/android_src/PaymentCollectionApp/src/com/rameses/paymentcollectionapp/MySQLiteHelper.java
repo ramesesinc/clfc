@@ -252,7 +252,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
-	public Cursor getPayment(String loanappid) {
+	public Cursor getBorrowerPayments(String loanappid) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_PAYMENT+" WHERE loanappid='"+loanappid+"'", null);
 		
 		if(result != null) result.moveToFirst();

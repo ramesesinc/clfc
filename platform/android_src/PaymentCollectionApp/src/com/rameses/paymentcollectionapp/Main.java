@@ -95,6 +95,7 @@ public class Main extends Activity {
 		db=new MySQLiteHelper(context);
 		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
 		progressDialog = new ProgressDialog(context);
+		progressDialog.setCancelable(false);
 		
 		isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		WifiManager wifiManager = (WifiManager)context.getSystemService(WIFI_SERVICE);
