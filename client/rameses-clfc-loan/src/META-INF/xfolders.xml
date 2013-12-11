@@ -28,7 +28,8 @@
     
     <folder id="menu">
         <folder id="txn" caption="Transaction">
-            <folder id="loan" caption="Loan"/>
+            <folder id="application" caption="Application"/>
+            <folder id="collection" caption="Collection"/>
         </folder>
     </folder>
 </folders>
