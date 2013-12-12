@@ -14,6 +14,9 @@ import org.w3c.dom.Text;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -233,7 +236,9 @@ public class CollectionSheetInfo extends Activity {
 			case R.id.payment_editremarks:
 					showRemarksDialog();
 					break;
-			
+			case R.id.payment_addnotes:
+					showNotesDialog();
+					break;
 		}
 		return true;
 	}
@@ -243,9 +248,6 @@ public class CollectionSheetInfo extends Activity {
 		builder.setTitle("Remarks");
 		View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_remarks, null);
 		builder.setView(view);
-		if (!remarks.equals("")) {
-			((EditText) dialog.findViewById(R.id.remarks_text)).setText(remarks);
-		}
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {			
 			@Override
 			public void onClick(DialogInterface d, int which) {
@@ -256,10 +258,12 @@ public class CollectionSheetInfo extends Activity {
 					map.put("loanappid", loanappid);
 					map.put("remarks", et_remarks.getText());
 					if (!db.isOpen) db.openDb();
-					db.insertRemarks(map);
+					if (remarks.equals("")) db.insertRemarks(map);
+					else if (!remarks.equals("")) db.updateRemarks(map);
 					if (db.isOpen) db.closeDb();
 					if (rl_remarks.getVisibility() == View.GONE) rl_remarks.setVisibility(View.VISIBLE);
 					((TextView) findViewById(R.id.tv_info_remarks)).setText(et_remarks.getText());
+					remarks = et_remarks.getText().toString();
 				}
 			}
 		});	
@@ -267,14 +271,18 @@ public class CollectionSheetInfo extends Activity {
 		builder.setNegativeButton("Cancel", null);
 		dialog = builder.create();
 		dialog.show();
+		if (!remarks.equals("")) {
+			((EditText) dialog.findViewById(R.id.remarks_text)).setText(remarks);
+		}
 	}
 	
-	private Object saveRemarksClickListener = new DialogInterface.OnClickListener() {
-		
-		@Override
-		public void onClick(DialogInterface d, int which) {
-			// TODO Auto-generated method stub
-			
-		}
-	};
+	private void showNotesDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("Notes");
+		View view = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(dialog_notes, null);
+		builder.setView(view);
+		/*Calendar c = Calendar.getInstance();
+		DatePickerDialog datepickerDialog = new DatePickerDialog(context, null, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+		datepickerDialog.show();*/
+	}
 }

@@ -152,12 +152,13 @@ public final class R {
         public static final int activity_payment=0x7f030005;
         public static final int activity_route=0x7f030006;
         public static final int dialog_login=0x7f030007;
-        public static final int dialog_remarks=0x7f030008;
-        public static final int header_route=0x7f030009;
-        public static final int item_collectionsheet=0x7f03000a;
-        public static final int item_payment=0x7f03000b;
-        public static final int item_route=0x7f03000c;
-        public static final int item_string=0x7f03000d;
+        public static final int dialog_notes=0x7f030008;
+        public static final int dialog_remarks=0x7f030009;
+        public static final int header_route=0x7f03000a;
+        public static final int item_collectionsheet=0x7f03000b;
+        public static final int item_payment=0x7f03000c;
+        public static final int item_route=0x7f03000d;
+        public static final int item_string=0x7f03000e;
     }
     public static final class menu {
         public static final int empty=0x7f080000;

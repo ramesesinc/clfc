@@ -251,7 +251,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		
 		if (result != null && result.getCount() > 0) {
 			result.moveToFirst();
-			System.out.println("result = "+result);
 			return result.getString(result.getColumnIndex("remarks"));
 		}
 		return "";
