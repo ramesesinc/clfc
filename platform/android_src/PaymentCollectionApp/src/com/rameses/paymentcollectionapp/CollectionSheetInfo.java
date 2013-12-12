@@ -13,7 +13,9 @@ import java.util.Map;
 import org.w3c.dom.Text;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Camera.Size;
@@ -24,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -41,9 +44,12 @@ public class CollectionSheetInfo extends Activity {
 	private String paymenttype = "";
 	private int totaldays = 0;
 	private Cursor payment;
+	private String remarks = "";
 	private int isfirstbill = 0;
 	private RelativeLayout rl_general = null;
 	private RelativeLayout rl_payment = null;
+	private RelativeLayout rl_remarks = null;
+	private AlertDialog dialog = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,7 @@ public class CollectionSheetInfo extends Activity {
 		db = new MySQLiteHelper(context);
 		rl_general = (RelativeLayout) findViewById(R.id.layout_info_general);
 		rl_payment = (RelativeLayout) findViewById(R.id.layout_info_payment);
+		rl_remarks = (RelativeLayout) findViewById(R.id.layout_info_remarks);
 	}
 	
 	@Override
@@ -117,43 +124,36 @@ public class CollectionSheetInfo extends Activity {
 			}				
 			SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
 			duedate = df.format(c.getTime());
-			totaldays = amountdue.divide(dailydue).intValue();
+			totaldays = amountdue.divide(dailydue, 2, BigDecimal.ROUND_HALF_UP).intValue();
 			if (paymenttype.equals(null) || paymenttype.equals("")) paymenttype = result.getString(result.getColumnIndex("paymentmethod"));
 		}
 		
-		TextView tv_info_acctname = (TextView) findViewById(R.id.tv_info_acctname);
-		TextView tv_info_appno = (TextView) findViewById(R.id.tv_info_appno);
-		TextView tv_info_loanamount = (TextView) findViewById(R.id.tv_info_loanamount);
-		TextView tv_info_balance = (TextView) findViewById(R.id.tv_info_balance);
-		TextView tv_info_dailydue = (TextView) findViewById(R.id.tv_info_dailydue);
-		TextView tv_info_amountdue = (TextView) findViewById(R.id.tv_info_amountdue);
-		TextView tv_info_overpayment = (TextView) findViewById(R.id.tv_info_overpayment);
-		TextView tv_info_duedate = (TextView) findViewById(R.id.tv_info_duedate);
-		TextView tv_info_homeaddress = (TextView) findViewById(R.id.tv_info_homeaddress);
-		TextView tv_info_collectionaddress = (TextView) findViewById(R.id.tv_info_collectionaddress);
-		TextView tv_info_interest = (TextView) findViewById(R.id.tv_info_interest);
-		TextView tv_info_penalty = (TextView) findViewById(R.id.tv_info_penalty);
-		TextView tv_info_others = (TextView) findViewById(R.id.tv_info_others);
-		TextView tv_info_term = (TextView) findViewById(R.id.tv_info_term);
-		
-		tv_info_acctname.setText(acctname);
-		tv_info_appno.setText(appno);
-		tv_info_loanamount.setText(formatValue(loanamount));
-		tv_info_balance.setText(formatValue(balance));
-		tv_info_dailydue.setText(formatValue(dailydue));
-		tv_info_amountdue.setText(formatValue(amountdue));
-		tv_info_overpayment.setText(formatValue(overpayment));
-		tv_info_duedate.setText(duedate);
-		tv_info_homeaddress.setText(homeaddress);
-		tv_info_collectionaddress.setText(collectionaddress);
-		tv_info_interest.setText(formatValue(interest));
-		tv_info_penalty.setText(formatValue(penalty));
-		tv_info_others.setText(formatValue(others));
-		tv_info_term.setText(term+" days");
+		((TextView) findViewById(R.id.tv_info_acctname)).setText(acctname);
+		((TextView) findViewById(R.id.tv_info_appno)).setText(appno);
+		((TextView) findViewById(R.id.tv_info_loanamount)).setText(formatValue(loanamount));
+		((TextView) findViewById(R.id.tv_info_balance)).setText(formatValue(balance));
+		((TextView) findViewById(R.id.tv_info_dailydue)).setText(formatValue(dailydue));
+		((TextView) findViewById(R.id.tv_info_amountdue)).setText(formatValue(amountdue));
+		((TextView) findViewById(R.id.tv_info_overpayment)).setText(formatValue(overpayment));
+		((TextView) findViewById(R.id.tv_info_duedate)).setText(duedate);
+		((TextView) findViewById(R.id.tv_info_homeaddress)).setText(homeaddress);
+		((TextView) findViewById(R.id.tv_info_collectionaddress)).setText(collectionaddress);
+		((TextView) findViewById(R.id.tv_info_interest)).setText(formatValue(interest));
+		((TextView) findViewById(R.id.tv_info_penalty)).setText(formatValue(penalty));
+		((TextView) findViewById(R.id.tv_info_others)).setText(formatValue(others));
+		((TextView) findViewById(R.id.tv_info_term)).setText(term+" days");
 		
 		db.openDb();
 		payment = db.getBorrowerPayments(loanappid);
+		remarks = db.getRemarks(loanappid);
 		db.closeDb();
+		
+		rl_remarks.setVisibility(View.GONE);
+		if (!remarks.equals("")) {
+			TextView tv_info_remarks = (TextView) findViewById(R.id.tv_info_remarks);
+			tv_info_remarks.setText(remarks);
+			rl_remarks.setVisibility(View.VISIBLE);
+		}
 		
 		//ListView lv_info_payments = (ListView) findViewById(R.id.lv_info_payments);
 		LinearLayout ll_info_payments = (LinearLayout) findViewById(R.id.ll_info_payments);
@@ -167,24 +167,19 @@ public class CollectionSheetInfo extends Activity {
 		TextView tv_info_txndate = null;
 		TextView tv_info_type = null;
 		TextView tv_info_amount = null;
-		System.out.println(payment.getCount());
 		if(payment != null && payment.getCount() > 0) {
 			rl_payment.setVisibility(View.VISIBLE);
 			do {
 				child = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_payment, null);
-				tv_info_refno = (TextView) child.findViewById(R.id.tv_info_refno);
-				tv_info_refno.setText(payment.getString(payment.getColumnIndex("refno")));
-				tv_info_txndate = (TextView) child.findViewById(R.id.tv_info_txndate);
-				tv_info_txndate.setText(payment.getString(payment.getColumnIndex("txndate")));
+				((TextView) child.findViewById(R.id.tv_info_refno)).setText(payment.getString(payment.getColumnIndex("refno")));
+				((TextView) child.findViewById(R.id.tv_info_txndate)).setText(payment.getString(payment.getColumnIndex("txndate")));
 				String type = payment.getString(payment.getColumnIndex("paymenttype"));
 				if (type.equals("schedule")) paymenttype = "Schedule/Advance";
 				else paymenttype = "Overpayment";
-				tv_info_type = (TextView) child.findViewById(R.id.tv_info_paymenttype);
-				tv_info_type.setText(paymenttype);
+				((TextView) child.findViewById(R.id.tv_info_paymenttype)).setText(paymenttype);
 				String amt = payment.getDouble(payment.getColumnIndex("paymentamount"))+"";
 				paymentamount = new BigDecimal(amt).setScale(2);
-				tv_info_amount = (TextView) child.findViewById(R.id.tv_info_paymentamount);
-				tv_info_amount.setText(formatValue(paymentamount));
+				((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(paymentamount));
 				ll_info_payments.addView(child);
 				//list.add(pp);
 			} while(payment.moveToNext());
@@ -192,7 +187,7 @@ public class CollectionSheetInfo extends Activity {
 	}
 	
 	private String formatValue(Object number) {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
+		DecimalFormat df = new DecimalFormat("#,###,##0.00");
 		StringBuffer sb = new StringBuffer();
 		FieldPosition fp = new FieldPosition(0);
 		df.format(number, sb, fp);
@@ -206,7 +201,13 @@ public class CollectionSheetInfo extends Activity {
 			getMenuInflater().inflate(R.menu.empty, menu);
 		else*/
 		getMenuInflater().inflate(R.menu.payment, menu);
-		
+		MenuItem menuItem = null;
+		if (remarks.equals(null) || remarks.equals("")) {
+			menuItem = menu.findItem(R.id.payment_editremarks);
+		} else {
+			menuItem = menu.findItem(R.id.payment_addpayment);
+		}
+		menuItem.setVisible(false);
 		return super.onPrepareOptionsMenu(menu);
 	}
 	
@@ -226,8 +227,54 @@ public class CollectionSheetInfo extends Activity {
 					intent.putExtra("overpayment", overpayment.toString());
 					startActivity(intent);
 					break;
+			case R.id.payment_addremarks:
+					showRemarksDialog();
+					break;
+			case R.id.payment_editremarks:
+					showRemarksDialog();
+					break;
+			
 		}
 		return true;
 	}
 
+	public void showRemarksDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("Remarks");
+		View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_remarks, null);
+		builder.setView(view);
+		if (!remarks.equals("")) {
+			((EditText) dialog.findViewById(R.id.remarks_text)).setText(remarks);
+		}
+		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {			
+			@Override
+			public void onClick(DialogInterface d, int which) {
+				// TODO Auto-generated method stub
+				EditText et_remarks = (EditText) dialog.findViewById(R.id.remarks_text);
+				if (!et_remarks.getText().equals("")) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("loanappid", loanappid);
+					map.put("remarks", et_remarks.getText());
+					if (!db.isOpen) db.openDb();
+					db.insertRemarks(map);
+					if (db.isOpen) db.closeDb();
+					if (rl_remarks.getVisibility() == View.GONE) rl_remarks.setVisibility(View.VISIBLE);
+					((TextView) findViewById(R.id.tv_info_remarks)).setText(et_remarks.getText());
+				}
+			}
+		});	
+		
+		builder.setNegativeButton("Cancel", null);
+		dialog = builder.create();
+		dialog.show();
+	}
+	
+	private Object saveRemarksClickListener = new DialogInterface.OnClickListener() {
+		
+		@Override
+		public void onClick(DialogInterface d, int which) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 }

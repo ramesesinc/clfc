@@ -287,63 +287,7 @@ public class Main extends Activity {
 			}
 		}
 	}
-	
-	/*private void getRoutes() {
-		if(progressDialog.isShowing()) progressDialog.dismiss();
-		progressDialog.setMessage("Getting routes from server.");
-		progressDialog.show();
-		Executors.newSingleThreadExecutor().submit(new GetRoutesRunnable());
-	}
 
-	private Handler handler=new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			Bundle bundle=msg.getData();
-			if(!db.isOpen) db.openDb();
-			db.emptySystemTable();
-			db.removeAllCollectionsheets();
-			db.closeDb();
-			Intent intent=new Intent(context, Route.class);
-			intent.putExtra("bundle", bundle);
-			if(progressDialog.isShowing()) progressDialog.dismiss();
-			startActivity(intent);
-		}
-	};
-	
-	private class GetRoutesRunnable implements Runnable {
-		@Override
-		public void run() {
-			Message msg  = responseHandler.obtainMessage();
-			Bundle bundle = new Bundle();
-			String status = "";
-			Message responseMsg=responseHandler.obtainMessage();
-			Bundle responseData=new Bundle();
-			try {
-				msg = handler.obtainMessage();
-				Map params=new HashMap();
-				ArrayList<RouteParcelable> list = (ArrayList<RouteParcelable>) svcProxy.invoke("getRoutes", new Object[]{params});
-				bundle.putParcelableArrayList("routes", list);
-				msg.setData(bundle);
-				status = "ok";
-			}
-			catch( TimeoutException te ) {
-				bundle.putString("response", "Connection Timeout!");
-			}
-			catch( IOException ioe ) {
-				bundle.putString("response", "Error connecting to Server.");
-			}
-			catch( Exception e ) {
-				bundle.putString("response", e.getMessage());
-				e.printStackTrace(); 
-			}
-			finally {
-				msg.setData(bundle);
-				if(status == "ok") handler.sendMessage(msg);
-				else responseHandler.sendMessage(msg);
-			}
-		}
-	}*/
-	
 	private Handler responseHandler=new Handler() {
 		@Override
 		public void handleMessage(Message msg) {

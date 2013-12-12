@@ -618,5 +618,40 @@
               </LinearLayout>
 
           </RelativeLayout>
+
+          <RelativeLayout
+              android:id="@+id/layout_info_remarks"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" >
+
+              <TextView
+                  android:id="@+id/TextView20"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentLeft="true"
+                  android:layout_alignParentRight="true"
+                  android:layout_marginTop="5dp"
+                  android:background="@android:color/darker_gray"
+                  android:padding="2dp"
+                  android:text="@string/txt_info_remarks"
+                  android:textColor="@android:color/white"
+                  android:textSize="18sp"
+                  android:textStyle="bold" />
+
+              <TextView
+                  android:id="@+id/tv_info_remarks"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentLeft="true"
+                  android:layout_alignParentRight="true"
+                  android:layout_below="@+id/TextView20"
+                  android:layout_marginLeft="10dp"
+                  android:paddingBottom="5dp"
+                  android:paddingTop="5dp"
+                  android:text="@string/txt_empty"
+                  android:textAppearance="?android:attr/textAppearanceMedium" />
+
+          </RelativeLayout>
+
       </LinearLayout>
 </ScrollView>

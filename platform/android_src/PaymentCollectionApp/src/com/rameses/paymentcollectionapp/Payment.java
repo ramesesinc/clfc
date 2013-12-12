@@ -109,7 +109,7 @@ public class Payment extends Activity {
 					if (type.equals("over")) {
 						amt2 = new BigDecimal(et_overpayment.getText().toString()).setScale(2);
 						if (isfirstbill == 1) {
-							int td = amt.divide(amt2).intValue();
+							int td = amt.divide(amt2, 2, BigDecimal.ROUND_HALF_UP).intValue();
 							if (td < totaldays) {
 								Toast.makeText(context, "Amount paid could not cover up to current date based on overpayment amount.", Toast.LENGTH_SHORT).show();
 								flag = false;
