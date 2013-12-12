@@ -42,4 +42,11 @@
 	<string name="txt_term">Term</string>
 	<string name="header_route">Select a Route:</string>
 	<string name="txt_info_remarks">Remarks</string>
+	<string name="btn_change_date">Change Date</string>
+	<string name="txt_notes_fromdate">From:</string>
+	<string name="txt_notes_todate">To:</string>
+	<string name="txt_info_notes">Note(s)</string>
+	<string name="txt_fromdate">From Date</string>
+	<string name="txt_todate">To Date</string>
+	<string name="txt_remarks">Remarks</string>
 </resources>

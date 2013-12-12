@@ -19,6 +19,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String TABLE_COLLECTIONSHEET = "collectionsheet";
 	private static final String TABLE_PAYMENT = "payment";
 	private static final String TABLE_REMARKS = "remarks";
+	private static final String TABLE_NOTES = "notes";
 	private static final String TABLE_UPLOADEDPAYMENT = "uploaded";
 	private static final String TABLE_SYSTEM = "system";
 	private static final String TABLE_HOST = "host";
@@ -59,7 +60,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"routecode text, " +
 			"isfirstbill numeric" +
 			");";
-	private static final String CREATE_TABLE_REMARKS = "CREATE TABLE REMARKS(loanappid text, remarks text);";
+	private static final String CREATE_TABLE_REMARKS = "CREATE TABLE REMARKS(loanappid text PRIMARY KEY, remarks text);";
+	private static final String CREATE_TABLE_NOTES = "CREATE TABLE NOTES(" +
+			"objid text, " +
+			"loanappid text, " +
+			"fromdate text, " +
+			"todate text, " +
+			"remarks text" +
+			");";
 	private static final String CREATE_TABLE_UPLOADEDPAYMENT = "CREATE TABLE UPLOADED(loanappid text)";
 	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(sessionid text, serverdate text)";
 	private static final String CREATE_TABLE_HOST = "CREATE TABLE HOST(ipaddress text, port text);";
@@ -79,6 +87,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_COLLECTIONSHEET);
 		db.execSQL(CREATE_TABLE_PAYMENT);
 		db.execSQL(CREATE_TABLE_REMARKS);
+		db.execSQL(CREATE_TABLE_NOTES);
 		db.execSQL(CREATE_TABLE_UPLOADEDPAYMENT);
 		db.execSQL(CREATE_TABLE_SYSTEM);
 		db.execSQL(CREATE_TABLE_HOST);
@@ -93,6 +102,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_COLLECTIONSHEET);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_PAYMENT);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_REMARKS);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_NOTES);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_UPLOADEDPAYMENT);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_SYSTEM);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_HOST);
@@ -151,6 +161,27 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		values.put("loanappid", params.get("loanappid").toString());
 		values.put("remarks", params.get("remarks").toString());
 		db.update(TABLE_REMARKS, values, null, null);
+	}
+	
+	public void insertNotes(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		values.put("objid", params.get("objid").toString());
+		values.put("loanappid", params.get("loanappid").toString());
+		values.put("fromdate", params.get("fromdate").toString());
+		values.put("todate", params.get("todate").toString());
+		values.put("remarks", params.get("remarks").toString());
+		db.insert(TABLE_NOTES, null, values);
+	}
+	
+	public void updateNotes(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		String objid = params.get("objid").toString();
+		values.put("objid", objid);
+		values.put("loanappid", params.get("loanappid").toString());
+		values.put("fromdate", params.get("fromdate").toString());
+		values.put("todate", params.get("todate").toString());
+		values.put("remarks", params.get("remarks").toString());
+		db.update(TABLE_NOTES, values, "objid='"+objid+"'", null);
 	}
 	
 	public void insertUploadedPayment(String loanappid) {
@@ -254,6 +285,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			return result.getString(result.getColumnIndex("remarks"));
 		}
 		return "";
+	}
+	
+	public Cursor getNotes(String loanappid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_NOTES+" WHERE loanappid='"+loanappid+"'", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
 	}
 	
 	

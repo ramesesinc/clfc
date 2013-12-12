@@ -45,8 +45,8 @@ public class PaymentAdapter extends BaseAdapter {
 			LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = inflater.inflate(R.layout.item_payment, null);
 		}
-		TextView tv_info_refno = (TextView) v.findViewById(R.id.tv_info_refno);
-		TextView tv_info_txndate = (TextView) v.findViewById(R.id.tv_info_txndate);
+		TextView tv_info_refno = (TextView) v.findViewById(R.id.tv_info_fromdate);
+		TextView tv_info_txndate = (TextView) v.findViewById(R.id.tv_info_todate);
 		TextView tv_info_type = (TextView) v.findViewById(R.id.tv_info_paymenttype);
 		TextView tv_info_amount = (TextView) v.findViewById(R.id.tv_info_paymentamount);
 		
