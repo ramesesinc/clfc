@@ -1,0 +1,10 @@
+"entity.objid" [mode == 'create'] {
+    enabled: true; 
+}
+"entity.objid" [mode != 'create'] {
+    enabled: false; 
+    disabledTextColor: #000;
+} 
+"entity.*" [mode == 'read'] {
+    disabledTextColor: #000;
+} 

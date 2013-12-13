@@ -1,0 +1,12 @@
+<workunit>
+    <invokers>
+        <invoker type="branch:create" caption="Branch Information" action="create"/>
+        <invoker type="branch:open" caption="Branch Information" action="open"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.branch.BranchInfoController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.branch.BranchInfoPage"/>
+    </pages>
+</workunit>
