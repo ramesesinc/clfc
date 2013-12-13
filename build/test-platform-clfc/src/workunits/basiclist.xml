@@ -2,6 +2,8 @@
     <invokers>
         <invoker folderid="/menu/transaction" caption="Basic List"/>
         <invoker folderid="/master/test" caption="Basic List"/>
+        
+        <invoker type="basiclist:open" caption="Basic List" target="popup"/>
     </invokers>
     
     <code>
@@ -13,13 +15,14 @@
 
     class SampleBasicListController 
     {        
+        def title = "Basic List";
         def selectedRow = [:]; 
         def itemStatus;
         def list = [
             [name:'name1', value:100.00], 
             [name:'name2', value:200.00], 
             [name:'name3', value:300.00],
-            [name:'name4', value:10],
+            [name:'name10', value:10],
         ];
         
         def lookupHandler = InvokerUtil.lookupOpener('var:lookup', [
@@ -47,7 +50,7 @@
             validate: {li-> 
                 println 'validate-> item:'+li.item;
             }
-        ] as EditorListModel 
+        ] as BasicListModel 
         
         void showInfo() {
             MsgBox.alert(selectedRow);

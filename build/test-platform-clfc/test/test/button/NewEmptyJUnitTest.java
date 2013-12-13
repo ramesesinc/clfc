@@ -5,8 +5,9 @@
  * Created on September 9, 2013, 1:27 PM
  */
 
-package test;
+package test.button;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 import junit.framework.*;
@@ -29,23 +30,15 @@ public class NewEmptyJUnitTest extends TestCase {
     }
     
     public void test0() throws Exception {
-//        JPanel pnl = new JPanel(new BorderLayout());
-//        pnl.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-//        
-//        CTabbedPane ctab = new CTabbedPane();
-//        pnl.add(ctab); 
-//        
-//        ctab.addTab("Tab#1", new TestPanel(ctab));
-//        ctab.addTab("Tab#2", new TestPanel(ctab));
-//        ctab.addTab("Tab#3", new TestPanel(ctab));
-//        B
+        
         JDialog d = new JDialog();
         d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         d.setModal(true);        
-        d.setContentPane(new ImageCanvas()); 
+        d.setContentPane(new TestForm()); 
         d.setSize(640, 480); 
+        d.pack();
         d.setVisible(true); 
     }
 
-    
+
 }

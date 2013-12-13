@@ -9,9 +9,11 @@ public class Main
 {
     public static void main(String[] args) throws Exception 
     {
-        try {
+        try { 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-        }catch(Exception e){;} 
+        } catch(Exception e){;} 
+        
+        //dumpSystemInfo();
         
         Map env = new HashMap();
         env.put("app.debugMode", "true");         
@@ -29,20 +31,23 @@ public class Main
         
         Map roles = new HashMap();
         roles.put("ADMIN.SYSADMIN", null);
-        roles.put("DATAMGMT.ENTITY_ENCODER", null);
-        roles.put("ACCOUNTS.ACCOUNT_DATAMGMT", null);
-        roles.put("TREASURY.ACCOUNT_DATAMGMT", null); 
-        roles.put("BPLS.BP_DATAMGMT", null); 
-        roles.put("RPT.RPT_DATAMGMT", null); 
+        roles.put("DATAMGMT.DATAMGMT_AUTHOR", null);
+        roles.put("LOAN.FIELD_COLLECTOR", null);
+        roles.put("LOAN.CASHIER", null);
         
-        roles.put("DATAMGMT.LOAN_DATAMGMT_AUTHOR", null);
-        roles.put("LOAN.LOAN_CAO_OFFICER", null);
-        roles.put("LOAN.LOAN_CI_OFFICER", null);
-        roles.put("LOAN.LOAN_CRECOM_OFFICER", null);
-        roles.put("LOAN.LOAN_ACCT_OFFICER", null);
+        roles.put("LOAN.CAO_OFFICER", null);
+        roles.put("LOAN.CI_OFFICER", null);
+        roles.put("LOAN.CRECOM_OFFICER", null);
+        roles.put("LOAN.ACCT_OFFICER", null);
         OsirisTestPlatform.runTest(env, roles, profile); 
     }
 
+    private static void dumpSystemInfo() {
+        System.getProperties().list(System.out); 
+    }
+    
     public Main() {
     }
+    
+    
 }
