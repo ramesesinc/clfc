@@ -29,6 +29,7 @@
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/textView1"
             android:gravity="center_vertical"
+            android:paddingLeft="5dp"
             android:text="@string/txt_empty"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -66,6 +67,7 @@
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/TextView02"
             android:gravity="center_vertical"
+            android:paddingLeft="5dp"
             android:text="@string/txt_empty"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 

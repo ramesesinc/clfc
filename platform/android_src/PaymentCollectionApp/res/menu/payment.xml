@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/payment_addpayment" android:title="Add Payment"></item>
-    <item android:id="@+id/payment_addremarks" android:title="Add Remarks"></item>
-    <item android:id="@+id/payment_editremarks" android:title="Edit Remarks"></item><item android:id="@+id/payment_addnotes" android:title="Add Notes"></item>
+    <item android:id="@+id/payment_addremarks" android:title="Add Remark"></item><item android:id="@+id/payment_addnotes" android:title="Add Note"></item>
     
     
 

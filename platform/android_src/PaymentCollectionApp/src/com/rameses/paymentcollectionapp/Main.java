@@ -71,7 +71,7 @@ public class Main extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		setTitle("Payment Collection");
+		setTitle("CLFC Collection");
 		//dialog = new Dialog(context, android.R.style.Theme_WallpaperSettings);
 	}
 	

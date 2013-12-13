@@ -158,9 +158,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void updateRemarks(Map<String, Object> params) {
 		ContentValues values = new ContentValues();
-		values.put("loanappid", params.get("loanappid").toString());
+		String loanappid = params.get("loanappid").toString();
 		values.put("remarks", params.get("remarks").toString());
-		db.update(TABLE_REMARKS, values, null, null);
+		db.update(TABLE_REMARKS, values, "loanappid='"+loanappid+"'", null);
 	}
 	
 	public void insertNotes(Map<String, Object> params) {
@@ -176,7 +176,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public void updateNotes(Map<String, Object> params) {
 		ContentValues values = new ContentValues();
 		String objid = params.get("objid").toString();
-		values.put("objid", objid);
+		//values.put("objid", objid);
 		values.put("loanappid", params.get("loanappid").toString());
 		values.put("fromdate", params.get("fromdate").toString());
 		values.put("todate", params.get("todate").toString());
@@ -277,14 +277,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
-	public String getRemarks(String loanappid) {
+	public Cursor getRemarks(String loanappid) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_REMARKS+" WHERE loanappid='"+loanappid+"' LIMIT 1", null);
 		
-		if (result != null && result.getCount() > 0) {
-			result.moveToFirst();
-			return result.getString(result.getColumnIndex("remarks"));
-		}
-		return "";
+		if (result != null) result.moveToFirst();
+		return result;
 	}
 	
 	public Cursor getNotes(String loanappid) {
@@ -353,6 +350,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void removePaymentByLoanappid(String loanappid) {
 		db.delete(TABLE_PAYMENT, "loanappid='"+loanappid+"'", null);
+	}
+	
+	public void removeNoteById(String objid) {
+		db.delete(TABLE_NOTES, "objid='"+objid+"'", null);
+	}
+	
+	public void removeRemarksByAppid(String loanappid) {
+		db.delete(TABLE_REMARKS, "loanappid='"+loanappid+"'", null);
 	}
 	
 	public void removeAllUploadedPayments() {
