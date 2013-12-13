@@ -15,22 +15,32 @@ class OrgAdminService extends AbstractCrudService {
 
 	@Service 
 	def self;
+
+	@Service('DateService')
+	def dateSvc;
 	
 	String schemaName = "org";
 
 	public void beforeCreate( data ) {
-		def prefixid = 'ORG';
-		if (data.orgclass == 'MUNICIPALITY') prefixid = 'MUNI';
-		else if (data.orgclass == 'HOSPITAL') prefixid = 'HOSP';
-		else if (data.orgclass == 'DISTRICT') prefixid = 'DIST';
-		else if (data.orgclass == 'BARANGAY') prefixid = 'BRGY';
+		if (data.objid == null) { 
+			def prefixid = 'ORG'; 
+			if (data.orgclass == 'MUNICIPALITY') prefixid = 'MUNI';
+			else if (data.orgclass == 'HOSPITAL') prefixid = 'HOSP';
+			else if (data.orgclass == 'DISTRICT') prefixid = 'DIST';
+			else if (data.orgclass == 'BARANGAY') prefixid = 'BRGY';
 
-		data.objid = prefixid + new UID().toString();
-		data.filetype = data.orgclass;
+			data.objid = prefixid + new UID().toString(); 
+		} 
+		data.filetype = data.orgclass;		
+		data.dtcreated = dateSvc.serverDate.toString();
 	}
 
 	public void afterUpdate( data ) {
 		data.filetype = data.orgclass;
+	}
+
+	public void beforeUpdate( data ) {
+		data.dtmodified = dateSvc.serverDate.toString(); 
 	}
 	
 	private def getChildNodes(def selectedNode) {
