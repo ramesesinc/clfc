@@ -9,8 +9,8 @@ class LoanPaymentService
 	@ActiveDB(value="loanapp")
 	def loanapp;
 
-	@ActiveDB(value="batch_payment")
-	def batch_payment;
+	@ActiveDB(value="batch_collectionsheet")
+	def batch_collectionsheet;
 
 	@ActiveDB(value="loan_ledger")
 	def ledgerdb;
@@ -36,7 +36,7 @@ class LoanPaymentService
 	@ProxyMethod
 	public def getCashBreakdown( params ) {
 		if (!params.objid) throw new Exception('Please specify objid.');
-		def list = batch_payment.getCashBreakdown([parentid: params.objid]);
+		def list = batch_collectionsheet.getCashBreakdown([parentid: params.objid]);
 
 		return list;
 	}
@@ -54,7 +54,7 @@ class LoanPaymentService
 				qty: it.qty? it.qty : 0,
 				amount: it.amount? it.amount : 0.00
 			]
-			batch_payment.create(itm, 'cashbreakdown'); 
+			batch_collectionsheet.create(itm, 'cashbreakdown'); 
 		}
 		return params;
 	}
@@ -64,7 +64,7 @@ class LoanPaymentService
 		if (!params.objid) throw new Exception('Please specify objid.');
 		if (!params.cashbreakdown) throw new Exception('Please specify cashbreakdown.');
 		params.cashbreakdown.each{ 
-			batch_payment.update(it, 'cashbreakdown'); 
+			batch_collectionsheet.update(it, 'cashbreakdown'); 
 		}
 		return params;
 	}
@@ -72,10 +72,10 @@ class LoanPaymentService
 	@ProxyMethod
 	public def getUnpostedPayments( params ) {
 		if(!params.route_code) throw new Exception('Route code is required');
-		def bp = batch_payment.findByRoutecode(params);
+		def bp = batch_collectionsheet.findByRoutecode(params);
 		def list = []
 		if (bp) {
-			list = batch_payment.getDetailsByParentId([parentid: bp.objid]);
+			list = batch_collectionsheet.getDetailsByParentId([parentid: bp.objid]);
 			if(bp.totalcount != list.size()) 
 				throw new Exception('Payments for this route was not uploaded successfully.');
 		}
