@@ -482,7 +482,7 @@ public class Main extends Activity {
 					params.put("routecode", routecode);
 					params.put("totalcount", payments.size());
 					params.put("totalamount", totalamount);
-					Object response = svcProxy.invoke("uploadPayments", new Object[]{params});
+					Object response = svcProxy.invoke("uploadCollectionSheets", new Object[]{params});
 					Map<String, Object> result = (Map<String, Object>) response;
 					bundle.putString("loanappid", collectionsheet.get("loanappid").toString());
 					bundle.putStringArrayList("list", ((ArrayList<String>) result.get("list")));
