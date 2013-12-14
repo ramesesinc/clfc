@@ -8,13 +8,7 @@
         <invoker type="formActions" caption="State=null" action="stateNull"/>
         
         <invoker type="formActions" caption="Print" action="print"/>
-        <invoker type="formActions" caption="Export NP" action="export"/>
-        <invoker type="formActions" caption="Import NP" action="import"/>
-        
-        <invoker type="formActions" caption="Export CAO" action="export" 
-            domain="LOAN" role="LOAN_CAO_OFFICER" visibleWhen="#{entity.state == 0}"/>
-        <invoker type="formActions" caption="Import CI" action="import" 
-            domain="LOAN" role="LOAN_CI_OFFICER" visibleWhen="#{entity.state == 1}"/>
+        <invoker type="formActions" caption="Report" action="viewReport"/>
     </invokers>
     
     <code>
@@ -25,6 +19,9 @@
 
     class SampleFormController implements ViewHandler
     {        
+        @Binding
+        def binding;
+        
         def entity = [:];
         
         void doSearch() {
@@ -49,15 +46,56 @@
         } 
         
         def state0() {
+            if (true) throw new com.rameses.util.BreakException();
+            
             entity.state = 0;
             return Inv.lookupOpener('var:lookup', [:]); 
         } 
         void state1() {
             entity.state = 1;
+            if (true) throw new Exception('error...');
         } 
         void stateNull() {
             entity.state = null;
-        }         
+        }      
+        
+        def photo;
+        void refreshPhoto() {
+            binding.refresh('photo'); 
+        } 
+        
+        def cameraHandler1 = {o-> 
+            photo = o; 
+            binding.refresh('photo'); 
+        } 
+        
+        def cameraHandler = [            
+            onselect: {bytes-> 
+                photo = bytes;
+                println 'select-> ' + bytes;
+                binding.refresh('photo'); 
+            }, 
+            
+            onclose: {
+                println 'closing camera session'; 
+            } 
+        ] as CameraModel 
+        
+        def fingerPrintHandler = [
+            onselect: {bytes-> 
+                photo = bytes;
+                binding.refresh('photo'); 
+            }
+        ] as FingerPrintModel
+        
+        
+        def actionFieldHandler = [
+        
+            invoke: {info-> 
+                return Inv.lookupOpener('basiclist:open', [:]);
+            } 
+            
+        ] as ActionFieldModel 
     }
     </code>
     

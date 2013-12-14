@@ -1,0 +1,34 @@
+<workunit>
+    <invokers>
+        <invoker type="calendar_event:create" action="create" caption="Calendar Event" 
+            role="DATAMGMT_AUTHOR" permission="calendar_event.create" 
+            target="popup" resizable="false"/>
+            
+        <invoker type="calendar_event:open" action="open" caption="Calendar Event" 
+            role="DATAMGMT_AUTHOR" permission="calendar_event.read" 
+            target="popup" resizable="false"/>
+    </invokers>
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.osiris2.common.*;
+        
+        class CalendarEventInfoController extends CRUDController
+        {
+            String serviceName = 'CalendarEventService';
+            String entityName  = 'calendar_event';
+            
+            String createFocusComponent = 'entity.date';
+            String editFocusComponent = 'entity.name';            
+            boolean showConfirmOnSave = false;
+            boolean allowApprove = false;
+            
+            Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'calendar_event.create']; 
+            Map editPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'calendar_event.edit']; 
+            Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'calendar_event.delete']; 
+            Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'calendar_event.approve'];             
+        }
+    </code>
+    <pages>
+        <page name="com.rameses.clfc.calendar.CalendarEventPage"/>
+    </pages>
+</workunit>

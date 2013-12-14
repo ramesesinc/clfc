@@ -1,6 +1,6 @@
 <schema>
 
-	<element name="holiday_event_calendar" tablename="holiday_event_calendar">
+	<element name="calendar_event" tablename="calendar_event">
 		<field name="objid" primary="true"/>
 		<field name="state" required="true"/>
 		<field name="dtcreated" required="true"/>

@@ -1,11 +1,11 @@
 <workunits>
     <invokers>
-        <invoker type="producttype:create" action="create" caption="Product Type" 
-            role="DATAMGMT_AUTHOR" permission="producttype.create" 
+        <invoker type="product_type:create" action="create" caption="Product Type" 
+            role="DATAMGMT_AUTHOR" permission="product_type.create" 
             target="popup" resizable="false"/>
             
-        <invoker type="producttype:open" action="open" caption="Product Type" 
-            role="DATAMGMT_AUTHOR" permission="producttype.read" 
+        <invoker type="product_type:open" action="open" caption="Product Type" 
+            role="DATAMGMT_AUTHOR" permission="product_type.read" 
             target="popup" resizable="false"/>
             
     </invokers>
@@ -19,17 +19,17 @@
         class ProductTypeController extends CRUDController
         {
             String serviceName = 'LoanProductTypeService'
-            String entityName = 'producttype'
+            String entityName = 'product_type'
 
             String createFocusComponent = 'entity.name';
             String editFocusComponent = 'entity.description';                         
             boolean showConfirmOnSave = false;
             boolean allowApprove = false;
 
-            Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.create']; 
-            Map editPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.edit']; 
-            Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.delete']; 
-            Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'producttype.approve']; 
+            Map createPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'product_type.create']; 
+            Map editPermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'product_type.edit']; 
+            Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'product_type.delete']; 
+            Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'product_type.approve']; 
         } 
     </code>
     

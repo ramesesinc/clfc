@@ -15,10 +15,10 @@ import com.rameses.rcp.ui.annotations.Template;
  */
 @StyleSheet
 @Template(com.rameses.osiris2.themes.FormPage.class)
-public class HolidayEventPage extends javax.swing.JPanel 
+public class CalendarEventPage extends javax.swing.JPanel 
 {
     
-    public HolidayEventPage() {
+    public CalendarEventPage() {
         initComponents();
     }
     
@@ -42,6 +42,7 @@ public class HolidayEventPage extends javax.swing.JPanel
         xDateField1.setCaption("Date");
         xDateField1.setHint("Event Date");
         xDateField1.setName("entity.date");
+        xDateField1.setOutputFormat("MMM-dd-yyyy");
         xDateField1.setPreferredSize(new java.awt.Dimension(120, 20));
         xDateField1.setRequired(true);
         xFormPanel1.add(xDateField1);

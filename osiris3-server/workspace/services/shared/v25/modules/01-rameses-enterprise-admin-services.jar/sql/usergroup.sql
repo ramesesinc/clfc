@@ -25,7 +25,7 @@ WHERE
 [getList]
 SELECT DISTINCT
 	ugm.objid, ugm.user_username, ugm.user_lastname, ugm.user_firstname, 
-	ugm.org_name, sg.name AS securitygroup 
+	ugm.org_name, ug.role, sg.name AS securitygroup 
 FROM sys_usergroup ug 
 	INNER JOIN sys_usergroup_member ugm ON ug.objid=ugm.usergroupid ${usergroupfilter} 
 	LEFT JOIN sys_securitygroup sg ON ugm.securitygroupid=sg.objid 
@@ -56,9 +56,9 @@ WHERE uga.usergroupid=$P{usergroupid}
 [search]
 SELECT ugm.objid, su.username, su.name, sg.name AS securitygroup, so.name as org
 FROM sys_usergroup_member ugm
-INNER JOIN sys_user su ON su.objid=ugm.user_objid
-INNER JOIN sys_securitygroup sg ON ugm.securitygroupid=sg.objid 
-LEFT JOIN sys_org so ON ugm.orgid=so.objid
+	INNER JOIN sys_user su ON su.objid=ugm.user_objid
+	INNER JOIN sys_securitygroup sg ON ugm.securitygroupid=sg.objid 
+	LEFT JOIN sys_org so ON ugm.orgid=so.objid
 WHERE su.name like $P{name}  
 
 [changeState-approved]

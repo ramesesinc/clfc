@@ -6,8 +6,8 @@ import com.rameses.io.*;
 import com.rameses.services.extended.*;
 
 
-class UsergroupAdminService extends AbstractCrudService {
-
+class UsergroupAdminService extends AbstractCrudService 
+{
 	@PersistenceContext("admin")
 	def	em; 
 
@@ -23,7 +23,6 @@ class UsergroupAdminService extends AbstractCrudService {
 	@ProxyMethod
 	public def getColumns( def o ) {
 		o.userid = env.USERID;
-		println 'UsergroupAdminService_getColumns-> ' + o;
 		return[
 			[name:'user.username', caption:'User Name' ],
 			[name:'user.lastname', caption:'Last Name' ],

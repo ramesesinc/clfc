@@ -267,6 +267,7 @@ is divided into following sections:
     ===================
     -->
     <target name="deps-jar" depends="init" unless="no.deps">
+        <ant target="jar" inheritall="false" antfile="${project.dev-controls}/build.xml"/>
         <ant target="jar" inheritall="false" antfile="${project.rameses-clfc-customer}/build.xml"/>
         <ant target="jar" inheritall="false" antfile="${project.rameses-clfc-datamgmt}/build.xml"/>
         <ant target="jar" inheritall="false" antfile="${project.rameses-clfc-loan}/build.xml"/>
@@ -569,6 +570,7 @@ is divided into following sections:
     ===============
     -->
     <target name="deps-clean" depends="init" unless="no.deps">
+        <ant target="clean" inheritall="false" antfile="${project.dev-controls}/build.xml"/>
         <ant target="clean" inheritall="false" antfile="${project.rameses-clfc-customer}/build.xml"/>
         <ant target="clean" inheritall="false" antfile="${project.rameses-clfc-datamgmt}/build.xml"/>
         <ant target="clean" inheritall="false" antfile="${project.rameses-clfc-loan}/build.xml"/>
