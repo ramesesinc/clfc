@@ -420,7 +420,8 @@ public class CollectionSheetInfo extends Activity {
 			((EditText) dialog.findViewById(R.id.notes_text)).setText(((TextView) v.findViewById(R.id.tv_info_remarks)).getText());
 			
 		}
-		((Button) dialog.findViewById(R.id.notes_btn_changefromdate)).setOnClickListener(new View.OnClickListener() {
+		Button btn_changefromdate = (Button) dialog.findViewById(R.id.notes_btn_changefromdate);
+		btn_changefromdate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				// TODO Auto-generated method stub
@@ -452,7 +453,8 @@ public class CollectionSheetInfo extends Activity {
 				dpd.show();
 			}
 		});
-		((Button) dialog.findViewById(R.id.notes_btn_changetodate)).setOnClickListener(new View.OnClickListener() {			
+		Button btn_changetodate = (Button) dialog.findViewById(R.id.notes_btn_changetodate);
+		btn_changetodate.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
