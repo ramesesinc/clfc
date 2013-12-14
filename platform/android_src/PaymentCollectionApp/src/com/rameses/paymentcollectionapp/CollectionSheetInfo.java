@@ -155,9 +155,9 @@ public class CollectionSheetInfo extends Activity {
 		((TextView) findViewById(R.id.tv_info_term)).setText(term+" days");
 		
 		db.openDb();
-		payment = db.getBorrowerPayments(loanappid);
-		remarks = db.getRemarks(loanappid);
-		notes = db.getNotes(loanappid);
+		payment = db.getPaymentsByAppid(loanappid);
+		remarks = db.getRemarksByAppid(loanappid);
+		notes = db.getNotesByAppid(loanappid);
 		db.closeDb();
 		
 		rl_remarks.setVisibility(View.GONE);
@@ -590,7 +590,7 @@ public class CollectionSheetInfo extends Activity {
 					db.updateRemarks(map); 
 					showShortError("Successfully updated remark.");
 				}
-				remarks = db.getRemarks(loanappid);
+				remarks = db.getRemarksByAppid(loanappid);
 				if (db.isOpen) db.closeDb();
 				((TextView) findViewById(R.id.tv_info_remarks)).setText(map.get("remarks").toString());
 				dialog.dismiss();
