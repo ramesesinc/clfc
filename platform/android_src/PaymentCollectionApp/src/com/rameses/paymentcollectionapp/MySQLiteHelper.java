@@ -161,7 +161,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void insertPayment(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
-		values.put("object", params.get("objid").toString());
+		values.put("objid", params.get("objid").toString());
 		values.put("loanappid", params.get("loanappid").toString());
 		values.put("detailid", params.get("detailid").toString());
 		values.put("refno", params.get("refno").toString());

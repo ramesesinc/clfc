@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -148,6 +149,7 @@ public class Payment extends Activity {
 	private void savePayment() {
 		db.openDb();
 		Map<String, Object> payment = new HashMap<String, Object>();
+		payment.put("objid", "PT"+UUID.randomUUID().toString());
 		payment.put("loanappid", loanappid);
 		payment.put("detailid", detailid);
 		payment.put("refno", tv_refno.getText());
