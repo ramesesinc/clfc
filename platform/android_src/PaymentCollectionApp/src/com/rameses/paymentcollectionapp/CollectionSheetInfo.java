@@ -341,7 +341,7 @@ public class CollectionSheetInfo extends Activity {
 		else*/
 		getMenuInflater().inflate(R.menu.payment, menu);
 		if (remarks != null && remarks.getCount() > 0) {
-			((MenuItem) menu.findItem(R.id.payment_addpayment)).setVisible(false);
+			((MenuItem) menu.findItem(R.id.payment_addremarks)).setVisible(false);
 		}
 		//menuItem.setVisible(false);*/
 		return super.onPrepareOptionsMenu(menu);
@@ -582,18 +582,15 @@ public class CollectionSheetInfo extends Activity {
 				if (!db.isOpen) db.openDb();
 				if (mode.equals("create")) {
 					db.insertRemarks(map);
+					rl_remarks.setVisibility(View.VISIBLE);					
 					showShortError("Successfully added remarks.");
-					rl_remarks.setVisibility(View.VISIBLE);
-				}
-				else if (!mode.equals("create")) {
-					db.updateRemarks(map);
-					remarks = db.getRemarks(loanappid);
+				} else if (!mode.equals("create")) {
+					db.updateRemarks(map); 
 					showShortError("Successfully updated remark.");
 				}
+				remarks = db.getRemarks(loanappid);
 				if (db.isOpen) db.closeDb();
-				if (rl_remarks.getVisibility() == View.GONE) rl_remarks.setVisibility(View.VISIBLE);
-				//remarks = et_remarks;
-				//((TextView) findViewById(R.id.tv_info_remarks)).setText(remarks);
+				((TextView) findViewById(R.id.tv_info_remarks)).setText(map.get("remarks").toString());
 				dialog.dismiss();
 			}
 		}
