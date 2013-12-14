@@ -427,6 +427,7 @@ public class Main extends Activity {
 					String loanappid = cs.getString(cs.getColumnIndex("loanappid"));
 					cs.moveToFirst();
 					collectionsheet.put("loanappid", loanappid);
+					collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
 					Cursor p = db.getPaymentsByAppid(loanappid);
 					if (p != null && p.getCount() > 0) {
 						setPayments(p, payments);
