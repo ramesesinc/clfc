@@ -61,11 +61,10 @@ public class Main extends Activity {
 	//private ArrayList<Map> payments=new ArrayList<Map>();
 	private ServiceProxy svcProxy;
 	private String uploadStatus;
-	private String ipaddress = "";
-	private String port = "";
 	private ProgressDialog progressDialog;
 	//private Dialog dialog;
 	private AlertDialog dialog;
+	private ServiceHelper svcHelper = new ServiceHelper(context);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +72,7 @@ public class Main extends Activity {
 		setContentView(R.layout.activity_main);
 		setTitle("CLFC Collection");
 		//dialog = new Dialog(context, android.R.style.Theme_WallpaperSettings);
-	}
-	
-	private Map buildConfig() {
-		Map<String, String> map = new HashMap<String, String>();
-        map.put("app.context", "clfc");
-        map.put("app.host", ipaddress+":"+port);
-        map.put("app.cluster","osiris3");
-        return map;
-	}
-	
-	private ServiceProxy buildServiceProxy(String serviceName) {
-        ScriptServiceContext sp=new ScriptServiceContext(buildConfig());
-        return (ServiceProxy) sp.create(serviceName);
-	}
-	
+	}	
 		
 	@Override
 	protected void onStart() {
@@ -102,6 +87,12 @@ public class Main extends Activity {
 		wifiManager.setWifiEnabled(true);
 		ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE);
 		networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		System.out.println("is network enabled = "+isNetworkEnabled);
+		if (isNetworkEnabled) {
+			System.out.println("passing 1");
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, (1000 * 5), 0, new DeviceLocationListener());
+			
+		}
 		
 		ListView optionLv = (ListView)findViewById(R.id.optionList);
 		ArrayList<String> arrlist = new ArrayList<String>();
@@ -152,16 +143,7 @@ public class Main extends Activity {
 			}
 		});
 		
-		if(!db.isOpen) db.openDb();
-		Cursor host = db.getHost();
-		db.closeDb();
-		
-		if(host != null && host.getCount() > 0) {
-			host.moveToFirst();
-			ipaddress = host.getString(host.getColumnIndex("ipaddress"));
-			port = host.getString(host.getColumnIndex("port"));
-			svcProxy = buildServiceProxy("DeviceLoanBillingService");
-		}
+		if(svcHelper.isHostSet()) svcProxy = svcHelper.createServiceProxy("DeviceLoanBillingService");
 	}
 		
 	@Override
@@ -271,7 +253,7 @@ public class Main extends Activity {
 			Bundle bundle = new Bundle();
 			String status = "";
 			try {
-				ServiceProxy proxy = buildServiceProxy("DeviceLoginService");
+				ServiceProxy proxy = svcHelper.createServiceProxy("DeviceLoginService");
 				msg=loginHandler.obtainMessage();
 				Map<String, Object> params=new HashMap<String, Object>();
 				params.put("username", username);
