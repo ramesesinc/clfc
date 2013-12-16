@@ -384,33 +384,31 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 	
 	public int getTotalCollectionSheetsForUpload() {
-		String sql = "SELECT cs.objid, p.objid AS paymentid, n.objid AS notesid, r.loanappid AS remarksid" +
+		String sql = "SELECT cs.loanappid AS objid, p.objid AS paymentid, n.objid AS notesid, r.loanappid AS remarksid " +
 				"FROM "+TABLE_COLLECTIONSHEET+" cs "+
 				"LEFT JOIN "+TABLE_PAYMENT+" p ON cs.loanappid=p.loanappid " +
 				"LEFT JOIN "+TABLE_NOTES+" n ON cs.loanappid=n.loanappid " +
-				"LEFT JOIN "+TABLE_REMARKS+" r ON cs.loanappid=r.loanappid";
-		Cursor result = db.rawQuery(sql, null); 
-		
+				"LEFT JOIN "+TABLE_REMARKS+" r ON cs.loanappid=r.loanappid";		
+		Cursor result = db.rawQuery(sql, null);
+		int total = 0;
 		if (result != null && result.getCount() > 0) {
-			int total = 0;
+			result.moveToFirst();
 			String paymentid = "";
 			String notesid = "";
 			String remarksid = "";
-			boolean payment = false;
-			boolean notes = false;
-			boolean remarks = false;
+			boolean forupload = false;
 			do {
+				forupload = false;
 				paymentid = result.getString(result.getColumnIndex("paymentid"));
 				notesid = result.getString(result.getColumnIndex("notesid"));
 				remarksid = result.getString(result.getColumnIndex("remarksid"));
-				payment = (paymentid.equals(null) || paymentid.equals(""));
-				notes = (notesid.equals(null) || notesid.equals(""));
-				remarks = (remarksid.equals(null) || remarksid.equals(""));
-				if (payment == false && notes == false && remarks == false) total++;
+				if (forupload == false && paymentid != null && !paymentid.equals("")) forupload = true;
+				if (forupload == false && notesid != null && !notesid.equals("")) forupload = true;
+				if (forupload == false && remarksid != null && !remarksid.equals("")) forupload = true;
+				if (forupload == true) total++;
 			} while(result.moveToNext());
-			return total;
-		}	
-		return 0;
+		}
+		return total;
 	}
 	
 	public Cursor getRoutes() {

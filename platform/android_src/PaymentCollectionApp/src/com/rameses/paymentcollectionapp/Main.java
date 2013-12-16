@@ -324,7 +324,6 @@ public class Main extends Activity {
 		if(progressDialog.isShowing()) progressDialog.dismiss();
 		progressDialog.setMessage("Uploading collection sheets.");
 		progressDialog.show();
-		System.out.println("passing 1");
 		Executors.newSingleThreadExecutor().submit(new UploadPaymentsRunnable());		
 	}
 	
@@ -344,20 +343,31 @@ public class Main extends Activity {
 					map.put("referenceid", id);
 					db.insertUploads(map);
 					db.removePaymentById(id);
+					db.removeNoteById(id);
 					//db.insertUploadedPayment(id);
 					//db.removePaymentByLoanappid(id);
 					//db.removeCollectionsheetByLoanappid(id);
 				}
 			}
-			Cursor p = db.getPayments();
-			if (p == null || p.getCount() == 0) {
+			db.removeRemarksByAppid(loanappid);
+			db.removeCollectionsheetByLoanappid(loanappid);
+			boolean finishUploading = true;
+			Cursor result = db.getPayments();
+			if (finishUploading == true && result != null && result.getCount() > 0) finishUploading = false;
+			result = db.getNotes();
+			if (finishUploading == true && result != null && result.getCount() > 0) finishUploading = false;
+			result = db.getRemarks();
+			if (finishUploading == true && result != null && result.getCount() > 0) finishUploading = false;
+			if (finishUploading == true) {
 				db.removeAllCollectionsheets();
 				db.removeAllPayments();
+				db.removeAllNotes();
+				db.removeAllRemarks();
 				db.removeAllUploads();
 				db.removeAllRoutes();
 				if (progressDialog.isShowing()) progressDialog.dismiss();
 				//Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
-				showShortMsg("Successfully uploaded payments!");
+				showShortMsg("Successfully uploaded collection sheets!");
 			} else { uploadPayments(); }
 			db.closeDb();
 		}
@@ -401,7 +411,6 @@ public class Main extends Activity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			System.out.println("passing 1");
 			if (!db.isOpen) db.openDb();
 			String sessionid = db.getSessionid();
 			Date serverDate = null;
@@ -409,11 +418,8 @@ public class Main extends Activity {
 				serverDate = db.getServerDate();
 			}
 			catch (Exception e) { showShortMsg("Error: ParseException"); }
-			
-			String routecode = "";
-			System.out.println("passing 2");
 			if(db.isOpen) db.closeDb();
-			
+			String routecode = "";
 			boolean forupload = false;
 			Map<String, Object> collectionsheet = new HashMap<String, Object>();
 			ArrayList<Map<String, Object>> payments = new ArrayList<Map<String, Object>>();
@@ -455,19 +461,9 @@ public class Main extends Activity {
 					if (forupload == false) db.removeCollectionsheetByLoanappid(loanappid);
 					break;
 				}
-				System.out.println("route"+routecode);
 			} while(routes.moveToNext());
 			db.closeDb();
-			
 			if (forupload) {			
-				/*ArrayList<Map> list = new ArrayList<Map>();
-				int counter = (payments.size() > 5)? 5 : payments.size(); 
-				Map<String, Object> map;
-				for(int i=0; i<counter; i++) {
-					map = (Map<String, Object>) payments.get(i);
-					list.add(map);
-				}*/
-				
 				Map<String, Object> map = new HashMap<String, Object>();
 				BigDecimal totalamount = new BigDecimal("0").setScale(2);
 				for(int i=0; i<payments.size(); i++) {
