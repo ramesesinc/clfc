@@ -383,6 +383,36 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
+	public int getTotalCollectionSheetsForUpload() {
+		String sql = "SELECT cs.objid, p.objid AS paymentid, n.objid AS notesid, r.loanappid AS remarksid" +
+				"FROM "+TABLE_COLLECTIONSHEET+" cs "+
+				"LEFT JOIN "+TABLE_PAYMENT+" p ON cs.loanappid=p.loanappid " +
+				"LEFT JOIN "+TABLE_NOTES+" n ON cs.loanappid=n.loanappid " +
+				"LEFT JOIN "+TABLE_REMARKS+" r ON cs.loanappid=r.loanappid";
+		Cursor result = db.rawQuery(sql, null); 
+		
+		if (result != null && result.getCount() > 0) {
+			int total = 0;
+			String paymentid = "";
+			String notesid = "";
+			String remarksid = "";
+			boolean payment = false;
+			boolean notes = false;
+			boolean remarks = false;
+			do {
+				paymentid = result.getString(result.getColumnIndex("paymentid"));
+				notesid = result.getString(result.getColumnIndex("notesid"));
+				remarksid = result.getString(result.getColumnIndex("remarksid"));
+				payment = (paymentid.equals(null) || paymentid.equals(""));
+				notes = (notesid.equals(null) || notesid.equals(""));
+				remarks = (remarksid.equals(null) || remarksid.equals(""));
+				if (payment == false && notes == false && remarks == false) total++;
+			} while(result.moveToNext());
+			return total;
+		}	
+		return 0;
+	}
+	
 	public Cursor getRoutes() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_ROUTE, null);
 		

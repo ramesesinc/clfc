@@ -322,8 +322,9 @@ public class Main extends Activity {
 	
 	public void uploadPayments() {
 		if(progressDialog.isShowing()) progressDialog.dismiss();
-		progressDialog.setMessage("Uploading payments.");
+		progressDialog.setMessage("Uploading collection sheets.");
 		progressDialog.show();
+		System.out.println("passing 1");
 		Executors.newSingleThreadExecutor().submit(new UploadPaymentsRunnable());		
 	}
 	
@@ -400,6 +401,7 @@ public class Main extends Activity {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
+			System.out.println("passing 1");
 			if (!db.isOpen) db.openDb();
 			String sessionid = db.getSessionid();
 			Date serverDate = null;
@@ -409,6 +411,7 @@ public class Main extends Activity {
 			catch (Exception e) { showShortMsg("Error: ParseException"); }
 			
 			String routecode = "";
+			System.out.println("passing 2");
 			if(db.isOpen) db.closeDb();
 			
 			boolean forupload = false;
@@ -416,6 +419,7 @@ public class Main extends Activity {
 			ArrayList<Map<String, Object>> payments = new ArrayList<Map<String, Object>>();
 			ArrayList<Map<String, Object>> notes = new ArrayList<Map<String, Object>>();
 			if(!db.isOpen) db.openDb();
+			int totalcount = db.getTotalCollectionSheetsForUpload();
 			Cursor routes = db.getRoutes();
 			routes.moveToFirst();
 			do {
@@ -439,6 +443,7 @@ public class Main extends Activity {
 						setNotes(n, notes);
 						forupload = true;
 					}
+					collectionsheet.put("notes", notes);
 					String remarks = "";
 					Cursor r = db.getRemarksByAppid(loanappid);
 					if (r != null && r.getCount() > 0) {
@@ -450,6 +455,7 @@ public class Main extends Activity {
 					if (forupload == false) db.removeCollectionsheetByLoanappid(loanappid);
 					break;
 				}
+				System.out.println("route"+routecode);
 			} while(routes.moveToNext());
 			db.closeDb();
 			
@@ -481,7 +487,7 @@ public class Main extends Activity {
 					params.put("sessionid", sessionid);
 					params.put("txndate", serverDate);
 					params.put("routecode", routecode);
-					params.put("totalcount", payments.size());
+					params.put("totalcount", totalcount);
 					params.put("totalamount", totalamount);
 					Object response = svcProxy.invoke("uploadCollectionSheets", new Object[]{params});
 					Map<String, Object> result = (Map<String, Object>) response;
