@@ -1,0 +1,17 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+
+class DeviceLocationService {
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def postLocation( params ) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(dateSvc.serverDate);
+		println '\ntime: '+c.getTime();
+		println 'longitude: '+params.longitude;
+		println 'latitude: '+params.latitude;
+		println 'remarks: '+params.remarks;
+	}
+}

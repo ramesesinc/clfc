@@ -8,8 +8,8 @@ class LoanLedgerService extends ActiveListService
 	@ActiveDB(value='loan_ledger')
 	def em;
 
-	@ActiveDB(value='batch_payment')
-	def batch_payment;
+	@ActiveDB(value='batch_collectionsheet')
+	def batch_collectionsheet;
 
 	@ActiveDB(value='loan_ledger_billing')
 	def ledger_billing;
@@ -175,7 +175,7 @@ class LoanLedgerService extends ActiveListService
 			it.entity = params.entity;
 			paymentSvc.postPayment(it);
 		}
-		batch_payment.changeStateApproved(params.entity);
+		batch_collectionsheet.changeStateApproved(params.entity);
 		ledger_billing.changeStateCompleted(params.entity);
 		return params;
 	}

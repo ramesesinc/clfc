@@ -9,8 +9,8 @@ class DeviceLoanBillingService
 	@ActiveDB(value="loan_ledger")
 	def ledger;
 
-	@ActiveDB(value="batch_payment")
-	def batch_payment;
+	@ActiveDB(value="batch_collectionsheet")
+	def batch_collectionsheet;
 
 	@ActiveDB(value="loan_product_type")
 	def product_type;
@@ -44,7 +44,7 @@ class DeviceLoanBillingService
 		if (ledger_billing.findBillingLock([billingid: params.billingid, routecode: params.route_code])) 
 			throw new Exception('This billing has already been downloaded.');
 
-		def unpostedpayment = batch_payment.findUnpostedPayment(params);
+		def unpostedpayment = batch_collectionsheet.findUnpostedPayment(params);
 		if (unpostedpayment) throw new Exception('Cannot download billing. There are still unposted payments.');
 
 		def result = ledger_billing.getBillingDetailByRoutecode(params);
@@ -84,34 +84,47 @@ class DeviceLoanBillingService
 	}
 
 	@ProxyMethod
-	public def uploadPayments( params ) {
+	public def uploadCollectionSheets( params ) {
 		if (!params.sessionid) throw new Exception('Session ID is required.');
-		if (!params.payments) throw new Exception('Payments are required.');
-		createBatchPaymentHeader(params);
+		if (!params.collectionsheet) throw new Exception('Collection Sheet is required.');
+		createBatchCollectionSheetHeader(params);
+		createBatchCollectionSheetDetail(params);
 
-		def data = batch_payment.read([objid: params.sessionid]);
+		def collectionsheet = params.collectionsheet;
+		def data = batch_collectionsheet.read([objid: params.sessionid]);
+		def itm;
 		def list = [];
-		params.payments.each{
-			def itm = batch_payment.read([objid: it.detailid], 'detail');//batch_payment.findDetailByAppIdAndParentId([appid: it.loanappid, parentid: data.objid]);
+		collectionsheet.payments.each{
+			itm = batch_collectionsheet.read(it, "payment");
 			if (!itm) {
-				itm = [
-					objid: 		it.detailid,//'BPDTL'+new java.rmi.server.UID(),
-					parentid: 	data.objid,
-					refno: 		it.refno,
-					appid: 		it.loanappid,
-					paytype: 	it.paytype,
-					payamount: 	it.payamount
-				]
-				batch_payment.create(itm, "detail");
+				itm = [:];
+				itm.putAll(it);
+				itm.parentid = collectionsheet.detailid;
+				batch_collectionsheet.create(itm, "payment");
 			}
-			list.add(it.loanappid); 
+			list.add(it.objid);
 		}
-		ledger_billing.changeStateUploaded([objid: params.sessionid]);
+		collectionsheet.notes.each{
+			itm = batch_collectionsheet.read(it, "note");
+			if (!itm) {
+				itm = [:];
+				itm.putAll(it);
+				itm.parentid = collectionsheet.detailid;
+				batch_collectionsheet.create(itm, "note");
+			}
+			list.add(it.objid);
+		}
+		//println 'list = '+list;
+		def total = batch_collectionsheet.findTotalDetailByParentId([parentid: params.sessionid]).total;
+		if (data.totalcount == total) {
+			//throw new Exception('stopping');
+			ledger_billing.changeStateUploaded([objid: params.sessionid]);
+		}
 		return [list: list];
 	}
 
-	private void createBatchPaymentHeader( params ) {
-		def itm = batch_payment.read([objid: params.sessionid]);
+	private void createBatchCollectionSheetHeader( params ) {
+		def itm = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!itm) {
 			def txndate = dateSvc.parse("yyyy-mm-dd", params.txndate);
 			itm = [
@@ -123,7 +136,21 @@ class DeviceLoanBillingService
 				totalcount: 	params.totalcount,
 				totalamount: 	params.totalamount
 			];
-			batch_payment.create(itm);
+			batch_collectionsheet.create(itm);
+		}
+	}
+
+	private void createBatchCollectionSheetDetail( params ) {
+		def itm = batch_collectionsheet.read([objid: params.collectionsheet.detailid], "detail");
+		if (!itm) {
+			String remarks = params.collectionsheet.remarks? params.collectionsheet.remarks : "";
+			itm = [
+				objid: params.collectionsheet.detailid,
+				parentid: params.sessionid,
+				appid: params.collectionsheet.loanappid,
+				remarks: remarks
+			];
+			batch_collectionsheet.create(itm, "detail");
 		}
 	}
 }
