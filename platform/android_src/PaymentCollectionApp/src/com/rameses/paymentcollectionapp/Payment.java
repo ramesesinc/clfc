@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.rameses.service.ServiceProxy;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,6 +32,7 @@ public class Payment extends Activity {
 	private String loanappid = "";
 	private String detailid = "";
 	private String refno = "";
+	String txndate = "";
 	private TextView tv_refno;
 	private TextView tv_txndate;
 	private String type = "";
@@ -69,8 +72,10 @@ public class Payment extends Activity {
 			c.setTime(db.getServerDate());
 		}
 		catch (Exception e) { Toast.makeText(context, "Error: ParseException", Toast.LENGTH_SHORT).show(); }
-		db.closeDb();			
+		db.closeDb();	
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
+		txndate = sdf.format(c.getTime());
 		String formattedDate = df.format(c.getTime());
 		
 		RelativeLayout rl_overpayment = (RelativeLayout) findViewById(R.id.rl_overpayment);
@@ -147,20 +152,26 @@ public class Payment extends Activity {
 	}
 	
 	private void savePayment() {
-		db.openDb();
 		Map<String, Object> payment = new HashMap<String, Object>();
 		payment.put("objid", "PT"+UUID.randomUUID().toString());
 		payment.put("loanappid", loanappid);
 		payment.put("detailid", detailid);
-		payment.put("refno", tv_refno.getText());
-		payment.put("txndate", tv_txndate.getText());
-		payment.put("amount", et_amount.getText());
+		payment.put("refno", tv_refno.getText().toString());
+		payment.put("txndate", txndate);
+		payment.put("amount", Double.parseDouble(et_amount.getText().toString()));
 		payment.put("routecode", routecode);
 		payment.put("type", type);
 		payment.put("isfirstbill", isfirstbill);
-		db.insertPayment(payment);
-		db.closeDb();
-
+		ServiceProxy proxy = new ServiceHelper(context).createServiceProxy("DevicePaymentService");
+		try {
+			proxy.invoke("postPayment", new Object[]{payment});
+			
+		} catch (Exception e) {}
+		finally {
+			db.openDb();
+			db.insertPayment(payment);
+			db.closeDb();
+		}
 		finish();
 	}
 	

@@ -16,6 +16,8 @@ import java.util.concurrent.TimeoutException;
 import com.rameses.service.ScriptServiceContext;
 import com.rameses.service.ServiceProxy;
 
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -54,30 +56,77 @@ import android.widget.Toast;
 
 public class Main extends Activity {
 	private Context context=this;
-	private MySQLiteHelper db;
+	private MySQLiteHelper db = new MySQLiteHelper(context);
 	private boolean isNetworkEnabled;
 	private LocationManager locationManager;
 	private NetworkInfo networkInfo;
-	//private ArrayList<Map> payments=new ArrayList<Map>();
 	private ServiceProxy svcProxy;
-	private String uploadStatus;
 	private ProgressDialog progressDialog;
-	//private Dialog dialog;
 	private AlertDialog dialog;
 	private ServiceHelper svcHelper = new ServiceHelper(context);
+	private ProjectApplication application = null;
+	private LocationListener locationListener = new DeviceLocationListener();
+	private Handler locationHandler = new Handler();
+	private Runnable locationRunnable = new Runnable() {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			Location location = null;
+			String provider = "";
+			if (isNetworkEnabled) {
+				provider = LocationManager.NETWORK_PROVIDER;
+				locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
+				location = locationManager.getLastKnownLocation(provider);
+				if (application != null) {
+					application.setLongitude(location.getLongitude());
+					application.setLatitude(location.getLatitude());
+				}
+			}
+			locationManager.removeUpdates(locationListener);
+			Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable());
+		}
+	};
+	
+	private class PublishLocationRunnable implements Runnable {
+		private String msg = "";
+		private boolean repeat = true;
+		
+		public PublishLocationRunnable() {}
+		public PublishLocationRunnable(String msg, boolean repeat) {
+			this.msg = msg;
+			this.repeat = repeat;
+		}
+		
+		@Override
+		public void run() {
+			ServiceProxy proxy = svcHelper.createServiceProxy("DeviceLocationService");
+			//params.put("payments", list);
+			try {
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("longitude", application.getLongitude());
+				params.put("latitude", application.getLatitude());
+				params.put("remarks", msg);
+				proxy.invoke("postLocation", new Object[]{params});
+			} catch(Exception e) {}
+			finally { 
+				if (repeat) locationHandler.postDelayed(locationRunnable, 3000); 
+			}
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setTitle("CLFC Collection");
-		//dialog = new Dialog(context, android.R.style.Theme_WallpaperSettings);
+		application = (ProjectApplication) context.getApplicationContext();
+		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		locationHandler.postDelayed(locationRunnable, 0);
 	}	
 		
 	@Override
 	protected void onStart() {
 		super.onStart();
-		db=new MySQLiteHelper(context);
 		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(false);
@@ -87,12 +136,6 @@ public class Main extends Activity {
 		wifiManager.setWifiEnabled(true);
 		ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE);
 		networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		System.out.println("is network enabled = "+isNetworkEnabled);
-		if (isNetworkEnabled) {
-			System.out.println("passing 1");
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, (1000 * 5), 0, new DeviceLocationListener());
-			
-		}
 		
 		ListView optionLv = (ListView)findViewById(R.id.optionList);
 		ArrayList<String> arrlist = new ArrayList<String>();
@@ -161,6 +204,9 @@ public class Main extends Activity {
 	@Override
 	protected void onDestroy() {
 		if(db.isOpen) db.closeDb();
+		locationHandler.removeCallbacks(locationRunnable);
+		//Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable("Application closed", false));
+		//locationHandler = null;
 		super.onDestroy();
 	}
 	
