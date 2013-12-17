@@ -121,7 +121,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 					homeaddress: it.homeaddress,
 					collectionaddress: it.collectionaddress? it.collectionaddress : '',
 					interest: 0.00,
-					others: 0.00
+					others: 0.00,
+					overduepenalty: it.overduepenalty
 				];
 				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+o.code, 8);
 				/*def dtschedule;
@@ -129,19 +130,25 @@ class LoanLedgerBillingService extends ActiveCrudService
 					dtlastpaid = dateSvc.add(it.dtstarted, "-1");
 				else 
 					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;*/
-				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
 				def amt = it.dailydue;
 				if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
 				detail.amountdue = (amt*days)+detail.others;
-				def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
-				days -= noofholidays;
-				def cal = Calendar.getInstance();
-				cal.setTime(currentDate);
-				if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
-				days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
-				detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
-				if (currentDate > maturityDate) detail.penalty = it.overduepenalty*(days > 0? days : 0);
-				detail.amountdue += detail.penalty;
+				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
+				if (currentDate > maturityDate) {
+					detail.penalty = days*it.overduepenalty;
+					def amountdue = new BigDecimal((detail.penalty+(days*detail.interestamount)+it.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
+					detail.amountdue = new BigDecimal(amountdue+'').setScale(2);
+					detail.days = days;
+				} else {
+					def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
+					days -= noofholidays;
+					def cal = Calendar.getInstance();
+					cal.setTime(currentDate);
+					if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
+					days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();				
+					detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
+					detail.amountdue += detail.penalty;
+				}
 				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");
 			}
@@ -156,13 +163,17 @@ class LoanLedgerBillingService extends ActiveCrudService
 			params.isfirstbill = 1;
 		} else {
 			def ledgeritem = loan_ledger.findLastLedgerItemByParentId([parentid: params.ledgerid]);
-			def avgamount = params.dailydue;
-			if (params.paymentmethod == 'over') avgamount = em.findAvgOverpaymentAmount([parentid: params.ledgerid]).groupbaseamount;
-			BigDecimal b = new BigDecimal(avgamount+'').setScale(2);
-			b = b.subtract(new BigDecimal(params.interestamount+'').setScale(2));
-			BigDecimal bd = new BigDecimal(balance+'').setScale(2)
-			bd = bd.divide(b, BigDecimal.ROUND_HALF_UP);
-			bal += (bd.setScale(0, BigDecimal.ROUND_HALF_UP)*params.interestamount);
+			if (params.overduepenalty > 0) {
+				bal += params.days*params.interestamount;
+			} else {
+				def avgamount = params.dailydue;
+				if (params.paymentmethod == 'over') avgamount = em.findAvgOverpaymentAmount([parentid: params.ledgerid]).groupbaseamount;
+				BigDecimal b = new BigDecimal(avgamount+'').setScale(2);
+				b = b.subtract(new BigDecimal(params.interestamount+'').setScale(2));
+				BigDecimal bd = new BigDecimal(balance+'').setScale(2)
+				bd = bd.divide(b, BigDecimal.ROUND_HALF_UP);
+				bal += (bd.setScale(0, BigDecimal.ROUND_HALF_UP)*params.interestamount);
+			}
 			
 			if (ledgeritem.interestbal > 0) {
 				params.amountdue += ledgeritem.interestbal;
@@ -177,6 +188,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 			params.isfirstbill = 0;
 		}
 		if (params.penalty > 0) bal += params.penalty;
+		bal = new BigDecimal(bal+'').setScale(0, BigDecimal.ROUND_CEILING);
 		bal = new BigDecimal(bal+'').setScale(2);
 		return bal;
 	}

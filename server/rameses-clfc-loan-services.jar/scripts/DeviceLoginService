@@ -19,6 +19,8 @@ class DeviceLoginService
 		if (!params.password) throw new Exception('Please specify password.');
 
 		def user = device_login.findFieldCollectorByUsername(params);
+		if (!user) throw new Exception("User is not a Field Collector.");
+		
 		def encval = Encoder.MD5.encode(params.password, params.username)
 		def routes = [];
 		def billing;
@@ -30,6 +32,7 @@ class DeviceLoginService
 			if (!billing) throw new Exception('You have no billing to download for today.');
 
 			def list = ledger_billing.getRoutesByBillingid([billingid: billing.objid]);
+			println list.size();
 			list.each{ routes.add(it); }
 
 		} else throw new Exception('Username/Password is incorrect!');
