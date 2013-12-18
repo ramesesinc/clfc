@@ -56,7 +56,7 @@ public class CollectionSheetAdapter extends BaseAdapter {
 		
 		MySQLiteHelper db=new MySQLiteHelper(v.getContext());
 		if (!db.isOpen) db.openDb();
-		Cursor result = db.getBorrowerPayments(cs.getLoanappid());
+		Cursor result = db.getPaymentsByAppid(cs.getLoanappid());
 		if (db.isOpen) db.closeDb();
 
 		iv_info_paid.setVisibility(View.GONE);

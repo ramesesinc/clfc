@@ -33,9 +33,8 @@ public class Route extends Activity {
 	private MySQLiteHelper db;
 	private Bundle bundle;
 	private ServiceProxy svcProxy;
-	private String ipaddress = "";
-	private String port = "";
 	private ProgressDialog progressDialog;
+	private ServiceHelper svcHelper = new ServiceHelper(context);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +44,6 @@ public class Route extends Activity {
 		Intent intent = getIntent();
 		bundle = intent.getBundleExtra("bundle");
 		db = new MySQLiteHelper(context);
-	}
-	
-	private void buildServiceProxy() {
-		Map<String, String> map = new HashMap<String, String>();
-        map.put("app.context", "clfc");
-        map.put("app.host", ipaddress+":"+port);
-        map.put("app.cluster","osiris3");
-        ScriptServiceContext sp=new ScriptServiceContext(map);
-        svcProxy = (ServiceProxy)sp.create("DeviceLoanBillingService");
 	}
 	
 	@Override
@@ -85,16 +75,7 @@ public class Route extends Activity {
 			}
 		});
 		
-		if(!db.isOpen) db.openDb();
-		Cursor host = db.getHost();
-		db.closeDb();
-		
-		if(host != null && host.getCount() > 0) {
-			host.moveToFirst();
-			ipaddress = host.getString(host.getColumnIndex("ipaddress"));
-			port = host.getString(host.getColumnIndex("port"));
-			buildServiceProxy();
-		}
+		if (svcHelper.isHostSet()) svcProxy = svcHelper.createServiceProxy("DeviceLoanBillingService");
 	}
 	
 	@Override
@@ -187,9 +168,13 @@ public class Route extends Activity {
 				//xbundle.putString("sessionid", map.get("sessionid").toString());
 				//xbundle.putString("serverdate", map.get("serverdate").toString());
 				xbundle.putString("routecode", route.getCode());
+				System.out.println("pass 1");
 				xbundle.putString("routedescription", route.getDescription());
+				System.out.println("pass 2");
 				xbundle.putString("routearea", route.getArea());
+				System.out.println("pass 3");
 				xbundle.putParcelableArrayList("collectionsheets", ((ArrayList<CollectionSheetParcelable>)map.get("list")));
+				System.out.println("pass 4");
 				status = "ok";
 			}
 			catch( TimeoutException te ) {

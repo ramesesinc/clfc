@@ -35,6 +35,7 @@ public class Main
         roles.put("LOAN.FIELD_COLLECTOR", null);
         roles.put("LOAN.CASHIER", null);
         
+        roles.put("DATAMGMT.DATAMGMT_AUTHOR", null);
         roles.put("LOAN.CAO_OFFICER", null);
         roles.put("LOAN.CI_OFFICER", null);
         roles.put("LOAN.CRECOM_OFFICER", null);

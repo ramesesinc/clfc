@@ -16,6 +16,8 @@ import java.util.concurrent.TimeoutException;
 import com.rameses.service.ScriptServiceContext;
 import com.rameses.service.ServiceProxy;
 
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -54,45 +56,77 @@ import android.widget.Toast;
 
 public class Main extends Activity {
 	private Context context=this;
-	private MySQLiteHelper db;
+	private MySQLiteHelper db = new MySQLiteHelper(context);
 	private boolean isNetworkEnabled;
 	private LocationManager locationManager;
 	private NetworkInfo networkInfo;
-	//private ArrayList<Map> payments=new ArrayList<Map>();
 	private ServiceProxy svcProxy;
-	private String uploadStatus;
-	private String ipaddress = "";
-	private String port = "";
 	private ProgressDialog progressDialog;
-	//private Dialog dialog;
 	private AlertDialog dialog;
+	private ServiceHelper svcHelper = new ServiceHelper(context);
+	private ProjectApplication application = null;
+	private LocationListener locationListener = new DeviceLocationListener();
+	private Handler locationHandler = new Handler();
+	private Runnable locationRunnable = new Runnable() {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			Location location = null;
+			String provider = "";
+			if (isNetworkEnabled) {
+				provider = LocationManager.NETWORK_PROVIDER;
+				locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
+				location = locationManager.getLastKnownLocation(provider);
+				if (application != null) {
+					application.setLongitude(location.getLongitude());
+					application.setLatitude(location.getLatitude());
+				}
+			}
+			locationManager.removeUpdates(locationListener);
+			Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable());
+		}
+	};
+	
+	private class PublishLocationRunnable implements Runnable {
+		private String msg = "";
+		private boolean repeat = true;
+		
+		public PublishLocationRunnable() {}
+		public PublishLocationRunnable(String msg, boolean repeat) {
+			this.msg = msg;
+			this.repeat = repeat;
+		}
+		
+		@Override
+		public void run() {
+			ServiceProxy proxy = svcHelper.createServiceProxy("DeviceLocationService");
+			//params.put("payments", list);
+			try {
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("longitude", application.getLongitude());
+				params.put("latitude", application.getLatitude());
+				params.put("remarks", msg);
+				proxy.invoke("postLocation", new Object[]{params});
+			} catch(Exception e) {}
+			finally { 
+				if (repeat) locationHandler.postDelayed(locationRunnable, 3000); 
+			}
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		setTitle("Payment Collection");
-		//dialog = new Dialog(context, android.R.style.Theme_WallpaperSettings);
-	}
-	
-	private Map buildConfig() {
-		Map<String, String> map = new HashMap<String, String>();
-        map.put("app.context", "clfc");
-        map.put("app.host", ipaddress+":"+port);
-        map.put("app.cluster","osiris3");
-        return map;
-	}
-	
-	private ServiceProxy buildServiceProxy(String serviceName) {
-        ScriptServiceContext sp=new ScriptServiceContext(buildConfig());
-        return (ServiceProxy) sp.create(serviceName);
-	}
-	
+		setTitle("CLFC Collection");
+		application = (ProjectApplication) context.getApplicationContext();
+		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		locationHandler.postDelayed(locationRunnable, 0);
+	}	
 		
 	@Override
 	protected void onStart() {
 		super.onStart();
-		db=new MySQLiteHelper(context);
 		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(false);
@@ -105,35 +139,44 @@ public class Main extends Activity {
 		
 		ListView optionLv = (ListView)findViewById(R.id.optionList);
 		ArrayList<String> arrlist = new ArrayList<String>();
-		arrlist.add("Download Billing");
-		arrlist.add("Collection Sheet");
-		arrlist.add("Upload Payments");
+		arrlist.add("Download Collection Sheet(s)");
+		arrlist.add("View Collection Sheet(s)");
+		arrlist.add("Upload Collection Sheet(s)");
 		
 		optionLv.setAdapter(new StringAdapter(context, arrlist));
 		optionLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				String opt = parent.getItemAtPosition(position).toString();
-				if(opt.equals("Collection Sheet")) {
+				//String opt = parent.getItemAtPosition(position).toString();
+				if(position == 1) {
 					Intent intent = new Intent(context, CollectionSheetRoute.class);
 					startActivity(intent);
 				} else {
 					if(svcProxy == null) {
-						Toast.makeText(context, "Please set the host's ip settings", Toast.LENGTH_SHORT).show();
+						//Toast.makeText(context, "Please set the host's ip settings", Toast.LENGTH_SHORT).show();
+						showShortMsg("Please set the host's ip settings.");
 					} else {
 						if(!db.isOpen) db.openDb();
-						Cursor p = db.getPayments();
+						boolean forupload = false;
+						Cursor cursor = db.getPayments();
+						if (forupload == false && cursor != null && cursor.getCount() > 0) forupload = true;
+						cursor = db.getNotes();
+						if (forupload == false && cursor != null && cursor.getCount() > 0) forupload = true;
+						cursor = db.getRemarks();
+						if (forupload == false && cursor != null && cursor.getCount() > 0) forupload = true;
 						db.closeDb();
-						if(opt.equals("Download Billing")) {
-							if(p.getCount() > 0) {
-								Toast.makeText(context, "There are still payments to upload. Please upload the payments before downloading current billing.", Toast.LENGTH_LONG).show();
+						if(position == 0) {
+							if(forupload == true) {
+								//Toast.makeText(context, "There are still collection sheets to upload. Please upload the payments before downloading current billing.", Toast.LENGTH_LONG).show();
+								showLongMsg("There are still collection sheets to upload. Please upload the collection sheets before downloading current collection sheets.");
 							} else {
 								showLoginDialog();
 							}
-						} else if(opt.equals("Upload Payments")) {
-							if(p.getCount() == 0) {
-								Toast.makeText(context, "No payments to upload.", Toast.LENGTH_SHORT).show();
+						} else if(position == 2) {
+							if(forupload == false) {
+								//Toast.makeText(context, "No payments to upload.", Toast.LENGTH_SHORT).show();
+								showShortMsg("No collection sheets to upload.");
 							} else {
 								uploadPayments();	
 							}
@@ -143,16 +186,7 @@ public class Main extends Activity {
 			}
 		});
 		
-		if(!db.isOpen) db.openDb();
-		Cursor host = db.getHost();
-		db.closeDb();
-		
-		if(host != null && host.getCount() > 0) {
-			host.moveToFirst();
-			ipaddress = host.getString(host.getColumnIndex("ipaddress"));
-			port = host.getString(host.getColumnIndex("port"));
-			svcProxy = buildServiceProxy("DeviceLoanBillingService");
-		}
+		if(svcHelper.isHostSet()) svcProxy = svcHelper.createServiceProxy("DeviceLoanBillingService");
 	}
 		
 	@Override
@@ -162,7 +196,7 @@ public class Main extends Activity {
 	}
 	
 	@Override
-	protected void onPause() {
+	protected void onPause() {	
 		if(db.isOpen) db.closeDb();
 		super.onPause();
 	}
@@ -170,6 +204,9 @@ public class Main extends Activity {
 	@Override
 	protected void onDestroy() {
 		if(db.isOpen) db.closeDb();
+		locationHandler.removeCallbacks(locationRunnable);
+		//Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable("Application closed", false));
+		//locationHandler = null;
 		super.onDestroy();
 	}
 	
@@ -196,24 +233,38 @@ public class Main extends Activity {
 		builder.setTitle("Login");
 		View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_login, null);
 		builder.setView(view);
-		builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {			
-			@Override
-			public void onClick(DialogInterface d, int which) {
-				// TODO Auto-generated method stub
-				EditText et_username = (EditText) dialog.findViewById(R.id.login_username);
-				EditText et_password = (EditText) dialog.findViewById(R.id.login_password);
-				
-				String username = et_username.getText().toString();
-				String password = et_password.getText().toString();
-				if (progressDialog.isShowing()) progressDialog.dismiss();
-				progressDialog.setMessage("Getting information from server.");
-				progressDialog.show();
-				Executors.newSingleThreadExecutor().submit(new LoginRunnable(username, password));				
-			}
-		});
+		builder.setPositiveButton("Login", null);
 		builder.setNegativeButton("Cancel", null);
 		dialog = builder.create();		
 		dialog.show();
+		Button btn_positive = (Button) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		btn_positive.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				String username = ((EditText) dialog.findViewById(R.id.login_username)).getText().toString();
+				String password = ((EditText) dialog.findViewById(R.id.login_password)).getText().toString();
+				
+				if (username.trim().equals("")) {
+					showShortMsg("Username is required.");
+				} else if (password.trim().equals("")) {
+					showShortMsg("Password is required.");
+				} else {
+					if (progressDialog.isShowing()) progressDialog.dismiss();
+					progressDialog.setMessage("Getting information from server.");
+					progressDialog.show();
+					Executors.newSingleThreadExecutor().submit(new LoginRunnable(username, password));
+				}
+			}
+		});
+	}
+	
+	public void showShortMsg(String msg) {
+		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+	}
+	
+	public void showLongMsg(String msg) {
+		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 	}
 	
 	private Handler loginHandler = new Handler() {
@@ -248,12 +299,12 @@ public class Main extends Activity {
 			Bundle bundle = new Bundle();
 			String status = "";
 			try {
-				ServiceProxy proxy = buildServiceProxy("DeviceLoginService");
+				ServiceProxy proxy = svcHelper.createServiceProxy("DeviceLoginService");
 				msg=loginHandler.obtainMessage();
 				Map<String, Object> params=new HashMap<String, Object>();
 				params.put("username", username);
 				params.put("password", password);
-				System.out.println("username-> "+username+" password-> "+password);
+				//System.out.println("username-> "+username+" password-> "+password);
 				Object response = proxy.invoke("login", new Object[]{params});
 				Map<String, Object> result = (Map<String, Object>) response;
 				
@@ -287,75 +338,19 @@ public class Main extends Activity {
 			}
 		}
 	}
-	
-	/*private void getRoutes() {
-		if(progressDialog.isShowing()) progressDialog.dismiss();
-		progressDialog.setMessage("Getting routes from server.");
-		progressDialog.show();
-		Executors.newSingleThreadExecutor().submit(new GetRoutesRunnable());
-	}
 
-	private Handler handler=new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			Bundle bundle=msg.getData();
-			if(!db.isOpen) db.openDb();
-			db.emptySystemTable();
-			db.removeAllCollectionsheets();
-			db.closeDb();
-			Intent intent=new Intent(context, Route.class);
-			intent.putExtra("bundle", bundle);
-			if(progressDialog.isShowing()) progressDialog.dismiss();
-			startActivity(intent);
-		}
-	};
-	
-	private class GetRoutesRunnable implements Runnable {
-		@Override
-		public void run() {
-			Message msg  = responseHandler.obtainMessage();
-			Bundle bundle = new Bundle();
-			String status = "";
-			Message responseMsg=responseHandler.obtainMessage();
-			Bundle responseData=new Bundle();
-			try {
-				msg = handler.obtainMessage();
-				Map params=new HashMap();
-				ArrayList<RouteParcelable> list = (ArrayList<RouteParcelable>) svcProxy.invoke("getRoutes", new Object[]{params});
-				bundle.putParcelableArrayList("routes", list);
-				msg.setData(bundle);
-				status = "ok";
-			}
-			catch( TimeoutException te ) {
-				bundle.putString("response", "Connection Timeout!");
-			}
-			catch( IOException ioe ) {
-				bundle.putString("response", "Error connecting to Server.");
-			}
-			catch( Exception e ) {
-				bundle.putString("response", e.getMessage());
-				e.printStackTrace(); 
-			}
-			finally {
-				msg.setData(bundle);
-				if(status == "ok") handler.sendMessage(msg);
-				else responseHandler.sendMessage(msg);
-			}
-		}
-	}*/
-	
 	private Handler responseHandler=new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			Bundle bundle=msg.getData();
 			if(progressDialog.isShowing()) progressDialog.dismiss();
-			Toast.makeText(context, bundle.getString("response"), Toast.LENGTH_SHORT).show();
+			showShortMsg(bundle.getString("response"));
 		}
 	};
 	
 	public void uploadPayments() {
 		if(progressDialog.isShowing()) progressDialog.dismiss();
-		progressDialog.setMessage("Uploading payments.");
+		progressDialog.setMessage("Uploading collection sheets.");
 		progressDialog.show();
 		Executors.newSingleThreadExecutor().submit(new UploadPaymentsRunnable());		
 	}
@@ -364,31 +359,65 @@ public class Main extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			Bundle bundle=msg.getData();
+			String loanappid = bundle.getString("loanappid");
 			ArrayList<String> list= bundle.getStringArrayList("list");
 			if (!db.isOpen) db.openDb();
 			if (list.size() > 0) {
 				String id = "";
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("loanappid", loanappid);
 				for(int i=0; i<list.size(); i++) {
 					id = list.get(i);
-					db.insertUploadedPayment(id);
-					db.removePaymentByLoanappid(id);
-					db.removeCollectionsheetByLoanappid(id);
+					map.put("referenceid", id);
+					db.insertUploads(map);
+					db.removePaymentById(id);
+					db.removeNoteById(id);
+					//db.insertUploadedPayment(id);
+					//db.removePaymentByLoanappid(id);
+					//db.removeCollectionsheetByLoanappid(id);
 				}
 			}
-			Cursor p = db.getPayments();
-			if (p == null || p.getCount() == 0) {
+			db.removeRemarksByAppid(loanappid);
+			db.removeCollectionsheetByLoanappid(loanappid);
+			boolean finishUploading = true;
+			Cursor result = db.getPayments();
+			if (finishUploading == true && result != null && result.getCount() > 0) finishUploading = false;
+			result = db.getNotes();
+			if (finishUploading == true && result != null && result.getCount() > 0) finishUploading = false;
+			result = db.getRemarks();
+			if (finishUploading == true && result != null && result.getCount() > 0) finishUploading = false;
+			if (finishUploading == true) {
 				db.removeAllCollectionsheets();
 				db.removeAllPayments();
-				db.removeAllUploadedPayments();
+				db.removeAllNotes();
+				db.removeAllRemarks();
+				db.removeAllUploads();
 				db.removeAllRoutes();
 				if (progressDialog.isShowing()) progressDialog.dismiss();
-				Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
+				showShortMsg("Successfully uploaded collection sheets!");
 			} else { uploadPayments(); }
 			db.closeDb();
 		}
 	};
 	
-	private void setPayments(Cursor result, ArrayList<Map> list) {
+	private void setNotes(Cursor cursor, ArrayList<Map<String, Object>> list) {
+		Map<String, Object> m;
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			do {
+				m = new HashMap<String, Object>();
+				m.put("objid", cursor.getString(cursor.getColumnIndex("objid")));
+				m.put("loanappid", cursor.getString(cursor.getColumnIndex("loanappid")));
+				m.put("fromdate", cursor.getString(cursor.getColumnIndex("fromdate")));
+				m.put("todate", cursor.getString(cursor.getColumnIndex("todate")));
+				m.put("remarks", cursor.getString(cursor.getColumnIndex("remarks")));
+				list.add(m);
+			} while(cursor.moveToNext());
+		}
+	}
+	
+	private void setPayments(Cursor result, ArrayList<Map<String, Object>> list) {
 		Map<String, Object> m;
 		if (result != null && result.getCount() > 0) {
 			result.moveToFirst();
@@ -416,38 +445,58 @@ public class Main extends Activity {
 			try {
 				serverDate = db.getServerDate();
 			}
-			catch (Exception e) { Toast.makeText(context, "Error: ParseException", Toast.LENGTH_LONG).show(); }
-			
-			String routecode = "";
+			catch (Exception e) { showShortMsg("Error: ParseException"); }
 			if(db.isOpen) db.closeDb();
-			
-			ArrayList<Map> payments = new ArrayList<Map>();
+			String routecode = "";
+			boolean forupload = false;
+			Map<String, Object> collectionsheet = new HashMap<String, Object>();
+			ArrayList<Map<String, Object>> payments = new ArrayList<Map<String, Object>>();
+			ArrayList<Map<String, Object>> notes = new ArrayList<Map<String, Object>>();
 			if(!db.isOpen) db.openDb();
+			int totalcount = db.getTotalCollectionSheetsForUpload();
 			Cursor routes = db.getRoutes();
 			routes.moveToFirst();
 			do {
+				payments.clear();
+				notes.clear();
 				routecode = routes.getString(routes.getColumnIndex("routecode"));
-				Cursor p = db.getPayments(routecode);
-				if (p != null && p.getCount() > 0) {
-					setPayments(p, payments);
+				Cursor cs = db.getCollectionsheetsByRoute(routecode);
+				if (cs != null && cs.getCount() > 0) {
+					String loanappid = cs.getString(cs.getColumnIndex("loanappid"));
+					cs.moveToFirst();
+					collectionsheet.put("loanappid", loanappid);
+					collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
+					Cursor p = db.getPaymentsByAppid(loanappid);
+					if (p != null && p.getCount() > 0) {
+						setPayments(p, payments);
+						forupload = true;
+					}
+					collectionsheet.put("payments", payments);
+					Cursor n = db.getNotesByAppid(loanappid);
+					if (n != null && n.getCount() > 0) {
+						setNotes(n, notes);
+						forupload = true;
+					}
+					collectionsheet.put("notes", notes);
+					String remarks = "";
+					Cursor r = db.getRemarksByAppid(loanappid);
+					if (r != null && r.getCount() > 0) {
+						r.moveToFirst();
+						remarks = r.getString(r.getColumnIndex("remarks"));
+						forupload = true;
+					}
+					collectionsheet.put("remarks", remarks);
+					if (forupload == false) db.removeCollectionsheetByLoanappid(loanappid);
 					break;
 				}
 			} while(routes.moveToNext());
 			db.closeDb();
-			
-			if (payments.size() > 0) {			
-				ArrayList<Map> list = new ArrayList<Map>();
-				int counter = (payments.size() > 5)? 5 : payments.size(); 
-				Map<String, Object> map;
-				for(int i=0; i<counter; i++) {
-					map = (Map<String, Object>) payments.get(i);
-					list.add(map);
-				}
-				
+			if (forupload) {			
+				Map<String, Object> map = new HashMap<String, Object>();
 				BigDecimal totalamount = new BigDecimal("0").setScale(2);
 				for(int i=0; i<payments.size(); i++) {
 					map = (Map<String, Object>) payments.get(i);
-					System.out.println(map);
+					//System.out.println(map);
 					totalamount = totalamount.add(new BigDecimal(map.get("payamount").toString()));
 				}
 				
@@ -457,14 +506,16 @@ public class Main extends Activity {
 				try {
 					msg=uploadHandler.obtainMessage();
 					Map<String, Object> params=new HashMap<String, Object>();
-					params.put("payments", list);
+					//params.put("payments", list);
+					params.put("collectionsheet", collectionsheet);
 					params.put("sessionid", sessionid);
 					params.put("txndate", serverDate);
 					params.put("routecode", routecode);
-					params.put("totalcount", payments.size());
+					params.put("totalcount", totalcount);
 					params.put("totalamount", totalamount);
-					Object response = svcProxy.invoke("uploadPayments", new Object[]{params});
+					Object response = svcProxy.invoke("uploadCollectionSheets", new Object[]{params});
 					Map<String, Object> result = (Map<String, Object>) response;
+					bundle.putString("loanappid", collectionsheet.get("loanappid").toString());
 					bundle.putStringArrayList("list", ((ArrayList<String>) result.get("list")));
 					status = "ok";
 				}

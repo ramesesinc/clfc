@@ -18,7 +18,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	private static final String TABLE_COLLECTIONSHEET = "collectionsheet";
 	private static final String TABLE_PAYMENT = "payment";
-	private static final String TABLE_UPLOADEDPAYMENT = "uploaded";
+	private static final String TABLE_REMARKS = "remarks";
+	private static final String TABLE_NOTES = "notes";
+	private static final String TABLE_UPLOADS = "uploads";
+	//private static final String TABLE_UPLOADEDPAYMENTS = "uploaded_payments";
 	private static final String TABLE_SYSTEM = "system";
 	private static final String TABLE_HOST = "host";
 	private static final String TABLE_ROUTE = "route";
@@ -49,6 +52,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			");";
 	private static final String CREATE_TABLE_PAYMENT = "" +
 			"CREATE TABLE PAYMENT(" +
+			"objid text PRIMARY KEY, " +
 			"refno text, " +
 			"txndate text, " +
 			"paymenttype text, " +
@@ -58,7 +62,34 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"routecode text, " +
 			"isfirstbill numeric" +
 			");";
-	private static final String CREATE_TABLE_UPLOADEDPAYMENT = "CREATE TABLE UPLOADED(loanappid text)";
+	private static final String CREATE_TABLE_REMARKS = "CREATE TABLE REMARKS(loanappid text PRIMARY KEY, remarks text);";
+	private static final String CREATE_TABLE_NOTES = "CREATE TABLE NOTES(" +
+			"objid text PRIMARY KEY, " +
+			"loanappid text, " +
+			"fromdate text, " +
+			"todate text, " +
+			"remarks text" +
+			");";
+	/*private static final String CREATE_TABLE_UPLOADEDPAYMENTS = "CREATE TABLE UPLOADED_PAYMENTS(" +
+			"loanappid text, " +
+			"paymentid text" +
+			"PRIMARY KEY (loanappid, paymentid)" +
+			")";
+	private static final String CREATE_TABLE_UPLOADEDNOTES = "CREATE TABLE UPLOADED_NOTES(" +
+			"loanappid text, " +
+			"notesid text" +
+			"PRIMARY KEY(loanappid, notesid)" +
+			")";
+	private static final String CREATE_TABLE_UPLOADEDREMARKS = "CREATE TABLE UPLOADED_REMARKS(" +
+			"loanappid text, " +
+			"remarksid text" +
+			"PRIMARY KEY(loanappid, remarksid)" +
+			")";*/
+	private static final String CREATE_TABLE_UPLOADS = "CREATE TABLE UPLOADS(" +
+			"loanappid text, " +
+			"referenceid text, " +
+			"PRIMARY KEY(loanappid, referenceid)" +
+			");";
 	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(sessionid text, serverdate text)";
 	private static final String CREATE_TABLE_HOST = "CREATE TABLE HOST(ipaddress text, port text);";
 	private static final String CREATE_TABLE_ROUTE = "CREATE TABLE ROUTE(routecode text PRIMARY KEY, routedescription text, routearea text);";
@@ -76,11 +107,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		Log.e("Database", "oncreate");
 		db.execSQL(CREATE_TABLE_COLLECTIONSHEET);
 		db.execSQL(CREATE_TABLE_PAYMENT);
-		db.execSQL(CREATE_TABLE_UPLOADEDPAYMENT);
+		db.execSQL(CREATE_TABLE_REMARKS);
+		db.execSQL(CREATE_TABLE_NOTES);
+		//db.execSQL(CREATE_TABLE_UPLOADEDPAYMENT);
+		db.execSQL(CREATE_TABLE_UPLOADS);
 		db.execSQL(CREATE_TABLE_SYSTEM);
 		db.execSQL(CREATE_TABLE_HOST);
 		db.execSQL(CREATE_TABLE_ROUTE);
-		db.execSQL("INSERT INTO "+TABLE_HOST+" VALUES('192.168.254.21', '8070')");
+		db.execSQL("INSERT INTO "+TABLE_HOST+" VALUES('121.97.60.200', '8070')");
 	}
 
 	@Override
@@ -89,7 +123,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		Log.e("Database", "onupgrade");
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_COLLECTIONSHEET);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_PAYMENT);
-		db.execSQL("DROP TABLE IF EXISTS "+TABLE_UPLOADEDPAYMENT);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_REMARKS);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_NOTES);
+		//db.execSQL("DROP TABLE IF EXISTS "+TABLE_UPLOADEDPAYMENT);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_UPLOADS);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_SYSTEM);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_HOST);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_ROUTE);
@@ -124,6 +161,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void insertPayment(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
+		values.put("objid", params.get("objid").toString());
 		values.put("loanappid", params.get("loanappid").toString());
 		values.put("detailid", params.get("detailid").toString());
 		values.put("refno", params.get("refno").toString());
@@ -135,10 +173,51 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.insert(TABLE_PAYMENT, null, values);
 	}
 	
-	public void insertUploadedPayment(String loanappid) {
+	public void insertRemarks(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		values.put("loanappid", params.get("loanappid").toString());
+		values.put("remarks", params.get("remarks").toString());
+		db.insert(TABLE_REMARKS, null, values);
+	}
+	
+	public void updateRemarks(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		String loanappid = params.get("loanappid").toString();
+		values.put("remarks", params.get("remarks").toString());
+		db.update(TABLE_REMARKS, values, "loanappid='"+loanappid+"'", null);
+	}
+	
+	public void insertNotes(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		values.put("objid", params.get("objid").toString());
+		values.put("loanappid", params.get("loanappid").toString());
+		values.put("fromdate", params.get("fromdate").toString());
+		values.put("todate", params.get("todate").toString());
+		values.put("remarks", params.get("remarks").toString());
+		db.insert(TABLE_NOTES, null, values);
+	}
+	
+	public void updateNotes(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		String objid = params.get("objid").toString();
+		//values.put("objid", objid);
+		values.put("loanappid", params.get("loanappid").toString());
+		values.put("fromdate", params.get("fromdate").toString());
+		values.put("todate", params.get("todate").toString());
+		values.put("remarks", params.get("remarks").toString());
+		db.update(TABLE_NOTES, values, "objid='"+objid+"'", null);
+	}
+	
+	/*public void insertUploadedPayment(String loanappid) {
 		ContentValues values=new ContentValues();
 		values.put("loanappid", loanappid);
 		db.insert(TABLE_UPLOADEDPAYMENT, null, values);
+	}*/
+	public void insertUploads(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		values.put("loanappid", params.get("loanappid").toString());
+		values.put("referenceid", params.get("referenceid").toString());
+		db.insert(TABLE_UPLOADS, null, values);
 	}
 	
 	public void insertSystem(String sessionid, String serverdate) {
@@ -193,16 +272,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return null;
 	}
 	
-	/*public String getRouteCode() {
-		Cursor result = db.rawQuery("SELECT routecode FROM "+TABLE_SYSTEM, null);
-		
-		if(result != null) {
-			result.moveToFirst();
-			return result.getString(result.getColumnIndex("routecode"));
-		}
-		return null;
-	}*/
-	
 	public Cursor getHost() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_HOST, null);
 		
@@ -217,7 +286,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
-	public Cursor getCollectionsheets(String routecode) {
+	public Cursor getCollectionsheetsByRoute(String routecode) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_COLLECTIONSHEET+" WHERE routecode='"+routecode+"' ORDER BY seqno", null);
 		
 		if (result != null) result.moveToFirst();
@@ -238,6 +307,34 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
+	public Cursor getRemarks() {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_REMARKS, null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getRemarksByAppid(String loanappid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_REMARKS+" WHERE loanappid='"+loanappid+"' LIMIT 1", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getNotes() {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_NOTES, null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getNotesByAppid(String loanappid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_NOTES+" WHERE loanappid='"+loanappid+"'", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}	
+	
 	public Cursor getPayments() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_PAYMENT, null);
 		
@@ -245,25 +342,73 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
-	public Cursor getPayments(String routecode) {
+	/*public Cursor getPayments(String routecode) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_PAYMENT+" WHERE routecode='"+routecode+"'", null);
 		
 		if(result != null) result.moveToFirst();
 		return result;
-	}
+	}*/
 	
-	public Cursor getBorrowerPayments(String loanappid) {
+	public Cursor getPaymentsByAppid(String loanappid) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_PAYMENT+" WHERE loanappid='"+loanappid+"'", null);
 		
 		if(result != null) result.moveToFirst();
 		return result;
 	}
 	
-	public Cursor getUploadedPayments() {
+	/*public Cursor getUploadedPayments() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_UPLOADEDPAYMENT, null);
 		
 		if(result != null) result.moveToFirst();
 		return result;
+	}*/
+	public Cursor getUploads() {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_UPLOADS, null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getUploadsByAppid(String loanappid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_UPLOADS+" WHERE loanappid='"+loanappid+"'", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getUpload(String loanappid, String referenceid) {
+		Cursor result = db.rawQuery("SELECT * FORM "+TABLE_UPLOADS+" WHERE loanappid='"+loanappid+"' AND referenceid='"+referenceid+"'", null);
+
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public int getTotalCollectionSheetsForUpload() {
+		String sql = "SELECT cs.loanappid AS objid, p.objid AS paymentid, n.objid AS notesid, r.loanappid AS remarksid " +
+				"FROM "+TABLE_COLLECTIONSHEET+" cs "+
+				"LEFT JOIN "+TABLE_PAYMENT+" p ON cs.loanappid=p.loanappid " +
+				"LEFT JOIN "+TABLE_NOTES+" n ON cs.loanappid=n.loanappid " +
+				"LEFT JOIN "+TABLE_REMARKS+" r ON cs.loanappid=r.loanappid";		
+		Cursor result = db.rawQuery(sql, null);
+		int total = 0;
+		if (result != null && result.getCount() > 0) {
+			result.moveToFirst();
+			String paymentid = "";
+			String notesid = "";
+			String remarksid = "";
+			boolean forupload = false;
+			do {
+				forupload = false;
+				paymentid = result.getString(result.getColumnIndex("paymentid"));
+				notesid = result.getString(result.getColumnIndex("notesid"));
+				remarksid = result.getString(result.getColumnIndex("remarksid"));
+				if (forupload == false && paymentid != null && !paymentid.equals("")) forupload = true;
+				if (forupload == false && notesid != null && !notesid.equals("")) forupload = true;
+				if (forupload == false && remarksid != null && !remarksid.equals("")) forupload = true;
+				if (forupload == true) total++;
+			} while(result.moveToNext());
+		}
+		return total;
 	}
 	
 	public Cursor getRoutes() {
@@ -293,12 +438,42 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.delete(TABLE_PAYMENT, null, null);
 	}
 	
-	public void removePaymentByLoanappid(String loanappid) {
+	/*public void removePaymentByLoanappid(String loanappid) {
+		db.delete(TABLE_PAYMENT, "loanappid='"+loanappid+"'", null);
+	}*/
+	public void removePaymentByAppid(String loanappid) {
 		db.delete(TABLE_PAYMENT, "loanappid='"+loanappid+"'", null);
 	}
+
+	public void removePaymentById(String objid) {
+		db.delete(TABLE_PAYMENT, "objid='"+objid+"'", null);
+	}
 	
-	public void removeAllUploadedPayments() {
+	public void removeNoteById(String objid) {
+		db.delete(TABLE_NOTES, "objid='"+objid+"'", null);
+	}
+	
+	public void removeNotesByAppid(String loanappid) {
+		db.delete(TABLE_NOTES, "loanappid='"+loanappid+"'", null);
+	}
+	
+	public void removeAllNotes() {
+		db.delete(TABLE_NOTES, null, null);
+	}
+	
+	public void removeRemarksByAppid(String loanappid) {
+		db.delete(TABLE_REMARKS, "loanappid='"+loanappid+"'", null);
+	}
+	
+	public void removeAllRemarks() {
+		db.delete(TABLE_REMARKS, null, null);
+	}
+	
+	/*public void removeAllUploadedPayments() {
 		db.delete(TABLE_UPLOADEDPAYMENT, null, null);
+	}*/
+	public void removeAllUploads() {
+		db.delete(TABLE_UPLOADS, null, null);
 	}
 	
 	public void removeAllRoutes() {

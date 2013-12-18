@@ -53,7 +53,7 @@ public class CollectionSheet extends Activity {
 		
 		lv_collectionsheet = (ListView) findViewById(R.id.lv_collectionsheet);
 		if(!db.isOpen) db.openDb();
-		final Cursor list = db.getCollectionsheets(routecode);
+		final Cursor list = db.getCollectionsheetsByRoute(routecode);
 		db.closeDb();
 
 		loadCollectionsheets(list);

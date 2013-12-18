@@ -323,7 +323,7 @@
                       android:layout_height="wrap_content" >
 
                       <TextView
-                          android:id="@+id/TextView03"
+                          android:id="@+id/notes_todate"
                           android:layout_width="150dp"
                           android:layout_height="wrap_content"
                           android:layout_alignParentLeft="true"
@@ -338,7 +338,7 @@
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_alignParentTop="true"
-                          android:layout_toRightOf="@+id/TextView03"
+                          android:layout_toRightOf="@+id/notes_todate"
                           android:text="@string/semicolon"
                           android:textAppearance="?android:attr/textAppearanceMedium"
                           android:textSize="17sp" />
@@ -618,5 +618,77 @@
               </LinearLayout>
 
           </RelativeLayout>
+
+          <RelativeLayout
+              android:id="@+id/layout_info_remarks"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" >
+
+              <TextView
+                  android:id="@+id/TextView20"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentLeft="true"
+                  android:layout_alignParentRight="true"
+                  android:layout_marginTop="5dp"
+                  android:background="@android:color/darker_gray"
+                  android:padding="2dp"
+                  android:text="@string/txt_info_remarks"
+                  android:textColor="@android:color/white"
+                  android:textSize="18sp"
+                  android:textStyle="bold" />
+
+              <RelativeLayout
+                  android:id="@+id/rl_info_remarks"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentLeft="true"
+                  android:layout_alignParentRight="true"
+                  android:layout_below="@+id/TextView20" >
+
+                  <TextView
+                      android:id="@+id/tv_info_remarks"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_alignParentLeft="true"
+                      android:layout_alignParentRight="true"
+                      android:layout_marginLeft="10dp"
+                      android:text="@string/txt_empty"
+                      android:textAppearance="?android:attr/textAppearanceMedium" />
+
+              </RelativeLayout>
+
+          </RelativeLayout>
+
+          <RelativeLayout
+              android:id="@+id/layout_info_notes"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" >
+
+              <TextView
+                  android:id="@+id/TextView03"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentLeft="true"
+                  android:layout_alignParentRight="true"
+                  android:layout_marginTop="5dp"
+                  android:background="@android:color/darker_gray"
+                  android:padding="2dp"
+                  android:text="@string/txt_info_notes"
+                  android:textColor="@android:color/white"
+                  android:textSize="18sp"
+                  android:textStyle="bold" />
+
+              <LinearLayout
+                  android:id="@+id/ll_info_notes"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@+id/TextView03"
+                  android:clickable="true"
+                  android:orientation="vertical" >
+
+              </LinearLayout>
+          </RelativeLayout>
+
       </LinearLayout>
 </ScrollView>
