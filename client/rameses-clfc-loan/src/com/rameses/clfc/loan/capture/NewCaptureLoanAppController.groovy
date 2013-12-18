@@ -33,6 +33,7 @@ class NewCaptureLoanAppController extends AbstractLoanAppController
         entity = service.initEntity();
         entity.appmode = 'CAPTURE';
         entity.previousloans = [];
+        entity.orgid = OsirisContext.env.ORGID;
         productTypes = entity.productTypes;
     }
     
