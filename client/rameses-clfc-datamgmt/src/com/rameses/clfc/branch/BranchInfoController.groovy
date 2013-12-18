@@ -23,6 +23,10 @@ public class BranchInfoController extends CRUDController
     Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'branch.delete']; 
     Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'branch.approve'];     
     
+    boolean isAllowCreate() {
+        return (node != null); 
+    }
+    
     Map createEntity() {
         return [
             orgclass:       'BRANCH', 
