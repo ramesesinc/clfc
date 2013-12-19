@@ -61,6 +61,7 @@ public class Main extends Activity {
 	private LocationManager locationManager;
 	private NetworkInfo networkInfo;
 	private ServiceProxy svcProxy;
+	private ServiceProxy postingProxy;
 	private ProgressDialog progressDialog;
 	private AlertDialog dialog;
 	private ServiceHelper svcHelper = new ServiceHelper(context);
@@ -84,6 +85,37 @@ public class Main extends Activity {
 			}
 			locationManager.removeUpdates(locationListener);
 			Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable());
+		}
+	};
+	private Handler voidHandler = new Handler();
+	private Runnable voidRunnable = new Runnable() {
+		@Override
+		public void run() {
+			if (!db.isOpen) db.openDb();
+			Cursor voidPayments = db.getPendingVoidPayments();
+			if (db.isOpen) db.closeDb();
+			if (voidPayments != null && voidPayments.getCount() > 0) {
+				voidPayments.moveToFirst();
+				Map<String, Object> params = new HashMap<String, Object>();
+				Boolean isapproved = false;
+				String objid = "";
+				do {
+					objid = voidPayments.getString(voidPayments.getColumnIndex("objid"));
+					params.put("objid", objid);
+					try {
+						isapproved = (Boolean) postingProxy.invoke("isVoidPaymentApproved", new Object[]{params});
+					} catch (Exception e) {}
+					finally {
+						if (isapproved) {
+							if (!db.isOpen) db.openDb();
+							db.approveVoidPayment(objid);
+							if (db.isOpen) db.closeDb();
+						}
+					}
+					
+				} while(voidPayments.moveToNext());
+			}
+			voidHandler.postDelayed(voidRunnable, 0);
 		}
 	};
 	
@@ -119,6 +151,7 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setTitle("CLFC Collection");
+		postingProxy = svcHelper.createServiceProxy("DevicePostingService");
 		application = (ProjectApplication) context.getApplicationContext();
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		locationHandler.postDelayed(locationRunnable, 0);
@@ -273,7 +306,11 @@ public class Main extends Activity {
 			Bundle bundle = msg.getData();
 			if (!db.isOpen) db.openDb();
 			db.emptySystemTable();
-			db.insertSystem(bundle.getString("billingid"), bundle.getString("serverdate"));
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("sessionid", bundle.getString("billingid"));
+			params.put("serverdate", bundle.getString("serverdate"));
+			params.put("collectorid", bundle.getString("collectorid"));
+			db.insertSystem(params);
 			if (db.isOpen) db.closeDb();
 			Intent intent=new Intent(context, Route.class);
 			intent.putExtra("bundle", bundle);
@@ -319,6 +356,7 @@ public class Main extends Activity {
 				bundle.putParcelableArrayList("routes", ((ArrayList<RouteParcelable>) result.get("routes")));
 				bundle.putString("billingid", result.get("billingid").toString());
 				bundle.putString("serverdate", result.get("serverdate").toString());
+				bundle.putString("collectorid", result.get("collectorid").toString());
 				status = "ok";
 			}
 			catch( TimeoutException te ) {

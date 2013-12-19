@@ -25,6 +25,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String TABLE_SYSTEM = "system";
 	private static final String TABLE_HOST = "host";
 	private static final String TABLE_ROUTE = "route";
+	private static final String TABLE_VOID = "void";
 	
 	private static final String CREATE_TABLE_COLLECTIONSHEET = "" +
 			"CREATE TABLE COLLECTIONSHEET(" +
@@ -70,29 +71,34 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"todate text, " +
 			"remarks text" +
 			");";
-	/*private static final String CREATE_TABLE_UPLOADEDPAYMENTS = "CREATE TABLE UPLOADED_PAYMENTS(" +
-			"loanappid text, " +
-			"paymentid text" +
-			"PRIMARY KEY (loanappid, paymentid)" +
-			")";
-	private static final String CREATE_TABLE_UPLOADEDNOTES = "CREATE TABLE UPLOADED_NOTES(" +
-			"loanappid text, " +
-			"notesid text" +
-			"PRIMARY KEY(loanappid, notesid)" +
-			")";
-	private static final String CREATE_TABLE_UPLOADEDREMARKS = "CREATE TABLE UPLOADED_REMARKS(" +
-			"loanappid text, " +
-			"remarksid text" +
-			"PRIMARY KEY(loanappid, remarksid)" +
-			")";*/
 	private static final String CREATE_TABLE_UPLOADS = "CREATE TABLE UPLOADS(" +
 			"loanappid text, " +
 			"referenceid text, " +
 			"PRIMARY KEY(loanappid, referenceid)" +
 			");";
-	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(sessionid text, serverdate text)";
-	private static final String CREATE_TABLE_HOST = "CREATE TABLE HOST(ipaddress text, port text);";
-	private static final String CREATE_TABLE_ROUTE = "CREATE TABLE ROUTE(routecode text PRIMARY KEY, routedescription text, routearea text);";
+	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(" +
+			"sessionid text, " +
+			"serverdate text, " +
+			"collectorid text" +
+			")";
+	private static final String CREATE_TABLE_HOST = "CREATE TABLE HOST(" +
+			"ipaddress text, " +
+			"port text" +
+			");";
+	private static final String CREATE_TABLE_ROUTE = "CREATE TABLE ROUTE(" +
+			"routecode text PRIMARY KEY, " +
+			"routedescription text, " +
+			"routearea text" +
+			");";
+	private static final String CREATE_TABLE_VOID = "CREATE TABLE VOID(" +
+			"objid text PRIMARY KEY, " +
+			"paymentid text, " +
+			"loanappid text, " +
+			"state text, " +
+			"collectorid text, " +
+			"reason text" +
+			");";
+	
 	
 	private SQLiteDatabase db;
 	public boolean isOpen = false;
@@ -114,6 +120,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_SYSTEM);
 		db.execSQL(CREATE_TABLE_HOST);
 		db.execSQL(CREATE_TABLE_ROUTE);
+		db.execSQL(CREATE_TABLE_VOID);
 		db.execSQL("INSERT INTO "+TABLE_HOST+" VALUES('121.97.60.200', '8070')");
 	}
 
@@ -130,6 +137,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_SYSTEM);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_HOST);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_ROUTE);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_VOID);
 		onCreate(db);
 	}
 
@@ -220,10 +228,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.insert(TABLE_UPLOADS, null, values);
 	}
 	
-	public void insertSystem(String sessionid, String serverdate) {
+	public void insertSystem(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
-		values.put("sessionid", sessionid);
-		values.put("serverdate", serverdate);
+		values.put("sessionid", params.get("sessionid").toString());
+		values.put("serverdate", params.get("serverdate").toString());
+		values.put("collectorid", params.get("collectorid").toString());
 		db.insert(TABLE_SYSTEM, null, values);
 	}
 	
@@ -242,6 +251,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.insert(TABLE_ROUTE, null, values);
 	}
 	
+	public void insertVoidPayment(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		values.put("objid", params.get("objid").toString());
+		values.put("state", params.get("state").toString());
+		values.put("paymentid", params.get("paymentid").toString());
+		values.put("loanappid", params.get("loanappid").toString());
+		values.put("collectorid", params.get("collectorid").toString());
+		values.put("reason", params.get("reason").toString());
+		db.insert(TABLE_VOID, null, values);
+	}
+	
+	public void approveVoidPayment(String objid) {
+		db.execSQL("UPDATE FROM "+TABLE_VOID+" SET state='APPROVED' WHERE objid='"+objid+"'");
+	}
+	
 	public void updateHost(String ipaddress, String port) {
 		ContentValues values=new ContentValues();
 		values.put("ipaddress", ipaddress);
@@ -255,6 +279,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		if(result != null) {
 			result.moveToFirst();
 			return result.getString(result.getColumnIndex("sessionid"));
+		}
+		return null;
+	}
+	
+	public String getCollectorid() {
+		Cursor result = db.rawQuery("SELECT collectorid FROM "+TABLE_SYSTEM, null);
+		
+		if (result != null) {
+			result.moveToFirst();
+			return result.getString(result.getColumnIndex("collectorid"));
 		}
 		return null;
 	}
@@ -281,6 +315,27 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public Cursor getCollectionsheets() {
 		Cursor result=db.rawQuery("SELECT * FROM "+TABLE_COLLECTIONSHEET+" ORDER BY acctname", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getPendingVoidPayments() {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_VOID+" WHERE state='PENDING'", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getPendingVoidPaymentsByAppid(String loanappid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_VOID+" WHERE state='PENDING' AND loanappid='"+loanappid+"'", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getVoidPaymentByPaymentidAndAppid(String paymentid, String loanappid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_VOID+" WHERE paymentid='"+paymentid+"' AND loanappid='"+loanappid+"' LIMIT 1", null);
 		
 		if (result != null) result.moveToFirst();
 		return result;
@@ -459,6 +514,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void removeAllNotes() {
 		db.delete(TABLE_NOTES, null, null);
+	}
+	
+	public void removeAllVoidPayments() {
+		db.delete(TABLE_VOID, null, null);
 	}
 	
 	public void removeRemarksByAppid(String loanappid) {

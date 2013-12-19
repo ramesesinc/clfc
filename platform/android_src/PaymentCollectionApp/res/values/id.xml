@@ -2,5 +2,7 @@
 <resources>
     <item name="noteid" type="id"/>
     <item name="idx" type="id"/>
+    <item type="id" name="paymentid"/>
+    <item name="overlayid" type="id"/>
     
 </resources>

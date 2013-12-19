@@ -168,13 +168,9 @@ public class Route extends Activity {
 				//xbundle.putString("sessionid", map.get("sessionid").toString());
 				//xbundle.putString("serverdate", map.get("serverdate").toString());
 				xbundle.putString("routecode", route.getCode());
-				System.out.println("pass 1");
 				xbundle.putString("routedescription", route.getDescription());
-				System.out.println("pass 2");
 				xbundle.putString("routearea", route.getArea());
-				System.out.println("pass 3");
 				xbundle.putParcelableArrayList("collectionsheets", ((ArrayList<CollectionSheetParcelable>)map.get("list")));
-				System.out.println("pass 4");
 				status = "ok";
 			}
 			catch( TimeoutException te ) {
