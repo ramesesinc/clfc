@@ -173,9 +173,7 @@ public final class R {
         public static final int item_payment=0x7f03000d;
         public static final int item_route=0x7f03000e;
         public static final int item_string=0x7f03000f;
-        public static final int overlay_void_approved=0x7f030010;
-        public static final int overlay_void_pending=0x7f030011;
-        public static final int overlay_void_text=0x7f030012;
+        public static final int overlay_void_text=0x7f030010;
     }
     public static final class menu {
         public static final int empty=0x7f090000;

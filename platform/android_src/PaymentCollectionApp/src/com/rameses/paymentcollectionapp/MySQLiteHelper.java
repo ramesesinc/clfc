@@ -263,7 +263,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 	
 	public void approveVoidPayment(String objid) {
-		db.execSQL("UPDATE FROM "+TABLE_VOID+" SET state='APPROVED' WHERE objid='"+objid+"'");
+		db.execSQL("UPDATE "+TABLE_VOID+" SET state='APPROVED' WHERE objid='"+objid+"'");
 	}
 	
 	public void updateHost(String ipaddress, String port) {

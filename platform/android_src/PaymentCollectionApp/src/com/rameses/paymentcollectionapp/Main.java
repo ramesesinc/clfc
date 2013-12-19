@@ -94,12 +94,13 @@ public class Main extends Activity {
 			if (!db.isOpen) db.openDb();
 			Cursor voidPayments = db.getPendingVoidPayments();
 			if (db.isOpen) db.closeDb();
-			if (voidPayments != null && voidPayments.getCount() > 0) {
-				voidPayments.moveToFirst();
-				Map<String, Object> params = new HashMap<String, Object>();
+			Executors.newSingleThreadExecutor().submit(new VoidPaymentStatusRunnable(voidPayments));
+			//if (voidPayments != null && voidPayments.getCount() > 0) {
+			//	voidPayments.moveToFirst();
+				/*Map<String, Object> params = new HashMap<String, Object>();
 				Boolean isapproved = false;
-				String objid = "";
-				do {
+				String objid = "";*/
+				/*do {
 					objid = voidPayments.getString(voidPayments.getColumnIndex("objid"));
 					params.put("objid", objid);
 					try {
@@ -113,9 +114,9 @@ public class Main extends Activity {
 						}
 					}
 					
-				} while(voidPayments.moveToNext());
-			}
-			voidHandler.postDelayed(voidRunnable, 0);
+				} while(voidPayments.moveToNext());*/
+			//}
+			//voidHandler.postDelayed(voidRunnable, 5000);
 		}
 	};
 	
@@ -145,6 +146,36 @@ public class Main extends Activity {
 			}
 		}
 	}
+	
+	private class VoidPaymentStatusRunnable implements Runnable {
+		private Cursor voidPayments;
+		public VoidPaymentStatusRunnable(Cursor voidPayments) {
+			this.voidPayments = voidPayments;
+		}
+		@Override
+		public void run() {
+			voidPayments.moveToFirst();
+			Map<String, Object> params = new HashMap<String, Object>();
+			Boolean isapproved = false;
+			String objid = "";
+			do {
+				objid = voidPayments.getString(voidPayments.getColumnIndex("objid"));
+				params.put("voidid", objid);
+				try {
+					isapproved = (Boolean) postingProxy.invoke("isVoidPaymentApproved", new Object[]{params});
+				} catch (Exception e) {}
+				finally {
+					if (isapproved) {
+						if (!db.isOpen) db.openDb();
+						db.approveVoidPayment(objid);
+						if (db.isOpen) db.closeDb();
+					}
+				}
+				
+			} while(voidPayments.moveToNext());
+			//voidHandler.postDelayed(voidRunnable, 3000);
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +186,7 @@ public class Main extends Activity {
 		application = (ProjectApplication) context.getApplicationContext();
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		locationHandler.postDelayed(locationRunnable, 0);
+		voidHandler.postDelayed(voidRunnable, 0);
 	}	
 		
 	@Override
@@ -188,7 +220,7 @@ public class Main extends Activity {
 				} else {
 					if(svcProxy == null) {
 						//Toast.makeText(context, "Please set the host's ip settings", Toast.LENGTH_SHORT).show();
-						showShortMsg("Please set the host's ip settings.");
+						ApplicationUtil.showShortMsg(context, "Please set the host's ip settings.");
 					} else {
 						if(!db.isOpen) db.openDb();
 						boolean forupload = false;
@@ -202,14 +234,14 @@ public class Main extends Activity {
 						if(position == 0) {
 							if(forupload == true) {
 								//Toast.makeText(context, "There are still collection sheets to upload. Please upload the payments before downloading current billing.", Toast.LENGTH_LONG).show();
-								showLongMsg("There are still collection sheets to upload. Please upload the collection sheets before downloading current collection sheets.");
+								ApplicationUtil.showLongMsg(context, "There are still collection sheets to upload. Please upload the collection sheets before downloading current collection sheets.");
 							} else {
 								showLoginDialog();
 							}
 						} else if(position == 2) {
 							if(forupload == false) {
 								//Toast.makeText(context, "No payments to upload.", Toast.LENGTH_SHORT).show();
-								showShortMsg("No collection sheets to upload.");
+								ApplicationUtil.showShortMsg(context, "No collection sheets to upload.");
 							} else {
 								uploadPayments();	
 							}
@@ -238,8 +270,9 @@ public class Main extends Activity {
 	protected void onDestroy() {
 		if(db.isOpen) db.closeDb();
 		locationHandler.removeCallbacks(locationRunnable);
-		//Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable("Application closed", false));
-		//locationHandler = null;
+		locationHandler = null;
+		voidHandler.removeCallbacks(voidRunnable);
+		voidHandler = null;
 		super.onDestroy();
 	}
 	
@@ -279,9 +312,9 @@ public class Main extends Activity {
 				String password = ((EditText) dialog.findViewById(R.id.login_password)).getText().toString();
 				
 				if (username.trim().equals("")) {
-					showShortMsg("Username is required.");
+					ApplicationUtil.showShortMsg(context, "Username is required.");
 				} else if (password.trim().equals("")) {
-					showShortMsg("Password is required.");
+					ApplicationUtil.showShortMsg(context, "Password is required.");
 				} else {
 					if (progressDialog.isShowing()) progressDialog.dismiss();
 					progressDialog.setMessage("Getting information from server.");
@@ -290,14 +323,6 @@ public class Main extends Activity {
 				}
 			}
 		});
-	}
-	
-	public void showShortMsg(String msg) {
-		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-	}
-	
-	public void showLongMsg(String msg) {
-		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 	}
 	
 	private Handler loginHandler = new Handler() {
@@ -382,7 +407,7 @@ public class Main extends Activity {
 		public void handleMessage(Message msg) {
 			Bundle bundle=msg.getData();
 			if(progressDialog.isShowing()) progressDialog.dismiss();
-			showShortMsg(bundle.getString("response"));
+			ApplicationUtil.showShortMsg(context, bundle.getString("response"));
 		}
 	};
 	
@@ -433,7 +458,7 @@ public class Main extends Activity {
 				db.removeAllRoutes();
 				if (progressDialog.isShowing()) progressDialog.dismiss();
 				//Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
-				showShortMsg("Successfully uploaded collection sheets!");
+				ApplicationUtil.showShortMsg(context, "Successfully uploaded collection sheets!");
 			} else { uploadPayments(); }
 			db.closeDb();
 		}
@@ -483,7 +508,7 @@ public class Main extends Activity {
 			try {
 				serverDate = db.getServerDate();
 			}
-			catch (Exception e) { showShortMsg("Error: ParseException"); }
+			catch (Exception e) { ApplicationUtil.showShortMsg(context, "Error: ParseException"); }
 			if(db.isOpen) db.closeDb();
 			String routecode = "";
 			boolean forupload = false;

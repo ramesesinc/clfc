@@ -89,7 +89,7 @@ public class CollectionSheetInfo extends Activity {
 		if (!db.isOpen) db.openDb();
 		try {
 			txndate = new SimpleDateFormat("yyyy-MM-dd").format(db.getServerDate());
-		} catch (Exception e) { showShortError("Error: ParseException"); }
+		} catch (Exception e) { ApplicationUtil.showShortMsg(context, "Error: ParseException"); }
 		if (db.isOpen) db.closeDb();
 	}
 	
@@ -142,7 +142,7 @@ public class CollectionSheetInfo extends Activity {
 				Object date = result.getString(result.getColumnIndex("duedate"));
 				if (!(date instanceof Date)) date = new SimpleDateFormat("yyyy-MM-dd").parse(date.toString());
 				c.setTime((Date) date);
-			} catch (Exception e) { showShortError("Error: ParseException"); }
+			} catch (Exception e) { ApplicationUtil.showShortMsg(context, "Error: ParseException"); }
 			/*catch (Exception e) { 
 				e.printStackTrace();
 				Toast.makeText(context, "Error: ParseException", Toast.LENGTH_SHORT).show(); 
@@ -209,11 +209,11 @@ public class CollectionSheetInfo extends Activity {
 							if (db.isOpen) db.closeDb();
 							remarks = null;
 							rl_remarks.setVisibility(View.GONE);
-							showShortError("Successfully removed remarks.");
+							ApplicationUtil.showShortMsg(context, "Successfully removed remarks.");
 						}
 					}
 				};
-				showOptionDialog(items, listener);
+				ApplicationUtil.showOptionDialog(context, items, listener);
 				return false;
 			}
 		});
@@ -255,6 +255,7 @@ public class CollectionSheetInfo extends Activity {
 					View overlay = null;
 					RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 					layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
+					System.out.println("state = "+state);
 					if (state.equals("PENDING")) {
 						overlay = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.overlay_void_text, null);
 						((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
@@ -308,24 +309,6 @@ public class CollectionSheetInfo extends Activity {
 				ll_notes.addView(child);
 			} while(notes.moveToNext());
 		}
-	}	
-	
-	private void showConfirmationDialog(String msg, DialogInterface.OnClickListener positivelistener, DialogInterface.OnClickListener negativelistener) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Confirmation");
-		builder.setMessage(msg);
-		builder.setPositiveButton("Yes", positivelistener);
-		builder.setNegativeButton("No", negativelistener);
-		AlertDialog d = builder.create();
-		d.show();
-	}
-	
-	private void showOptionDialog(CharSequence[] items, DialogInterface.OnClickListener listener) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Options");
-		builder.setItems(items, listener);
-		AlertDialog d = builder.create();
-		d.show();
 	}
 	
 	private void addPaymentProperties(View child) {
@@ -351,7 +334,7 @@ public class CollectionSheetInfo extends Activity {
 						showVoidDialog(view);
 					}
 				};
-				showOptionDialog(items, listener);
+				ApplicationUtil.showOptionDialog(context, items, listener);
 				return false;
 			}
 		});
@@ -380,7 +363,7 @@ public class CollectionSheetInfo extends Activity {
 						//showVoidDialog(view);
 					}
 				};
-				showOptionDialog(items, listener);
+				ApplicationUtil.showOptionDialog(context, items, listener);
 				return false;
 			}
 		});
@@ -463,15 +446,15 @@ public class CollectionSheetInfo extends Activity {
 										db.removeNoteById(noteid);
 										if (db.isOpen) db.closeDb();
 										removeNoteAt(idx);
-										showShortError("Successfully removed note.");
+										ApplicationUtil.showShortMsg(context, "Successfully removed note.");
 									}
 								}
 							};
-							showConfirmationDialog("You are about to remove this note. Continue?", positivelistener, null);
+							ApplicationUtil.showConfirmationDialog(context, "You are about to remove this note. Continue?", positivelistener, null);
 						}
 					}
 				};
-				showOptionDialog(items, listener);
+				ApplicationUtil.showOptionDialog(context, items, listener);
 				return false;
 			}
 		});
@@ -514,7 +497,7 @@ public class CollectionSheetInfo extends Activity {
 					Cursor voidPayments = db.getPendingVoidPaymentsByAppid(loanappid);
 					if (db.isOpen) db.closeDb();
 					if (voidPayments != null && voidPayments.getCount() > 0) {
-						showLongError("Cannot add payment. No confirmation for void requested at the moment.");
+						ApplicationUtil.showLongMsg(context, "Cannot add payment. No confirmation for void requested at the moment.");
 					} else {
 						intent.putExtra("refno", refno);
 						intent.putExtra("paymenttype", paymenttype);
@@ -603,7 +586,7 @@ public class CollectionSheetInfo extends Activity {
 							Calendar cc = Calendar.getInstance();
 							cc.set(year, monthOfYear, dayOfMonth);
 							if (cc.getTime().compareTo(c.getTime()) < 0) {
-								showLongError("From date must not be less than billing date: "+df.format(c.getTime()));
+								ApplicationUtil.showLongMsg(context, "From date must not be less than billing date: "+df.format(c.getTime()));
 							} else {
 								setFromDateValue(df.format(cc.getTime()));
 							}
@@ -638,7 +621,7 @@ public class CollectionSheetInfo extends Activity {
 							Calendar c2 = Calendar.getInstance();
 							c2.set(year, monthOfYear, dayOfMonth);
 							if (c2.compareTo(c1) < 0) {
-								showLongError("To date must not be less than from date: "+df.format(c1.getTime()));
+								ApplicationUtil.showLongMsg(context, "To date must not be less than from date: "+df.format(c1.getTime()));
 							} else {
 								setToDateValue(df.format(c2.getTime()));
 							}
@@ -677,14 +660,6 @@ public class CollectionSheetInfo extends Activity {
 		try {
 			return new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		} catch (Exception e) { return null; }
-	}
-	
-	private void showLongError(String msg) {
-		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-	}
-	
-	private void showShortError(String msg) {
-		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 	}
 	
 	private void addNote(Map<String, Object> params) {
@@ -735,7 +710,7 @@ public class CollectionSheetInfo extends Activity {
 			// TODO Auto-generated method stub
 			String et_remarks = ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString();
 			if (et_remarks.trim().equals("")) {
-				showShortError("Remarks is required.");
+				ApplicationUtil.showShortMsg(context, "Remarks is required.");
 			} else {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("loanappid", loanappid);
@@ -758,10 +733,10 @@ public class CollectionSheetInfo extends Activity {
 					if (mode.equals("create")) {
 						db.insertRemarks(map);
 						rl_remarks.setVisibility(View.VISIBLE);					
-						showShortError("Successfully added remarks.");
+						ApplicationUtil.showShortMsg(context, "Successfully added remarks.");
 					} else if (!mode.equals("create")) {
 						db.updateRemarks(map); 
-						showShortError("Successfully updated remark.");
+						ApplicationUtil.showShortMsg(context, "Successfully updated remark.");
 					}
 				}				
 				remarks = db.getRemarksByAppid(loanappid);
@@ -791,9 +766,9 @@ public class CollectionSheetInfo extends Activity {
 			String notes_remarks = ((TextView) dialog.findViewById(R.id.notes_text)).getText().toString();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			if (c2.compareTo(c) < 0) {
-				showLongError("To date must not be less than from date: "+df.format(c.getTime()));;
+				ApplicationUtil.showLongMsg(context, "To date must not be less than from date: "+df.format(c.getTime()));;
 			} else if (notes_remarks.trim().equals("")) {
-				showShortError("Remarks is required.");
+				ApplicationUtil.showShortMsg(context, "Remarks is required.");
 			} else {
 				Map<String, Object> note = new HashMap<String, Object>();
 				note.put("objid", "NT"+UUID.randomUUID().toString());
@@ -818,7 +793,7 @@ public class CollectionSheetInfo extends Activity {
 					finally {
 						db.insertNotes(note);
 						addNote(note);
-						showShortError("Successfully added note.");	
+						ApplicationUtil.showShortMsg(context, "Successfully added note.");	
 					}
 				} else if (!mode.equals("create")) {
 					if (view != null) note.put("objid", view.getTag(R.id.noteid).toString());
@@ -829,7 +804,7 @@ public class CollectionSheetInfo extends Activity {
 					finally {
 						db.updateNotes(note);
 						updateNote(note, view);
-						showShortError("Successfully updated note.");
+						ApplicationUtil.showShortMsg(context, "Successfully updated note.");
 					}
 				}
 				if (db.isOpen) db.closeDb();
