@@ -383,6 +383,7 @@ public class CollectionSheetInfo extends Activity {
 				params.put("objid", "VOID"+UUID.randomUUID());
 				params.put("paymentid", payment.getTag(R.id.paymentid));
 				params.put("loanappid", loanappid);
+				params.put("routecode", routecode);
 				if (!db.isOpen) db.openDb();
 				params.put("collectorid", db.getCollectorid());
 				params.put("reason", ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString());

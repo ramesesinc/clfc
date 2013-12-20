@@ -94,29 +94,7 @@ public class Main extends Activity {
 			if (!db.isOpen) db.openDb();
 			Cursor voidPayments = db.getPendingVoidPayments();
 			if (db.isOpen) db.closeDb();
-			Executors.newSingleThreadExecutor().submit(new VoidPaymentStatusRunnable(voidPayments));
-			//if (voidPayments != null && voidPayments.getCount() > 0) {
-			//	voidPayments.moveToFirst();
-				/*Map<String, Object> params = new HashMap<String, Object>();
-				Boolean isapproved = false;
-				String objid = "";*/
-				/*do {
-					objid = voidPayments.getString(voidPayments.getColumnIndex("objid"));
-					params.put("objid", objid);
-					try {
-						isapproved = (Boolean) postingProxy.invoke("isVoidPaymentApproved", new Object[]{params});
-					} catch (Exception e) {}
-					finally {
-						if (isapproved) {
-							if (!db.isOpen) db.openDb();
-							db.approveVoidPayment(objid);
-							if (db.isOpen) db.closeDb();
-						}
-					}
-					
-				} while(voidPayments.moveToNext());*/
-			//}
-			//voidHandler.postDelayed(voidRunnable, 5000);
+			Executors.newSingleThreadExecutor().submit(new VoidPaymentStatusRunnable(voidPayments));			
 		}
 	};
 	
@@ -182,6 +160,8 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setTitle("CLFC Collection");
+		progressDialog = new ProgressDialog(context);
+		progressDialog.setCancelable(false);
 		postingProxy = svcHelper.createServiceProxy("DevicePostingService");
 		application = (ProjectApplication) context.getApplicationContext();
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -192,9 +172,6 @@ public class Main extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
-		progressDialog = new ProgressDialog(context);
-		progressDialog.setCancelable(false);
 		
 		isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		WifiManager wifiManager = (WifiManager)context.getSystemService(WIFI_SERVICE);
