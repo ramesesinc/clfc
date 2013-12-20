@@ -255,7 +255,6 @@ public class CollectionSheetInfo extends Activity {
 					View overlay = null;
 					RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 					layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
-					System.out.println("state = "+state);
 					if (state.equals("PENDING")) {
 						overlay = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.overlay_void_text, null);
 						((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
@@ -396,6 +395,16 @@ public class CollectionSheetInfo extends Activity {
 					if (!db.isOpen) db.openDb();
 					db.insertVoidPayment(params);
 					if (db.isOpen) db.closeDb();
+					View overlay = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.overlay_void_text, null);
+					RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+					layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
+					((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
+					((TextView) overlay).setText("VOID REQUEST PENDING");
+					overlay.setLayoutParams(layoutParams);
+					((RelativeLayout) payment).addView(overlay);
+					payment.setClickable(false);
+					payment.setOnClickListener(null);
+					payment.setOnLongClickListener(null);
 				}
 			}
 		});
@@ -436,7 +445,6 @@ public class CollectionSheetInfo extends Activity {
 
 									String noteid = view.getTag(R.id.noteid).toString();
 									int idx = Integer.parseInt(view.getTag(R.id.idx).toString());
-									System.out.println("noteid = "+noteid);
 									Map<String, Object> params = new HashMap<String, Object>();
 									params.put("noteid", noteid);
 									try {
@@ -780,6 +788,7 @@ public class CollectionSheetInfo extends Activity {
 				if (!db.isOpen) db.openDb();
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("sessionid", db.getSessionid());
+				params.put("collectorid", db.getCollectorid());
 				params.put("txndate", txndate);
 				params.put("routecode", routecode);
 				Map<String, Object> collectionsheet = new HashMap<String, Object>();

@@ -171,6 +171,7 @@ public class Payment extends Activity {
 			Map<String, Object> collectionsheet = new HashMap<String, Object>();
 			if (!db.isOpen) db.openDb();
 			params.put("sessionid", db.getSessionid());
+			params.put("collectorid", db.getCollectorid());
 			Cursor cs = db.getCollectionsheetByLoanappid(loanappid);
 			if (db.isOpen) db.closeDb();
 			

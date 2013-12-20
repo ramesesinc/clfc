@@ -151,7 +151,7 @@ public class Main extends Activity {
 				}
 				
 			} while(voidPayments.moveToNext());
-			//voidHandler.postDelayed(voidRunnable, 3000);
+			voidHandler.postDelayed(voidRunnable, 3000);
 		}
 	}
 
@@ -220,7 +220,14 @@ public class Main extends Activity {
 								//Toast.makeText(context, "No payments to upload.", Toast.LENGTH_SHORT).show();
 								ApplicationUtil.showShortMsg(context, "No collection sheets to upload.");
 							} else {
-								uploadPayments();	
+								DialogInterface.OnClickListener positivelistener = new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface d, int which) {
+										// TODO Auto-generated method stub
+										uploadPayments();	
+									}
+								};
+								ApplicationUtil.showConfirmationDialog(context, "You are about to upload the collection sheets. Continue?", positivelistener, null);
 							}
 						}
 					}
@@ -481,6 +488,7 @@ public class Main extends Activity {
 			// TODO Auto-generated method stub
 			if (!db.isOpen) db.openDb();
 			String sessionid = db.getSessionid();
+			String collectorid = db.getCollectorid();
 			Date serverDate = null;
 			try {
 				serverDate = db.getServerDate();
@@ -539,20 +547,22 @@ public class Main extends Activity {
 					//System.out.println(map);
 					totalamount = totalamount.add(new BigDecimal(map.get("payamount").toString()));
 				}
+
+				Map<String, Object> params=new HashMap<String, Object>();
+				//params.put("payments", list);
+				params.put("collectorid", collectorid);
+				params.put("collectionsheet", collectionsheet);
+				params.put("sessionid", sessionid);
+				params.put("txndate", serverDate);
+				params.put("routecode", routecode);
+				params.put("totalcount", totalcount);
+				params.put("totalamount", totalamount);
 				
 				Message msg = responseHandler.obtainMessage();
 				Bundle bundle = new Bundle();
 				String status = "";
 				try {
 					msg=uploadHandler.obtainMessage();
-					Map<String, Object> params=new HashMap<String, Object>();
-					//params.put("payments", list);
-					params.put("collectionsheet", collectionsheet);
-					params.put("sessionid", sessionid);
-					params.put("txndate", serverDate);
-					params.put("routecode", routecode);
-					params.put("totalcount", totalcount);
-					params.put("totalamount", totalamount);
 					Object response = svcProxy.invoke("uploadCollectionSheets", new Object[]{params});
 					Map<String, Object> result = (Map<String, Object>) response;
 					bundle.putString("loanappid", collectionsheet.get("loanappid").toString());
