@@ -1,0 +1,18 @@
+<workunit>
+    <invokers>
+        <invoker type="loanledger:formActions" action="init" caption="Compromise" mnemonic="m" target="popup"
+            visibleWhen="#{selectedEntity != null &amp;&amp; (selectedEntity.ismatured == 1 &amp;&amp; selectedEntity.compromiseid == null)}"/>
+            
+        <invoker type="loanledger:formActions" action="open" caption="Compromise" mnemonic="m" target="popup"
+            visibleWhen="#{selectedEntity != null &amp;&amp; (selectedEntity.ismatured == 1 &amp;&amp; selectedEntity.compromiseid != null)}"/>
+            
+        <invoker type="formActions" action="close" mnemonic="c" immediate="true" tooltip="Close"/>
+        <invoker type="formActions" action="save" visibleWhen="#{mode != 'read'}" tooltip="Save"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.ledger.compromise.LoanLedgerCompromiseController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.ledger.compromise.LoanLedgerCompromisePage"/>
+    </pages>
+</workunit>

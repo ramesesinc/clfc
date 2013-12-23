@@ -1,0 +1,23 @@
+<workunit extends="wtemplates/InboxController.xml" >
+    <invokers>
+        <invoker folderid="/explorer/txn/loan" caption="Void Requests" />
+        
+        <invoker type="voidrequest:formActions" action="approve" caption="Approve" tooltip="Approve" visibleWhen="#{selectedNode.properties.state == 'PENDING' &amp;&amp; selectedEntity != null}" />
+    </invokers>
+    
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+        
+        class VoidRequestInboxController extends InboxController
+        {
+            String serviceName = "LoanVoidPaymentService";
+            String defaultFileType = "voidrequest";
+            
+            boolean allowOpen = false;
+        }
+    </code>
+    
+</workunit>

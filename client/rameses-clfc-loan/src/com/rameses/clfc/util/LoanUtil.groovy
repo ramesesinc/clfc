@@ -16,6 +16,7 @@ class LoanUtil
     private static def otherLendingModesOfPayment;
     private static def borrowerOccupancyTypes;
     private static def paymentTypes;
+    private static def compromiseTypes;
 
     public static def getAppTypes() {
         if (appTypes == null) {
@@ -171,5 +172,16 @@ class LoanUtil
             ]
         }
         return paymentTypes;
+    }
+
+    public static def getCompromiseTypes() {
+        if (compromiseTypes == null) {
+            compromiseTypes = [
+                [key:'FIXED_AMOUNT', value:'FIXED AMOUNT'],
+                [key:'WAIVE_INTEREST', value:'WAIVE INTEREST'],
+                [key:'WAIVE_PENALTY', value:'WAIVE PENALTY']
+            ]
+        }
+        return compromiseTypes;
     }
 }

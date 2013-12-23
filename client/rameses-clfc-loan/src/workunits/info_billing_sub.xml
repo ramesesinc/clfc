@@ -1,0 +1,14 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/txn/collection" caption="New Sub Collection Sheet" action="create" role="ACCT_OFFICER" index="5"/>
+        <invoker type="quick_launcher" code="NSCS" caption="New Sub Collection Sheet" action="create" role="ACCT_OFFICER"/>
+        
+        <invoker type="ledgersubbilling:open" action="open" caption="Sub Collection Sheet" target="popup" resizable="false"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.subbilling.LoanLedgerSubBillingController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.subbilling.LoanLedgerSubBillingPage"/>
+    </pages>
+</workunit>
