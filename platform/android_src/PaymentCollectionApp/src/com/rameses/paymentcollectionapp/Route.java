@@ -139,13 +139,13 @@ public class Route extends Activity {
 				map.put("sessionid", bundle.getString("sessionid"));
 				itm = db.getCollectionsheetByLoanappid(map.get("loanappid").toString());
 				if (itm == null || itm.getCount() == 0) db.insertCollectionsheet(map);
-				if (map.containsKey("payments")) {
+				/*if (map.containsKey("payments")) {
 					list = (ArrayList<Map<String, Object>>) map.get("payments");
 					for(int j=0; i<list.size(); i++) {
 						m = (Map<String, Object>) list.get(j);
 						m.put(", value)
 					}
-				}
+				}*/
 			}
 			db.closeDb();
 			
