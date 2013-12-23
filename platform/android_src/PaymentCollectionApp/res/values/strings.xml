@@ -49,4 +49,6 @@
 	<string name="txt_fromdate">From Date</string>
 	<string name="txt_todate">To Date</string>
 	<string name="txt_remarks">Remarks</string>
+	<string name="txt_overlay_void_pending">VOID REQUEST PENDING</string>
+	<string name="txt_overlay_void_approved">VOID APPROVED</string>
 </resources>

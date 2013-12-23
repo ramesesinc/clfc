@@ -61,6 +61,7 @@ public class Route extends Activity {
 			r.setCode(map.get("code").toString());
 			r.setDescription(map.get("description").toString());
 			r.setArea(map.get("area").toString());
+			r.setSessionid(map.get("billingid").toString());
 			list.add(r);
 		}
 		
@@ -112,16 +113,39 @@ public class Route extends Activity {
 			
 			if(!db.isOpen) db.openDb();
 			db.insertRoute(params);
+			/*Cursor cs = db.getCollectionsheetsByRoute(params.get("routecode").toString);
+			if (cs != null && cs.getCount() > 0) {
+				cs.moveToFirst();
+				String loanappid  = cs.getString(cs.getColumnIndex("loanappid"));
+				do {
+					db.removePaymentByAppid(loanappid);
+					db.removeNotesByAppid(loanappid);
+					db.removeRemarksByAppid(loanappid);
+					db.removeCollectionsheetByLoanappid(loanappid);
+				} while(cs.moveToNext());
+			}*/
 			db.removeCollectionsheetsByRoute(params.get("routecode").toString());
 			//db.insertSystem(sessionid, serverdate);
 			//byte[] barr;
+			Cursor itm = null;
+			ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+			Map<String, Object> m;
 			for(int i=0; i<bundleList.size(); i++) {
 				map = (Map) bundleList.get(i);
 				//barr = map.toString().getBytes();
 				//BigDecimal a = new BigDecimal(barr.length+"").setScale(2);
 				//System.out.println("cs "+map.get("acctid").toString()+" size: "+a.divide(new BigDecimal("1024").setScale(0), BigDecimal.ROUND_HALF_UP).setScale(2)+"kb");
 				map.put("routecode", params.get("routecode").toString());
-				db.insertCollectionsheet(map);
+				map.put("sessionid", bundle.getString("sessionid"));
+				itm = db.getCollectionsheetByLoanappid(map.get("loanappid").toString());
+				if (itm == null || itm.getCount() == 0) db.insertCollectionsheet(map);
+				/*if (map.containsKey("payments")) {
+					list = (ArrayList<Map<String, Object>>) map.get("payments");
+					for(int j=0; i<list.size(); i++) {
+						m = (Map<String, Object>) list.get(j);
+						m.put(", value)
+					}
+				}*/
 			}
 			db.closeDb();
 			
@@ -161,20 +185,17 @@ public class Route extends Activity {
 				params.put("route_code", route.getCode());
 				params.put("route_description", route.getDescription());
 				params.put("route_area", route.getArea());
-				params.put("billingid", bundle.getString("billingid"));
+				params.put("billingid", route.getSessionid());
 				//ArrayList<CollectionSheetParcelable> list = (ArrayList<CollectionSheetParcelable>)sp1.invoke("getCollectionsheets", new Object[]{params});
 				Object result = svcProxy.invoke("downloadBilling", new Object[]{params});
 				Map<String, Object> map = (Map<String, Object>) result;
 				//xbundle.putString("sessionid", map.get("sessionid").toString());
 				//xbundle.putString("serverdate", map.get("serverdate").toString());
 				xbundle.putString("routecode", route.getCode());
-				System.out.println("pass 1");
 				xbundle.putString("routedescription", route.getDescription());
-				System.out.println("pass 2");
 				xbundle.putString("routearea", route.getArea());
-				System.out.println("pass 3");
+				xbundle.putString("sessionid", route.getSessionid());
 				xbundle.putParcelableArrayList("collectionsheets", ((ArrayList<CollectionSheetParcelable>)map.get("list")));
-				System.out.println("pass 4");
 				status = "ok";
 			}
 			catch( TimeoutException te ) {

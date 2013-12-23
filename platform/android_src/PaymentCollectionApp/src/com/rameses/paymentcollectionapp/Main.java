@@ -61,6 +61,7 @@ public class Main extends Activity {
 	private LocationManager locationManager;
 	private NetworkInfo networkInfo;
 	private ServiceProxy svcProxy;
+	private ServiceProxy postingProxy;
 	private ProgressDialog progressDialog;
 	private AlertDialog dialog;
 	private ServiceHelper svcHelper = new ServiceHelper(context);
@@ -84,6 +85,16 @@ public class Main extends Activity {
 			}
 			locationManager.removeUpdates(locationListener);
 			Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable());
+		}
+	};
+	private Handler voidHandler = new Handler();
+	private Runnable voidRunnable = new Runnable() {
+		@Override
+		public void run() {
+			if (!db.isOpen) db.openDb();
+			Cursor voidPayments = db.getPendingVoidPayments();
+			if (db.isOpen) db.closeDb();
+			Executors.newSingleThreadExecutor().submit(new VoidPaymentStatusRunnable(voidPayments));			
 		}
 	};
 	
@@ -113,23 +124,54 @@ public class Main extends Activity {
 			}
 		}
 	}
+	
+	private class VoidPaymentStatusRunnable implements Runnable {
+		private Cursor voidPayments;
+		public VoidPaymentStatusRunnable(Cursor voidPayments) {
+			this.voidPayments = voidPayments;
+		}
+		@Override
+		public void run() {
+			voidPayments.moveToFirst();
+			Map<String, Object> params = new HashMap<String, Object>();
+			Boolean isapproved = false;
+			String objid = "";
+			do {
+				objid = voidPayments.getString(voidPayments.getColumnIndex("objid"));
+				params.put("voidid", objid);
+				try {
+					isapproved = (Boolean) postingProxy.invoke("isVoidPaymentApproved", new Object[]{params});
+				} catch (Exception e) {}
+				finally {
+					if (isapproved) {
+						if (!db.isOpen) db.openDb();
+						db.approveVoidPayment(objid);
+						if (db.isOpen) db.closeDb();
+					}
+				}
+				
+			} while(voidPayments.moveToNext());
+			voidHandler.postDelayed(voidRunnable, 3000);
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setTitle("CLFC Collection");
+		progressDialog = new ProgressDialog(context);
+		progressDialog.setCancelable(false);
+		postingProxy = svcHelper.createServiceProxy("DevicePostingService");
 		application = (ProjectApplication) context.getApplicationContext();
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		locationHandler.postDelayed(locationRunnable, 0);
+		voidHandler.postDelayed(voidRunnable, 0);
 	}	
 		
 	@Override
 	protected void onStart() {
 		super.onStart();
-		locationManager=(LocationManager)context.getSystemService(LOCATION_SERVICE);
-		progressDialog = new ProgressDialog(context);
-		progressDialog.setCancelable(false);
 		
 		isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		WifiManager wifiManager = (WifiManager)context.getSystemService(WIFI_SERVICE);
@@ -155,7 +197,7 @@ public class Main extends Activity {
 				} else {
 					if(svcProxy == null) {
 						//Toast.makeText(context, "Please set the host's ip settings", Toast.LENGTH_SHORT).show();
-						showShortMsg("Please set the host's ip settings.");
+						ApplicationUtil.showShortMsg(context, "Please set the host's ip settings.");
 					} else {
 						if(!db.isOpen) db.openDb();
 						boolean forupload = false;
@@ -169,16 +211,23 @@ public class Main extends Activity {
 						if(position == 0) {
 							if(forupload == true) {
 								//Toast.makeText(context, "There are still collection sheets to upload. Please upload the payments before downloading current billing.", Toast.LENGTH_LONG).show();
-								showLongMsg("There are still collection sheets to upload. Please upload the collection sheets before downloading current collection sheets.");
+								ApplicationUtil.showLongMsg(context, "There are still collection sheets to upload. Please upload the collection sheets before downloading current collection sheets.");
 							} else {
 								showLoginDialog();
 							}
 						} else if(position == 2) {
 							if(forupload == false) {
 								//Toast.makeText(context, "No payments to upload.", Toast.LENGTH_SHORT).show();
-								showShortMsg("No collection sheets to upload.");
+								ApplicationUtil.showShortMsg(context, "No collection sheets to upload.");
 							} else {
-								uploadPayments();	
+								DialogInterface.OnClickListener positivelistener = new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface d, int which) {
+										// TODO Auto-generated method stub
+										uploadPayments();	
+									}
+								};
+								ApplicationUtil.showConfirmationDialog(context, "You are about to upload the collection sheets. Continue?", positivelistener, null);
 							}
 						}
 					}
@@ -205,8 +254,9 @@ public class Main extends Activity {
 	protected void onDestroy() {
 		if(db.isOpen) db.closeDb();
 		locationHandler.removeCallbacks(locationRunnable);
-		//Executors.newSingleThreadExecutor().submit(new PublishLocationRunnable("Application closed", false));
-		//locationHandler = null;
+		locationHandler = null;
+		voidHandler.removeCallbacks(voidRunnable);
+		voidHandler = null;
 		super.onDestroy();
 	}
 	
@@ -246,9 +296,9 @@ public class Main extends Activity {
 				String password = ((EditText) dialog.findViewById(R.id.login_password)).getText().toString();
 				
 				if (username.trim().equals("")) {
-					showShortMsg("Username is required.");
+					ApplicationUtil.showShortMsg(context, "Username is required.");
 				} else if (password.trim().equals("")) {
-					showShortMsg("Password is required.");
+					ApplicationUtil.showShortMsg(context, "Password is required.");
 				} else {
 					if (progressDialog.isShowing()) progressDialog.dismiss();
 					progressDialog.setMessage("Getting information from server.");
@@ -259,21 +309,17 @@ public class Main extends Activity {
 		});
 	}
 	
-	public void showShortMsg(String msg) {
-		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-	}
-	
-	public void showLongMsg(String msg) {
-		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-	}
-	
 	private Handler loginHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			Bundle bundle = msg.getData();
 			if (!db.isOpen) db.openDb();
 			db.emptySystemTable();
-			db.insertSystem(bundle.getString("billingid"), bundle.getString("serverdate"));
+			Map<String, Object> params = new HashMap<String, Object>();
+			//params.put("sessionid", bundle.getString("billingid"));
+			params.put("serverdate", bundle.getString("serverdate"));
+			params.put("collectorid", bundle.getString("collectorid"));
+			db.insertSystem(params);
 			if (db.isOpen) db.closeDb();
 			Intent intent=new Intent(context, Route.class);
 			intent.putExtra("bundle", bundle);
@@ -317,8 +363,9 @@ public class Main extends Activity {
 				}*/
 				
 				bundle.putParcelableArrayList("routes", ((ArrayList<RouteParcelable>) result.get("routes")));
-				bundle.putString("billingid", result.get("billingid").toString());
+				//bundle.putString("billingid", result.get("billingid").toString());
 				bundle.putString("serverdate", result.get("serverdate").toString());
+				bundle.putString("collectorid", result.get("collectorid").toString());
 				status = "ok";
 			}
 			catch( TimeoutException te ) {
@@ -344,7 +391,7 @@ public class Main extends Activity {
 		public void handleMessage(Message msg) {
 			Bundle bundle=msg.getData();
 			if(progressDialog.isShowing()) progressDialog.dismiss();
-			showShortMsg(bundle.getString("response"));
+			ApplicationUtil.showShortMsg(context, bundle.getString("response"));
 		}
 	};
 	
@@ -395,7 +442,7 @@ public class Main extends Activity {
 				db.removeAllRoutes();
 				if (progressDialog.isShowing()) progressDialog.dismiss();
 				//Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
-				showShortMsg("Successfully uploaded collection sheets!");
+				ApplicationUtil.showShortMsg(context, "Successfully uploaded collection sheets!");
 			} else { uploadPayments(); }
 			db.closeDb();
 		}
@@ -440,12 +487,12 @@ public class Main extends Activity {
 		public void run() {
 			// TODO Auto-generated method stub
 			if (!db.isOpen) db.openDb();
-			String sessionid = db.getSessionid();
+			String collectorid = db.getCollectorid();
 			Date serverDate = null;
 			try {
 				serverDate = db.getServerDate();
 			}
-			catch (Exception e) { showShortMsg("Error: ParseException"); }
+			catch (Exception e) { ApplicationUtil.showShortMsg(context, "Error: ParseException"); }
 			if(db.isOpen) db.closeDb();
 			String routecode = "";
 			boolean forupload = false;
@@ -453,6 +500,7 @@ public class Main extends Activity {
 			ArrayList<Map<String, Object>> payments = new ArrayList<Map<String, Object>>();
 			ArrayList<Map<String, Object>> notes = new ArrayList<Map<String, Object>>();
 			if(!db.isOpen) db.openDb();
+			String sessionid = "";
 			int totalcount = db.getTotalCollectionSheetsForUpload();
 			Cursor routes = db.getRoutes();
 			routes.moveToFirst();
@@ -463,6 +511,7 @@ public class Main extends Activity {
 				Cursor cs = db.getCollectionsheetsByRoute(routecode);
 				if (cs != null && cs.getCount() > 0) {
 					String loanappid = cs.getString(cs.getColumnIndex("loanappid"));
+					sessionid = cs.getString(cs.getColumnIndex("sessionid"));
 					cs.moveToFirst();
 					collectionsheet.put("loanappid", loanappid);
 					collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
@@ -499,20 +548,22 @@ public class Main extends Activity {
 					//System.out.println(map);
 					totalamount = totalamount.add(new BigDecimal(map.get("payamount").toString()));
 				}
+
+				Map<String, Object> params=new HashMap<String, Object>();
+				//params.put("payments", list);
+				params.put("collectorid", collectorid);
+				params.put("collectionsheet", collectionsheet);
+				params.put("sessionid", sessionid);
+				params.put("txndate", serverDate);
+				params.put("routecode", routecode);
+				params.put("totalcount", totalcount);
+				params.put("totalamount", totalamount);
 				
 				Message msg = responseHandler.obtainMessage();
 				Bundle bundle = new Bundle();
 				String status = "";
 				try {
 					msg=uploadHandler.obtainMessage();
-					Map<String, Object> params=new HashMap<String, Object>();
-					//params.put("payments", list);
-					params.put("collectionsheet", collectionsheet);
-					params.put("sessionid", sessionid);
-					params.put("txndate", serverDate);
-					params.put("routecode", routecode);
-					params.put("totalcount", totalcount);
-					params.put("totalamount", totalamount);
 					Object response = svcProxy.invoke("uploadCollectionSheets", new Object[]{params});
 					Map<String, Object> result = (Map<String, Object>) response;
 					bundle.putString("loanappid", collectionsheet.get("loanappid").toString());

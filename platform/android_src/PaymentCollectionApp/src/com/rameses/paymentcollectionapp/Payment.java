@@ -31,6 +31,7 @@ public class Payment extends Activity {
 	private MySQLiteHelper db;
 	private String loanappid = "";
 	private String detailid = "";
+	private String sessionid = "";
 	private String refno = "";
 	String txndate = "";
 	private TextView tv_refno;
@@ -52,6 +53,7 @@ public class Payment extends Activity {
 		Intent intent = getIntent();
 		loanappid = intent.getStringExtra("loanappid");
 		detailid = intent.getStringExtra("detailid");
+		sessionid = intent.getStringExtra("sessionid");
 		refno = intent.getStringExtra("refno");
 		routecode = intent.getStringExtra("routecode");
 		type = intent.getStringExtra("paymenttype");
@@ -162,9 +164,27 @@ public class Payment extends Activity {
 		payment.put("routecode", routecode);
 		payment.put("type", type);
 		payment.put("isfirstbill", isfirstbill);
-		ServiceProxy proxy = new ServiceHelper(context).createServiceProxy("DevicePaymentService");
+		ServiceProxy proxy = new ServiceHelper(context).createServiceProxy("DevicePostingService");
 		try {
-			proxy.invoke("postPayment", new Object[]{payment});
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("txndate", txndate);
+			params.put("routecode", routecode);
+			params.put("payment", payment);
+			Map<String, Object> collectionsheet = new HashMap<String, Object>();
+			if (!db.isOpen) db.openDb();
+			params.put("sessionid", sessionid);
+			params.put("collectorid", db.getCollectorid());
+			Cursor cs = db.getCollectionsheetByLoanappid(loanappid);
+			if (db.isOpen) db.closeDb();
+			
+			if (cs != null && cs.getCount() > 0 ) {
+				cs.moveToFirst();
+				collectionsheet.put("loanappid", loanappid);
+				collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
+			}
+			params.put("collectionsheet", collectionsheet);
+			
+			proxy.invoke("postPayment", new Object[]{params});
 			
 		} catch (Exception e) {}
 		finally {
