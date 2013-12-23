@@ -316,7 +316,7 @@ public class Main extends Activity {
 			if (!db.isOpen) db.openDb();
 			db.emptySystemTable();
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("sessionid", bundle.getString("billingid"));
+			//params.put("sessionid", bundle.getString("billingid"));
 			params.put("serverdate", bundle.getString("serverdate"));
 			params.put("collectorid", bundle.getString("collectorid"));
 			db.insertSystem(params);
@@ -363,7 +363,7 @@ public class Main extends Activity {
 				}*/
 				
 				bundle.putParcelableArrayList("routes", ((ArrayList<RouteParcelable>) result.get("routes")));
-				bundle.putString("billingid", result.get("billingid").toString());
+				//bundle.putString("billingid", result.get("billingid").toString());
 				bundle.putString("serverdate", result.get("serverdate").toString());
 				bundle.putString("collectorid", result.get("collectorid").toString());
 				status = "ok";
@@ -487,7 +487,6 @@ public class Main extends Activity {
 		public void run() {
 			// TODO Auto-generated method stub
 			if (!db.isOpen) db.openDb();
-			String sessionid = db.getSessionid();
 			String collectorid = db.getCollectorid();
 			Date serverDate = null;
 			try {
@@ -501,6 +500,7 @@ public class Main extends Activity {
 			ArrayList<Map<String, Object>> payments = new ArrayList<Map<String, Object>>();
 			ArrayList<Map<String, Object>> notes = new ArrayList<Map<String, Object>>();
 			if(!db.isOpen) db.openDb();
+			String sessionid = "";
 			int totalcount = db.getTotalCollectionSheetsForUpload();
 			Cursor routes = db.getRoutes();
 			routes.moveToFirst();
@@ -511,6 +511,7 @@ public class Main extends Activity {
 				Cursor cs = db.getCollectionsheetsByRoute(routecode);
 				if (cs != null && cs.getCount() > 0) {
 					String loanappid = cs.getString(cs.getColumnIndex("loanappid"));
+					sessionid = cs.getString(cs.getColumnIndex("sessionid"));
 					cs.moveToFirst();
 					collectionsheet.put("loanappid", loanappid);
 					collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));

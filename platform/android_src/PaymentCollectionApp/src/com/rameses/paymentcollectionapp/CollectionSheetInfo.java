@@ -49,6 +49,7 @@ public class CollectionSheetInfo extends Activity {
 	private String txndate = "";
 	private String loanappid = "";
 	private String detailid = "";
+	private String sessionid = "";
 	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
 	private String routecode = "";
 	private String refno = "";
@@ -115,6 +116,7 @@ public class CollectionSheetInfo extends Activity {
 		String collectionaddress = "";
 		
 		if(result != null && result.getCount() > 0) {
+			sessionid = result.getString(result.getColumnIndex("sessionid"));
 			acctname = result.getString(result.getColumnIndex("acctname"));
 			appno = result.getString(result.getColumnIndex("appno"));
 			String amt = result.getString(result.getColumnIndex("amountdue"));
@@ -499,6 +501,7 @@ public class CollectionSheetInfo extends Activity {
 		intent.putExtra("routecode", routecode);
 		intent.putExtra("totaldays", totaldays);
 		intent.putExtra("isfirstbill", isfirstbill);
+		intent.putExtra("sessionid", sessionid);
 		if (payment.getCount() > 0) refno += (payment.getCount()+1);
 		switch(item.getItemId()) {
 			case R.id.payment_addpayment:
@@ -726,7 +729,7 @@ public class CollectionSheetInfo extends Activity {
 				map.put("remarks", et_remarks);
 				if (!db.isOpen) db.openDb();
 				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("sessionid", db.getSessionid());
+				params.put("sessionid", sessionid);
 				params.put("routecode", routecode);
 				params.put("txndate", txndate);
 				params.put("remarks", et_remarks);
@@ -787,7 +790,7 @@ public class CollectionSheetInfo extends Activity {
 				note.put("remarks", notes_remarks);
 				if (!db.isOpen) db.openDb();
 				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("sessionid", db.getSessionid());
+				params.put("sessionid", sessionid);
 				params.put("collectorid", db.getCollectorid());
 				params.put("txndate", txndate);
 				params.put("routecode", routecode);

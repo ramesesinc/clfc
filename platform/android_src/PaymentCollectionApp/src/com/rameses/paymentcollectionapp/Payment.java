@@ -31,6 +31,7 @@ public class Payment extends Activity {
 	private MySQLiteHelper db;
 	private String loanappid = "";
 	private String detailid = "";
+	private String sessionid = "";
 	private String refno = "";
 	String txndate = "";
 	private TextView tv_refno;
@@ -52,6 +53,7 @@ public class Payment extends Activity {
 		Intent intent = getIntent();
 		loanappid = intent.getStringExtra("loanappid");
 		detailid = intent.getStringExtra("detailid");
+		sessionid = intent.getStringExtra("sessionid");
 		refno = intent.getStringExtra("refno");
 		routecode = intent.getStringExtra("routecode");
 		type = intent.getStringExtra("paymenttype");
@@ -170,7 +172,7 @@ public class Payment extends Activity {
 			params.put("payment", payment);
 			Map<String, Object> collectionsheet = new HashMap<String, Object>();
 			if (!db.isOpen) db.openDb();
-			params.put("sessionid", db.getSessionid());
+			params.put("sessionid", sessionid);
 			params.put("collectorid", db.getCollectorid());
 			Cursor cs = db.getCollectionsheetByLoanappid(loanappid);
 			if (db.isOpen) db.closeDb();

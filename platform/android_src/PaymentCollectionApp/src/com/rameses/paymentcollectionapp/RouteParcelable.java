@@ -7,13 +7,14 @@ public class RouteParcelable implements Parcelable {
 	private String code = "";
 	private String description = "";
 	private String area = "";
-	
+	private String sessionid = "";
 	
 	public RouteParcelable() {}
 	public RouteParcelable(Parcel source) {
 		this.code = source.readString();
 		this.description = source.readString();
 		this.area = source.readString();
+		this.sessionid = source.readString();
 	}
 	
 	public void setCode(String code) {
@@ -28,9 +29,14 @@ public class RouteParcelable implements Parcelable {
 		this.area = area;
 	}
 	
+	public void setSessionid(String sessionid) {
+		this.sessionid = sessionid;
+	}
+	
 	public String getCode() { return this.code; }
 	public String getDescription() { return this.description; }
 	public String getArea() { return this.area; }
+	public String getSessionid() { return this.sessionid; }
 	
 	@Override
 	public int describeContents() {
@@ -44,6 +50,7 @@ public class RouteParcelable implements Parcelable {
 		dest.writeString(code);
 		dest.writeString(description);
 		dest.writeString(area);
+		dest.writeString(sessionid);
 	}
 
 	public class MyCreate implements Parcelable.Creator<RouteParcelable> {
