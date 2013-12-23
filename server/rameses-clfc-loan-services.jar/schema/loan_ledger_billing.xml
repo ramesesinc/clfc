@@ -54,4 +54,11 @@
 		<field name="dtmodified" required="true"/>
 	</element>	
 
+	<element name="subbilling" tablename="loan_ledger_subbilling">
+		<field name="objid" primary="true" />
+		<field name="parentid" required="true" />
+		<field name="subcollector_objid" required="true" />
+		<field name="subcollector_username" required="true" />
+	</element>
+
 </schema>

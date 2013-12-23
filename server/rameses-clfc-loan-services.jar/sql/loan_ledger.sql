@@ -36,12 +36,11 @@ ORDER BY dtpaid DESC
 LIMIT 1
 
 [getList]
-SELECT ll.objid AS ledgerid, la.borrower_objid AS borrower_objid,
-	la.objid AS appid, la.borrower_name AS borrower_name, 
-	ll.producttypeid AS producctypeid, la.appno AS appno, 
-	la.route_code AS route_code, ll.dailydue AS dailydue,
-	ll.dtstarted AS dtstarted, ll.dtmatured AS dtmatured,
-	ll.interestamount AS interest, ll.state AS state
+SELECT ll.objid AS ledgerid, la.borrower_objid, la.objid AS appid, 
+	la.borrower_name, ll.producttypeid, la.appno, la.route_code, 
+	ll.dailydue, ll.dtstarted, ll.dtmatured, ll.state, la.loanamount,
+	ll.interestamount AS interest, ll.compromiseid, ll.overduepenalty,
+	ll.balance, CASE WHEN NOW() > dtmatured THEN 1 ELSE 0 END AS ismatured
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid = la.objid
 WHERE la.state IN('RELEASED','CLOSED')

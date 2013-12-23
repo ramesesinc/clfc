@@ -1,0 +1,13 @@
+<schema>
+
+	<element name="void_payment" tablename="void_payment">
+		<field name="objid" primary="true" />
+		<field name="state" required="true" />
+		<field name="paymentid" required="true" />
+		<field name="routecode" required="true"/>
+		<field name="loanappid" required="true" />
+		<field name="collectorid" required="true" />
+		<field name="reason" required="true" />
+	</element>
+	
+</schema>

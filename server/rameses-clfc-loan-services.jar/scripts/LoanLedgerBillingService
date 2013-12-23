@@ -38,7 +38,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 			[caption: 'DRAFT', state: 'DRAFT'], 
 			[caption: 'CANCELLED', state: 'CANCELLED'], 
 			[caption: 'COMPLETED', state: 'COMPLETED'],
-			[caption: 'UPLOADED', state: 'UPLOADED']
+			[caption: 'UPLOADED', state: 'UPLOADED'],
+			[caption: 'VOIDED', state: 'VOIDED']
 		];
 	}
 
@@ -48,7 +49,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 			[name:'collector.username', caption:'Collector'],
 			[name:'billdate', caption:'Billing Date'],
 			[name:'createdby', caption:'Created By'],
-			[name:'dtmodified', caption:'Date Modified']
+			[name:'dtmodified', caption:'Date Modified'],
+			[name:'subcollector.username', caption:'Sub Collector']
 		]
 	}
 
@@ -56,13 +58,9 @@ class LoanLedgerBillingService extends ActiveCrudService
 	public def getList( params ) {
 		params.searchtext = params.searchtext? params.searchtext+'%' : '%';
 		def list = params.state? em.getList(params) : em.getDefaultList(params);
-		list.each{ it.filetype = 'ledgerbilling' }
+		list.each{ it.filetype = it.subcollector.objid? 'ledgersubbilling' : 'ledgerbilling' }
 		return list;
 	}
-
-	/*void beforeList( data ) {
-		data.searchtext = data.searchtext? data.searchtext+'%' : '%';
-	}*/
 
 	void beforeCreate( data ) {
 		def currentDate = dateSvc.serverDate.toString().split(" ")[0];
@@ -132,8 +130,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;*/
 				def amt = it.dailydue;
 				if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
-				detail.amountdue = (amt*days)+detail.others;
 				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
+				detail.amountdue = (amt*days)+detail.others;
 				if (currentDate > maturityDate) {
 					detail.penalty = days*it.overduepenalty;
 					def amountdue = new BigDecimal((detail.penalty+(days*detail.interestamount)+it.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
@@ -145,7 +143,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 					def cal = Calendar.getInstance();
 					cal.setTime(currentDate);
 					if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
-					days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();				
+					days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
 					detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
 					detail.amountdue += detail.penalty;
 				}
@@ -196,11 +194,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 	void updateRoute( data ) {
 		em.removeRouteByBillingid([billingid: data.objid]);
 		data.routes.each{o->
-			def item = [
-				billingid: data.objid,
-				routecode: o.code
-			];
-			em.create(item, 'billing_route');
+			em.create([billingid: data.objid, routecode: o.code], 'billing_route');
 		}
 	}
 

@@ -28,15 +28,22 @@ class DeviceLoginService
 			//Get Routes
 			def date = dateSvc.parseCurrentDate();
 			def d = date.year+'-'+date.month+'-'+date.day;
-			billing = ledger_billing.findBillingByCollectorid([collectorid: user.objid, billdate: d]);
+			billing = ledger_billing.getBillingByCollectorid([collectorid: user.objid, billdate: d]);
 			if (!billing) throw new Exception('You have no billing to download for today.');
 
-			def list = ledger_billing.getRoutesByBillingid([billingid: billing.objid]);
-			println list.size();
-			list.each{ routes.add(it); }
+			billing.addAll(ledger_billing.getBillingBySubCollectorid([subcollectorid: user.objid, billdate: d]));
+
+			def list;
+			billing.each{bill->
+				list = ledger_billing.getRoutesByBillingid([billingid: bill.objid]);
+				list.each{
+					it.billingid = bill.objid;
+					routes.add(it);
+				}
+			}
 
 		} else throw new Exception('Username/Password is incorrect!');
 
-		return [ routes: routes, billingid: billing.objid, serverdate: dateSvc.serverDate];
+		return [ routes: routes, serverdate: dateSvc.serverDate, collectorid: user.objid];
 	}
 }

@@ -18,6 +18,9 @@ class DeviceLoanBillingService
 	@ActiveDB(value="loan_ledger_billing")
 	def ledger_billing;
 
+	@ActiveDB(value="user")
+	def user;
+
 	@Service('DateService')
 	def dateSvc;
 
@@ -58,7 +61,7 @@ class DeviceLoanBillingService
 			for(int j=i+1; j<hasNexttoList.size(); j++) {
 				if (hasNexttoList[i].nextto == hasNexttoList[j].acctid) {
 					hasNexttoList.add(i, hasNexttoList.remove(j));
-					i=0;
+					i = 0;
 					break;
 				}
 			}
@@ -77,6 +80,20 @@ class DeviceLoanBillingService
 		}
 		list.eachWithIndex{itm, idx->
 			itm.seqno = idx+1;
+			itm.payments = batch_collectionsheet.getPaymentsByDetailid([parentid: itm.objid]);
+			itm.payments.each{
+				it.detailid = itm.objid;
+				it.loanappid = itm.acctid;
+				it.amount = it.payamount;
+				it.type = it.paytype;
+				it.routecode = itm.route_code;
+				it.isfirstbill = itm.isfirstbill;
+			}
+			itm.notes = batch_collectionsheet.getNotesByDetailid([parentid: itm.objid]);
+			itm.notes.each{
+				it.loanappid = itm.acctid;
+			}
+			itm.remarks = batch_collectionsheet.findDetailById([objid: itm.objid]);
 		}
 		//result.each{ list.add(it); }
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
@@ -123,14 +140,21 @@ class DeviceLoanBillingService
 		return [list: list];
 	}
 
-	private void createBatchCollectionSheetHeader( params ) {
+	@ProxyMethod
+	public void createBatchCollectionSheetHeader( params ) {
 		def itm = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!itm) {
+			def date = dateSvc.serverDate;
 			def txndate = dateSvc.parse("yyyy-mm-dd", params.txndate);
+			def collector = user.read([objid: params.collectorid]);
+			if (!collector) throw new Exception("Collector record does not exist or has already been deleted.");
+
 			itm = [
 				objid: 			params.sessionid,
 				state: 			'DRAFT',
-				dtcreated: 		dateSvc.serverDate,
+				dtposted: 		date,
+				postedby: 		collector.name,
+				dtcreated: 		date,
 				txndate: 		txndate,
 				route_code: 	params.routecode,
 				totalcount: 	params.totalcount,
@@ -140,7 +164,8 @@ class DeviceLoanBillingService
 		}
 	}
 
-	private void createBatchCollectionSheetDetail( params ) {
+	@ProxyMethod
+	public void createBatchCollectionSheetDetail( params ) {
 		def itm = batch_collectionsheet.read([objid: params.collectionsheet.detailid], "detail");
 		if (!itm) {
 			String remarks = params.collectionsheet.remarks? params.collectionsheet.remarks : "";

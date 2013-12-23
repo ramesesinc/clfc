@@ -1,0 +1,113 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+import java.rmi.server.UID;
+
+class LoanLedgerSubBillingService extends ActiveCrudService
+{
+	@Env
+	def env;
+
+	@ActiveDB(value="loan_ledger_billing")
+	def em;
+
+	@ActiveDB(value="batch_collectionsheet")
+	def batch_collectionsheet;
+
+	@ActiveDB(value="void_payment")
+	def void_payment;
+
+	@Service("DateService")
+	def dateSvc;
+	
+	void beforeCreate( params ) {
+		params.dtcreated = dateSvc.serverDate;
+		params.createdby = env.USER;
+		params.dtmodified = params.dtcreated;
+	}
+
+	void afterCreate( params ) {
+		params.subcollector.username = params.subcollector.name;
+		em.changeStateVoided([objid: params.parentid]);
+		em.changeBatchCollectionSheetStateVoided([objid: params.parentid]);
+		em.create(params, "subbilling")
+		updateRoute(params);
+		updateBillingDetail(params);
+	}
+
+	void beforeUpdate( params ) {
+		params.dtmodified = dateSvc.serverDate
+		em.changeStateDraft([objid: params._parentid]);
+		em.changeBatchCollectionSheetStateDraft([objid: params._parentid]);
+	}
+
+	void afterUpdate( params ) {
+		params.subcollector.username = params.subcollector.name;
+		em.update(params, "subbilling")
+		updateRoute(params);
+		updateBillingDetail(params);
+	}
+
+	void updateBillingDetail( params ) {
+		em.removeBillingDetailByParentid([parentid: params.objid]);
+
+		def itm = batch_collection.read([objid: params.parentid]);
+		itm.objid = params.objid;
+		itm.state = 'DRAFT';
+		batch_collectionsheet.create(itm);
+
+		def list = em.getBillingDetailByParentid([parentid: params.parentid]);
+		def csList = batch_collectionsheet.getDetailsByParentid([parentid: params.parentid]);
+		def objid;
+		def payments;
+		def notes;
+		def voidrequest;
+		list.each{bill->
+			objid = 'LLSBD'+new UID();
+			itm = csList.find{ bill.objid == it.objid }
+			if (itm) {
+				//itm.objid
+				payments = batch_collectionsheet.getPaymentsByDetailid([parentid: itm.objid]);
+				notes = batch_collectionsheet.getNotesByDetailid([parentid: itm.objid]);
+
+				itm.objid = objid;
+				batch_collectionsheet.create(itm, "detail");
+
+				payments.each{
+					voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
+					void_payment.changeStateVoided(voidrequest);
+					it.objid = "PT"+new UID();
+					it.parentid = itm.objid;
+					batch_collectionsheet.create(it, "payment");
+
+					voidrequest.objid = "VOID"+new UID();
+					voidrequest.paymentid = it.objid;
+					void_payment.create(voidrequest);
+				}
+
+				notes.each{
+					it.objid = "NOTE"+new UID();
+					it.parentid = itm.objid;
+					batch_collectionsheet.create(it, "note");
+				}
+			}
+			bill.objid = objid;
+			bill.parentid = params.objid;
+			em.create(bill, "detail");
+		}
+		
+	}
+
+	void afterOpen( data ) {
+		data.putAll(em.read(data, "subbilling"));
+		data.subcollector.name = data.subcollector.username;
+		data.routes = em.getRoutesByBillingid([billingid: data.objid]);
+	}
+
+	void updateRoute( params ) {
+		em.removeRouteByBillingid([billingid: params.objid]);
+		params.routes.each{o->
+			em.create([billingid: params.objid, routecode: o.code], 'billing_route');
+		}
+	}
+}

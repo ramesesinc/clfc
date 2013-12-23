@@ -33,3 +33,15 @@ WHERE objid=$P{objid}
 SELECT * FROM batch_collectionsheet_cashbreakdown
 WHERE parentid=$P{parentid}
 ORDER BY denomination DESC
+
+[getPaymentsByDetailid]
+SELECT * FROM batch_collectionsheet_detail_payment
+WHERE parentid=$P{parentid}
+
+[getNotesByDetailid]
+SELECT * FROM batch_collectionsheet_detail_note
+WHERE parentid=$P{parentid}
+
+[findDetailById]
+SELECT * FROM batch_collectionsheet_detail
+where objid=$P{objid}

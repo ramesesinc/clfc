@@ -1,8 +1,10 @@
 [getList]
-SELECT * FROM loan_ledger_billing
-WHERE (createdby LIKE $P{searchtext} OR collector_username LIKE $P{searchtext})
-	AND state=$P{state}
-ORDER BY billdate
+SELECT llb.*, lls.parentid AS parentid, lls.subcollector_objid, lls.subcollector_username
+FROM loan_ledger_billing llb
+LEFT JOIN loan_ledger_subbilling lls ON llb.objid=lls.objid
+WHERE (llb.createdby LIKE $P{searchtext} OR llb.collector_username LIKE $P{searchtext})
+	AND llb.state=$P{state}
+ORDER BY llb.billdate
 
 [getDefaultList]
 SELECT * FROM loan_ledger_billing
@@ -23,8 +25,15 @@ DELETE FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
 [getBillingDetailByParentid]
 SELECT * FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
 
-[findBillingByCollectorid]
+[getBillingByCollectorid]
 SELECT * FROM loan_ledger_billing WHERE collector_objid=$P{collectorid} AND billdate=$P{billdate}
+
+[getBillingBySubCollectorid]
+SELECT llb.* FROM loan_ledger_billing llb
+LEFT JOIN loan_ledger_subbilling lls ON llb.objid=lls.objid
+WHERE lls.subcollector_objid=$P{subcollectorid}
+	AND llb.billdate=$P{billdate}
+	AND llb.state='DRAFT'
 
 [getRoutesByCollectorid]
 SELECT lr.* 
@@ -73,7 +82,29 @@ WHERE objid=$P{objid}
 UPDATE loan_ledger_billing SET state="UPLOADED"
 WHERE objid=$P{objid}
 
+[changeStateVoided]
+UPDATE loan_ledger_billing SET state="VOIDED"
+WHERE objid=$P{objid}
+
+[changeStateDraft]
+UPDATE loan_ledger_billing SET state="DRAFT"
+WHERE objid=$P{objid}
+
+[changeBatchCollectionSheetStateVoided]
+UPDATE batch_collectionsheet SET state="VOIDED"
+WHERE objid=$P{objid}
+
+[changeBatchCollectionSheetStateDraft]
+UPDATE batch_collectionsheet SET state="DRAFT"
+WHERE objid=$P{objid}
+
 [getPastDraftBillings]
 SELECT * FROM loan_ledger_billing
 WHERE state='DRAFT'
 	AND billdate < $P{date}
+
+[getBillingForSubCollection]
+SELECT * FROM loan_ledger_billing
+WHERE collector_username LIKE $P{searchtext}
+	AND state='DRAFT'
+ORDER BY billdate

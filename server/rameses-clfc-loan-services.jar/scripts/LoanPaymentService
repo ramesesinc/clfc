@@ -9,6 +9,9 @@ class LoanPaymentService
 	@ActiveDB(value="loanapp")
 	def loanapp;
 
+	@ActiveDB(value="void_payment")
+	def void_payment;
+
 	@ActiveDB(value="batch_collectionsheet")
 	def batch_collectionsheet;
 

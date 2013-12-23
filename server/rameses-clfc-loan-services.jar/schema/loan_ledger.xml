@@ -61,6 +61,11 @@
 		<field name="updatetype" required="true"/>
 	</element>
 
+	<element name="compromise" tablename="loan_ledger">
+		<field name="objid" primary="true"/>
+		<field name="compromiseid" required="true"/>
+	</element>
+
 	<element name="detail" tablename="loan_ledger_detail">
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/>

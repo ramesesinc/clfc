@@ -1,0 +1,32 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+
+class LoanVoidPaymentService extends ActiveListService
+{
+	@ActiveDB("void_payment")
+	def em;
+
+	@ProxyMethod
+	public def getNodes( params ) {
+		return [
+			[caption: 'PENDING', state: 'PENDING', name: 'voidrequest'],
+			[caption: 'APPROVED', state: 'APPROVED', name: 'voidrequest']
+		]
+	}
+
+	@ProxyMethod
+	public def getColumns( params ) {
+		return [
+			[name: 'state', caption: 'State'],
+			[name: 'appno', caption: 'App. No.'],
+			[name: 'borrower.name', caption: 'Borrower'],
+			[name: 'collector.name', caption: 'Requested By'],
+			[name: 'reason', caption: 'Reason']
+		]
+	}
+
+	void beforeList( Object data ) {
+		data.state = (data.state? data.state : '%');
+	}
+}
