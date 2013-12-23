@@ -1,0 +1,6 @@
+Instructions:
+
+1. Execute patches found in "/db/patches" chronologically.
+2. Build services.
+3. Compile projects.
+4. 
