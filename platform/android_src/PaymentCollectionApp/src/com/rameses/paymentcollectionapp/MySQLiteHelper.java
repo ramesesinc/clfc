@@ -361,6 +361,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		if(result != null) result.moveToFirst();
 		return result;
 	}
+
+	public int countVoidPaymentsByAppid(String loanappid) {
+		Cursor result = db.rawQuery("SELECT objid FROM "+TABLE_VOID+" WHERE loanappid='"+loanappid+"'", null);
+		
+		if (result != null) return result.getCount();
+		return 0;
+	}
 	
 	public Cursor getRemarks() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_REMARKS, null);
@@ -374,6 +381,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		
 		if (result != null) result.moveToFirst();
 		return result;
+	}
+	
+	public boolean isNoteOverlapping(String fromdate, String todate, String loanappid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_NOTES+" WHERE loanappid='"+loanappid+"' '"+fromdate+"' BETWEEN fromdate AND todate", null);
+		if (result != null && result.getCount() > 0) return true;
+		
+		result = db.rawQuery("SELECT * FROM "+TABLE_NOTES+" WHERE loanappid='"+loanappid+"' '"+todate+"' BETWEEN fromdate AND todate", null);
+		if (result != null && result.getCount() > 0) return true;
+		return false;
 	}
 	
 	public Cursor getNotes() {
