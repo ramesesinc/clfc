@@ -78,24 +78,32 @@ class DeviceLoanBillingService
 			}
 			list.add(itm);
 		}
-		list.eachWithIndex{itm, idx->
+		def payments;
+		def notes;
+		list.reverse().eachWithIndex{itm, idx->
 			itm.seqno = idx+1;
-			itm.payments = batch_collectionsheet.getPaymentsByDetailid([parentid: itm.objid]);
-			itm.payments.each{
+			payments = batch_collectionsheet.getPaymentsByDetailid([parentid: itm.objid]);
+			itm.payments = [];
+			payments.each{
 				it.detailid = itm.objid;
-				it.loanappid = itm.acctid;
+				it.loanappid = itm.loanappid;
 				it.amount = it.payamount;
 				it.type = it.paytype;
-				it.routecode = itm.route_code;
+				it.routecode = itm.route.code;
 				it.isfirstbill = itm.isfirstbill;
+				it.txndate = itm.txndate;
+				itm.payments.add(it);
 			}
-			itm.notes = batch_collectionsheet.getNotesByDetailid([parentid: itm.objid]);
-			itm.notes.each{
-				it.loanappid = itm.acctid;
+			notes = batch_collectionsheet.getNotesByDetailid([parentid: itm.objid]);
+			itm.notes = [];
+			notes.each{
+				it.loanappid = itm.loanappid;
+				itm.notes.add(it);
 			}
-			itm.remarks = batch_collectionsheet.findDetailById([objid: itm.objid]);
+			map = batch_collectionsheet.findDetailById([objid: itm.objid]);
+			if (map && map.remarks) itm.remarks = map.remarks;
+			else itm.remove("remarks");
 		}
-		//result.each{ list.add(it); }
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
 		return [list: list];
 	}
@@ -116,6 +124,7 @@ class DeviceLoanBillingService
 			if (!itm) {
 				itm = [:];
 				itm.putAll(it);
+				println it;
 				itm.parentid = collectionsheet.detailid;
 				batch_collectionsheet.create(itm, "payment");
 			}
@@ -145,7 +154,7 @@ class DeviceLoanBillingService
 		def itm = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!itm) {
 			def date = dateSvc.serverDate;
-			def txndate = dateSvc.parse("yyyy-mm-dd", params.txndate);
+			def txndate = dateSvc.parse("yyyy-MM-dd", params.txndate);
 			def collector = user.read([objid: params.collectorid]);
 			if (!collector) throw new Exception("Collector record does not exist or has already been deleted.");
 

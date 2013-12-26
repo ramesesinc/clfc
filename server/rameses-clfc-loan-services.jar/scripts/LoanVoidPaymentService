@@ -19,6 +19,7 @@ class LoanVoidPaymentService extends ActiveListService
 	public def getColumns( params ) {
 		return [
 			[name: 'state', caption: 'State'],
+			[name: 'route.area', caption: 'Route Area'],
 			[name: 'appno', caption: 'App. No.'],
 			[name: 'borrower.name', caption: 'Borrower'],
 			[name: 'collector.name', caption: 'Requested By'],
@@ -28,5 +29,12 @@ class LoanVoidPaymentService extends ActiveListService
 
 	void beforeList( Object data ) {
 		data.state = (data.state? data.state : '%');
+	}
+
+	@ProxyMethod
+	public def approve( params ) {
+		/*println 'params = '+params;
+		throw new Exception('stop')
+		em.changeStateApproved(params);*/
 	}
 }

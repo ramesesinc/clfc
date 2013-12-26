@@ -23,15 +23,15 @@ class DeviceLoginService
 		
 		def encval = Encoder.MD5.encode(params.password, params.username)
 		def routes = [];
-		def billing;
 		if (encval == user.pwd) {
 			//Get Routes
 			def date = dateSvc.parseCurrentDate();
 			def d = date.year+'-'+date.month+'-'+date.day;
-			billing = ledger_billing.getBillingByCollectorid([collectorid: user.objid, billdate: d]);
-			if (!billing) throw new Exception('You have no billing to download for today.');
+			def billing = ledger_billing.getBillingByCollectorid([collectorid: user.objid, billdate: d]);
+			def subbilling = ledger_billing.getBillingBySubCollectorid([subcollectorid: user.objid, billdate: d]);
+			if (!billing && !subbilling) throw new Exception('You have no billing to download for today.');
 
-			billing.addAll(ledger_billing.getBillingBySubCollectorid([subcollectorid: user.objid, billdate: d]));
+			billing.addAll(subbilling);
 
 			def list;
 			billing.each{bill->

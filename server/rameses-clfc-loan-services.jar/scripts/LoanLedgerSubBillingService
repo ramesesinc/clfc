@@ -51,10 +51,12 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 	void updateBillingDetail( params ) {
 		em.removeBillingDetailByParentid([parentid: params.objid]);
 
-		def itm = batch_collection.read([objid: params.parentid]);
-		itm.objid = params.objid;
-		itm.state = 'DRAFT';
-		batch_collectionsheet.create(itm);
+		def itm = batch_collectionsheet.read([objid: params.parentid]);
+		if (itm) {
+			itm.objid = params.objid;
+			itm.state = 'DRAFT';
+			batch_collectionsheet.create(itm);
+		}
 
 		def list = em.getBillingDetailByParentid([parentid: params.parentid]);
 		def csList = batch_collectionsheet.getDetailsByParentid([parentid: params.parentid]);
@@ -62,6 +64,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 		def payments;
 		def notes;
 		def voidrequest;
+		def paymentid;
 		list.each{bill->
 			objid = 'LLSBD'+new UID();
 			itm = csList.find{ bill.objid == it.objid }
@@ -71,18 +74,21 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 				notes = batch_collectionsheet.getNotesByDetailid([parentid: itm.objid]);
 
 				itm.objid = objid;
+				itm.parentid = params.objid;
 				batch_collectionsheet.create(itm, "detail");
 
 				payments.each{
+					paymentid = "PT"+new UID();
 					voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
-					void_payment.changeStateVoided(voidrequest);
-					it.objid = "PT"+new UID();
+					if (voidrequest) {
+						void_payment.changeStateVoided(voidrequest);
+						voidrequest.objid = "VOID"+new UID();
+						voidrequest.paymentid = paymentid;
+						void_payment.create(voidrequest);
+					}
+					it.objid = paymentid;
 					it.parentid = itm.objid;
 					batch_collectionsheet.create(it, "payment");
-
-					voidrequest.objid = "VOID"+new UID();
-					voidrequest.paymentid = it.objid;
-					void_payment.create(voidrequest);
 				}
 
 				notes.each{
@@ -95,7 +101,6 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 			bill.parentid = params.objid;
 			em.create(bill, "detail");
 		}
-		
 	}
 
 	void afterOpen( data ) {

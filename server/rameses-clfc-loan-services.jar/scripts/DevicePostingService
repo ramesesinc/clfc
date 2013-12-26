@@ -58,6 +58,7 @@ class DevicePostingService
 		if (!params.sessionid) throw new Exception("Please specify sessionid.");
 		params.totalcount = 0;
 		params.totalamount = 0;
+		println 'params = '+params
 		device_billing.createBatchCollectionSheetHeader(params);
 		def cs = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");

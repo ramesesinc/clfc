@@ -73,16 +73,31 @@ class LoanPaymentService
 	}
 
 	@ProxyMethod
-	public def getUnpostedPayments( params ) {
+	public def getUnpostedCollectionSheets( params ) {
 		if(!params.route_code) throw new Exception('Route code is required');
-		def bp = batch_collectionsheet.findByRoutecode(params);
+		def bc = batch_collectionsheet.findByRoutecode(params);
 		def list = []
-		if (bp) {
-			list = batch_collectionsheet.getDetailsByParentId([parentid: bp.objid]);
-			if(bp.totalcount != list.size()) 
+		if (bc) {
+			//list = batch_collectionsheet.getPaymentsByParentId([parentid: bc.objid]);
+			list = batch_collectionsheet.getUnpostedCollectionSheets([parentid: bc.objid]);
+			if(bc.totalcount != list.size()) 
 				throw new Exception('Payments for this route was not uploaded successfully.');
+			def voidrequest;
+			list.each{cs->
+				cs.payments = batch_collectionsheet.getPaymentsByDetailid([parentid: cs.objid]);
+				cs.total = 0;
+				cs.payments.each{ 
+					voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
+					it.isvoided = 0;
+					if (voidrequest) {
+						if (voidrequest.state == "PENDING") throw new Exception("There are still pending void requests for this billing.");
+						it.isvoided = 1;
+					}
+				}
+				cs.notes = batch_collectionsheet.getNotesByDetailid([parentid: cs.objid]);
+			}
 		}
-		return [entity: bp, list: list];
+		return [entity: bc, list: list];
 	}
 
 	private void createPayment( params ) {
@@ -137,7 +152,7 @@ class LoanPaymentService
 		def producttype = product_type.read([name: ledger.producttypeid]);
 		def ledgeritem = ledgerdb.findLastLedgerItemByParentId([parentid: ledger.objid]);
 
-		if (dateSvc.parseDate(params.txndate, null).date > ledger.dtmatured && ledger.overduepenalty == 0.00) {	
+		if (dateSvc.parseDate(txndate, null).date > ledger.dtmatured && ledger.overduepenalty == 0.00) {	
 			//println 'balance = '+ledger.balance;
 			//println 'past due rate = '+producttype.pastduerate;
 			ledger.overduepenalty = ledgerSvc.computeOverduePenalty([balance: ledger.balance, pastduerate: (producttype.pastduerate? producttype.pastduerate : 0.00)]);
@@ -162,7 +177,7 @@ class LoanPaymentService
 			overduePenalty: ledger.overduepenalty,
 			underpaymentRate: producttype.underpaymentpenalty
 		]
-
+		
 		def item;
 		def isCompromise = ledger.compromiseid? true : false;
 
@@ -202,7 +217,6 @@ class LoanPaymentService
 			amountDue: ledger.dailydue,
 			overpaymentAmt: (ledger.overpaymentamount > 0)? ledger.overpaymentamount : params.payamount 
 		];
-
 
 		def compromiseFact = [:];
 		def results = [];
