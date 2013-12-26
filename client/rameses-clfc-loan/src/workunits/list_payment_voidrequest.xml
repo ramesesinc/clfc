@@ -10,13 +10,26 @@
         import com.rameses.rcp.annotations.*;
         import com.rameses.osiris2.client.*;
         import com.rameses.osiris2.common.*;
-        
+
         class VoidRequestInboxController extends InboxController
         {
+            @Binding
+            def binding;
+
+            @Service("LoanVoidPaymentService")
+            def svc;
+
             String serviceName = "LoanVoidPaymentService";
             String defaultFileType = "voidrequest";
-            
+
             boolean allowOpen = false;
+
+            def approve() {
+                /*println 'selected node = '+selectedNode;
+                println 'selected entity = '+selectedEntity;
+                svc.approve(selectedEntity);
+                binding.refresh();*/
+            }
         }
     </code>
     

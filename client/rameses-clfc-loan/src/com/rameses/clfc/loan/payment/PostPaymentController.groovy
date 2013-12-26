@@ -5,13 +5,13 @@ import com.rameses.rcp.annotations.*;
 import com.rameses.rcp.framework.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
+import com.rameses.clfc.util.LoanUtil;
 
 class PostPaymentController
 {    
     @Binding
     def binding;
-    
-    
+        
     @Service('LoanPaymentService')
     def paymentSvc;
     
@@ -25,12 +25,13 @@ class PostPaymentController
     def entity;
     def mode = 'init';
     def cashBreakdown;
-    def unpostedPayments;
+    def selectedCollectionsheet = [:];
+    def unpostedCollectionSheets;
     def prevcashbreakdown = [];
     def breakdown;
     def allowEdit = false;
     def iscollector = false;
-    
+
     PostPaymentController() {
         try {
             routeSvc = InvokerProxy.instance.create("LoanRouteService")
@@ -46,39 +47,21 @@ class PostPaymentController
     
     def next() {
         iscollector = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.FIELD_COLLECTOR');
-        def data = paymentSvc.getUnpostedPayments([route_code: route]);
+        mode = 'read';
+        def data = paymentSvc.getUnpostedCollectionSheets([route_code: route]);
         entity = data.entity;
-        unpostedPayments = data.list;
-        if (!unpostedPayments) {
-            throw new Exception('No unposted payments found for this route.')
+        unpostedCollectionSheets = data.list;
+        if (!unpostedCollectionSheets) {
+            throw new Exception('No unposted collection sheets found for this route.')
             return null;
         }
-        mode = 'read';
         entity.cashbreakdown = paymentSvc.getCashBreakdown(entity);
-        
-        if (entity.cashbreakdown) breakdown = entity.cashbreakdown.amount.sum();
-        else breakdown = 0;
-        
         if (entity.cashbreakdown.isEmpty() && iscollector) {
             mode = 'create';
             allowEdit = true;
         }
-        rebuildCashBreakdownInvoker();
-        paymentHandler.reload();
-        //denominations = paymentSvc.getDenominations(entity);
-        //denominationHandler.reload();
+        denominationHandler.reload();
         return 'mgmtpage';
-    }
-    
-    def rebuildCashBreakdownInvoker() {
-        cashBreakdown =  InvokerUtil.lookupOpener('cash:breakdown', [
-            entries: entity.cashbreakdown,
-            allowEdit: allowEdit,
-            onupdate: {o->
-                breakdown = entity.cashbreakdown.amount.sum();
-                binding.refresh('breakdown');
-            }
-        ]);
     }
     
     def back() {
@@ -87,7 +70,7 @@ class PostPaymentController
     }
     
     def post() {
-        ledgerSvc.approveBatchPayment([entity: entity, unpostedpayments: unpostedPayments]);
+        ledgerSvc.approveBatchPayment([entity: entity, unpostedcollectionsheets: unpostedCollectionSheets]);
         route = null;
         mode = 'init';
         MsgBox.alert('Transaction has been successfully posted'); 
@@ -95,28 +78,68 @@ class PostPaymentController
     }
     
     def viewExemptions() {
-        return InvokerUtil.lookupOpener('exemptions:view', [list: unpostedPayments]);
+        return InvokerUtil.lookupOpener('exemptions:view', [list: unpostedCollectionSheets]);
     }
     
     def close() {
         return '_close';
     }
+
+    public void setSelectedCollectionsheet( selectedCollectionsheet ) {
+        this.selectedCollectionsheet = selectedCollectionsheet;
+        paymentsHandler.reload();
+        notesHandler.reload();
+    }
     
-    def paymentHandler = [
+    def collectionsheetHandler = [
         fetchList: {o->
-            if(!unpostedPayments) unpostedPayments = [];
-            return unpostedPayments;
+            if (!unpostedCollectionSheets) unpostedCollectionSheets = [];
+            return unpostedCollectionSheets;
         }
     ] as BasicListModel;    
     
+    def paymentsHandler = [
+        fetchList: {o->
+            if (!selectedCollectionsheet?.payments) selectedCollectionsheet?.payments = [];
+            return selectedCollectionsheet.payments;
+        }
+    ] as BasicListModel;
+
+    def notesHandler = [
+        fetchList: {o->
+            if (!selectedCollectionsheet?.notes) selectedCollectionsheet?.notes = [];
+            return selectedCollectionsheet?.notes;
+        }
+    ] as BasicListModel;
+
+    def denominationHandler = [
+        fetchList: {o->
+            if (!entity.cashbreakdown) entity.cashbreakdown = LoanUtil.denominations;
+            return entity.cashbreakdown;
+        },
+        onColumnUpdate: {itm, colName->
+            if (colName == 'qty') {
+                if (!itm.qty) itm.qty = 0;
+                itm.amount = itm.denomination*itm.qty;
+                binding.refresh('totalbreakdown');
+            }
+        },
+        isAllowAdd: { return false; }
+    ] as EditorListModel;
+
     def getTotalamount() {
-        if (!unpostedPayments) return 0;
-        return unpostedPayments.payamount.sum();
+        if (!unpostedCollectionSheets) return 0;
+        return unpostedCollectionSheets.total.sum();
+    }
+
+    def getTotalbreakdown() {
+        if (!entity.cashbreakdown) return 0;
+        return entity.cashbreakdown.amount.sum();
     }
     
     def save() {
-        if (getTotalamount() != breakdown) 
-            throw new Exception('Total for denomination does not matched with total amount for unposted payments.');
+        if (getTotalamount() != getTotalbreakdown()) 
+            throw new Exception('Total for denomination does not matched with total amount for unposted collection sheets.');
         
         //entity.denominations = denominations;
         if (mode == 'create') {
@@ -136,9 +159,8 @@ class PostPaymentController
             prevcashbreakdown.add(m);
         }
         mode = 'edit';
-        allowEdit = true;
-        rebuildCashBreakdownInvoker();        
-        if (entity.cashbreakdown) breakdown = entity.cashbreakdown.amount.sum();
+        allowEdit = true;       
+        if (entity.cashbreakdown) binding.refresh('totalbreakdown');
         binding.refresh();
     }
     
@@ -148,8 +170,7 @@ class PostPaymentController
         entity.cashbreakdown.clear();
         entity.cashbreakdown.addAll(prevcashbreakdown);
         prevcashbreakdown.clear();
-        rebuildCashBreakdownInvoker();
-        if (entity.cashbreakdown) breakdown = entity.cashbreakdown.amount.sum();
+        if (entity.cashbreakdown) binding.refresh('totalbreakdown');
         binding.refresh();
     }
     

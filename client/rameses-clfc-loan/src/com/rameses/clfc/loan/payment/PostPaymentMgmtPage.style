@@ -1,6 +1,4 @@
-"selectedDenomination" [mode == 'read'] {
-    readonly: true;
-}
-"selectedDenomination" [mode != 'read'] {
-    readonly: false;
+"denominationHandler:item.*" [item.qty != 0] {
+    background-color: yellow;
+    color: black;
 }

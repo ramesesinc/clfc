@@ -17,6 +17,7 @@ class LoanUtil
     private static def borrowerOccupancyTypes;
     private static def paymentTypes;
     private static def compromiseTypes;
+    private static def denominations;
 
     public static def getAppTypes() {
         if (appTypes == null) {
@@ -183,5 +184,25 @@ class LoanUtil
             ]
         }
         return compromiseTypes;
+    }
+
+    public static def getDenominations() {
+        if (denominations == null) {
+            denominations = [
+                [caption: 1000.00, denomination: 1000, qty: 0, amount: 0],
+                [caption: 500.00, denomination: 500, qty: 0, amount: 0],
+                [caption: 200.00, denomination: 200, qty: 0, amount: 0],
+                [caption: 100.00, denomination: 100, qty: 0, amount: 0],
+                [caption: 50.00, denomination: 50, qty: 0, amount: 0],
+                [caption: 20.00, denomination: 20, qty: 0, amount: 0],
+                [caption: 10.00, denomination: 10, qty: 0, amount: 0],
+                [caption: 5.00, denomination: 5, qty: 0, amount: 0],
+                [caption: 1.00, denomination: 1, qty: 0, amount: 0],
+                [caption: 0.50, denomination: 0.50, qty: 0, amount: 0],
+                [caption: 0.25, denomination: 0.25, qty: 0, amount: 0],
+                [caption: 0.05, denomination: 0.05, qty: 0, amount: 0],
+            ]
+        }
+        return denominations;
     }
 }
