@@ -1,0 +1,32 @@
+Instructions:
+
+1. Execute patches found in "/db/patches" chronologically.
+2. Build services.
+3. Compile projects.
+
+
+To download apk file:
+
+1. Run server.
+2. Type in the url "{url}/downloads/apk".
+3. Click "clfc.apk" to download.
+
+Client:
+
+1. To create collection sheet, select transaction, collection, new collection sheet.
+2. Set the collector and billing date for the collection sheet. Specify the routes for collection.
+3. To create sub collection sheet, select transaction, collection, new sub collection sheet.
+4. Set the collector and sub collector.
+
+Android App:
+
+1. Open the application.
+2. Press the menu button and set the host address.
+3. Press the menu button and save setting.
+4. Click "Download Collectionsheet(s)" and login using an account with a FIELD_COLLECTOR role.
+5. Choose a route to download.
+6. After downloading, click "View Collectionsheet(s)" and select a route.
+7. Select a borrower to view borrower's info.
+8. Press the menu button to add payments, notes and remarks.
+9. To void payment, long press on the payment to void. Select the void option (A void request is sent for approval).
+10. To edit note/remarks, long press on the note/remarks and select edit.
