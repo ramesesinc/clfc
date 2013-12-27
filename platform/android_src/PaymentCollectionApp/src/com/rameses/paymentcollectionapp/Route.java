@@ -18,15 +18,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class Route extends Activity {
 	private Context context = this; 
@@ -139,22 +136,31 @@ public class Route extends Activity {
 				map.put("sessionid", bundle.getString("sessionid"));
 				itm = db.getCollectionsheetByLoanappid(map.get("loanappid").toString());
 				if (itm == null || itm.getCount() == 0) db.insertCollectionsheet(map);
-				/*if (map.containsKey("payments")) {
+				if (map.containsKey("payments")) {
 					list = (ArrayList<Map<String, Object>>) map.get("payments");
-					for(int j=0; i<list.size(); i++) {
+					for(int j=0; j<list.size(); j++) {
 						m = (Map<String, Object>) list.get(j);
-						m.put(", value)
+						db.insertPayment(m);
 					}
-				}*/
+				}
+				if (map.containsKey("notes")) {
+					list = (ArrayList<Map<String, Object>>) map.get("notes");
+					for (int j=0; j<list.size(); j++) {
+						m = (Map<String, Object>) list.get(j);
+						db.insertNotes(m);
+					}
+				}
+				if (map.containsKey("remarks")) {
+					m = new HashMap<String, Object>();
+					m.put("loanappid", map.get("loanappid").toString());
+					m.put("remarks", map.get("remarks").toString());
+					db.insertRemarks(m);
+				}
 			}
 			db.closeDb();
 			
 			if (progressDialog.isShowing()) progressDialog.dismiss();
-			Toast.makeText(context, "Successfully downloaded billing!", Toast.LENGTH_SHORT).show();
-			/*Intent intent = new Intent(context, CollectionSheet.class);
-			if(progressDialog.isShowing()) progressDialog.dismiss();
-			startActivity(intent);
-			finish();*/
+			ApplicationUtil.showShortMsg(context, "Successfully downloaded billing!");
 		}
 	};
 	
@@ -163,7 +169,7 @@ public class Route extends Activity {
 		public void handleMessage(Message msg) {
 			Bundle bundle=msg.getData();
 			if(progressDialog.isShowing()) progressDialog.dismiss();
-			Toast.makeText(context, bundle.getString("response"), Toast.LENGTH_LONG).show();
+			ApplicationUtil.showLongMsg(context, bundle.getString("response"));
 		}
 	};
 	

@@ -30,8 +30,10 @@ public class DeviceBroadcastReceiver extends BroadcastReceiver {
 			locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 			location = locationManager.getLastKnownLocation(provider);
 		}
-		params.put("longitude", location.getLongitude());
-		params.put("latitude", location.getLatitude());
+		if (location != null) {
+			params.put("longitude", location.getLongitude());
+			params.put("latitude", location.getLatitude());	
+		}
 		ServiceProxy proxy = new ServiceHelper(context).createServiceProxy("DeviceLocationService");
 		if (intent.getAction().equals("android.intent.action.ACTION_SHUTDOWN")) {
 			params.put("remarks", "Device shutdown");

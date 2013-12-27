@@ -57,10 +57,11 @@ public class CollectionSheetAdapter extends BaseAdapter {
 		MySQLiteHelper db=new MySQLiteHelper(v.getContext());
 		if (!db.isOpen) db.openDb();
 		Cursor result = db.getPaymentsByAppid(cs.getLoanappid());
+		int noOfVoidPayments = db.countVoidPaymentsByAppid(cs.getLoanappid());
 		if (db.isOpen) db.closeDb();
 
 		iv_info_paid.setVisibility(View.GONE);
-		if (result != null && result.getCount() > 0) {
+		if (result != null && result.getCount() > 0 && result.getCount() > noOfVoidPayments) {
 			iv_info_paid.setVisibility(View.VISIBLE);
 			//ctv_name.setChecked(true);
 		}

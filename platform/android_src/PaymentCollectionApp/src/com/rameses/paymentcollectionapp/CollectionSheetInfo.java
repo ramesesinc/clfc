@@ -789,35 +789,39 @@ public class CollectionSheetInfo extends Activity {
 				note.put("todate", sdf.format(c2.getTime()));
 				note.put("remarks", notes_remarks);
 				if (!db.isOpen) db.openDb();
-				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("sessionid", sessionid);
-				params.put("collectorid", db.getCollectorid());
-				params.put("txndate", txndate);
-				params.put("routecode", routecode);
-				Map<String, Object> collectionsheet = new HashMap<String, Object>();
-				collectionsheet.put("loanappid", loanappid);
-				collectionsheet.put("detailid", detailid);
-				params.put("collectionsheet", collectionsheet);
-				params.put("note", note);
-				if (mode.equals("create")) {
-					try {
-						postingProxy.invoke("postNote", new Object[]{params});
-					} catch(Exception e) {}
-					finally {
-						db.insertNotes(note);
-						addNote(note);
-						ApplicationUtil.showShortMsg(context, "Successfully added note.");	
-					}
-				} else if (!mode.equals("create")) {
-					if (view != null) note.put("objid", view.getTag(R.id.noteid).toString());
+				if (db.isNoteOverlapping(note.get("fromdate").toString(), note.get("todate").toString(), loanappid)) {
+					ApplicationUtil.showShortMsg(context, "Note overlaps other notes.");
+				} else {
+					Map<String, Object> params = new HashMap<String, Object>();
+					params.put("sessionid", sessionid);
+					params.put("collectorid", db.getCollectorid());
+					params.put("txndate", txndate);
+					params.put("routecode", routecode);
+					Map<String, Object> collectionsheet = new HashMap<String, Object>();
+					collectionsheet.put("loanappid", loanappid);
+					collectionsheet.put("detailid", detailid);
+					params.put("collectionsheet", collectionsheet);
 					params.put("note", note);
-					try {
-						postingProxy.invoke("updateNote", new Object[]{params});
-					} catch (Exception e) {}
-					finally {
-						db.updateNotes(note);
-						updateNote(note, view);
-						ApplicationUtil.showShortMsg(context, "Successfully updated note.");
+					if (mode.equals("create")) {
+						try {
+							postingProxy.invoke("postNote", new Object[]{params});
+						} catch(Exception e) {}
+						finally {
+							db.insertNotes(note);
+							addNote(note);
+							ApplicationUtil.showShortMsg(context, "Successfully added note.");	
+						}
+					} else if (!mode.equals("create")) {
+						if (view != null) note.put("objid", view.getTag(R.id.noteid).toString());
+						params.put("note", note);
+						try {
+							postingProxy.invoke("updateNote", new Object[]{params});
+						} catch (Exception e) {}
+						finally {
+							db.updateNotes(note);
+							updateNote(note, view);
+							ApplicationUtil.showShortMsg(context, "Successfully updated note.");
+						}
 					}
 				}
 				if (db.isOpen) db.closeDb();

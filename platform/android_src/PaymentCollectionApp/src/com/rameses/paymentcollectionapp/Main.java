@@ -470,6 +470,7 @@ public class Main extends Activity {
 			result.moveToFirst();
 			do {
 				m = new HashMap<String, Object>();
+				m.put("objid", result.getString(result.getColumnIndex("objid")));
 				m.put("loanappid", result.getString(result.getColumnIndex("loanappid")));
 				m.put("detailid", result.getString(result.getColumnIndex("detailid")));
 				m.put("refno", result.getString(result.getColumnIndex("refno")));
@@ -510,33 +511,37 @@ public class Main extends Activity {
 				routecode = routes.getString(routes.getColumnIndex("routecode"));
 				Cursor cs = db.getCollectionsheetsByRoute(routecode);
 				if (cs != null && cs.getCount() > 0) {
-					String loanappid = cs.getString(cs.getColumnIndex("loanappid"));
-					sessionid = cs.getString(cs.getColumnIndex("sessionid"));
 					cs.moveToFirst();
-					collectionsheet.put("loanappid", loanappid);
-					collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
-					Cursor p = db.getPaymentsByAppid(loanappid);
-					if (p != null && p.getCount() > 0) {
-						setPayments(p, payments);
-						forupload = true;
-					}
-					collectionsheet.put("payments", payments);
-					Cursor n = db.getNotesByAppid(loanappid);
-					if (n != null && n.getCount() > 0) {
-						setNotes(n, notes);
-						forupload = true;
-					}
-					collectionsheet.put("notes", notes);
-					String remarks = "";
-					Cursor r = db.getRemarksByAppid(loanappid);
-					if (r != null && r.getCount() > 0) {
-						r.moveToFirst();
-						remarks = r.getString(r.getColumnIndex("remarks"));
-						forupload = true;
-					}
-					collectionsheet.put("remarks", remarks);
-					if (forupload == false) db.removeCollectionsheetByLoanappid(loanappid);
-					break;
+					String loanappid= "";
+					do {
+						loanappid = cs.getString(cs.getColumnIndex("loanappid"));
+						sessionid = cs.getString(cs.getColumnIndex("sessionid"));
+						collectionsheet.put("loanappid", loanappid);
+						collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
+						Cursor p = db.getPaymentsByAppid(loanappid);
+						if (p != null && p.getCount() > 0) {
+							setPayments(p, payments);
+							forupload = true;
+						}
+						collectionsheet.put("payments", payments);
+						Cursor n = db.getNotesByAppid(loanappid);
+						if (n != null && n.getCount() > 0) {
+							setNotes(n, notes);
+							forupload = true;
+						}
+						collectionsheet.put("notes", notes);
+						String remarks = "";
+						Cursor r = db.getRemarksByAppid(loanappid);
+						if (r != null && r.getCount() > 0) {
+							r.moveToFirst();
+							remarks = r.getString(r.getColumnIndex("remarks"));
+							forupload = true;
+						}
+						collectionsheet.put("remarks", remarks);
+						if (forupload == false) db.removeCollectionsheetByLoanappid(loanappid);
+						else if (forupload == true) break;
+					} while(cs.moveToNext());
+					if (forupload == true) break;
 				}
 			} while(routes.moveToNext());
 			db.closeDb();
