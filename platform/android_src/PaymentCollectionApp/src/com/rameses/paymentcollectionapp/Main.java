@@ -78,7 +78,7 @@ public class Main extends Activity {
 				provider = LocationManager.NETWORK_PROVIDER;
 				locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 				location = locationManager.getLastKnownLocation(provider);
-				if (application != null) {
+				if (application != null && location != null) {
 					application.setLongitude(location.getLongitude());
 					application.setLatitude(location.getLatitude());
 				}
@@ -174,8 +174,9 @@ public class Main extends Activity {
 		super.onStart();
 		
 		isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-		WifiManager wifiManager = (WifiManager)context.getSystemService(WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
 		wifiManager.setWifiEnabled(true);
+		
 		ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE);
 		networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		
