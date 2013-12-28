@@ -10,8 +10,8 @@ class LoanVoidPaymentService extends ActiveListService
 	@ProxyMethod
 	public def getNodes( params ) {
 		return [
-			[caption: 'PENDING', state: 'PENDING', name: 'voidrequest'],
-			[caption: 'APPROVED', state: 'APPROVED', name: 'voidrequest']
+			[caption: 'PENDING', state: 'PENDING', name: 'pending', filetype: 'voidrequest'],
+			[caption: 'APPROVED', state: 'APPROVED', name: 'approved', filetype: 'voidrequest']
 		]
 	}
 
@@ -33,8 +33,13 @@ class LoanVoidPaymentService extends ActiveListService
 
 	@ProxyMethod
 	public def approve( params ) {
-		/*println 'params = '+params;
-		throw new Exception('stop')
-		em.changeStateApproved(params);*/
+		em.changeStateApproved(params);
+		return params;
+	}
+
+	@ProxyMethod
+	public def open( params ) {
+		params = em.findVoidRequestById(params);
+		return params;
 	}
 }

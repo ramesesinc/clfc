@@ -39,7 +39,9 @@ declare Compromise
 	amountPaid		: double
 	balance			: double
 	interest		: double
+	penalty 		: double
 	isCompromise	: int
+	compromiseType	: String
 end
 
 rule "full payment"
@@ -1013,10 +1015,10 @@ rule "offset last payment and payment made beyond maturity"
 		update( p );
 end
 
-rule "compromise agreement"
+rule "compromise: fixed amount"
 	salience 30
 	when
-		c: Compromise( isCompromise > 0 && amountPaid > 0 && balance > 0 )
+		c: Compromise( isCompromise > 0 && compromiseType == 'FIXED_AMOUNT' )
 	then
 		//System.out.println("passing 11");
 		java.util.Map listItem = new java.util.HashMap();
@@ -1033,12 +1035,12 @@ rule "compromise agreement"
 		
 		if( interest > 0 ) {
 			if( amountPaid >= interest ) {
-				amountPaid-=interest;
+				amountPaid -= interest;
 				listItem.put("interestPaid", interest);
 				interest = 0;
 			}
 			else {
-				interest-=amountPaid;
+				interest -= amountPaid;
 				listItem.put("interestPaid", amountPaid);
 				listItem.put("penalty", interest);
 				listItem.put("balance", balance);
@@ -1048,13 +1050,13 @@ rule "compromise agreement"
 		if( amountPaid > 0 ) {
 			if( amountPaid >= balance ) {
 				//System.out.println("passing 1");
-				amountPaid-=balance;
+				amountPaid -= balance;
 				listItem.put("partialPayment", balance);
 				balance = 0;
 				listItem.put("balance", balance);
 			}
 			else {
-				balance-=amountPaid;
+				balance -= amountPaid;
 				listItem.put("partialPayment", amountPaid);
 				listItem.put("balance", balance);
 			}
@@ -1062,6 +1064,38 @@ rule "compromise agreement"
 		results.add( listItem );
 		floating.put("balance", balance);
 		floating.put("interestPaid", interest);
+end
+
+rule "compromise: waived interest"
+	when
+		c: Compromise( isCompromise > 0 && compromiseType == 'WAIVED_INTEREST' )
+	then
+		java.util.Map listItem = new java.util.HashMap();
+		double penalty = c.getPenalty();
+		double partialPayment = c.getAmountPaid()-penalty;
+		double balance = c.getBalance()-partialPayment;
+
+		listItem.put("penalty", penalty);
+		listItem.put("partialPayment", partialPayment);
+		listItem.put("balance", balance);
+		listItem.put("payment", c.getAmountPaid());
+		results.add(listItem);
+end
+
+rule "compromise: waived penalty"
+	when
+		c: Compromise( isCompromise > 0 && compromiseType == 'WAIVED_PENALTY' )
+	then
+		java.util.Map listItem = new java.util.HashMap();
+		double interest = c.getInterest();
+		double partialPayment = c.getAmountPaid()-interest;
+		double balance = c.getBalance()-partialPayment;
+
+		listItem.put("interestPaid", interest);
+		listItem.put("partialPayment", partialPayment);
+		listItem.put("balance", balance);
+		listItem.put("payment", c.getAmountPaid());
+		results.add(listItem);
 end
 
 rule "terminating rule"

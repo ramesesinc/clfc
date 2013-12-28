@@ -10,6 +10,8 @@ class DeviceLocationService {
 		Calendar c = Calendar.getInstance();
 		c.setTime(dateSvc.serverDate);
 		println '\ntime: '+c.getTime();
+		println 'session id: '+params.sessionid;
+		println 'terminal key: '+params.terminalkey;
 		println 'longitude: '+params.longitude;
 		println 'latitude: '+params.latitude;
 		println 'remarks: '+params.remarks;

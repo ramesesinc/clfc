@@ -43,6 +43,8 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 
 	void afterUpdate( params ) {
 		params.subcollector.username = params.subcollector.name;
+		em.changeStateVoided([objid: params.parentid]);
+		em.changeBatchCollectionSheetStateVoided([objid: params.parentid]);
 		em.update(params, "subbilling")
 		updateRoute(params);
 		updateBillingDetail(params);
@@ -114,5 +116,13 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 		params.routes.each{o->
 			em.create([billingid: params.objid, routecode: o.code], 'billing_route');
 		}
+	}
+
+	@ProxyMethod
+	public def resetBilling( params ) {
+		params.dtmodified = dateSvc.serverDate;
+		em.update(params, "datemodified");
+		updateBillingDetail(params);
+		em.removeBillingLockByBillingid([billingid: params.objid]);
 	}
 }

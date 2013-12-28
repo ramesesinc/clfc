@@ -26,7 +26,12 @@ DELETE FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
 SELECT * FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
 
 [getBillingByCollectorid]
-SELECT * FROM loan_ledger_billing WHERE collector_objid=$P{collectorid} AND billdate=$P{billdate}
+SELECT llb.* FROM loan_ledger_billing llb
+LEFT JOIN loan_ledger_subbilling lls ON llb.objid=lls.objid
+WHERE llb.collector_objid=$P{collectorid}
+	AND lls.subcollector_objid IS NULL
+	AND llb.billdate=$P{billdate}
+	AND llb.state='DRAFT'
 
 [getBillingBySubCollectorid]
 SELECT llb.* FROM loan_ledger_billing llb

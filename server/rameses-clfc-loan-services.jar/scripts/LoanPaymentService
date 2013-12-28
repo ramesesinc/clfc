@@ -18,6 +18,9 @@ class LoanPaymentService
 	@ActiveDB(value="loan_ledger")
 	def ledgerdb;
 
+	@ActiveDB(value="loan_ledger_compromise")
+	def compromise;
+
 	@ActiveDB(value="loan_product_type")
 	def product_type;
 
@@ -218,7 +221,15 @@ class LoanPaymentService
 			overpaymentAmt: (ledger.overpaymentamount > 0)? ledger.overpaymentamount : params.payamount 
 		];
 
-		def compromiseFact = [:];
+		def compromiseFact = [ isCompromise: data.isCompromise ];
+		if (data.isCompromise == 1) {
+			def c = compromise.read([objid: ledger.compromiseid])
+			compromiseFact.amountPaid = params.payamount;
+			compromiseFact.balance = ledger.balance;
+			compromiseFact.compromiseType = c.compromisetype;
+			compromiseFact.interest = ledger.interestamount;
+			compromiseFact.penalty = ledger.overduepenalty;
+		}
 		def results = [];
 		def lastPayment = [:];
 		def floating = [:];
@@ -252,7 +263,7 @@ class LoanPaymentService
 		/*if (params.txndate.toString() == '2013-10-25') {
 			println 'data-> '+data;
 		}*/
-		if (txndate == lastPayment.datePaid) {
+		if (txndate == lastPayment.datePaid && isCompromise == 0) {
 			data.amountPaid += ledgeritem.amtpaid;
 			data.totalPayment = ledgeritem.amtdue;
 			data.lackingInterest = ledgeritem.interestbal;
@@ -278,7 +289,7 @@ class LoanPaymentService
 			lastPayment.currentDay = ledgeritem.day;
 			lastPayment.totaldays = item.totalDays;
 			lastPayment.amountPaid = data.amountPaid;
-		} else {
+		} else if (isCompromise == 0) {
 			lastPayment.totaldays = 0;
 			//println 'data = '+data;
 			item = preComputation(data, ref);

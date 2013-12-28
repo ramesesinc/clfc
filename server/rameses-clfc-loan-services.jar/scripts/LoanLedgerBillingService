@@ -208,6 +208,6 @@ class LoanLedgerBillingService extends ActiveCrudService
 		params.dtmodified = dateSvc.serverDate;
 		em.update(params, "datemodified");
 		updateBillingDetail(params);
-		em.removeBillingLockByBillingid([billingid: params.objid])
+		em.removeBillingLockByBillingid([billingid: params.objid]);
 	}
 }

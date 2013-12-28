@@ -24,12 +24,12 @@ class LoanLedgerService extends ActiveListService
 	public def getColumns( params ) {
 		return [
 			[name:'appno', caption:'App. No.', width:150],
-			[name:'state', caption:'State', width: 100],
+			[name:'state', caption:'State'],
 			[name:'borrower.name', caption:'Borrower Name', width:250],
-			[name:'dailydue', caption:'Daily Due', width:100],
-			[name:'interest', caption:'Interest', width:100],
-			[name:'dtstarted', caption:'Date Started', width:100],
-			[name:'dtmatured', caption:'Date Matured', width:100]
+			[name:'dailydue', caption:'Daily Due'],
+			[name:'interest', caption:'Interest'],
+			[name:'dtstarted', caption:'Date Started', type: 'date', format: 'MMM dd, yyyy'],
+			[name:'dtmatured', caption:'Date Matured']
 		]
 	}
 
