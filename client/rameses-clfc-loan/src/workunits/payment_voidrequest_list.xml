@@ -1,0 +1,5 @@
+<workunit extends="wtemplates/InboxController.xml" serviceName="LoanVoidPaymentService" defaultFileType="voidrequest">
+    <invokers>
+        <invoker folderid="/explorer/txn/loan" caption="Void Requests" role="ACCT_OFFICER"/>
+    </invokers>
+</workunit>

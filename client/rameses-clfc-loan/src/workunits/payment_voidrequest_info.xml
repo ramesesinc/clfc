@@ -1,0 +1,28 @@
+<workunit>
+    <invokers>
+        <invoker type="voidrequest:open" action="open" caption="Void Request" target="popup" resizable="false"/>
+        
+        <invoker type="formActions" action="approve" mnemonic="v" visibleWhen="#{mode == 'read' &amp;&amp; entity.state == 'PENDING'}" />
+    </invokers>
+    
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+        
+        class PaymentVoidRequestController extends CRUDController
+        {
+            String serviceName = "LoanVoidPaymentService";
+            String entityName = "voidrequest";
+            
+            boolean allowCreate = false;
+            boolean allowEdit = false;
+            boolean allowDelete = false;
+         }
+    </code>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.payment.voidrequest.PaymentVoidRequestPage" />
+    </pages>
+</workunit>

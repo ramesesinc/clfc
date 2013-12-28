@@ -4,6 +4,8 @@
         <invoker type="quick_launcher" code="NSCS" caption="New Sub Collection Sheet" action="create" role="ACCT_OFFICER"/>
         
         <invoker type="ledgersubbilling:open" action="open" caption="Sub Collection Sheet" target="popup" resizable="false"/>
+        
+        <invoker type="formActions" action="reset" caption="Reset" mnemonic="r" visibleWhen="#{mode == 'read' &amp;&amp; entity.state == 'DRAFT'}"/>
     </invokers>
     
     <code class="com.rameses.clfc.loan.subbilling.LoanLedgerSubBillingController"/>

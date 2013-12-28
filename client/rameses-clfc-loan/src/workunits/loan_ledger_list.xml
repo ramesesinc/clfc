@@ -1,12 +1,8 @@
 <workunit extends="wtemplates/ListController.xml">
     <invokers>
         <invoker folderid="explorer/txn/loan" caption="Loan Ledgers" role="ACCT_OFFICER"/>
-        
-        <!--
-        <invoker type="loanledger:formActions" action="adjust" caption="Adjust Payments" mnemonic="a" shortcut="ctrl A" visibleWhen="mode == 'mgmt'"/>
-        <invoker type="loanledger:formActions" action="view" caption="View" mnemonic="v" shortcut="ctrl V" icon="images/toolbars/chart.png" visibleWhen="#{mode == 'mgmt'}"/>
-        -->
     </invokers>
+    
     <code>
         import com.rameses.rcp.common.*;
         import com.rameses.rcp.annotations.*;
