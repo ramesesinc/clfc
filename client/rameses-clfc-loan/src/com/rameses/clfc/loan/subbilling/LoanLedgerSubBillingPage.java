@@ -79,7 +79,7 @@ public class LoanLedgerSubBillingPage extends javax.swing.JPanel {
         xDateField1.setCaptionWidth(100);
         xDateField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         xDateField1.setName("entity.billdate");
-        xDateField1.setOutputFormat("MMM-dd-yyyy");
+        xDateField1.setOutputFormat("MMM dd, yyyy");
         xDateField1.setReadonly(true);
         xFormPanel2.add(xDateField1);
 

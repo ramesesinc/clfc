@@ -55,4 +55,11 @@ class LoanLedgerSubBillingController extends CRUDController
     void afterOpen( data ) {
         data._parentid = data.parentid;
     }
+
+    def reset() {
+        if (MsgBox.confirm("You are about to reset the billing information. Continue?")) {
+            service.resetBilling(entity);
+            MsgBox.alert("Resetting has been successfully processed.", true);
+        }
+    }
 }

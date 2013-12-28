@@ -76,7 +76,7 @@ public class LoanLedgerPage extends javax.swing.JPanel {
                 , new Object[]{"editable", true}
                 , new Object[]{"editableWhen", null}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.DateColumnHandler("yyyy-MM-dd", "yyyy-MM-dd", "yyyy-MM-dd")}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.DateColumnHandler("yyyy-MM-dd", "MMM dd, yyyy", "yyyy-MM-dd")}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "payamount"}
@@ -201,6 +201,7 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         xDateField3.setEnabled(false);
         xDateField3.setFontStyle("font-size:12");
         xDateField3.setName("entity.dtstarted");
+        xDateField3.setOutputFormat("MMM dd, yyyy");
         xDateField3.setPreferredSize(new java.awt.Dimension(150, 20));
         xDateField3.setReadonly(true);
         xFormPanel2.add(xDateField3);
@@ -211,6 +212,7 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         xDateField4.setEnabled(false);
         xDateField4.setFontStyle("font-size:12");
         xDateField4.setName("entity.dtmatured");
+        xDateField4.setOutputFormat("MMM dd, yyyy");
         xDateField4.setPreferredSize(new java.awt.Dimension(150, 20));
         xDateField4.setReadonly(true);
         xFormPanel2.add(xDateField4);
