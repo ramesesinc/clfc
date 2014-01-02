@@ -20,6 +20,9 @@ class LoanLedgerBillingService extends ActiveCrudService
 	@ActiveDB(value="loan_exemption")
 	def exemption;
 
+	@ActiveDB(value="loan_ledger_compromise")
+	def ledger_compromise;
+
 	@Service("DateService")
 	def dateSvc;
 
@@ -132,22 +135,34 @@ class LoanLedgerBillingService extends ActiveCrudService
 				if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
 				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
 				detail.amountdue = (amt*days)+detail.others;
-				if (currentDate > maturityDate) {
-					detail.penalty = days*it.overduepenalty;
-					def amountdue = new BigDecimal((detail.penalty+(days*detail.interestamount)+it.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
-					detail.amountdue = new BigDecimal(amountdue+'').setScale(2);
-					detail.days = days;
+				if (!it.compromiseid) {					
+					if (currentDate > maturityDate) {
+						detail.penalty = days*it.overduepenalty;
+						def amountdue = new BigDecimal((detail.penalty+(days * detail.interestamount)+it.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
+						detail.amountdue = new BigDecimal(amountdue+'').setScale(2);
+						detail.days = days;
+					} else {
+						def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
+						days -= noofholidays;
+						def cal = Calendar.getInstance();
+						cal.setTime(currentDate);
+						if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
+						days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
+						detail.penalty = it.absentpenalty * (days > 0? days-1 : 0);
+						detail.amountdue += detail.penalty;
+					}
+					detail.balance = getBalance(detail, it.balance);
 				} else {
-					def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
-					days -= noofholidays;
-					def cal = Calendar.getInstance();
-					cal.setTime(currentDate);
-					if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
-					days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
-					detail.penalty = it.absentpenalty*(days > 0? days-1 : 0);
-					detail.amountdue += detail.penalty;
+					def compromise = ledger_compromise.read([objid: it.compromiseid]);
+					def type = compromise.compromisetype;
+					if (type == 'WAIVED_INTEREST') {
+						detail.penalty = days * it.overduepenalty;
+						detail.balance = it.balance + detail.penalty;
+					} else if (type == 'WAIVED_PENALTY') {
+						detail.balance = it.balance + (days*it.interestamount);
+					}
+
 				}
-				detail.balance = getBalance(detail, it.balance);
 				em.create(detail, "detail");
 			}
 		}

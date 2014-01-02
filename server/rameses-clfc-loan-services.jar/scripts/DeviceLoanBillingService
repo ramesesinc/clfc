@@ -124,7 +124,6 @@ class DeviceLoanBillingService
 			if (!itm) {
 				itm = [:];
 				itm.putAll(it);
-				println it;
 				itm.parentid = collectionsheet.detailid;
 				batch_collectionsheet.create(itm, "payment");
 			}

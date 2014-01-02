@@ -9,6 +9,7 @@
 		<field name="collector_objid" required="true"/>
 		<field name="collector_username" required="true"/>
 		<field name="billdate" required="true"/>
+		<field name="branchid"/>
 	</element>
 
 	<element name="detail" tablename="loan_ledger_billing_detail">

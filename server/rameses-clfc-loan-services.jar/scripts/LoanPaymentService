@@ -263,7 +263,7 @@ class LoanPaymentService
 		/*if (params.txndate.toString() == '2013-10-25') {
 			println 'data-> '+data;
 		}*/
-		if (txndate == lastPayment.datePaid && isCompromise == 0) {
+		if (txndate == lastPayment.datePaid && !isCompromise) {
 			data.amountPaid += ledgeritem.amtpaid;
 			data.totalPayment = ledgeritem.amtdue;
 			data.lackingInterest = ledgeritem.interestbal;
@@ -289,7 +289,7 @@ class LoanPaymentService
 			lastPayment.currentDay = ledgeritem.day;
 			lastPayment.totaldays = item.totalDays;
 			lastPayment.amountPaid = data.amountPaid;
-		} else if (isCompromise == 0) {
+		} else if (!isCompromise) {
 			lastPayment.totaldays = 0;
 			//println 'data = '+data;
 			item = preComputation(data, ref);
@@ -303,7 +303,7 @@ class LoanPaymentService
 			paymentFact.lackingInterest = item.lackingInterest;
 			paymentFact.lackingPenalty = item.lackingPenalty;
 		}
-
+				
 		item.hasSunday = referencesFact.hasSunday;
 		item.noOfHolidays = calendarSvc.getNoOfHolidays([item: item, lastscheduledate: lastscheduledate]);
 
@@ -326,6 +326,7 @@ class LoanPaymentService
 		//results.each{ println it } 
 		//results.each{ println it; }
 		//throw new Exception('stopping');
+
 		def lastitem;
 		if (results.size() > 0) {
 			lastitem = results[results.size()-1];

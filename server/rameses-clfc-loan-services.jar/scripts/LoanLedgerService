@@ -26,9 +26,9 @@ class LoanLedgerService extends ActiveListService
 			[name:'appno', caption:'App. No.', width:150],
 			[name:'state', caption:'State'],
 			[name:'borrower.name', caption:'Borrower Name', width:250],
-			[name:'dailydue', caption:'Daily Due'],
+			[name:'dailydue', caption:'Sched. of Payment'],
 			[name:'interest', caption:'Interest'],
-			[name:'dtstarted', caption:'Date Started', type: 'date', format: 'MMM dd, yyyy'],
+			[name:'dtstarted', caption:'Date Started'],
 			[name:'dtmatured', caption:'Date Matured']
 		]
 	}

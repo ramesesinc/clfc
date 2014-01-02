@@ -150,7 +150,7 @@ class LoanLedgerReportService
 		}
 
 		def list = data.payments.findAll{ it.penaltycharge != null }
-		data.totalcharges = list.penaltycharge.sum();
+		//data.totalcharges = list.penaltycharge.sum();
 		if (!data.totalcharges) data.totalcharges = 0.00;
 
 		return data;

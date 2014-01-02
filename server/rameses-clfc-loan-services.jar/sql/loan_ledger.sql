@@ -8,7 +8,7 @@ SELECT ll.objid, la.objid AS loanappid, la.appno, ll.acctname, ll.dailydue,
 		ll.producttypeid, ll.balance, ll.overpaymentamount, la.loanamount,
 		ll.absentpenalty, ll.dtmatured, ll.paymentmethod, ll.interestamount,
 		ll.dtcurrentschedule, la.dtcreated AS loandate, ll.term, ll.acctid,
-		c.address AS homeaddress
+		c.address AS homeaddress, ll.compromiseid
 FROM loan_ledger ll
 INNER JOIN loanapp la ON ll.appid=la.objid
 INNER JOIN customer c ON c.objid=ll.acctid

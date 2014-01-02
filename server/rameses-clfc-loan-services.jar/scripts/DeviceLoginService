@@ -44,6 +44,6 @@ class DeviceLoginService
 
 		} else throw new Exception('Username/Password is incorrect!');
 
-		return [ routes: routes, serverdate: dateSvc.serverDate, collectorid: user.objid, billingid: bill.objid];
+		return [ routes: routes, serverdate: dateSvc.serverDate, collectorid: user.objid];
 	}
 }

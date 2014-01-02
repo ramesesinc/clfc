@@ -46,6 +46,12 @@ ORDER BY denomination DESC
 SELECT * FROM batch_collectionsheet_detail_payment
 WHERE parentid=$P{parentid}
 
+[getPaymentsWithPostedByByDetailid]
+SELECT bcdp.*, su.name AS postedby
+FROM batch_collectionsheet_detail_payment bcdp
+INNER JOIN sys_user su ON bcdp.collectorid=su.objid
+WHERE bcdp.parentid=$P{parentid}
+
 [getPaymentsAndVoidrequestByDetailid]
 SELECT bcdp.*,
 	CASE WHEN vp.objid IS NULL THEN FALSE ELSE TRUE END AS isvoided
@@ -55,6 +61,12 @@ WHERE bcdp.parentid=$P{parentid}
 
 [getNotesByDetailid]
 SELECT * FROM batch_collectionsheet_detail_note
+WHERE parentid=$P{parentid}
+
+[getNotesWithPostedByByDetailid]
+SELECT bcdn.*, su.name AS postedby
+FROM batch_collectionsheet_detail_note bcdn
+INNER JOIN sys_user su ON bcdn.collectorid=su.objid
 WHERE parentid=$P{parentid}
 
 [findDetailById]

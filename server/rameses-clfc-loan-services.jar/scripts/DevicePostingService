@@ -10,8 +10,14 @@ class DevicePostingService
 	@ActiveDB(value="void_payment")
 	def void_payment;
 
+	@ActiveDB(value="sysuser")
+	def sysuser;
+
 	@Service("DeviceLoanBillingService")
 	def device_billing;
+
+	@Service("DateService")
+	def dateSvc;
 
 	@ProxyMethod
 	public void postPayment( params ) {
@@ -30,8 +36,12 @@ class DevicePostingService
 				parentid: params.collectionsheet.detailid,
 				refno: params.payment.refno,
 				paytype: params.payment.type,
-				payamount: params.payment.amount
+				payamount: params.payment.amount,
+				dtposted: dateSvc.serverDate,
+				postedby: 'COLLECTOR NOT IDENTIFIED'
 			];
+			def user = sysuser.read([objid: params.collectorid]);
+			if (user) itm.postedby = user.name;
 			batch_collectionsheet.create(itm, "payment");
 		}
 	}
@@ -48,8 +58,12 @@ class DevicePostingService
 				parentid: params.collectionsheet.detailid,
 				fromdate: params.note.fromdate,
 				todate: params.note.todate,
-				remarks: params.note.remarks
+				remarks: params.note.remarks,
+				dtposted: dateSvc.serverDate,
+				postedby: 'COLLECTOR NOT IDENTIFIED'
 			];
+			def user = sysuser.read([objid: params.collectorid]);
+			if (user) itm.postedby = user.name;
 			batch_collectionsheet.create(itm, "note");
 		}
 	}
@@ -58,7 +72,6 @@ class DevicePostingService
 		if (!params.sessionid) throw new Exception("Please specify sessionid.");
 		params.totalcount = 0;
 		params.totalamount = 0;
-		println 'params = '+params
 		device_billing.createBatchCollectionSheetHeader(params);
 		def cs = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");

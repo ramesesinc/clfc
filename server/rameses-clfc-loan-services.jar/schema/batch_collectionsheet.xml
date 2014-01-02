@@ -40,7 +40,8 @@
 		<field name="refno" required="true"/>
 		<field name="paytype" required="true"/>
 		<field name="payamount" required="true"/>
-	</element>
+		<field name="postedby" required="true"/>
+ 	</element>
 
 	<element name="note" tablename="batch_collectionsheet_detail_note">
 		<field name="objid" primary="true"/>
@@ -48,6 +49,7 @@
 		<field name="fromdate" required="true"/>
 		<field name="todate" required="true"/>
 		<field name="remarks" required="true"/>
+		<field name="collectorid" required="true"/>
 	</element>
 
 	<element name="cashbreakdown" tablename="batch_collectionsheet_cashbreakdown">
