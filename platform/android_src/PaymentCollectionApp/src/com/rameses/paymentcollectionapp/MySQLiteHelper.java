@@ -2,6 +2,7 @@ package com.rameses.paymentcollectionapp;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String TABLE_HOST = "host";
 	private static final String TABLE_ROUTE = "route";
 	private static final String TABLE_VOID = "void";
+	private static final String TABLE_SESSION = "session";
 	
 	private static final String CREATE_TABLE_COLLECTIONSHEET = "" +
 			"CREATE TABLE COLLECTIONSHEET(" +
@@ -78,7 +80,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"PRIMARY KEY(loanappid, referenceid)" +
 			");";
 	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(" +
-			"sessionid text, " +
 			"serverdate text, " +
 			"collectorid text" +
 			")";
@@ -98,6 +99,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"state text, " +
 			"collectorid text, " +
 			"reason text" +
+			");";
+	private static final String CREATE_TABLE_SESSION = "CREATE TABLE SESSION(" +
+			"objid text PRIMARY KEY" +
 			");";
 	
 	
@@ -122,6 +126,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_HOST);
 		db.execSQL(CREATE_TABLE_ROUTE);
 		db.execSQL(CREATE_TABLE_VOID);
+		db.execSQL(CREATE_TABLE_SESSION);
 		db.execSQL("INSERT INTO "+TABLE_HOST+" VALUES('121.97.60.200', '8070')");
 	}
 
@@ -139,6 +144,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_HOST);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_ROUTE);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_VOID);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_SESSION);
 		onCreate(db);
 	}
 
@@ -232,10 +238,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void insertSystem(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
-		values.put("sessionid", params.get("sessionid").toString());
+		//values.put("sessionid", params.get("sessionid").toString());
 		values.put("serverdate", params.get("serverdate").toString());
 		values.put("collectorid", params.get("collectorid").toString());
 		db.insert(TABLE_SYSTEM, null, values);
+	}
+	
+	public void insertSession(String objid) {
+		ContentValues values = new ContentValues();
+		values.put("objid", objid);
+		db.insert(TABLE_SESSION, null, values);
 	}
 	
 	public void insertHost(String ipaddress, String port) {
@@ -275,14 +287,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.update(TABLE_HOST, values, null, null);
 	}
 	
-	public String getSessionid() {
-		Cursor result = db.rawQuery("SELECT sessionid FROM "+TABLE_SYSTEM, null);
+	public Cursor findSessionById(String objid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SESSION+" WHERE objid='"+objid+"'", null);
 		
+		if (result != null && result.getCount() > 0) result.moveToFirst();
+		return result;
+	}
+	
+	public ArrayList<String> getSessionid() {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SESSION, null);
+		
+		ArrayList<String> sessionidList = new ArrayList<String>();
 		if(result != null && result.getCount() > 0) {
 			result.moveToFirst();
-			return result.getString(result.getColumnIndex("sessionid"));
+			do {
+				sessionidList.add(result.getString(result.getColumnIndex("objid")));
+			} while(result.moveToNext());
+			return sessionidList;
 		}
-		return "";
+		return sessionidList;
 	}
 	
 	public String getCollectorid() {
@@ -370,7 +393,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		if (result != null) return result.getCount();
 		return 0;
 	}
-	
+		
 	public Cursor getRemarks() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_REMARKS, null);
 		
@@ -555,6 +578,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void removeAllRoutes() {
 		db.delete(TABLE_ROUTE, null, null);
+	}
+	
+	public void removeAllSessions() {
+		db.delete(TABLE_SESSION, null, null);
 	}
 	
 	public void openDb() throws SQLException {

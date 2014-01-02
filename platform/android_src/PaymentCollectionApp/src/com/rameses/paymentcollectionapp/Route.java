@@ -109,6 +109,8 @@ public class Route extends Activity {
 			params.put("routearea", bundle.getString("routearea"));
 			
 			if(!db.isOpen) db.openDb();
+			Cursor r = db.findSessionById(bundle.getString("sessionid"));
+			if (r == null || r.getCount() == 0) db.insertSession(bundle.getString("sessionid"));
 			db.insertRoute(params);
 			/*Cursor cs = db.getCollectionsheetsByRoute(params.get("routecode").toString);
 			if (cs != null && cs.getCount() > 0) {

@@ -118,12 +118,16 @@ public class Main extends Activity {
 				if (!db.isOpen) db.openDb();
 				params.put("sessionid", db.getSessionid());
 				if (db.isOpen) db.closeDb();
-				params.put("terminalkey", ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
+				String terminalkey = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+				if (terminalkey == null) {
+					terminalkey = Build.ID;
+				}
+				params.put("terminalkey", terminalkey);
 				params.put("longitude", application.getLongitude());
 				params.put("latitude", application.getLatitude());
 				params.put("remarks", msg);
 				proxy.invoke("postLocation", new Object[]{params});
-			} catch(Exception e) { e.printStackTrace(); }
+			} catch(Exception e) {}
 			finally { 
 				if (repeat) locationHandler.postDelayed(locationRunnable, 3000); 
 			}
@@ -322,7 +326,7 @@ public class Main extends Activity {
 			if (!db.isOpen) db.openDb();
 			db.emptySystemTable();
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("sessionid", bundle.getString("billingid"));
+			//params.put("sessionid", bundle.getString("billingid"));
 			params.put("serverdate", bundle.getString("serverdate"));
 			params.put("collectorid", bundle.getString("collectorid"));
 			db.insertSystem(params);
@@ -446,6 +450,7 @@ public class Main extends Activity {
 				db.removeAllRemarks();
 				db.removeAllUploads();
 				db.removeAllRoutes();
+				db.removeAllSessions();
 				if (progressDialog.isShowing()) progressDialog.dismiss();
 				//Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
 				ApplicationUtil.showShortMsg(context, "Successfully uploaded collection sheets!");

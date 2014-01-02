@@ -196,10 +196,10 @@ public final class R {
         public static final int txt_amountdue=0x7f070008;
         public static final int txt_appno=0x7f070003;
         public static final int txt_balance=0x7f070006;
+        public static final int txt_borrowerimg=0x7f070032;
         public static final int txt_btn_cancel=0x7f070017;
         public static final int txt_btn_login=0x7f070018;
         public static final int txt_btn_ok=0x7f07001c;
-        public static final int txt_dailydue=0x7f070007;
         public static final int txt_dtmatured=0x7f07000b;
         public static final int txt_empty=0x7f07000c;
         public static final int txt_fromdate=0x7f07002d;
@@ -226,6 +226,7 @@ public final class R {
         public static final int txt_penalty=0x7f07000a;
         public static final int txt_refno=0x7f07000d;
         public static final int txt_remarks=0x7f07002f;
+        public static final int txt_schedofpayment=0x7f070007;
         public static final int txt_term=0x7f070026;
         public static final int txt_term_overpayment=0x7f070020;
         public static final int txt_term_schedule=0x7f07001f;

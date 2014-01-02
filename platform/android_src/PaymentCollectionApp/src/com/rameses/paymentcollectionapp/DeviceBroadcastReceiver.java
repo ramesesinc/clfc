@@ -25,7 +25,7 @@ public class DeviceBroadcastReceiver extends BroadcastReceiver {
 		Location location = null;
 		String provider = "";
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (isNetworkEnabled && wifiManager.isWifiEnabled()) {
+		if (isNetworkEnabled) {
 			provider = LocationManager.NETWORK_PROVIDER;
 			locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 			location = locationManager.getLastKnownLocation(provider);
