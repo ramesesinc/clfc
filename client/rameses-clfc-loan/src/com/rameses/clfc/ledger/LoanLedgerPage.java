@@ -35,16 +35,18 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xIntegerField1 = new com.rameses.rcp.control.XIntegerField();
+        xDecimalField4 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         xDecimalField3 = new com.rameses.rcp.control.XDecimalField();
-        xDecimalField4 = new com.rameses.rcp.control.XDecimalField();
-        xLabel3 = new com.rameses.rcp.control.XLabel();
+        xDecimalField5 = new com.rameses.rcp.control.XDecimalField();
+        xDecimalField6 = new com.rameses.rcp.control.XDecimalField();
         xFormPanel2 = new com.rameses.rcp.control.XFormPanel();
         xLabel1 = new com.rameses.rcp.control.XLabel();
         xLabel2 = new com.rameses.rcp.control.XLabel();
         xDecimalField2 = new com.rameses.rcp.control.XDecimalField();
         xDateField3 = new com.rameses.rcp.control.XDateField();
         xDateField4 = new com.rameses.rcp.control.XDateField();
+        xLabel3 = new com.rameses.rcp.control.XLabel();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setTitle("Payments");
@@ -76,7 +78,7 @@ public class LoanLedgerPage extends javax.swing.JPanel {
                 , new Object[]{"editable", true}
                 , new Object[]{"editableWhen", null}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
-                , new Object[]{"typeHandler", new com.rameses.rcp.common.DateColumnHandler("yyyy-MM-dd", "MMM dd, yyyy", "yyyy-MM-dd")}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.DateColumnHandler("yyyy-MM-dd", "MMM-dd-yyyy", "yyyy-MM-dd")}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "payamount"}
@@ -100,7 +102,7 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+            .addComponent(xDataTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,6 +124,15 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         xIntegerField1.setReadonly(true);
         xFormPanel1.add(xIntegerField1);
 
+        xDecimalField4.setCaption("Balance");
+        xDecimalField4.setCaptionWidth(100);
+        xDecimalField4.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDecimalField4.setEnabled(false);
+        xDecimalField4.setFontStyle("font-size:14;");
+        xDecimalField4.setName("entity.balance");
+        xDecimalField4.setReadonly(true);
+        xFormPanel1.add(xDecimalField4);
+
         xDecimalField1.setCaption("Daily Due");
         xDecimalField1.setCaptionWidth(100);
         xDecimalField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -140,34 +151,29 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         xDecimalField3.setReadonly(true);
         xFormPanel1.add(xDecimalField3);
 
-        xDecimalField4.setCaption("Balance");
-        xDecimalField4.setCaptionWidth(100);
-        xDecimalField4.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        xDecimalField4.setEnabled(false);
-        xDecimalField4.setFontStyle("font-size:14;");
-        xDecimalField4.setName("entity.balance");
-        xDecimalField4.setReadonly(true);
-        xFormPanel1.add(xDecimalField4);
+        xDecimalField5.setCaption("Absent Penalty");
+        xDecimalField5.setCaptionWidth(100);
+        xDecimalField5.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDecimalField5.setEnabled(false);
+        xDecimalField5.setName("entity.absentpenalty");
+        xDecimalField5.setReadonly(true);
+        xFormPanel1.add(xDecimalField5);
 
-        xLabel3.setBackground(new java.awt.Color(250, 250, 250));
-        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
-        xLabel3.setBorder(xLineBorder1);
-        xLabel3.setCaption("Payment Method");
-        xLabel3.setCaptionWidth(100);
-        xLabel3.setExpression("#{entity.paymentmethod}");
-        xLabel3.setFontStyle("font-size:12");
-        xLabel3.setOpaque(true);
-        xLabel3.setPreferredSize(new java.awt.Dimension(150, 20));
-        xFormPanel1.add(xLabel3);
+        xDecimalField6.setCaption("Overdue Penalty");
+        xDecimalField6.setCaptionWidth(100);
+        xDecimalField6.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        xDecimalField6.setEnabled(false);
+        xDecimalField6.setName("entity.overduepenalty");
+        xDecimalField6.setReadonly(true);
+        xFormPanel1.add(xDecimalField6);
 
         xFormPanel2.setPadding(new java.awt.Insets(5, 5, 0, 20));
         xLabel1.setBackground(new java.awt.Color(250, 250, 250));
-        com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
-        xLabel1.setBorder(xLineBorder2);
+        com.rameses.rcp.control.border.XLineBorder xLineBorder1 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder1.setLineColor(new java.awt.Color(204, 204, 204));
+        xLabel1.setBorder(xLineBorder1);
         xLabel1.setCaption("App. No.");
-        xLabel1.setCaptionWidth(90);
+        xLabel1.setCaptionWidth(100);
         xLabel1.setExpression("#{entity.appno}");
         xLabel1.setFontStyle("font-size:12");
         xLabel1.setOpaque(true);
@@ -175,18 +181,18 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         xFormPanel2.add(xLabel1);
 
         xLabel2.setBackground(new java.awt.Color(250, 250, 250));
-        com.rameses.rcp.control.border.XLineBorder xLineBorder3 = new com.rameses.rcp.control.border.XLineBorder();
-        xLineBorder3.setLineColor(new java.awt.Color(204, 204, 204));
-        xLabel2.setBorder(xLineBorder3);
+        com.rameses.rcp.control.border.XLineBorder xLineBorder2 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder2.setLineColor(new java.awt.Color(204, 204, 204));
+        xLabel2.setBorder(xLineBorder2);
         xLabel2.setCaption("Borrower");
-        xLabel2.setCaptionWidth(90);
+        xLabel2.setCaptionWidth(100);
         xLabel2.setExpression("#{entity.acctname}");
         xLabel2.setOpaque(true);
         xLabel2.setPreferredSize(new java.awt.Dimension(0, 20));
         xFormPanel2.add(xLabel2);
 
         xDecimalField2.setCaption("Loan Amount");
-        xDecimalField2.setCaptionWidth(90);
+        xDecimalField2.setCaptionWidth(100);
         xDecimalField2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         xDecimalField2.setEnabled(false);
         xDecimalField2.setFontStyle("font-size:14;");
@@ -196,26 +202,38 @@ public class LoanLedgerPage extends javax.swing.JPanel {
         xFormPanel2.add(xDecimalField2);
 
         xDateField3.setCaption("Date Started");
-        xDateField3.setCaptionWidth(90);
+        xDateField3.setCaptionWidth(100);
         xDateField3.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         xDateField3.setEnabled(false);
         xDateField3.setFontStyle("font-size:12");
         xDateField3.setName("entity.dtstarted");
-        xDateField3.setOutputFormat("MMM dd, yyyy");
+        xDateField3.setOutputFormat("MMM-dd-yyyy");
         xDateField3.setPreferredSize(new java.awt.Dimension(150, 20));
         xDateField3.setReadonly(true);
         xFormPanel2.add(xDateField3);
 
         xDateField4.setCaption("Date Matured");
-        xDateField4.setCaptionWidth(90);
+        xDateField4.setCaptionWidth(100);
         xDateField4.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         xDateField4.setEnabled(false);
         xDateField4.setFontStyle("font-size:12");
         xDateField4.setName("entity.dtmatured");
-        xDateField4.setOutputFormat("MMM dd, yyyy");
+        xDateField4.setOutputFormat("MMM-dd-yyyy");
         xDateField4.setPreferredSize(new java.awt.Dimension(150, 20));
         xDateField4.setReadonly(true);
         xFormPanel2.add(xDateField4);
+
+        xLabel3.setBackground(new java.awt.Color(250, 250, 250));
+        com.rameses.rcp.control.border.XLineBorder xLineBorder3 = new com.rameses.rcp.control.border.XLineBorder();
+        xLineBorder3.setLineColor(new java.awt.Color(204, 204, 204));
+        xLabel3.setBorder(xLineBorder3);
+        xLabel3.setCaption("Payment Method");
+        xLabel3.setCaptionWidth(100);
+        xLabel3.setExpression("#{entity.paymentmethod}");
+        xLabel3.setFontStyle("font-size:12");
+        xLabel3.setOpaque(true);
+        xLabel3.setPreferredSize(new java.awt.Dimension(150, 20));
+        xFormPanel2.add(xLabel3);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -224,16 +242,17 @@ public class LoanLedgerPage extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(xFormPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                    .addComponent(xFormPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(xFormPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(11, 11, 11))
+                    .addComponent(xFormPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -243,15 +262,15 @@ public class LoanLedgerPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -269,6 +288,8 @@ public class LoanLedgerPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XDecimalField xDecimalField2;
     private com.rameses.rcp.control.XDecimalField xDecimalField3;
     private com.rameses.rcp.control.XDecimalField xDecimalField4;
+    private com.rameses.rcp.control.XDecimalField xDecimalField5;
+    private com.rameses.rcp.control.XDecimalField xDecimalField6;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
     private com.rameses.rcp.control.XIntegerField xIntegerField1;

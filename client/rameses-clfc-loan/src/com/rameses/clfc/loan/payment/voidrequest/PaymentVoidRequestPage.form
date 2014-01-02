@@ -87,6 +87,9 @@
             </Property>
             <Property name="caption" type="java.lang.String" value="Address"/>
             <Property name="expression" type="java.lang.String" value="#{entity.borrower.address}"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[0, 18]"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="com.rameses.rcp.control.XLabel" name="xLabel5">

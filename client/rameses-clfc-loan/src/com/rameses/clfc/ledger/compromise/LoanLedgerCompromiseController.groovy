@@ -32,6 +32,7 @@ class LoanLedgerCompromiseController
         }
     ]
 
+    String title = "Compromise";
     def entity;
     def data;
     def compromiseTypes = LoanUtil.compromiseTypes;

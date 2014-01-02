@@ -8,6 +8,9 @@ import com.rameses.osiris2.reports.*;
 
 class LoanLedgerController extends ReportModel
 {   
+    @Binding
+    def binding;
+
     @Service('LoanLedgerService')
     def svc;
 
@@ -58,6 +61,7 @@ class LoanLedgerController extends ReportModel
             throw new Exception('Please commit table data before saving.');
             
         entity = svc.rebuild(entity);
+        binding.refresh('entity')
         paymentsHandler.reload();
         MsgBox.alert("Successfully rebuilt collection sheet!");
     }

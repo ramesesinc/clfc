@@ -31,6 +31,7 @@ class LoanLedgerAdjustmentController
             
     def save() {
         adjustmentSvc.create([ledgerid: entity.ledgerid, payments: payments]);
+        MsgBox.alert("Successfully adjusted payments!");
         return close();
     }
     

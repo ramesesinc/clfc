@@ -35,7 +35,7 @@
                   <Component id="jPanel2" alignment="0" min="-2" max="-2" attributes="1"/>
                   <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="1"/>
               </Group>
-              <EmptySpace pref="34" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -125,7 +125,7 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="entity.billdate"/>
-                <Property name="outputFormat" type="java.lang.String" value="MMM dd, yyyy"/>
+                <Property name="outputFormat" type="java.lang.String" value="MMM-dd-yyyy"/>
                 <Property name="readonly" type="boolean" value="true"/>
               </Properties>
             </Component>

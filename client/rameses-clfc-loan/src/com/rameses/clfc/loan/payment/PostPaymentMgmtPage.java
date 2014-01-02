@@ -59,6 +59,7 @@ public class PostPaymentMgmtPage extends javax.swing.JPanel {
         xDateField1.setEnabled(false);
         xDateField1.setFontStyle("font-size:12");
         xDateField1.setName("entity.txndate");
+        xDateField1.setOutputFormat("MMM-dd-yyyy");
         xFormPanel1.add(xDateField1);
 
         xDataTable1.setColumns(new com.rameses.rcp.common.Column[]{
@@ -174,7 +175,7 @@ public class PostPaymentMgmtPage extends javax.swing.JPanel {
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "isvoided"}
                 , new Object[]{"caption", "Is Voided?"}
-                , new Object[]{"width", 20}
+                , new Object[]{"width", 70}
                 , new Object[]{"minWidth", 0}
                 , new Object[]{"maxWidth", 0}
                 , new Object[]{"required", false}
@@ -183,6 +184,19 @@ public class PostPaymentMgmtPage extends javax.swing.JPanel {
                 , new Object[]{"editable", false}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.CheckBoxColumnHandler(java.lang.Boolean.class, 1, 0)}
+            }),
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "postedby"}
+                , new Object[]{"caption", "Posted By"}
+                , new Object[]{"width", 150}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
         xDataTable2.setHandler("paymentsHandler");
@@ -225,6 +239,19 @@ public class PostPaymentMgmtPage extends javax.swing.JPanel {
                 , new Object[]{"editable", false}
                 , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.DateColumnHandler("MMM-dd-yyyy", "MMM-dd-yyyy", "MMM-dd-yyyy")}
+            }),
+            new com.rameses.rcp.common.Column(new Object[]{
+                new Object[]{"name", "postedby"}
+                , new Object[]{"caption", "Posted by"}
+                , new Object[]{"width", 150}
+                , new Object[]{"minWidth", 0}
+                , new Object[]{"maxWidth", 0}
+                , new Object[]{"required", false}
+                , new Object[]{"resizable", true}
+                , new Object[]{"nullWhenEmpty", true}
+                , new Object[]{"editable", false}
+                , new Object[]{"textCase", com.rameses.rcp.constant.TextCase.UPPER}
+                , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
                 new Object[]{"name", "remarks"}

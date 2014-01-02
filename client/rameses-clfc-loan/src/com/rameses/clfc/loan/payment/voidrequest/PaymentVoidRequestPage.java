@@ -66,6 +66,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
         xLabel4.setBorder(xLineBorder3);
         xLabel4.setCaption("Address");
         xLabel4.setExpression("#{entity.borrower.address}");
+        xLabel4.setPreferredSize(new java.awt.Dimension(0, 18));
         xFormPanel1.add(xLabel4);
 
         com.rameses.rcp.control.border.XLineBorder xLineBorder4 = new com.rameses.rcp.control.border.XLineBorder();

@@ -79,7 +79,7 @@ public class LoanLedgerSubBillingPage extends javax.swing.JPanel {
         xDateField1.setCaptionWidth(100);
         xDateField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         xDateField1.setName("entity.billdate");
-        xDateField1.setOutputFormat("MMM dd, yyyy");
+        xDateField1.setOutputFormat("MMM-dd-yyyy");
         xDateField1.setReadonly(true);
         xFormPanel2.add(xDateField1);
 
@@ -172,7 +172,7 @@ public class LoanLedgerSubBillingPage extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
