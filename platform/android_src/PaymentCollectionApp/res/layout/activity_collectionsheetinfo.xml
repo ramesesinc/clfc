@@ -368,7 +368,7 @@
                           android:layout_alignParentLeft="true"
                           android:layout_alignParentTop="true"
                           android:layout_marginLeft="10dp"
-                          android:text="@string/txt_dailydue"
+                          android:text="@string/txt_schedofpayment"
                           android:textAppearance="?android:attr/textAppearanceMedium"
                           android:textSize="17sp" />
 
