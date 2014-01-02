@@ -78,6 +78,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"PRIMARY KEY(loanappid, referenceid)" +
 			");";
 	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(" +
+			"sessionid text, " +
 			"serverdate text, " +
 			"collectorid text" +
 			")";
@@ -231,6 +232,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void insertSystem(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
+		values.put("sessionid", params.get("sessionid").toString());
 		values.put("serverdate", params.get("serverdate").toString());
 		values.put("collectorid", params.get("collectorid").toString());
 		db.insert(TABLE_SYSTEM, null, values);
@@ -273,15 +275,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.update(TABLE_HOST, values, null, null);
 	}
 	
-	/*public String getSessionid() {
+	public String getSessionid() {
 		Cursor result = db.rawQuery("SELECT sessionid FROM "+TABLE_SYSTEM, null);
 		
-		if(result != null) {
+		if(result != null && result.getCount() > 0) {
 			result.moveToFirst();
 			return result.getString(result.getColumnIndex("sessionid"));
 		}
-		return null;
-	}*/
+		return "";
+	}
 	
 	public String getCollectorid() {
 		Cursor result = db.rawQuery("SELECT collectorid FROM "+TABLE_SYSTEM, null);

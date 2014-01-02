@@ -8,7 +8,7 @@
     <string name="txt_acctname">Acct. Name</string>
     <string name="txt_loanamount">Loan Amount</string>
     <string name="txt_balance">Total Balance</string>
-    <string name="txt_dailydue">Daily Due</string>
+    <string name="txt_schedofpayment">Sched. of Payment</string>
     <string name="txt_amountdue">Amount Due</string>
     <string name="txt_overpayment">Overpayment</string>
     <string name="txt_penalty">Penalty</string>

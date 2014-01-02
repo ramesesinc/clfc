@@ -40,6 +40,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.hardware.SensorManager;
+import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -78,7 +79,7 @@ public class Main extends Activity {
 				provider = LocationManager.NETWORK_PROVIDER;
 				locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 				location = locationManager.getLastKnownLocation(provider);
-				if (application != null) {
+				if (application != null && location != null) {
 					application.setLongitude(location.getLongitude());
 					application.setLatitude(location.getLatitude());
 				}
@@ -114,11 +115,15 @@ public class Main extends Activity {
 			//params.put("payments", list);
 			try {
 				Map<String, Object> params = new HashMap<String, Object>();
+				if (!db.isOpen) db.openDb();
+				params.put("sessionid", db.getSessionid());
+				if (db.isOpen) db.closeDb();
+				params.put("terminalkey", ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
 				params.put("longitude", application.getLongitude());
 				params.put("latitude", application.getLatitude());
 				params.put("remarks", msg);
 				proxy.invoke("postLocation", new Object[]{params});
-			} catch(Exception e) {}
+			} catch(Exception e) { e.printStackTrace(); }
 			finally { 
 				if (repeat) locationHandler.postDelayed(locationRunnable, 3000); 
 			}
@@ -174,8 +179,9 @@ public class Main extends Activity {
 		super.onStart();
 		
 		isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-		WifiManager wifiManager = (WifiManager)context.getSystemService(WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
 		wifiManager.setWifiEnabled(true);
+		
 		ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE);
 		networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		
@@ -316,7 +322,7 @@ public class Main extends Activity {
 			if (!db.isOpen) db.openDb();
 			db.emptySystemTable();
 			Map<String, Object> params = new HashMap<String, Object>();
-			//params.put("sessionid", bundle.getString("billingid"));
+			params.put("sessionid", bundle.getString("billingid"));
 			params.put("serverdate", bundle.getString("serverdate"));
 			params.put("collectorid", bundle.getString("collectorid"));
 			db.insertSystem(params);
