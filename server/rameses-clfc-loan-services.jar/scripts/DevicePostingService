@@ -13,6 +13,12 @@ class DevicePostingService
 	@ActiveDB(value="sysuser")
 	def sysuser;
 
+	@ActiveDB(value="loan_ledger_billing")
+	def loan_billing;
+
+	@ActiveDB(value="loan_ledger_specialcollection")
+	def specialcollection;
+
 	@Service("DeviceLoanBillingService")
 	def device_billing;
 
@@ -138,5 +144,41 @@ class DevicePostingService
 			reason: params.reason
 		]
 		void_payment.create(itm);
+	}
+
+	@ProxyMethod
+	public def postSpecialCollectionRequest( params ) {
+		def map = [:];
+		map.putAll(params);
+		def user = sysuser.read([objid: map.collectorid]);
+		//if (!user) throw new Exception("Collector does not exist or has already been deleted.");
+
+		map.collector = user;
+		map.dtrequested = dateSvc.serverDate;
+		map.requestedby = map.collector.name;
+		specialcollection.create(map);
+	}
+
+	@ProxyMethod
+	public def downloadSpecialCollection( params ) {
+		params = specialcollection.read(params);
+		if (!params || params.state != 'APPROVED') throw new Exception("Request is still pending.");
+
+		def routes = [];
+		loan_billing.getRoutesByBillingid([billingid: params.billingid]).each{
+			routes.add([
+				routecode: it.code,
+				routedescription: it.description,
+				routearea: it.area
+			]);
+		}
+		def list = [];
+		loan_billing.getBillingDetailByParentid([parentid: params.billingid]).each{
+			it.sessionid = params.billingid;
+			it.routecode = it.route.code;
+			it.remove("route");
+			list.add(it);
+		}
+		return [routes: routes, list: list, request: params];
 	}
 }
