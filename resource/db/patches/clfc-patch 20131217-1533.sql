@@ -13,7 +13,7 @@ CREATE TABLE `loan_ledger_compromise` (
   `dteffectivefrom` DATE DEFAULT NULL,
   `dteffectiveto` DATE DEFAULT NULL,
   PRIMARY KEY  (`objid`),
-  KEY `ix_compromisetypeid` (`compromisetype_objid`),
+  KEY `ix_compromisetype` (`compromisetype`),
   KEY `ix_iswaveinterest` (`iswaveinterest`),
   KEY `ix_iswavepenalty` (`iswavepenalty`),
   KEY `ix_fixedamount` (`isfixedamount`)
