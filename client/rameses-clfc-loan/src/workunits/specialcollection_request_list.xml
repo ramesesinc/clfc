@@ -2,7 +2,7 @@
     <invokers>
         <invoker folderid="/explorer/txn/loan" caption="Special Collection Requests" role="ACCT_OFFICER" />
         
-        <invoker type="formActions" action="create" caption="Create" mnemonic="r" visibleWhen="#{selectedEntity != null &amp;&amp; selectedEntity.state == 'PENDING'}"/>
+        <invoker type="formActions" action="create" caption="Create" mnemonic="e" visibleWhen="#{selectedEntity != null &amp;&amp; selectedEntity.state == 'PENDING'}"/>
         <invoker type="formActions" action="open" visibleWhen="#{selectedEntity != null &amp;&amp; selectedEntity.state != 'PENDING'}"/>
     </invokers>
     

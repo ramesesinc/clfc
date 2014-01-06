@@ -1,6 +1,5 @@
-"addLedger|removeLedger" [mode != 'read'] {
-    enabled: true;
-}
-"addLedger|removeLedger" [mode == 'read'] {
+"entity.*" [mode == 'read' || mode != 'read'] {
     enabled: false;
+    disabledTextColor: #000;
+    readonly: true;
 }
