@@ -306,12 +306,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("UPDATE "+TABLE_SPECIALCOLLECTION+" SET state='APPROVED' WHERE objid='"+objid+"'");
 	}
 	
-	public void resetSC() {
-		db.execSQL("UPDATE "+TABLE_SPECIALCOLLECTION+" SET state='PENDING'");
-		db.execSQL("DELETE FROM "+TABLE_SESSION+" WHERE objid LIKE 'ls%'");
-		db.execSQL("DELETE FROM "+TABLE_COLLECTIONSHEET+" WHERE sessionid LIKE 'ls%'");
-	}
-	
 	public Cursor findSessionById(String objid) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SESSION+" WHERE objid='"+objid+"'", null);
 		

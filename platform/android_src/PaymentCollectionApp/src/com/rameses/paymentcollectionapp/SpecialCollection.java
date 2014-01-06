@@ -46,9 +46,6 @@ public class SpecialCollection extends Activity {
 		postingProxy = new ServiceHelper(context).createServiceProxy("DevicePostingService");
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(false);
-		if (!db.isOpen) db.openDb();
-		db.resetSC();
-		if (db.isOpen) db.closeDb();
 	}
 	
 	@Override
