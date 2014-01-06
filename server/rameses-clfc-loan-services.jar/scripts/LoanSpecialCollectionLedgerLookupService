@@ -23,6 +23,7 @@ class LoanSpecialCollectionLedgerLookupService
 		params.billdate = params.billdate? params.billdate : dateSvc.serverDate;
 		params.billdate = params.billdate.toString().split(' ')[0];
 		params.collectorid = params.collectorid? params.collectorid : '';
+		params.searchtext = params.searchtext? params.searchtext+'%' : '%';
 		return em.getForSpecialCollectionList(params);
 	}
 	

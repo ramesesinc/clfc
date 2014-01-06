@@ -29,7 +29,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 	@Service("SequenceService")
 	def seqSvc;
 
-	@Service("HolidayEventCalendarService")
+	@Service("CalendarEventService")
 	def calendarSvc;
 
 	@Service("LoanLedgerService")
@@ -132,11 +132,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 				overduepenalty: it.overduepenalty
 			];
 			detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+detail.route_code, 8);
-			/*def dtschedule;
-			if (!it.dtlastpaid)
-				dtlastpaid = dateSvc.add(it.dtstarted, "-1");
-			else 
-				dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;*/
+			
 			def amt = it.dailydue;
 			if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
 			days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);

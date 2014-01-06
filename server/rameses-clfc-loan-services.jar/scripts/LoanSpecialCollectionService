@@ -39,6 +39,7 @@ class LoanSpecialCollectionService extends ActiveListService
 		itm.createdby = env.USER? env.USER : 'SYSTEM';
 		itm.dtmodified = itm.dtcreated;
 		itm.billdate = itm._specialcollectionrequest.dtrequested;
+		itm.remarks = null;
 		ledger_billing.create(itm);
 		updateBillingDetail(itm);
 		em.update([objid: itm._specialcollectionrequest.objid, state: 'APPROVED', billingid: itm.objid]);
