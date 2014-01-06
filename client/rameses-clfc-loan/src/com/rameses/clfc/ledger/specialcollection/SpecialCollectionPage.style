@@ -1,0 +1,6 @@
+"addLedger|removeLedger" [mode != 'read'] {
+    enabled: true;
+}
+"addLedger|removeLedger" [mode == 'read'] {
+    enabled: false;
+}
