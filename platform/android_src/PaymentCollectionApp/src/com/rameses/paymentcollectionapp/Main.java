@@ -171,7 +171,6 @@ public class Main extends Activity {
 		setTitle("CLFC Collection");
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(false);
-		postingProxy = svcHelper.createServiceProxy("DevicePostingService");
 		application = (ProjectApplication) context.getApplicationContext();
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		locationHandler.postDelayed(locationRunnable, 0);
@@ -181,7 +180,8 @@ public class Main extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
+
+		postingProxy = svcHelper.createServiceProxy("DevicePostingService");
 		isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
 		wifiManager.setWifiEnabled(true);
@@ -194,6 +194,7 @@ public class Main extends Activity {
 		arrlist.add("Download Collection Sheet(s)");
 		arrlist.add("View Collection Sheet(s)");
 		arrlist.add("Upload Collection Sheet(s)");
+		arrlist.add("Special Collection");
 		
 		optionLv.setAdapter(new StringAdapter(context, arrlist));
 		optionLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -201,9 +202,20 @@ public class Main extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				//String opt = parent.getItemAtPosition(position).toString();
+				Intent intent = null;
 				if(position == 1) {
-					Intent intent = new Intent(context, CollectionSheetRoute.class);
+					intent = new Intent(context, CollectionSheetRoute.class);
 					startActivity(intent);
+				} else if (position == 3) {
+					if (!db.isOpen) db.openDb();
+					String collectorid = db.getCollectorid();
+					if (db.isOpen) db.closeDb();
+					if (!collectorid.equals("")) {
+						intent = new Intent(context, SpecialCollection.class);
+						startActivity(intent);
+					} else {
+						ApplicationUtil.showShortMsg(context, "You must log in first before requesting for special collection.");
+					}
 				} else {
 					if(svcProxy == null) {
 						//Toast.makeText(context, "Please set the host's ip settings", Toast.LENGTH_SHORT).show();
@@ -217,7 +229,7 @@ public class Main extends Activity {
 						if (forupload == false && cursor != null && cursor.getCount() > 0) forupload = true;
 						cursor = db.getRemarks();
 						if (forupload == false && cursor != null && cursor.getCount() > 0) forupload = true;
-						db.closeDb();
+						if (db.isOpen) db.closeDb();
 						if(position == 0) {
 							if(forupload == true) {
 								//Toast.makeText(context, "There are still collection sheets to upload. Please upload the payments before downloading current billing.", Toast.LENGTH_LONG).show();
@@ -451,6 +463,7 @@ public class Main extends Activity {
 				db.removeAllUploads();
 				db.removeAllRoutes();
 				db.removeAllSessions();
+				db.removeAllSpecialCollections();
 				if (progressDialog.isShowing()) progressDialog.dismiss();
 				//Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
 				ApplicationUtil.showShortMsg(context, "Successfully uploaded collection sheets!");

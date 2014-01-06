@@ -28,6 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String TABLE_ROUTE = "route";
 	private static final String TABLE_VOID = "void";
 	private static final String TABLE_SESSION = "session";
+	private static final String TABLE_SPECIALCOLLECTION = "specialcollection";
 	
 	private static final String CREATE_TABLE_COLLECTIONSHEET = "" +
 			"CREATE TABLE COLLECTIONSHEET(" +
@@ -103,7 +104,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_SESSION = "CREATE TABLE SESSION(" +
 			"objid text PRIMARY KEY" +
 			");";
-	
+	private static final String CREATE_TABLE_SPECIALCOLLECTION = "CREATE TABLE SPECIALCOLLECTION(" +
+			"objid text PRIMARY KEY, " +
+			"state text, " +
+			"remarks text " +
+			");";
 	
 	private SQLiteDatabase db;
 	public boolean isOpen = false;
@@ -127,6 +132,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_ROUTE);
 		db.execSQL(CREATE_TABLE_VOID);
 		db.execSQL(CREATE_TABLE_SESSION);
+		db.execSQL(CREATE_TABLE_SPECIALCOLLECTION);
 		db.execSQL("INSERT INTO "+TABLE_HOST+" VALUES('121.97.60.200', '8070')");
 	}
 
@@ -145,6 +151,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_ROUTE);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_VOID);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_SESSION);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_SPECIALCOLLECTION);
 		onCreate(db);
 	}
 
@@ -257,7 +264,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.insert(TABLE_HOST, null, values);
 	}
 	
-	public void insertRoute(Map<String, String> params) {
+	public void insertSpecialCollection(Map<String, Object> params) {
+		ContentValues values = new ContentValues();
+		values.put("objid", params.get("objid").toString());
+		values.put("state", params.get("state").toString());
+		values.put("remarks", params.get("remarks").toString());
+		db.insert(TABLE_SPECIALCOLLECTION, null, values);
+	}
+	
+	public void insertRoute(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
 		values.put("routecode", params.get("routecode").toString());
 		values.put("routedescription", params.get("routedescription").toString());
@@ -276,10 +291,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.insert(TABLE_VOID, null, values);
 	}
 	
-	public void approveVoidPayment(String objid) {
-		db.execSQL("UPDATE "+TABLE_VOID+" SET state='APPROVED' WHERE objid='"+objid+"'");
-	}
-	
 	public void updateHost(String ipaddress, String port) {
 		ContentValues values=new ContentValues();
 		values.put("ipaddress", ipaddress);
@@ -287,8 +298,29 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		db.update(TABLE_HOST, values, null, null);
 	}
 	
+	public void approveVoidPayment(String objid) {
+		db.execSQL("UPDATE "+TABLE_VOID+" SET state='APPROVED' WHERE objid='"+objid+"'");
+	}
+	
+	public void approveSpecialCollection(String objid) {
+		db.execSQL("UPDATE "+TABLE_SPECIALCOLLECTION+" SET state='APPROVED' WHERE objid='"+objid+"'");
+	}
+	
+	public void resetSC() {
+		db.execSQL("UPDATE "+TABLE_SPECIALCOLLECTION+" SET state='PENDING'");
+		db.execSQL("DELETE FROM "+TABLE_SESSION+" WHERE objid LIKE 'ls%'");
+		db.execSQL("DELETE FROM "+TABLE_COLLECTIONSHEET+" WHERE sessionid LIKE 'ls%'");
+	}
+	
 	public Cursor findSessionById(String objid) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SESSION+" WHERE objid='"+objid+"'", null);
+		
+		if (result != null && result.getCount() > 0) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor findRouteByCode(String routecode) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_ROUTE+" WHERE routecode='"+routecode+"'", null);
 		
 		if (result != null && result.getCount() > 0) result.moveToFirst();
 		return result;
@@ -311,11 +343,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public String getCollectorid() {
 		Cursor result = db.rawQuery("SELECT collectorid FROM "+TABLE_SYSTEM, null);
 		
-		if (result != null) {
+		if (result != null && result.getCount() > 0) {
 			result.moveToFirst();
 			return result.getString(result.getColumnIndex("collectorid"));
 		}
-		return null;
+		return "";
 	}
 	
 	public Date getServerDate() throws ParseException {
@@ -393,6 +425,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		if (result != null) return result.getCount();
 		return 0;
 	}
+	
+	public int countCollectionSheetsByRoutecode(String routecode) {
+		Cursor result = db.rawQuery("SELECT detailid FROM "+TABLE_COLLECTIONSHEET+" WHERE routecode='"+routecode+"'", null);
+		
+		if (result != null) return result.getCount();
+		return 0;
+	}
 		
 	public Cursor getRemarks() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_REMARKS, null);
@@ -429,7 +468,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		
 		if (result != null) result.moveToFirst();
 		return result;
-	}	
+	}
+	
+	public Cursor getSpecialCollections() {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SPECIALCOLLECTION, null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
+	
+	public Cursor getSpecialCollectionById(String objid) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SPECIALCOLLECTION+" WHERE objid='"+objid+"' LIMIT 1", null);
+		
+		if (result != null) result.moveToFirst();
+		return result;
+	}
 	
 	public Cursor getPayments() {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_PAYMENT, null);
@@ -582,6 +635,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void removeAllSessions() {
 		db.delete(TABLE_SESSION, null, null);
+	}
+	
+	public void removeAllSpecialCollections() {
+		db.delete(TABLE_SPECIALCOLLECTION, null, null);
 	}
 	
 	public void openDb() throws SQLException {

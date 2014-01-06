@@ -52,4 +52,5 @@
 	<string name="txt_overlay_void_pending">VOID REQUEST PENDING</string>
 	<string name="txt_overlay_void_approved">VOID APPROVED</string>
 	<string name="txt_borrowerimg">Borrower Image</string>
+	<string name="txt_specialcollection_request">Special Collection Request(s)</string>
 </resources>

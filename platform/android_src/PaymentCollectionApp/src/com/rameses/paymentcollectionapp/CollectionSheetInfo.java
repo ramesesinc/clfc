@@ -225,7 +225,7 @@ public class CollectionSheetInfo extends Activity {
 		}
 		
 		//ListView lv_info_payments = (ListView) findViewById(R.id.lv_info_payments);
-		LinearLayout ll_info_payments = (LinearLayout) findViewById(R.id.ll_info_payments);
+		LinearLayout ll_info_payments = (LinearLayout) findViewById(R.id.ll_specialcollection);
 		ll_info_payments.removeAllViewsInLayout();
 		rl_payment.setVisibility(View.GONE);
 

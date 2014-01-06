@@ -103,7 +103,7 @@ public class Route extends Activity {
 			//String serverdate = bundle.getString("serverdate");
 			ArrayList bundleList = (ArrayList) bundle.getParcelableArrayList("collectionsheets");
 			Map map;
-			Map<String, String> params = new HashMap<String, String>();
+			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("routecode", bundle.getString("routecode"));
 			params.put("routedescription", bundle.getString("routedescription"));
 			params.put("routearea", bundle.getString("routearea"));

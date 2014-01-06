@@ -34,10 +34,11 @@
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:contentDescription="@string/img_check_ico"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_check_on" />
+            android:src="@drawable/btn_check_off" />
 
     </RelativeLayout>
 
