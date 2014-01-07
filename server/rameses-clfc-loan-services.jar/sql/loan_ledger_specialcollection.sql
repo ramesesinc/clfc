@@ -23,7 +23,7 @@ INNER JOIN (SELECT lr.*, sqry.*
 			AND llb.billdate=$P{billdate}) sqry ON lr.code=sqry.routecode
 	WHERE sqry.routecode IS NULL) sqry ON la.route_code=sqry.code
 WHERE ll.state = 'OPEN'
-	AND ll.acctname LIKE '%'
+	AND ll.acctname LIKE $P{searchtext}
 
 [getLedgersByBillingid]
 SELECT ll.*, lr.code AS route_code, lr.area AS route_area,
