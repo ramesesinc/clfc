@@ -1,0 +1,117 @@
+import com.rameses.annotations.*;
+import com.rameses.http.*;
+import com.rameses.osiris3.server.*;
+
+class MobileTrackerService  
+{
+	@XConnection("mobile_tracker_poll")
+	def tracker_poll;
+
+	@ActiveDB('mobile_tracker')
+	def em; 
+
+	@Service('DateService')
+    def dateSvc;
+
+	@Service
+    def selfSvc;
+	
+	@ProxyMethod
+	public Map start(Map params) {
+		def branch = em.findBranch([objid: params.branchid]); 
+		if (!branch) throw new Exception("'"+params.branchid+"' branchid does not exist"); 
+
+		def entity = [
+			objid 		: 'TRKR' + new java.rmi.server.UID(), 
+			state		: 'OPEN', 
+			sessionid	: params.sessionid,
+			branchid 	: params.branchid, 
+			dtstart 	: dateSvc.serverDate,
+			startlng	: params.lng, 
+			startlat	: params.lat 
+		];
+		em.create(entity); 
+
+		def item = [
+			objid 		: "TRKRI" + new java.rmi.server.UID(), 
+			parentid 	: entity.objid, 
+			txndate 	: entity.dtstart, 
+			refid 		: 'RID' + new java.rmi.server.UID(), 
+			reftype		: 'TRACK', 
+			lng 		: entity.startlng,  
+			lat 		: entity.startlat 
+		]; 
+		em.create(item, 'detail'); 
+		return entity; 
+	}
+
+	@ProxyMethod
+	public Map stop(Map params) {
+		def entity = em.findBySession([sessionid: params.sessionid]); 
+		if (!entity) throw new Exception("'"+params.sessionid+"' sessionid not found"); 
+		if (entity.state == 'CLOSED') throw new Exception('This session has already been closed'); 
+
+		entity.dtclosed 	= dateSvc.serverDate;
+		entity.closedby 	= params.username;
+		entity.closedremarks = 'SESSION CLOSED';
+		entity.closedlng	= params.lng;
+		entity.closedlat 	= params.lat;
+		entity.state 		= 'CLOSED';
+		em.update(entity, 'close-tracker'); 
+
+		def item = [
+			objid 		: "TRKRI" + new java.rmi.server.UID(), 
+			parentid 	: entity.objid, 
+			txndate 	: entity.dtclosed, 
+			refid 		: 'RID' + new java.rmi.server.UID(), 
+			reftype		: 'TRACK', 
+			lng 		: entity.closedlng,  
+			lat 		: entity.closedlat 
+		]; 
+		em.create(item, 'detail'); 
+		return entity; 
+	} 
+
+	@ProxyMethod
+	public Map log(Map entity) {
+		def info = em.findBySession([sessionid: params.sessionid]); 
+		if (!info) throw new Exception("'"+params.sessionid+"' sessionid not found"); 
+		if (info.state == 'CLOSED') throw new Exception('This session has already been closed'); 
+
+		entity.objid = "TRKRI" + new java.rmi.server.UID();
+		entity.parentid = info.objid; 
+		entity.txndate = dateSvc.serverDate;
+		em.create(entity, 'detail'); 
+		selfSvc.publish(entity); 
+		return entity; 
+	} 
+
+	@ProxyMethod
+	public Map openSession(Map params) { 
+		return em.findBySession([sessionid: params.sessionid]); 
+	} 
+	
+	@ProxyMethod 	
+	public void refresh(Map params) {
+		def info = em.findBySession([sessionid: params.sessionid]); 
+		if (!info) return; 
+
+		def logs = em.getLogs([parentid: info.objid]); 
+		while (!logs.isEmpty()) {
+			selfSvc.publish(logs.remove(0)); 
+		}
+	}
+
+	@ProxyMethod 
+	@Async
+	public void publish(def data) { 
+		if (data != null) {
+			if (data.txndate) {
+				def s = data.txndate.toString().replaceAll('[-:. ]',''); 
+				data.indexno = Long.parseLong(s); 
+			} 
+			tracker_poll.send(data); 
+		} 
+	} 
+	
+}
