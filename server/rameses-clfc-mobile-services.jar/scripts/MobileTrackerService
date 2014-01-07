@@ -35,6 +35,7 @@ class MobileTrackerService
 		def item = [
 			objid 		: "TRKRI" + new java.rmi.server.UID(), 
 			parentid 	: entity.objid, 
+			type		: entity.type,
 			txndate 	: entity.dtstart, 
 			refid 		: 'RID' + new java.rmi.server.UID(), 
 			reftype		: 'TRACK', 
@@ -74,8 +75,8 @@ class MobileTrackerService
 
 	@ProxyMethod
 	public Map log(Map entity) {
-		def info = em.findBySession([sessionid: params.sessionid]); 
-		if (!info) throw new Exception("'"+params.sessionid+"' sessionid not found"); 
+		def info = em.findBySession([sessionid: entity.sessionid]); 
+		if (!info) throw new Exception("'"+entity.sessionid+"' sessionid not found"); 
 		if (info.state == 'CLOSED') throw new Exception('This session has already been closed'); 
 
 		entity.objid = "TRKRI" + new java.rmi.server.UID();
@@ -87,7 +88,7 @@ class MobileTrackerService
 	} 
 
 	@ProxyMethod
-	public Map openSession(Map params) { 
+	public Map openSession(Map params) {
 		return em.findBySession([sessionid: params.sessionid]); 
 	} 
 	
