@@ -19,7 +19,7 @@ class DeviceLoanBillingService
 	def ledger_billing;
 
 	@ActiveDB(value="user")
-	def user;
+	def sysuser;
 
 	@Service('DateService')
 	def dateSvc;
@@ -29,6 +29,9 @@ class DeviceLoanBillingService
 
 	@Service("LoanLedgerService")
 	def ledgerSvc;
+
+	@Service("MobileTrackerService")
+	def trackerSvc;
 
 	@ProxyMethod
 	public def getRoutes(params) {
@@ -105,6 +108,18 @@ class DeviceLoanBillingService
 			else itm.remove("remarks");
 		}
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
+		def session = trackerSvc.openSession([sessionid: params.billingid]);
+		if (!session) {
+			def billing = ledger_billing.read([objid: params.billingid]);
+			map = [
+				sessionid: billing.objid,
+				branchid: billing.branchid,
+				type: 'NORMAL',
+				lng: params.longitude,
+				lat: params.latitude
+			];
+			trackerSvc.start(map);
+		}
 		return [list: list];
 	}
 
@@ -118,12 +133,15 @@ class DeviceLoanBillingService
 		def collectionsheet = params.collectionsheet;
 		def data = batch_collectionsheet.read([objid: params.sessionid]);
 		def itm;
+		def user = sysuser.read([objid: params.collectorid]);
 		def list = [];
 		collectionsheet.payments.each{
 			itm = batch_collectionsheet.read(it, "payment");
 			if (!itm) {
 				itm = [:];
 				itm.putAll(it);
+				itm.dtposted = dateSvc.serverDate;
+				itm.postedby = user? user.name : 'COLLECTOR NOT IDENTIFIED';
 				itm.parentid = collectionsheet.detailid;
 				batch_collectionsheet.create(itm, "payment");
 			}
@@ -134,6 +152,8 @@ class DeviceLoanBillingService
 			if (!itm) {
 				itm = [:];
 				itm.putAll(it);
+				itm.dtposted = dateSvc.serverDate;
+				itm.postedby = user? user.name : 'COLLECTOR NOT IDENTIFIED';
 				itm.parentid = collectionsheet.detailid;
 				batch_collectionsheet.create(itm, "note");
 			}
@@ -143,6 +163,16 @@ class DeviceLoanBillingService
 		def total = batch_collectionsheet.findTotalDetailByParentId([parentid: params.sessionid]).total;
 		if (data.totalcount == total) {
 			//throw new Exception('stopping');
+			def session = trackerSvc.openSession(params);
+			if (session && session.state == 'OPEN') {
+				def map = [
+					sessionid: params.sessionid,
+					username: user? user.name : 'COLLECTOR NOT IDENTIFIED',
+					lng: params.longitude,
+					lat: params.latitude
+				]
+				trackerSvc.stop(map)
+			}
 			ledger_billing.changeStateUploaded([objid: params.sessionid]);
 		}
 		return [list: list];
@@ -154,7 +184,7 @@ class DeviceLoanBillingService
 		if (!itm) {
 			def date = dateSvc.serverDate;
 			def txndate = dateSvc.parse("yyyy-MM-dd", params.txndate);
-			def collector = user.read([objid: params.collectorid]);
+			def collector = sysuser.read([objid: params.collectorid]);
 			if (!collector) throw new Exception("Collector record does not exist or has already been deleted.");
 
 			itm = [
