@@ -45,11 +45,13 @@ public class Payment extends Activity {
 	private int isfirstbill = 0;
 	private int totaldays = 0;
 	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
+	private ProjectApplication application = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_payment);
+		application = (ProjectApplication) context.getApplicationContext();
 		Intent intent = getIntent();
 		loanappid = intent.getStringExtra("loanappid");
 		detailid = intent.getStringExtra("detailid");
@@ -170,6 +172,8 @@ public class Payment extends Activity {
 			params.put("txndate", txndate);
 			params.put("routecode", routecode);
 			params.put("payment", payment);
+			params.put("longitude", application.getLongitude());
+			params.put("latitude", application.getLatitude());
 			Map<String, Object> collectionsheet = new HashMap<String, Object>();
 			if (!db.isOpen) db.openDb();
 			params.put("sessionid", sessionid);

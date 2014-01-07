@@ -32,6 +32,7 @@ public class Route extends Activity {
 	private ServiceProxy svcProxy;
 	private ProgressDialog progressDialog;
 	private ServiceHelper svcHelper = new ServiceHelper(context);
+	private ProjectApplication application = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class Route extends Activity {
 		setTitle("Select a Route: ");
 		Intent intent = getIntent();
 		bundle = intent.getBundleExtra("bundle");
+		application = (ProjectApplication) context.getApplicationContext();
 		db = new MySQLiteHelper(context);
 	}
 	
@@ -188,12 +190,13 @@ public class Route extends Activity {
 			Bundle xbundle = new Bundle();
 			String status = "";
 			try {
-				msg=handler.obtainMessage();
 				Map params=new HashMap();
 				params.put("route_code", route.getCode());
 				params.put("route_description", route.getDescription());
 				params.put("route_area", route.getArea());
 				params.put("billingid", route.getSessionid());
+				params.put("longitude", application.getLongitude());
+				params.put("latitude", application.getLatitude());
 				//ArrayList<CollectionSheetParcelable> list = (ArrayList<CollectionSheetParcelable>)sp1.invoke("getCollectionsheets", new Object[]{params});
 				Object result = svcProxy.invoke("downloadBilling", new Object[]{params});
 				Map<String, Object> map = (Map<String, Object>) result;
@@ -205,6 +208,7 @@ public class Route extends Activity {
 				xbundle.putString("sessionid", route.getSessionid());
 				xbundle.putParcelableArrayList("collectionsheets", ((ArrayList<CollectionSheetParcelable>)map.get("list")));
 				status = "ok";
+				msg=handler.obtainMessage();
 			}
 			catch( TimeoutException te ) {
 				xbundle.putString("response", "Connection Timeout!");

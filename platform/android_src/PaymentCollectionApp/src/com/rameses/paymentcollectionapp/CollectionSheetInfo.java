@@ -730,6 +730,7 @@ public class CollectionSheetInfo extends Activity {
 				if (!db.isOpen) db.openDb();
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("sessionid", sessionid);
+				params.put("collectorid", db.getCollectorid());
 				params.put("routecode", routecode);
 				params.put("txndate", txndate);
 				params.put("remarks", et_remarks);
