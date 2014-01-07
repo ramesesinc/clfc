@@ -80,7 +80,7 @@ class DeviceLoanBillingService
 		}
 		def payments;
 		def notes;
-		list.reverse().eachWithIndex{itm, idx->
+		list.eachWithIndex{itm, idx->
 			itm.seqno = idx+1;
 			payments = batch_collectionsheet.getPaymentsByDetailid([parentid: itm.objid]);
 			itm.payments = [];

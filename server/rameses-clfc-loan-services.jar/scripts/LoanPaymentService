@@ -33,7 +33,7 @@ class LoanPaymentService
 	@Service("DateService")
 	def dateSvc;
 
-	@Service("HolidayEventCalendarService")
+	@Service("CalendarEventService")
 	def calendarSvc;
 
 	@Service("LoanLedgerService")
