@@ -47,6 +47,7 @@
         <activity android:name="com.rameses.paymentcollectionapp.Payment" android:screenOrientation="portrait"></activity>
         <activity android:name="com.rameses.paymentcollectionapp.IPSetting" android:screenOrientation="portrait"></activity>
         <activity android:name="com.rameses.paymentcollectionapp.CollectionSheetRoute"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.SpecialCollection"></activity>
     </application>
 
 </manifest>

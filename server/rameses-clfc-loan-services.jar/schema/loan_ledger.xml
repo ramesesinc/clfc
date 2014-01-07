@@ -26,6 +26,29 @@
 		<field name="updatetype" required="true"/>
 	</element> 
 
+	<element name="detail" tablename="loan_ledger_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/>
+		<field name="state" required="true"/>
+		<field name="amtdue" required="true"/>
+		<field name="interestdue" required="true"/>
+		<field name="penaltydue" required="true"/>
+		<field name="amtpaid" required="true"/>
+		<field name="interestpaid" required="true"/>
+		<field name="penaltypaid" required="true"/>
+		<field name="amtbal" required="true"/>
+		<field name="interestbal" required="true"/>
+		<field name="penaltybal" required="true"/>
+		<field name="dtpaid"/>
+		<field name="refno"/>
+		<field name="day" required="true"/>
+		<field name="balance" required="true"/>
+		<field name="partialpayment" required="true"/>
+		<field name="txndate" required="true"/>
+		<field name="baseamount" required="true"/>
+		<field name="groupbaseamount" required="true"/>
+	</element> 
+
 	<element name="method" tablename="loan_ledger">
 		<field name="objid" primary="true"/>
 		<field name="paymentmethod" required="true"/>
@@ -65,28 +88,5 @@
 		<field name="objid" primary="true"/>
 		<field name="compromiseid" required="true"/>
 	</element>
-
-	<element name="detail" tablename="loan_ledger_detail">
-		<field name="objid" primary="true"/>
-		<field name="parentid" required="true"/>
-		<field name="state" required="true"/>
-		<field name="amtdue" required="true"/>
-		<field name="interestdue" required="true"/>
-		<field name="penaltydue" required="true"/>
-		<field name="amtpaid" required="true"/>
-		<field name="interestpaid" required="true"/>
-		<field name="penaltypaid" required="true"/>
-		<field name="amtbal" required="true"/>
-		<field name="interestbal" required="true"/>
-		<field name="penaltybal" required="true"/>
-		<field name="dtpaid"/>
-		<field name="refno"/>
-		<field name="day" required="true"/>
-		<field name="balance" required="true"/>
-		<field name="partialpayment" required="true"/>
-		<field name="txndate" required="true"/>
-		<field name="baseamount" required="true"/>
-		<field name="groupbaseamount" required="true"/>
-	</element> 
 
 </schema>

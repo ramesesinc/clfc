@@ -29,7 +29,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 	@Service("SequenceService")
 	def seqSvc;
 
-	@Service("HolidayEventCalendarService")
+	@Service("CalendarEventService")
 	def calendarSvc;
 
 	@Service("LoanLedgerService")
@@ -91,80 +91,81 @@ class LoanLedgerBillingService extends ActiveCrudService
 		em.removeBillingDetailByParentid([parentid: data.objid]);
 		data.routes.each{o->
 			def list = loan_ledger.getCollectionsheets([route_code: o.code]);
-			def days = 0;
-			list.each{
-				def currentDate = dateSvc.parseDate(data.billdate, null).date;
-				def maturityDate = dateSvc.parseDate(it.dtmatured, null).date;
-				if (currentDate >  maturityDate && it.overduepenalty == 0.00) {
-					def p = product_type.read([name: it.producttypeid])
-					it.overduepenalty = ledgerSvc.computeOverduePenalty([balance: it.balance, pastduerate: (p.pastduerate? p.pastduerate : 0.00)]);
-					loan_ledger.update(it, 'overduepenalty');
-				}
-				def detail = [
-					objid: 'LLBD'+new UID(),
-					parentid: data.objid,
-					ledgerid: it.objid,
-					route_code: o.code,
-					acctid: it.acctid,
-					loanappid: it.loanappid,
-					acctname: it.acctname,
-					loanamount: it.loanamount,
-					loandate: it.loandate,
-					term: it.term,
-					appno: it.appno,
-					overpaymentamount: it.overpaymentamount,
-					txndate: currentDate,
-					dailydue: it.dailydue,
-					dtmatured: it.dtmatured,
-					producttypeid: it.producttypeid,
-					paymentmethod: it.paymentmethod,
-					interestamount: it.interestamount,
-					homeaddress: it.homeaddress,
-					collectionaddress: it.collectionaddress? it.collectionaddress : '',
-					interest: 0.00,
-					others: 0.00,
-					overduepenalty: it.overduepenalty
-				];
-				detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+o.code, 8);
-				/*def dtschedule;
-				if (!it.dtlastpaid)
-					dtlastpaid = dateSvc.add(it.dtstarted, "-1");
-				else 
-					dtlastpaid = dateSvc.parseDate(it.dtlastpaid, null).date;*/
-				def amt = it.dailydue;
-				if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
-				days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
-				detail.amountdue = (amt*days)+detail.others;
-				if (!it.compromiseid) {					
-					if (currentDate > maturityDate) {
-						detail.penalty = days*it.overduepenalty;
-						def amountdue = new BigDecimal((detail.penalty+(days * detail.interestamount)+it.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
-						detail.amountdue = new BigDecimal(amountdue+'').setScale(2);
-						detail.days = days;
-					} else {
-						def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
-						days -= noofholidays;
-						def cal = Calendar.getInstance();
-						cal.setTime(currentDate);
-						if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
-						days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
-						detail.penalty = it.absentpenalty * (days > 0? days-1 : 0);
-						detail.amountdue += detail.penalty;
-					}
-					detail.balance = getBalance(detail, it.balance);
-				} else {
-					def compromise = ledger_compromise.read([objid: it.compromiseid]);
-					def type = compromise.compromisetype;
-					if (type == 'WAIVED_INTEREST') {
-						detail.penalty = days * it.overduepenalty;
-						detail.balance = it.balance + detail.penalty;
-					} else if (type == 'WAIVED_PENALTY') {
-						detail.balance = it.balance + (days*it.interestamount);
-					}
+			createBilling(list, data, o);
+		}
+	}
 
-				}
-				em.create(detail, "detail");
+	@ProxyMethod
+	public void createBilling( list, data, route ) {
+		def days = 0;
+		list.each{
+			def currentDate = dateSvc.parseDate(data.billdate, null).date;
+			def maturityDate = dateSvc.parseDate(it.dtmatured, null).date;
+			if (currentDate >  maturityDate && it.overduepenalty == 0.00) {
+				def p = product_type.read([name: it.producttypeid])
+				it.overduepenalty = ledgerSvc.computeOverduePenalty([balance: it.balance, pastduerate: (p.pastduerate? p.pastduerate : 0.00)]);
+				loan_ledger.update(it, 'overduepenalty');
 			}
+			def detail = [
+				objid: 'LLBD'+new UID(),
+				parentid: data.objid,
+				ledgerid: it.objid,
+				route_code: route? route.code : it.route.code,
+				acctid: it.acctid,
+				loanappid: it.loanappid,
+				acctname: it.acctname,
+				loanamount: it.loanamount,
+				loandate: it.loandate,
+				term: it.term,
+				appno: it.appno,
+				overpaymentamount: it.overpaymentamount,
+				txndate: currentDate,
+				dailydue: it.dailydue,
+				dtmatured: it.dtmatured,
+				producttypeid: it.producttypeid,
+				paymentmethod: it.paymentmethod,
+				interestamount: it.interestamount,
+				homeaddress: it.homeaddress,
+				collectionaddress: it.collectionaddress? it.collectionaddress : '',
+				interest: 0.00,
+				others: 0.00,
+				overduepenalty: it.overduepenalty
+			];
+			detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+detail.route_code, 8);
+			
+			def amt = it.dailydue;
+			if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
+			days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
+			detail.amountdue = (amt*days)+detail.others;
+			if (!it.compromiseid) {					
+				if (currentDate > maturityDate) {
+					detail.penalty = days*it.overduepenalty;
+					def amountdue = new BigDecimal((detail.penalty+(days * detail.interestamount)+it.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
+					detail.amountdue = new BigDecimal(amountdue+'').setScale(2);
+					detail.days = days;
+				} else {
+					def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
+					days -= noofholidays;
+					def cal = Calendar.getInstance();
+					cal.setTime(currentDate);
+					if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
+					days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
+					detail.penalty = it.absentpenalty * (days > 0? days-1 : 0);
+					detail.amountdue += detail.penalty;
+				}
+				detail.balance = getBalance(detail, it.balance);
+			} else {
+				def compromise = ledger_compromise.read([objid: it.compromiseid]);
+				def type = compromise.compromisetype;
+				if (type == 'WAIVED_INTEREST') {
+					detail.penalty = days * it.overduepenalty;
+					detail.balance = it.balance + detail.penalty;
+				} else if (type == 'WAIVED_PENALTY') {
+					detail.balance = it.balance + (days*it.interestamount);
+				}
+
+			}
+			em.create(detail, "detail");
 		}
 	}
 

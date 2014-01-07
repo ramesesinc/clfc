@@ -1,0 +1,78 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+
+class LoanSpecialCollectionService extends ActiveListService
+{
+	@Env
+	def env;
+
+	@ActiveDB(value="loan_ledger_specialcollection")
+	def em;
+
+	@ActiveDB(value="loan_ledger_billing")
+	def ledger_billing;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@Service("LoanLedgerBillingService")
+	def billingSvc;
+
+	@ProxyMethod
+	public def getColumns( params ) {
+		return [
+			[name: 'state', caption: 'State'],
+			[name: 'dtrequested', caption: 'Date Requested'],
+			[name: 'requestedby', caption: 'Requested By'],
+			[name: 'remarks', caption: 'Reason']
+		]
+	}
+
+	@ProxyMethod
+	public def create( params ) {
+		if (!params.ledgers) throw new Exception("At least one ledger is required.");
+
+		def itm = [:];
+		itm.putAll(params);
+		itm.dtcreated = dateSvc.serverDate;
+		itm.createdby = env.USER? env.USER : 'SYSTEM';
+		itm.dtmodified = itm.dtcreated;
+		itm.billdate = itm._specialcollectionrequest.dtrequested;
+		itm.remarks = null;
+		ledger_billing.create(itm);
+		updateBillingDetail(itm);
+		em.update([objid: itm._specialcollectionrequest.objid, state: 'APPROVED', billingid: itm.objid]);
+		return itm;
+	}
+
+	@ProxyMethod
+	public def update( params ) {
+		if (!params.ledgers) throw new Exception("At least one ledger is required.");
+
+		ledger_billing.update(params);
+		updateBillingDetail(params);
+		return params;
+	}
+
+	private void updateBillingDetail( params ) {
+		ledger_billing.removeBillingDetailByParentid([parentid: params.objid]);
+		ledger_billing.removeRouteByBillingid([billingid: params.objid]);
+
+		def routes = [];
+		params.ledgers.each{l->
+			if (!routes.find{ l.route.code == it.code }) routes.add(l.route);
+		}
+		routes.each{
+			ledger_billing.create([billingid: params.objid, routecode: it.code], 'billing_route');
+		}
+		billingSvc.createBilling(params.ledgers, params, null);
+	}
+
+	@ProxyMethod
+	public def open( data ) {
+		data = em.read([objid: data.objid]);
+		data.ledgers = em.getLedgersByBillingid([billingid: data.billingid]);
+		return data;
+	}
+}

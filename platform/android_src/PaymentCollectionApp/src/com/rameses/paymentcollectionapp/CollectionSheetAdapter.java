@@ -49,8 +49,8 @@ public class CollectionSheetAdapter extends BaseAdapter {
 			v=inflater.inflate(R.layout.item_collectionsheet, null);
 		}
 		//CheckedTextView ctv_name = (CheckedTextView) v.findViewById(R.id.ctv_info_name);
-		TextView tv_info_name = (TextView) v.findViewById(R.id.tv_info_name);
-		ImageView iv_info_paid = (ImageView) v.findViewById(R.id.iv_info_paid);
+		TextView tv_info_name = (TextView) v.findViewById(R.id.tv_specialcollection_remarks);
+		ImageView iv_info_paid = (ImageView) v.findViewById(R.id.iv_specialcollection_approved);
 		CollectionSheetParcelable cs = (CollectionSheetParcelable) list.get(position);
 		tv_info_name.setText(cs.getAcctname());
 		

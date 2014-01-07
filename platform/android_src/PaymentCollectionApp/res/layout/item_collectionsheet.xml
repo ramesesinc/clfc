@@ -19,18 +19,18 @@
         android:paddingTop="10dp" >
 
         <TextView
-            android:id="@+id/tv_info_name"
+            android:id="@+id/tv_specialcollection_remarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/iv_info_paid"
+            android:layout_toLeftOf="@+id/iv_specialcollection_approved"
             android:padding="2dp"
             android:text="@string/txt_empty"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ImageView
-            android:id="@+id/iv_info_paid"
+            android:id="@+id/iv_specialcollection_approved"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

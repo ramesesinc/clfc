@@ -102,7 +102,7 @@ public class Payment extends Activity {
 		tv_refno.setText(refno);
 		tv_txndate.setText(formattedDate);
 		
-		Button btn_ok = (Button) findViewById(R.id.ll_info_payments);
+		Button btn_ok = (Button) findViewById(R.id.ll_specialcollection);
 		btn_ok.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

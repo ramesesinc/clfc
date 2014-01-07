@@ -2,8 +2,10 @@
 SELECT llb.*, lls.parentid AS parentid, lls.subcollector_objid, lls.subcollector_username
 FROM loan_ledger_billing llb
 LEFT JOIN loan_ledger_subbilling lls ON llb.objid=lls.objid
+LEFT JOIN loan_ledger_specialcollection llsc ON llb.objid=llsc.billingid
 WHERE (llb.createdby LIKE $P{searchtext} OR llb.collector_username LIKE $P{searchtext})
 	AND llb.state=$P{state}
+	AND llsc.objid IS NULL
 ORDER BY llb.billdate
 
 [getDefaultList]
@@ -26,18 +28,24 @@ DELETE FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
 SELECT * FROM loan_ledger_billing_detail WHERE parentid=$P{parentid}
 
 [getBillingByCollectorid]
-SELECT llb.* FROM loan_ledger_billing llb
+SELECT llb.* 
+FROM loan_ledger_billing llb
 LEFT JOIN loan_ledger_subbilling lls ON llb.objid=lls.objid
+LEFT JOIN loan_ledger_specialcollection llsc ON llb.objid=llsc.billingid
 WHERE llb.collector_objid=$P{collectorid}
 	AND lls.subcollector_objid IS NULL
 	AND llb.billdate=$P{billdate}
+	AND llsc.objid IS NULL
 	AND llb.state='DRAFT'
 
 [getBillingBySubCollectorid]
-SELECT llb.* FROM loan_ledger_billing llb
+SELECT llb.* 
+FROM loan_ledger_billing llb
 LEFT JOIN loan_ledger_subbilling lls ON llb.objid=lls.objid
+LEFT JOIN loan_ledger_specialcollection llsc ON llb.objid=llsc.billingid
 WHERE lls.subcollector_objid=$P{subcollectorid}
 	AND llb.billdate=$P{billdate}
+	AND llsc.objid IS NULL
 	AND llb.state='DRAFT'
 
 [getRoutesByCollectorid]
@@ -109,7 +117,10 @@ WHERE state='DRAFT'
 	AND billdate < $P{date}
 
 [getBillingForSubCollection]
-SELECT * FROM loan_ledger_billing
-WHERE collector_username LIKE $P{searchtext}
-	AND state='DRAFT'
-ORDER BY billdate
+SELECT llb.* 
+FROM loan_ledger_billing llb
+LEFT JOIN loan_ledger_specialcollection llsc ON llb.objid=llsc.billingid
+WHERE llb.collector_username LIKE $P{searchtext}
+	AND llb.state='DRAFT'
+	AND llsc.objid IS NULL
+ORDER BY llb.billdate

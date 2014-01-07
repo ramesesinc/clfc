@@ -6,4 +6,8 @@
 } 
 "entity.code" [mode == 'edit'] {
     enabled: false; 
-} 
+}
+"entity.remarks" [mode == 'read' || mode != 'read'] {
+    enabled: false;
+    disabledTextColor: #000;
+}

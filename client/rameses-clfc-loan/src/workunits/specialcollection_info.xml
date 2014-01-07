@@ -1,0 +1,12 @@
+<workunit>
+    <invokers>
+        <invoker type="specialcollection:create" action="init" caption="Special Collection" target="window"/>
+        <invoker type="specialcollection:open" action="open" caption="Special Collection" target="window"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.ledger.specialcollection.SpecialCollectionController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.ledger.specialcollection.SpecialCollectionPage"/>
+    </pages>
+</workunit>

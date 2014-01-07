@@ -10,6 +10,9 @@
 		<field name="collector_username" required="true"/>
 		<field name="billdate" required="true"/>
 		<field name="branchid"/>
+		<field name="dtcancelled"/>
+		<field name="cancelledby"/>
+		<field name="remarks"/>
 	</element>
 
 	<element name="detail" tablename="loan_ledger_billing_detail">
@@ -55,11 +58,18 @@
 		<field name="dtmodified" required="true"/>
 	</element>	
 
-	<element name="subbilling" tablename="loan_ledger_subbilling">
+	<element name="sub-billing" tablename="loan_ledger_subbilling">
 		<field name="objid" primary="true" />
 		<field name="parentid" required="true" />
 		<field name="subcollector_objid" required="true" />
 		<field name="subcollector_username" required="true" />
+	</element>
+
+	<element name="cancel" tablename="loan_ledger_billing">
+		<field name="objid" primary="true"/>
+		<field name="dtcancelled" required="true"/>
+		<field name="cancelledby" required="true"/>
+		<field name="remarks" required="true"/>
 	</element>
 
 </schema>

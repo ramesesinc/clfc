@@ -30,7 +30,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 		params.subcollector.username = params.subcollector.name;
 		em.changeStateVoided([objid: params.parentid]);
 		em.changeBatchCollectionSheetStateVoided([objid: params.parentid]);
-		em.create(params, "subbilling")
+		em.create(params, "sub-billing")
 		updateRoute(params);
 		updateBillingDetail(params);
 	}
@@ -38,6 +38,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 	void beforeUpdate( params ) {
 		params.dtmodified = dateSvc.serverDate
 		em.changeStateDraft([objid: params._parentid]);
+		em.update([objid: params._parentid, dtcancelled: null, cancelledby: null, remarks: null]);
 		em.changeBatchCollectionSheetStateDraft([objid: params._parentid]);
 	}
 
@@ -45,7 +46,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 		params.subcollector.username = params.subcollector.name;
 		em.changeStateVoided([objid: params.parentid]);
 		em.changeBatchCollectionSheetStateVoided([objid: params.parentid]);
-		em.update(params, "subbilling")
+		em.update(params, "sub-billing")
 		updateRoute(params);
 		updateBillingDetail(params);
 	}
@@ -55,6 +56,14 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 
 		def itm = batch_collectionsheet.read([objid: params.parentid]);
 		if (itm) {
+			def m = [
+				objid: itm.objid,
+				dtcancelled: dateSvc.serverDate,
+				cancelledby: env.USER,
+				remarks: params.reason
+			]
+			em.update(m, "cancel");
+
 			itm.objid = params.objid;
 			itm.state = 'DRAFT';
 			batch_collectionsheet.create(itm);
@@ -106,7 +115,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 	}
 
 	void afterOpen( data ) {
-		data.putAll(em.read(data, "subbilling"));
+		data.putAll(em.read(data, "sub-billing"));
 		data.subcollector.name = data.subcollector.username;
 		data.routes = em.getRoutesByBillingid([billingid: data.objid]);
 	}
