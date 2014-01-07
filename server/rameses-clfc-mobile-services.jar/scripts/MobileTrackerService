@@ -24,6 +24,7 @@ class MobileTrackerService
 		def entity = [
 			objid 		: 'TRKR' + new java.rmi.server.UID(), 
 			state		: 'OPEN', 
+			type		: params.type,
 			sessionid	: params.sessionid,
 			branchid 	: params.branchid, 
 			dtstart 	: dateSvc.serverDate,
@@ -35,7 +36,6 @@ class MobileTrackerService
 		def item = [
 			objid 		: "TRKRI" + new java.rmi.server.UID(), 
 			parentid 	: entity.objid, 
-			type		: entity.type,
 			txndate 	: entity.dtstart, 
 			refid 		: 'RID' + new java.rmi.server.UID(), 
 			reftype		: 'TRACK', 
