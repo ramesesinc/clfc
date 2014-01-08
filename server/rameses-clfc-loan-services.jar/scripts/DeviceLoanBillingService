@@ -18,7 +18,7 @@ class DeviceLoanBillingService
 	@ActiveDB(value="loan_ledger_billing")
 	def ledger_billing;
 
-	@ActiveDB(value="user")
+	@ActiveDB(value="sysuser")
 	def sysuser;
 
 	@Service('DateService')
@@ -108,19 +108,11 @@ class DeviceLoanBillingService
 			else itm.remove("remarks");
 		}
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
-		def session = trackerSvc.openSession([sessionid: params.billingid]);
+		def session = trackerSvc.open([trackerid: params.trackerid]);
 		if (!session) {
-			def billing = ledger_billing.read([objid: params.billingid]);
-			map = [
-				sessionid: billing.objid,
-				branchid: billing.branchid,
-				type: 'NORMAL',
-				lng: params.longitude,
-				lat: params.latitude
-			];
-			trackerSvc.start(map);
+			params.trackerid = trackerSvc.start([lng: params.longitude, lat: params.latitude]).objid;
 		}
-		return [list: list];
+		return [list: list, trackerid: params.trackerid];
 	}
 
 	@ProxyMethod
@@ -131,7 +123,6 @@ class DeviceLoanBillingService
 		createBatchCollectionSheetDetail(params);
 
 		def collectionsheet = params.collectionsheet;
-		def data = batch_collectionsheet.read([objid: params.sessionid]);
 		def itm;
 		def user = sysuser.read([objid: params.collectorid]);
 		def list = [];
@@ -160,16 +151,17 @@ class DeviceLoanBillingService
 			list.add(it.objid);
 		}
 		//println 'list = '+list;
+		def data = batch_collectionsheet.read([objid: params.sessionid]);
 		def total = batch_collectionsheet.findTotalDetailByParentId([parentid: params.sessionid]).total;
 		if (data.totalcount == total) {
 			//throw new Exception('stopping');
-			def session = trackerSvc.openSession(params);
+			def session = trackerSvc.open([objid: params.trackerid]);
 			if (session && session.state == 'OPEN') {
 				def map = [
-					sessionid: params.sessionid,
-					username: user? user.name : 'COLLECTOR NOT IDENTIFIED',
-					lng: params.longitude,
-					lat: params.latitude
+					trackerid: 	params.trackerid,
+					username: 	user? user.name : 'COLLECTOR NOT IDENTIFIED',
+					lng: 		params.longitude,
+					lat: 		params.latitude
 				]
 				trackerSvc.stop(map)
 			}
@@ -182,18 +174,16 @@ class DeviceLoanBillingService
 	public void createBatchCollectionSheetHeader( params ) {
 		def itm = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!itm) {
-			def date = dateSvc.serverDate;
-			def txndate = dateSvc.parse("yyyy-MM-dd", params.txndate);
 			def collector = sysuser.read([objid: params.collectorid]);
 			if (!collector) throw new Exception("Collector record does not exist or has already been deleted.");
-
+			def date = dateSvc.serverDate;
 			itm = [
 				objid: 			params.sessionid,
 				state: 			'DRAFT',
 				dtposted: 		date,
 				postedby: 		collector.name,
 				dtcreated: 		date,
-				txndate: 		txndate,
+				txndate: 		dateSvc.parse("yyyy-MM-dd", params.txndate),
 				route_code: 	params.routecode,
 				totalcount: 	params.totalcount,
 				totalamount: 	params.totalamount
@@ -206,12 +196,11 @@ class DeviceLoanBillingService
 	public void createBatchCollectionSheetDetail( params ) {
 		def itm = batch_collectionsheet.read([objid: params.collectionsheet.detailid], "detail");
 		if (!itm) {
-			String remarks = params.collectionsheet.remarks? params.collectionsheet.remarks : "";
 			itm = [
-				objid: params.collectionsheet.detailid,
-				parentid: params.sessionid,
-				appid: params.collectionsheet.loanappid,
-				remarks: remarks
+				objid: 		params.collectionsheet.detailid,
+				parentid: 	params.sessionid,
+				appid: 		params.collectionsheet.loanappid,
+				remarks: 	params.collectionsheet.remarks? params.collectionsheet.remarks : ""
 			];
 			batch_collectionsheet.create(itm, "detail");
 		}

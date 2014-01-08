@@ -8,14 +8,15 @@ class DeviceLocationService {
 
 	@ProxyMethod
 	public def postLocation( params ) {
-		def map = [
-			refid: 'TRCK'+new UID(),
-			reftype: 'TRACK',
-			lng: params.longitude,
-			lat: params.latitude
-		];
-		params.sessions.each{
-			map.sessionid = it;
+		if (params.trackerid) {
+			def map = [
+				trackerid: params.trackerid,
+				txntype: 'NORMAL',
+				refid: 'TRCK'+new UID(),
+				reftype: 'TRACK',
+				lng: params.longitude,
+				lat: params.latitude
+			];
 			trackerSvc.log(map);
 		}
 	}

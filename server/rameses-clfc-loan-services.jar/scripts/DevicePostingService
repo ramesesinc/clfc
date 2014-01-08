@@ -10,7 +10,7 @@ class DevicePostingService
 	@ActiveDB(value="void_payment")
 	def void_payment;
 
-	@ActiveDB(value="user")
+	@ActiveDB(value="sysuser")
 	def sysuser;
 
 	@ActiveDB(value="loan_ledger_billing")
@@ -52,15 +52,17 @@ class DevicePostingService
 			def user = sysuser.read([objid: params.collectorid]);
 			if (user) itm.postedby = user.name;
 			batch_collectionsheet.create(itm, "payment");
+			def map = [
+				trackerid: params.trackerid,
+				txntype: params.type? params.type : 'NORMAL',
+				refid: params.payment.objid,
+				reftype: 'PAYMENT',
+				lng: params.longitude,
+				lat: params.latitude
+			];
+			map.remarks = (map.txntype != 'NORMAL'? map.txntype : '') + 'PAYMENT COLLECTED';
+			trackerSvc.log(map);
 		}
-		def map = [
-			sessionid: params.sessionid,
-			refid: params.payment.objid,
-			reftype: 'PAYMENT',
-			lng: params.longitude,
-			lat: params.latitude
-		];
-		trackerSvc.log(map);
 	}
 
 	@ProxyMethod
@@ -114,9 +116,7 @@ class DevicePostingService
 	@ProxyMethod
 	public void updateRemarks( params ) {
 		if (!params.collectionsheet) throw new Exception("Please specify collection sheet.");
-		println 'pass 1'
 		postCollectionSheet(params)
-		println 'pass 2'
 		def cs = batch_collectionsheet.read([objid: params.collectionsheet.detailid] ,"detail");
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");
 
