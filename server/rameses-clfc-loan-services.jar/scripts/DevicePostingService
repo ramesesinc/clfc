@@ -58,9 +58,9 @@ class DevicePostingService
 				refid: params.payment.objid,
 				reftype: 'PAYMENT',
 				lng: params.longitude,
-				lat: params.latitude
+				lat: params.latitude,
+				remarks: 'RECEIVED PAYMENT FROM '+params.collectionsheet.acctname
 			];
-			map.remarks = (map.txntype != 'NORMAL'? map.txntype : '') + 'PAYMENT COLLECTED';
 			trackerSvc.log(map);
 		}
 	}
