@@ -18,9 +18,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -104,14 +106,21 @@ public class Route extends Activity {
 			//String sessionid = bundle.getString("sessionid");
 			//String serverdate = bundle.getString("serverdate");
 			ArrayList bundleList = (ArrayList) bundle.getParcelableArrayList("collectionsheets");
-			Map map;
+			Map<String, Object> map;
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("routecode", bundle.getString("routecode"));
 			params.put("routedescription", bundle.getString("routedescription"));
 			params.put("routearea", bundle.getString("routearea"));
 			
 			if(!db.isOpen) db.openDb();
-			Cursor r = db.findSessionById(bundle.getString("sessionid"));
+			Cursor r = db.getSystemByName("trackerid");
+			if (r == null || r.getCount() == 0) {
+				map = new HashMap<String, Object>();
+				map.put("name", "trackerid");
+				map.put("value", bundle.getString("trackerid"));
+				db.insertSystem(map);
+			}
+			r = db.findSessionById(bundle.getString("sessionid"));
 			if (r == null || r.getCount() == 0) db.insertSession(bundle.getString("sessionid"));
 			db.insertRoute(params);
 			/*Cursor cs = db.getCollectionsheetsByRoute(params.get("routecode").toString);
@@ -132,12 +141,13 @@ public class Route extends Activity {
 			ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 			Map<String, Object> m;
 			for(int i=0; i<bundleList.size(); i++) {
-				map = (Map) bundleList.get(i);
+				map = (Map<String, Object>) bundleList.get(i);
 				//barr = map.toString().getBytes();
 				//BigDecimal a = new BigDecimal(barr.length+"").setScale(2);
 				//System.out.println("cs "+map.get("acctid").toString()+" size: "+a.divide(new BigDecimal("1024").setScale(0), BigDecimal.ROUND_HALF_UP).setScale(2)+"kb");
 				map.put("routecode", params.get("routecode").toString());
 				map.put("sessionid", bundle.getString("sessionid"));
+				map.put("type", "");
 				itm = db.getCollectionsheetByLoanappid(map.get("loanappid").toString());
 				if (itm == null || itm.getCount() == 0) db.insertCollectionsheet(map);
 				if (map.containsKey("payments")) {
@@ -188,15 +198,24 @@ public class Route extends Activity {
 		public void run() {
 			Message msg = responseHandler.obtainMessage();
 			Bundle xbundle = new Bundle();
-			String status = "";
+			boolean status = false;
+			Map<String, Object> params=new HashMap<String, Object>();
+			params.put("route_code", route.getCode());
+			params.put("route_description", route.getDescription());
+			params.put("route_area", route.getArea());
+			params.put("billingid", route.getSessionid());
+			params.put("longitude", application.getLongitude());
+			params.put("latitude", application.getLatitude());
+			String terminalid = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+			if (terminalid == null) {
+				terminalid = Build.ID;
+			}
+			params.put("terminalid", terminalid);
+			if (!db.isOpen) db.openDb();
+			params.put("userid", db.getCollectorid());
+			params.put("trackerid", db.getTrackerid());
+			if (db.isOpen) db.closeDb();
 			try {
-				Map params=new HashMap();
-				params.put("route_code", route.getCode());
-				params.put("route_description", route.getDescription());
-				params.put("route_area", route.getArea());
-				params.put("billingid", route.getSessionid());
-				params.put("longitude", application.getLongitude());
-				params.put("latitude", application.getLatitude());
 				//ArrayList<CollectionSheetParcelable> list = (ArrayList<CollectionSheetParcelable>)sp1.invoke("getCollectionsheets", new Object[]{params});
 				Object result = svcProxy.invoke("downloadBilling", new Object[]{params});
 				Map<String, Object> map = (Map<String, Object>) result;
@@ -207,7 +226,8 @@ public class Route extends Activity {
 				xbundle.putString("routearea", route.getArea());
 				xbundle.putString("sessionid", route.getSessionid());
 				xbundle.putParcelableArrayList("collectionsheets", ((ArrayList<CollectionSheetParcelable>)map.get("list")));
-				status = "ok";
+				xbundle.putString("trackerid", map.get("trackerid").toString());
+				status = true;
 				msg=handler.obtainMessage();
 			}
 			catch( TimeoutException te ) {
@@ -222,7 +242,7 @@ public class Route extends Activity {
 			}
 			finally {
 				msg.setData(xbundle);
-				if(status == "ok") handler.sendMessage(msg);
+				if(status == true) handler.sendMessage(msg);
 				else responseHandler.sendMessage(msg);
 			}
 		}

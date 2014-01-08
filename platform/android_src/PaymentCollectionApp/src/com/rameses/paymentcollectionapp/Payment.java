@@ -178,6 +178,7 @@ public class Payment extends Activity {
 			if (!db.isOpen) db.openDb();
 			params.put("sessionid", sessionid);
 			params.put("collectorid", db.getCollectorid());
+			params.put("trackerid", db.getTrackerid());
 			Cursor cs = db.getCollectionsheetByLoanappid(loanappid);
 			if (db.isOpen) db.closeDb();
 			
@@ -185,6 +186,7 @@ public class Payment extends Activity {
 				cs.moveToFirst();
 				collectionsheet.put("loanappid", loanappid);
 				collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
+				params.put("type", cs.getString(cs.getColumnIndex("type")));
 			}
 			params.put("collectionsheet", collectionsheet);
 			

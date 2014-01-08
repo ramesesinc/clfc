@@ -113,6 +113,7 @@ public class SpecialCollection extends Activity {
 			for (int i=0; i<collectionsheets.size(); i++) {
 				map = (Map<String, Object>) collectionsheets.get(i);
 				map.put("seqno", db.countCollectionSheetsByRoutecode(map.get("routecode").toString())+1);
+				map.put("type", "SPECIAL");
 				db.insertCollectionsheet(map);
 			}
 			db.insertSession(bundle.getString("sessionid"));

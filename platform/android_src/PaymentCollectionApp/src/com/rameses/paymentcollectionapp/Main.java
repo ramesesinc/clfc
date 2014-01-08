@@ -117,6 +117,7 @@ public class Main extends Activity {
 				Map<String, Object> params = new HashMap<String, Object>();
 				if (!db.isOpen) db.openDb();
 				params.put("sessions", db.getSessionid());
+				params.put("trackerid", db.getTrackerid());
 				if (db.isOpen) db.closeDb();
 				String terminalkey = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
 				if (terminalkey == null) {
@@ -183,8 +184,6 @@ public class Main extends Activity {
 
 		postingProxy = svcHelper.createServiceProxy("DevicePostingService");
 		isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-		WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
-		wifiManager.setWifiEnabled(true);
 		
 		ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE);
 		networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -339,8 +338,11 @@ public class Main extends Activity {
 			db.emptySystemTable();
 			Map<String, Object> params = new HashMap<String, Object>();
 			//params.put("sessionid", bundle.getString("billingid"));
-			params.put("serverdate", bundle.getString("serverdate"));
-			params.put("collectorid", bundle.getString("collectorid"));
+			params.put("name", "serverdate");
+			params.put("value", bundle.getString("serverdate"));
+			db.insertSystem(params);
+			params.put("name", "collectorid");
+			params.put("value", bundle.getString("collectorid"));
 			db.insertSystem(params);
 			if (db.isOpen) db.closeDb();
 			Intent intent=new Intent(context, Route.class);
@@ -578,15 +580,6 @@ public class Main extends Activity {
 					//System.out.println(map);
 					totalamount = totalamount.add(new BigDecimal(map.get("payamount").toString()));
 				}
-				if (!db.isOpen) db.openDb();
-				boolean finishUploading = true;
-				Cursor cursor = db.getPayments();
-				if (finishUploading == true && cursor != null && cursor.getCount() > 0) finishUploading = false;
-				cursor = db.getNotes();
-				if (finishUploading == true && cursor != null && cursor.getCount() > 0) finishUploading = false;
-				cursor = db.getRemarks();
-				if (finishUploading == true && cursor != null && cursor.getCount() > 0) finishUploading = false;
-				if (db.isOpen) db.closeDb();
 				Map<String, Object> params=new HashMap<String, Object>();
 				//params.put("payments", list);
 				params.put("collectorid", collectorid);
@@ -598,17 +591,21 @@ public class Main extends Activity {
 				params.put("totalamount", totalamount);
 				params.put("longitude", application.getLongitude());
 				params.put("latitude", application.getLatitude());
-
+				if (!db.isOpen) db.openDb();
+				params.put("trackerid", db.getTrackerid());
+				if (db.isOpen) db.closeDb();
+				
+				System.out.println("params = "+params);
 				Message msg = responseHandler.obtainMessage();
 				Bundle bundle = new Bundle();
-				String status = "";
+				boolean status = false;
 				try {
-					msg=uploadHandler.obtainMessage();
 					Object response = svcProxy.invoke("uploadCollectionSheets", new Object[]{params});
 					Map<String, Object> result = (Map<String, Object>) response;
 					bundle.putString("loanappid", collectionsheet.get("loanappid").toString());
 					bundle.putStringArrayList("list", ((ArrayList<String>) result.get("list")));
-					status = "ok";
+					status = true;
+					msg=uploadHandler.obtainMessage();
 				}
 				catch( TimeoutException te ) {
 					bundle.putString("response", "Connection Timeout!");
@@ -622,7 +619,7 @@ public class Main extends Activity {
 				}
 				finally {
 					msg.setData(bundle);
-					if(status == "ok") uploadHandler.sendMessage(msg);
+					if(status == true) uploadHandler.sendMessage(msg);
 					else responseHandler.sendMessage(msg);
 				}
 			}

@@ -53,7 +53,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"paymentmethod text," +
 			"homeaddress text, " +
 			"collectionaddress text, " +
-			"sessionid text " +
+			"sessionid text, " +
+			"type text " +
 			");";
 	private static final String CREATE_TABLE_PAYMENT = "" +
 			"CREATE TABLE PAYMENT(" +
@@ -81,8 +82,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			"PRIMARY KEY(loanappid, referenceid)" +
 			");";
 	private static final String CREATE_TABLE_SYSTEM = "CREATE TABLE SYSTEM(" +
-			"serverdate text, " +
-			"collectorid text" +
+			"name text, " +
+			"value text " +
 			")";
 	private static final String CREATE_TABLE_HOST = "CREATE TABLE HOST(" +
 			"ipaddress text, " +
@@ -179,6 +180,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		values.put("homeaddress", params.get("homeaddress").toString());
 		values.put("collectionaddress", params.get("collectionaddress").toString());
 		values.put("sessionid", params.get("sessionid").toString());
+		values.put("type", params.get("type").toString());
 		db.insert(TABLE_COLLECTIONSHEET, null, values);
 	}
 	
@@ -245,9 +247,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	
 	public void insertSystem(Map<String, Object> params) {
 		ContentValues values=new ContentValues();
+		values.put("name", params.get("name").toString());
+		values.put("value", params.get("value").toString());
 		//values.put("sessionid", params.get("sessionid").toString());
-		values.put("serverdate", params.get("serverdate").toString());
-		values.put("collectorid", params.get("collectorid").toString());
+		//values.put("serverdate", params.get("serverdate").toString());
+		//values.put("collectorid", params.get("collectorid").toString());
 		db.insert(TABLE_SYSTEM, null, values);
 	}
 	
@@ -335,26 +339,43 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 	
 	public String getCollectorid() {
-		Cursor result = db.rawQuery("SELECT collectorid FROM "+TABLE_SYSTEM, null);
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='collectorid'", null);
 		
 		if (result != null && result.getCount() > 0) {
 			result.moveToFirst();
-			return result.getString(result.getColumnIndex("collectorid"));
+			return result.getString(result.getColumnIndex("value"));
 		}
 		return "";
 	}
 	
 	public Date getServerDate() throws ParseException {
-		Cursor result = db.rawQuery("SELECT serverdate FROM "+TABLE_SYSTEM, null);
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='serverdate'", null);
 		
 		if (result != null && result.getCount() > 0) {
 			result.moveToFirst();
-			Object date = result.getString(result.getColumnIndex("serverdate"));
+			Object date = result.getString(result.getColumnIndex("value"));
 			if(!(date instanceof Date))
 				return (new java.text.SimpleDateFormat("yyyy-MM-dd")).parse(date.toString());
 			return ((Date) date);
 		}	
 		return null;
+	}
+	
+	public String getTrackerid() {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='trackerid'", null);
+		
+		if (result != null && result.getCount() > 0) {
+			result.moveToFirst();
+			return result.getString(result.getColumnIndex("value"));
+		}
+		return "";
+	}
+	
+	public Cursor getSystemByName(String name) {
+		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='"+name+"'", null);
+		
+		if (result != null && result.getCount() > 0) result.moveToFirst();
+		return result;
 	}
 	
 	public Cursor getHost() {
