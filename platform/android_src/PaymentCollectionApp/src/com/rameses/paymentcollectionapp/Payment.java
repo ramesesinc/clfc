@@ -185,6 +185,7 @@ public class Payment extends Activity {
 			if (cs != null && cs.getCount() > 0 ) {
 				cs.moveToFirst();
 				collectionsheet.put("loanappid", loanappid);
+				collectionsheet.put("acctname", cs.getString(cs.getColumnIndex("acctname")));
 				collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
 				params.put("type", cs.getString(cs.getColumnIndex("type")));
 			}
