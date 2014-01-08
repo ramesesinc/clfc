@@ -18,14 +18,11 @@ class MobileTrackerService
 	
 	@ProxyMethod
 	public Map start(Map params) {
-		def branch = em.findBranch([objid: params.branchid]); 
-		if (!branch) throw new Exception("'"+params.branchid+"' branchid does not exist"); 
-
 		def entity = [
 			objid 		: 'TRKR' + new java.rmi.server.UID(), 
 			state		: 'OPEN', 
-			sessionid	: params.sessionid,
-			branchid 	: params.branchid, 
+			terminalid	: params.terminalid,
+			userid 		: params.userid, 
 			dtstart 	: dateSvc.serverDate,
 			startlng	: params.lng, 
 			startlat	: params.lat 
@@ -36,10 +33,12 @@ class MobileTrackerService
 			objid 		: "TRKRI" + new java.rmi.server.UID(), 
 			parentid 	: entity.objid, 
 			txndate 	: entity.dtstart, 
+			txntype 	: 'NORMAL', 
 			refid 		: 'RID' + new java.rmi.server.UID(), 
 			reftype		: 'TRACK', 
 			lng 		: entity.startlng,  
-			lat 		: entity.startlat 
+			lat 		: entity.startlat,
+			remarks 	: 'BEGIN MOBILE TRACKING'   
 		]; 
 		em.create(item, 'detail'); 
 		return entity; 
@@ -47,8 +46,8 @@ class MobileTrackerService
 
 	@ProxyMethod
 	public Map stop(Map params) {
-		def entity = em.findBySession([sessionid: params.sessionid]); 
-		if (!entity) throw new Exception("'"+params.sessionid+"' sessionid not found"); 
+		def entity = em.findByPrimary([objid: params.trackerid]); 
+		if (!entity) throw new Exception("'"+params.objid+"' trackerid not found"); 
 		if (entity.state == 'CLOSED') throw new Exception('This session has already been closed'); 
 
 		entity.dtclosed 	= dateSvc.serverDate;
@@ -63,10 +62,12 @@ class MobileTrackerService
 			objid 		: "TRKRI" + new java.rmi.server.UID(), 
 			parentid 	: entity.objid, 
 			txndate 	: entity.dtclosed, 
+			txntype 	: 'NORMAL', 
 			refid 		: 'RID' + new java.rmi.server.UID(), 
 			reftype		: 'TRACK', 
 			lng 		: entity.closedlng,  
-			lat 		: entity.closedlat 
+			lat 		: entity.closedlat, 
+			remarks 	: 'END MOBILE TRACKING' 
 		]; 
 		em.create(item, 'detail'); 
 		return entity; 
@@ -74,8 +75,8 @@ class MobileTrackerService
 
 	@ProxyMethod
 	public Map log(Map entity) {
-		def info = em.findBySession([sessionid: params.sessionid]); 
-		if (!info) throw new Exception("'"+params.sessionid+"' sessionid not found"); 
+		def info = em.findByPrimary([objid: params.trackerid]); 
+		if (!info) throw new Exception("'"+params.trackerid+"' trackerid not found"); 
 		if (info.state == 'CLOSED') throw new Exception('This session has already been closed'); 
 
 		entity.objid = "TRKRI" + new java.rmi.server.UID();
@@ -87,13 +88,13 @@ class MobileTrackerService
 	} 
 
 	@ProxyMethod
-	public Map openSession(Map params) { 
-		return em.findBySession([sessionid: params.sessionid]); 
+	public Map open(Map params) { 
+		return em.findByPrimary([objid: params.objid]); 
 	} 
 	
 	@ProxyMethod 	
 	public void refresh(Map params) {
-		def info = em.findBySession([sessionid: params.sessionid]); 
+		def info = em.findByPrimary([objid: params.trackerid]); 
 		if (!info) return; 
 
 		def logs = em.getLogs([parentid: info.objid]); 
