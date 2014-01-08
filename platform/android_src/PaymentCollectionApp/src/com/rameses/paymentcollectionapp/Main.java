@@ -116,7 +116,7 @@ public class Main extends Activity {
 			try {
 				Map<String, Object> params = new HashMap<String, Object>();
 				if (!db.isOpen) db.openDb();
-				params.put("sessionid", db.getSessionid());
+				params.put("sessions", db.getSessionid());
 				if (db.isOpen) db.closeDb();
 				String terminalkey = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
 				if (terminalkey == null) {
@@ -129,7 +129,7 @@ public class Main extends Activity {
 				proxy.invoke("postLocation", new Object[]{params});
 			} catch(Exception e) {}
 			finally { 
-				if (repeat) locationHandler.postDelayed(locationRunnable, 3000); 
+				if (repeat) locationHandler.postDelayed(locationRunnable, 57000); 
 			}
 		}
 	}
@@ -464,6 +464,7 @@ public class Main extends Activity {
 				db.removeAllRoutes();
 				db.removeAllSessions();
 				db.removeAllSpecialCollections();
+				db.emptySystemTable();
 				if (progressDialog.isShowing()) progressDialog.dismiss();
 				//Toast.makeText(context, "Successfully uploaded payments!", Toast.LENGTH_SHORT).show();
 				ApplicationUtil.showShortMsg(context, "Successfully uploaded collection sheets!");
@@ -577,7 +578,15 @@ public class Main extends Activity {
 					//System.out.println(map);
 					totalamount = totalamount.add(new BigDecimal(map.get("payamount").toString()));
 				}
-
+				if (!db.isOpen) db.openDb();
+				boolean finishUploading = true;
+				Cursor cursor = db.getPayments();
+				if (finishUploading == true && cursor != null && cursor.getCount() > 0) finishUploading = false;
+				cursor = db.getNotes();
+				if (finishUploading == true && cursor != null && cursor.getCount() > 0) finishUploading = false;
+				cursor = db.getRemarks();
+				if (finishUploading == true && cursor != null && cursor.getCount() > 0) finishUploading = false;
+				if (db.isOpen) db.closeDb();
 				Map<String, Object> params=new HashMap<String, Object>();
 				//params.put("payments", list);
 				params.put("collectorid", collectorid);
@@ -587,7 +596,9 @@ public class Main extends Activity {
 				params.put("routecode", routecode);
 				params.put("totalcount", totalcount);
 				params.put("totalamount", totalamount);
-				
+				params.put("longitude", application.getLongitude());
+				params.put("latitude", application.getLatitude());
+
 				Message msg = responseHandler.obtainMessage();
 				Bundle bundle = new Bundle();
 				String status = "";

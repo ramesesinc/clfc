@@ -75,6 +75,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 		data.dtcreated = dateSvc.serverDate;
 		data.dtmodified = data.dtcreated;
 		data.collector.username = data.collector.name;
+		data.branchid = env.ORGID;
 	}
 
 	void afterCreate( data ) {

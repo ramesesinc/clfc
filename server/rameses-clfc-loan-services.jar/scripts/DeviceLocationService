@@ -1,19 +1,22 @@
 import com.rameses.common.*;
 import com.rameses.annotations.*;
+import java.rmi.server.UID;
 
 class DeviceLocationService {
-	@Service("DateService")
-	def dateSvc;
+	@Service("MobileTrackerService")
+	def trackerSvc;
 
 	@ProxyMethod
 	public def postLocation( params ) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(dateSvc.serverDate);
-		println '\ntime: '+c.getTime();
-		println 'session id: '+params.sessionid;
-		println 'terminal key: '+params.terminalkey;
-		println 'longitude: '+params.longitude;
-		println 'latitude: '+params.latitude;
-		println 'remarks: '+params.remarks;
+		def map = [
+			refid: 'TRCK'+new UID(),
+			reftype: 'TRACK',
+			lng: params.longitude,
+			lat: params.latitude
+		];
+		params.sessions.each{
+			map.sessionid = it;
+			trackerSvc.log(map);
+		}
 	}
 }
