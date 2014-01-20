@@ -901,7 +901,12 @@ BindingUtils.handlers.input_text = function(elem, controller, idx ) {
 			}
 			input.autocomplete({ source: src, focus: suggestFocus, select: suggestSelect, change: suggestChange });
 			input.data('autocomplete')._renderItem = suggestItemRenderer;
-		}
+		} else if(R.attr(input, 'control') == 'actionfield') {
+			input.removeClass('actionfield').addClass('actionfield'); 
+			input.wrap('<span class="actionfield-wrapper"/>'); 
+			var wrapper = input.parent();
+			wrapper.append('<span class="button-icon button-icon-actionfield"/>'); 
+		} 
 		
 		//helper functions
 		function suggestItemRenderer(ul, item) {
@@ -1145,66 +1150,37 @@ BindingUtils.handlers.a = function( elem, controller, idx ) {
 
 BindingUtils.handlers.button = function( elem, controller, idx ) {
 	var $e = $(elem);
-    var action = R.attr($e, "name");
-	if ( action ) {
-		if ( !$e.hasClass('rui-button') ) 
-		{ 
+	var styles = '';
+    try {
+    	var iconsize = parseInt($e.attr('iconsize')); 
+    	if (iconsize) styles = 'padding-left:'+iconsize+'px;';
+    } catch(e) {;}
+
+    var action = R.attr($e, 'name');
+    var iconurl  = $e.attr('iconurl'); 
+    var iconname = $e.attr('icon');
+    var iconhtml = null;
+    if (iconurl) {
+    	iconhtml = '<span class="button-icon button-icon" style="background:url('+iconurl+') no-repeat;'+styles+'"/>'; 
+    } else if (iconname) {
+    	iconhtml = '<span class="button-icon button-icon-'+iconname+'" style="'+styles+'"/>';
+    } else if (action) {
+    	iconhtml = '<span class="button-icon button-icon-'+action+'" style="'+styles+'"/>'; 
+    } 
+
+	if (iconhtml) {
+		if ( !$e.hasClass('rui-button') ) { 
 			$e.removeClass('rui-button-icononly'); 		
 			$e.addClass('rui-button'); 
 		} 
 		
-		if (!$e.children('.rui-button-content-wrapper')[0]) 
-		{	/*
-			var output_html = '';
-			var icon = $e.attr('icon');
-			if (icon) output_html = '<span class="rui-button-icon '+icon+'"/>'; 
-			
-			var icononly = false; 
-			var text_html = $e.html(); 
-			if (text_html.trim().length > 0) 
-			{
-				if (icon) output_html = output_html+'<span class="rui-button-icon-separator"/>';
-				
-				output_html = output_html+'<span class="rui-button-content">'+text_html+'</span>';
-			} 
-			else { 
-				icononly = true; 
-			} 
-			
-			$e.html('<span class="rui-button-content-wrapper">'+output_html+'</span>'); 
-			
-			if (icononly == true) { 
-				var btnicon_e = $e.find('.rui-button-icon')[0]; 
-				if (btnicon_e) $(btnicon_e).addClass('rui-button-icononly'); 
-			}
-			*/
-			
-			var output_html = '';
-			var icon = $e.attr('icon');
-			if (icon) output_html = '<span class="rui-button-icon '+icon+'"/>'; 
-			
-			var text_html = $e.html(); 
-			if (text_html.trim().length > 0) 
-			{
-				output_html = output_html+'<span class="rui-button-icon-separator iconleftseparator"/>';
-				output_html = output_html+'<span class="rui-button-content">'+text_html+'</span>';
-				output_html = output_html+'<span class="rui-button-icon-separator iconrightseparator"/>';
-			} 
-			
-			var icon2 = $e.attr('icon2');
-			if (icon2) output_html = '<span class="rui-button-icon '+icon2+'"/>'; 
-			
-			$e.html('<span class="rui-button-content-wrapper">'+output_html+'</span>'); 
-			if (!icon) 
-			{
-				var sep_e = $e.find('.iconleftseparator')[0];
-				if (sep_e) $(sep_e).remove(); 
-			} 	
-			if (!icon2) 
-			{
-				var sep_e = $e.find('.iconrightseparator')[0];
-				if (sep_e) $(sep_e).remove(); 
-			} 	
+		if (!$e.children('.button-identifier')[0]) {
+			var newhtml = '<span class="button-identifier" style="padding:0;margin:0;border:0;"/>';
+			newhtml = newhtml + iconhtml;
+			newhtml = newhtml + '<span class="button-icon-gap"/>';
+
+			var oldhtml = $e.html();
+			$e.html(newhtml + oldhtml);
 		} 
 	} 
 	
@@ -1732,10 +1708,11 @@ function DataTable( table, bean, controller ) {
 		var className = (i%2==0)? 'even': 'odd'; 
 	
 		return tpl.clone()
-		 .addClass(className)
+		 .addClass('row')
+		 .addClass(className)		 
 		 .data('index', i)
-		 .each(function(i,e)
-		  {
+		 .each(function(i,e) 
+		 {
 			var tr = $(e);
 			var origTr = $(tpl[i]);
 
@@ -1768,6 +1745,11 @@ function DataTable( table, bean, controller ) {
 					evalAttr(origTd[idx],e,item);
 				});
 			}
+
+			if (td[0] && td.length > 0) {
+				$(td[0]).removeClass('first-col').addClass('first-col'); 
+				$(td[td.length-1]).removeClass('last-col').addClass('last-col'); 
+			} 
 		 }); //-- end of each function
 	}//-- end of createRow function
 
@@ -1898,7 +1880,6 @@ function DefaultTableModel() {
 	this.onRefresh;
 	this.onAddItems;
 
-	
 	this.select = function(idx) {
 		if( typeof idx == 'object' ) {
 			_selectedItems.push( idx );
@@ -2003,7 +1984,11 @@ function DefaultTableModel() {
 				{
 					try 
 					{
-						var fetchParam = _listParam || {};
+						var fetchParam = _listParam || {}; 
+						$.each(_dataModel.query || {}, function(k,v){
+							fetchParam[k] = v; 
+						}); 
+
 						var result = _dataModel.fetchList( fetchParam );
 						_this.setList( result );
 					}
@@ -2162,20 +2147,21 @@ function DefaultTableModel() {
 		_listParam = null;
 
 		//inject handlers to the map table model from the codebean
-		_dataModel.setList = _this.setList;
-		_dataModel.getList = _this.getList;
-		_dataModel.isEmpty = _this.isEmpty;
-		_dataModel.load = _this.load;
+		_dataModel.setList 	= _this.setList;
+		_dataModel.getList 	= _this.getList;
+		_dataModel.isEmpty 	= _this.isEmpty;
+		_dataModel.load 	= _this.load;
+		_dataModel.search 	= _this.load;
 		_dataModel.fetchNext = fetchNext;
-		_dataModel.refresh = doRefresh;
+		_dataModel.refresh 	= doRefresh;
 		_dataModel.moveFirst = moveFirst;
 		_dataModel.moveNext = moveNext;
-		_dataModel.movePrev = movePrev;
+		_dataModel.movePrev   = movePrev;
 		_dataModel.appendItem = appendItem;
-		_dataModel.appendAll = appendAll;
+		_dataModel.appendAll  = appendAll;
 		_dataModel.prependItem = prependItem;
 		_dataModel.prependAll = prependAll;
-		_dataModel.hasMore = function() { return !_isLast; };
+		_dataModel.hasMore    = function() { return !_isLast; };
 
 		_dataModel.getSelectedItem = function() {
 			var len = _selectedItems.length;
@@ -2193,8 +2179,10 @@ function DefaultTableModel() {
 			_listParam = {};
 			_listParam._limit = rows+1;
 			_listParam._start = 0;
-		}
-	}
+		} 
+
+		if (!_dataModel.query) _dataModel.query = {}; 		
+	} 
 
 }
 // end of DefaultTableModel class
@@ -2466,17 +2454,42 @@ var Hash = new function() {
 	
 	this.handlers = {}
 	
-	this.init = function(defaultHash) {
+	this.init = function(defaultHash, containerId) {
 		$(window).bind( "hashchange", function() {
 			self.loadContent();
 		});
-		if( window.location.hash ) {
+		if ( window.location.hash ) {
 			self.loadContent();
-		}
-                else if(defaultHash) {
-                    window.location.hash = defaultHash;
-                }    
-	}
+		} else if(defaultHash) {
+            window.location.hash = defaultHash;
+        } 
+
+        if (containerId != null) {
+        	var menucontainer = $('#'+containerId);
+        	var menuactions = menucontainer.find('tr td.menuitem > a');
+        	var menuitems = menuactions.parent(); 
+        	menuitems.removeClass('menuitem-selected').removeClass('menuitem-unselected');
+        	menuitems.addClass('menuitem-unselected');        	
+    		menuactions.click(function(event){
+    			var $e = $(this);
+    			if ($e.attr('href') == '#') return; 
+
+    			event.preventDefault();
+    			window.location.href = $e[0].href;
+    			if ($e[0].href == window.location.href) {
+	    			var $p = $e.closest('.hashmenu');
+	    			$p.find('tr td.menuitem-selected').removeClass('menuitem-selected').addClass('menuitem-unselected'); 
+	    			$e.parent().removeClass('menuitem-unselected').addClass('menuitem-selected'); 
+    			} 
+    		});
+
+    		if (window.location.hash) {
+    			var hashid = window.location.hash;
+    			var parent = menucontainer.find('td.menuitem a[href='+hashid+']').parent(); 
+    			if (parent[0]) parent.removeClass('menuitem-unselected').addClass('menuitem-selected');
+    		}
+        }
+	} 
 	
 	this.navigate = function( id, params ) {
 		var hash = id;
@@ -2702,6 +2715,16 @@ function PopupOpener( id, params, options )
 				return (result==false)? false: true; 
 			} 
 			
+			options.buttons = {
+				"Button1": function(){
+					$(this).dialog('close'); 
+				},
+				"Button2": function(){
+					$(this).dialog('close'); 
+				}
+			} 
+
+			options.buttons = null;
             div.dialog(options);
 			BindingUtils.load(div); 
 
@@ -2722,6 +2745,13 @@ function PopupOpener( id, params, options )
 						if (R.attr(o,'dockTo')) RUI.dockElement(o, div); 
 					} 
 				});
+
+				uidialog.css('padding-bottom', '1px'); 
+				uidialog.find('.ui-dialog-buttonpane').hide();
+				if (options.headless == true) {
+					uidialog.find('.ui-dialog-titlebar').hide(); 
+					uidialog.find('.rui-dialog-close-action').hide(); 
+				} 
 			} 
 		} 
 		
@@ -3416,3 +3446,24 @@ var RUI = {
 		} 
 	} 	
 };
+
+var Inv = new function() {
+	this.showOpener = function(elem) {
+		var $e = $(elem);
+    	var target = R.attr($e, "target");
+    	var hashid = R.attr($e, "hashid");
+    	if (target && hashid) {
+	    	var opener = null; 
+	    	if (target == 'popup') { 
+	    		opener = new PopupOpener(hashid); 
+	    	} else {
+	    		return; 
+	    	}
+
+	    	var controller = $get("default-controller-impl"); 
+	    	controller.navigate(opener); 
+    	}
+	}
+}
+
+$put("default-controller-impl", new function(){}); 

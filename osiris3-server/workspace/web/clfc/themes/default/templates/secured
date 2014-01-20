@@ -9,9 +9,31 @@
 	@css('default')
 	@page-imports()
 
-	<style>
+	<style> 
+		body { background-color:#fff; }		
 		.theme-background { background-image:none; }
-		body { background-color:#fff; }	
+		.theme-header-background { 
+			background: #ffa518 url('/images/header-bg.png'); 
+			border-bottom:1px solid #c0c0c0;
+		}
+		.mainmenu .navbar td > div {
+			margin-left:3px;
+			border-radius: 6px; 
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;				
+		} 
+		.mainmenu .navbar td > div:hover { 
+			background-color:transparent; 
+		} 		
+		.mainmenu .navbar td a {
+			font-size:14px; color:#fff; text-shadow:1px 1px #606060;
+		}
+		.mainmenu .navbar td.selected a {
+			color:#fff; text-shadow:1px 1px #606060;
+		}
+		.mainmenu .navbar td.selected > div, .mainmenu .navbar td.selected > div:hover {
+			background-color: #ffd700;
+		} 
 	</style> 
 </head>
 
@@ -23,7 +45,7 @@
 			<td id="master-header-logo-desc" class="logo-desc"> &nbsp; </td> 
 			<td id="master-header-center" style="width:100%"> &nbsp; </td> 
 			<td id="master-header-right" class="mainmenu" style="white-space:nowrap;"> 
-				@navbar(style="horizontal") 
+				@navbar(style:'horizontal', type:'topmenu') 
 			</td>
 		</tr>
 		</table>
@@ -37,7 +59,7 @@
 			</td>
 		</tr>
 		<tr class="master-content-section">
-			<td class="master-footer" style="text-align:center;">
+			<td class="theme-footer-background master-footer" style="text-align:center;">
 				@copyright()
 			</td>
 		</tr>

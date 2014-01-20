@@ -2,6 +2,11 @@
 body, .rui-theme-font { 
     font-family:Tahoma, Arial; font-size:10pt; 
 }
+input[type=text], input[type=password] {
+    border:1px solid #808080; padding:2px 3px 2px 7px;
+    border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; 
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.95);    
+}
 input[type='text'].number-field { 
     font-family:courier; font-size:1.1em; text-align:right; 
 }
@@ -139,7 +144,7 @@ span.hint-hover { color: lightgrey; }
     vertical-align:top; padding: 3px 5px 3px 5px;
     border: 1px solid #e7e7e7; background: #f9fafa; 
 }
-.grid th, .grid thead td {
+.grid th, .grid thead tr {
     background: #bbb6ad; color: #fff; text-shadow:1px 1px #808080; 
     font-weight:normal; border:0; white-space:nowrap; text-align: left;
 }
@@ -207,9 +212,10 @@ a.button { display: inline-block; }
 
 /* begin: default theme styles */
 .page-title { 
-    font-size:1.7em; color:#707070; 
-    text-shadow:1px 1px #dfdfdf; 
+    font-size:1.3em; font-weight:600; color:#505050; 
+    text-shadow:1px 1px #fafafa; 
 } 
+.pagelist { margin:10px 20px; width:98%; min-width:500px;}
 .form { width: 80%; margin-top: 20px; }
 .form label, .form .buttons { display:block; clear: both; margin-bottom: 5px; }
 .form .caption { display: inline-block; width: 100px; }
@@ -219,10 +225,56 @@ a.button { display: inline-block; }
 .error, .element-error { background-color: #FFEBE8; }
 .element-error { color:red; padding:1px 5px 2px 5px; }  
 
-.section-header-title {white-space:nowrap; padding-right:20px; font-weight:bold; font-size:0.9em; color:#707070;} 
+.section-header-title {white-space:nowrap; padding-right:20px; font-weight:bold; font-size:0.5em; color:#707070;} 
 .section-header-border {padding:0;margin:0;margin-top:2px;} 
 /* end: default theme styles */
 
+.error-box { padding:10px; background-color: #ffebe8; border: 1px solid #dd3c10; }
+.error-box .error-box-title { color:#dd3c10; font-weight:bold; font-size:1.1em; }
+
+.desktop-toolbar-col { padding-bottom: 20px; } 
+.desktop-toolbar-block { margin-right:20px; }
+.desktop-toolbar-block-icon { width:100px; height:100px; }
+.desktop-toolbar-block-content-filler { padding-left:10px; }
+.desktop-toolbar-block-title > a { font-weight:bold; font-size:12pt;  text-decoration:none; }
+.desktop-toolbar-block-desc {font-size:11px;}
+
+table.datatable { 
+    border-collapse: collapse; border-top:2px solid #808080; 
+    border-bottom:1px solid #e7e7e7; background-color:#f7f7f7; 
+    margin-bottom:5px;
+}
+table.datatable tr.row th, table.datatable tr.row td {
+    border-right:1px solid #e7e7e7; 
+}
+table.datatable tr > th, table.datatable tr > td {
+    padding:2px 10px;
+}
+table.datatable th, table.datatable td { height:18px; min-height:18px; }
+table.datatable th, table.datatable td {  }
+table.datatable tr.even { background-color:#fff; }
+table.datatable tr:hover { background-color:#c8d4f6; } 
+table.datatable tr.datatable-header:hover, table.datatable thead tr:hover { background-color:#f5f5f5;}
+table.datatable tr.datatable-header > td, table.datatable tr.datatable-header > th, 
+table.datatable thead tr > th, table.datatable thead tr > td, 
+table.datatable tr.row td.last-col { border-right:0; }
+table.datatable tr.datatable-header, table.datatable thead tr {
+    background-color:#eaeaea; font-weight:bold; font-size:12px;
+    color:#505050; text-shadow:1px 1px #efefef;
+}
+
+span.actionfield-wrapper {
+    position:relative; display:inline-block; white-space:nowrap;
+    margin:0; padding:0; border:0; 
+}
+span.actionfield-wrapper > input[type=text].actionfield { 
+    padding-right:20px;
+}
+span.actionfield-wrapper > .button-icon-actionfield { 
+    position:absolute; height:95%; margin-left:-21px;
+    cursor:pointer; padding-left:18px; 
+    background-position: right 3px center;
+} 
 
 /**
  * default theme for the rameses-lib.js file upload plugin
