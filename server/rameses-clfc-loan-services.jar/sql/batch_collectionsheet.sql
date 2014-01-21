@@ -17,17 +17,6 @@ FROM loanapp l
 INNER JOIN batch_collectionsheet_detail bcd ON l.objid=bcd.appid
 WHERE bcd.parentid=$P{parentid}
 
-[findDetailPayment]
-SELECT dp.*, 
-	l.objid AS loanapp_objid, l.appno AS loanapp_appno, 
-	l.borrower_objid, l.borrower_name, b.address AS borrower_address 
-FROM batch_collectionsheet_detail_payment dp 
-	INNER JOIN batch_collectionsheet_detail d ON dp.parentid=d.objid 
-	INNER JOIN loanapp l ON d.appid=l.objid 
-	INNER JOIN borrower b ON l.borrower_objid=b.objid 
-WHERE 
-	dp.objid=$P{objid} 
-
 [findDetailByAppIdAndParentId]
 SELECT * FROM batch_collectionsheet_detail
 WHERE appid=$P{appid} AND parentid=$P{parentid}
@@ -87,3 +76,15 @@ where objid=$P{objid}
 [getDetailsByParentid]
 SELECT * FROM batch_collectionsheet_detail
 WHERE parentid=$P{parentid}
+
+[findDetailPayment]
+SELECT dp.*, 
+	l.objid AS loanapp_objid, l.appno AS loanapp_appno, 
+	l.borrower_objid, l.borrower_name, b.address AS borrower_address 
+FROM batch_collectionsheet_detail_payment dp 
+	INNER JOIN batch_collectionsheet_detail d ON dp.parentid=d.objid 
+	INNER JOIN loanapp l ON d.appid=l.objid 
+	INNER JOIN borrower b ON l.borrower_objid=b.objid 
+WHERE 
+	dp.objid=$P{objid} 
+	
