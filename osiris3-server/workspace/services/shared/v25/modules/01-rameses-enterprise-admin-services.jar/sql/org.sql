@@ -33,3 +33,9 @@ SELECT * FROM sys_org WHERE parentid IS NULL
 
 [getInfo]
 SELECT * FROM sys_org WHERE name=$P{name} 
+
+[findByName]
+SELECT * FROM sys_org WHERE name=$P{name} 
+
+[findRoot]
+SELECT * FROM sys_org WHERE parentid IS NULL 
