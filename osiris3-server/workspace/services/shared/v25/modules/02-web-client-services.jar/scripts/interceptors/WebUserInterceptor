@@ -1,0 +1,55 @@
+import com.rameses.annotations.*;
+import com.rameses.util.*;
+
+class WebUserInteceptor 
+{
+	@Service('WebBasicUserService')
+	def svc;
+
+	@Env 
+	def env;
+
+	@After(pattern="UserService.getInfo", eval="env.CLIENTTYPE=='web'") 
+	public void loadUserInfo( evt ) {
+		def username = evt.args[0]; 
+		def userinfo = getInfo( username ); 
+		evt.result.putAll(userinfo);
+	}
+	
+	private Map getInfo( username ) {
+		def info = null;		
+		def isSA = username.toString().equalsIgnoreCase("sa");
+		if (isSA) 
+			info = [objid:username, username:username, name:username];
+		else 
+			info = svc.getInfo(username); 
+
+		if (!info) throw new Exception("'"+username+"' user account does not exist"); 
+
+		def fullname = new StringBuffer();
+		fullname.append(info.firstname);
+		if (info.middlename) {
+			fullname.append(" " + info.middlename); 
+		} 
+		fullname.append(" "+info.lastname);
+
+		def result = [:]; 
+		result.username = info.username; 
+		result.USERID = info.objid; 
+    	result.env = [ 
+            USER: info.username, 
+            USERID: info.objid, 
+            NAME: info.name, 
+            FULLNAME: fullname.toString(), 
+            JOBTITLE: info.jobtitle, 
+            EMAIL: info.email, 
+            TERMINALID: env.TERMINALID, 
+			ROLES: [ALLOWED: 'system.*'] 
+		]; 
+
+		if (isSA) result.env.ROLES['ADMIN.SYSADMIN'] = null; 
+		
+		return result; 
+	} 
+}  
+
