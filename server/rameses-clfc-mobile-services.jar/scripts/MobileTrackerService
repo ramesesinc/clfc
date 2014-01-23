@@ -126,5 +126,4 @@ class MobileTrackerService
 	public List getList( params ) {
 		return em.getList(params); 
 	}
-
 }

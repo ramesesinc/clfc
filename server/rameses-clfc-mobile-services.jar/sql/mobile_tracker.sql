@@ -10,7 +10,7 @@ ORDER BY dtstart
 SELECT * FROM mobile_tracker_detail WHERE parentid=$P{parentid} ORDER BY txndate 
 
 [findByPrimary]
-SELECT t.*, 
+SELECT t.*, t.userid AS user_objid, 
 	u.username AS user_name, u.lastname AS user_lastname, 
 	u.firstname AS user_firstname, u.middlename AS user_middlename  
 FROM mobile_tracker t 
