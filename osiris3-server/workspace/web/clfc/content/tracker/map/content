@@ -47,6 +47,8 @@
 					icon: '/images/mapicons/start.png'
 				});	
 				workspace.markers.push(startMarker); 
+				workspace.startlog = {lat: tracker.startlat, lng: tracker.startlng, objid: tracker.objid, type:'start'} 
+				new HeadWindowHandler(workspace, startMarker, workspace.startlog);
 			} 
 			if (tracker.state == 'CLOSED' && tracker.closedlat && tracker.closedlng && tracker.closedlat != 0 && tracker.closedlng != 0) { 
 				var endMarker = new google.maps.Marker({ 
@@ -55,7 +57,9 @@
 					title: 'End Point',
 					icon: '/images/mapicons/end.png'
 				});	
-				workspace.markers.push(startMarker);
+				workspace.markers.push(endMarker);
+				workspace.endlog = {lat: tracker.closedlat, lng: tracker.closedlng, objid: tracker.objid, type:'end'}
+				new HeadWindowHandler(workspace, endMarker, workspace.endlog);
 			}
 		} 
 	} 
@@ -90,7 +94,6 @@
 		}); 
 
 		var loadContent = function() {
-			window.console.log(data);
 			\$.ajax({ 
 				cache: false, 				
 				url: '/tracker/marker?objid='+data.objid, 
@@ -115,76 +118,126 @@
 		});	
 	} 
 
+	function HeadWindowHandler(workspace, gmarker, data) {
+		var infowindow = new google.maps.InfoWindow({ 
+			size: new google.maps.Size(50, 50), 			
+			content: '<table cellpadding="0" cellspacing="0" style="white-space:nowrap;width:180px;"><tr>'+ 
+			         '<td style="width:1px;"><img src="/images/loading.gif" height="16" border="0"/></td>'+
+			         '<td style="padding-left:5px;">loading information...</td>'+ 
+			         '</tr></table>'
+		}); 
+
+		var loadContent = function() {
+			\$.ajax({ 
+				cache: false, 				
+				url: '/tracker/head?objid='+data.objid+'&type='+data.type, 
+				complete: function(o, resp_stat) {
+					if (resp_stat == 'success') {
+						infowindow.setContent(o.responseText); 
+					} else {
+						infowindow.setContent('<p class="error-box"><b class="error-box-title">'+resp_stat+'</b><br/>'+o.statusText+'</p>'); 
+					}
+				}, 
+				error: function(o, resp_stat, msg) {
+					infowindow.setContent('<p class="error-box"><b class="error-box-title">'+resp_stat+'</b><br/>'+msg+'</p>'); 
+				} 
+			});
+		} 
+
+		google.maps.event.addListener(gmarker, 'click', function() {
+			if (workspace.infowindow) workspace.infowindow.close(); 
+			infowindow.open(workspace.map, gmarker); 
+			workspace.infowindow = infowindow; 
+			loadContent();  
+		});	
+	} 	
+
+	var sortedLogs = [];
+	var sortedPaymentLogs = [];
 	var repaintHandler = function() {
 		try { 
 			google; 
 		} catch(e) {
 			return;
 		}
+		//bind new markers
+		var paymentlogs = sortedPaymentLogs;
+		for (var i=0; i<paymentlogs.length; i++) { 
+			var item = paymentlogs[i];
+			if (item.marker) continue;
 
-		var logs = workspace.logs; 
-		var newarray = [];
-		for (var i=0; i<logs.length; i++) {
-			newarray.push(logs[i]); 
-		}
-
-		var comparator = function(a, b) {
-			if (!b.indexno) return -1; 
-
-			return a.indexno-b.indexno; 
-		}
-		newarray.sort(comparator); 
-
-		var lastItem = (newarray.length > 0? newarray[newarray.length-1]: null); 
+			var remarks = (item.remarks? item.remarks: '');
+			var txntype = (item.txntype? item.txntype: 'NORMAL');
+			var iconpath = '/images/mapicons/payment-'+txntype+'.png';
+			var pm = new google.maps.Marker({ 
+				position 	: new google.maps.LatLng(item.lat, item.lng), 
+				title 		: txntype+' Payment (#'+ (i+1) +') '+remarks, 
+				icon 		: iconpath.toLowerCase(), 				
+    			animation 	: google.maps.Animation.DROP, 
+    			map 		: workspace.map, 
+				draggable 	: false     			
+			});	
+			item.marker = pm; 			
+			new GmapInfoWindowHandler(workspace, pm, item); 
+		} 
 
 		var lineSymbol = {
 			path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
 		};
 
-		var paymentcount = 0;
-		var payments = [];
+		var logs = sortedLogs;
+		var lastItem = (logs.length > 0? logs[logs.length-1]: null); 
+		var previtem = workspace.startlog;
+		var strokeColor = null;		
 		var paths = [];
-		for (var i=0; i<newarray.length; i++) {
-			var item = newarray[i]; 
+
+		for (var i=0; i<logs.length; i++) {
+			var item = logs[i]; 
 			if (!item || !item.lat || !item.lng || item.lat==0 || item.lng==0) continue;
 
-			paths.push(new google.maps.LatLng(item.lat, item.lng)); 
-			if (item.reftype == 'PAYMENT') {
-				paymentcount++;
-				var remarks = (item.remarks? item.remarks: '');
-				var txntype = (item.txntype? item.txntype: 'NORMAL');
-				var iconpath = '/images/mapicons/payment-'+txntype+'.png';
-				var pm = new google.maps.Marker({ 
-					position: new google.maps.LatLng(item.lat, item.lng), 
-					title: txntype+' Payment (#'+paymentcount+') '+remarks, 
-					icon:  iconpath.toLowerCase() 
-				});	
-				payments.push(pm); 
-				new GmapInfoWindowHandler(workspace, pm, item); 
+			if (item.reftype != 'PAYMENT') {
+				paths.push(new google.maps.LatLng(item.lat, item.lng)); 
+				continue; 
 			} 
-		} 
-		while (newarray.length > 0) { 
-			newarray.pop(); 
+			
+			if (!item.polyline) {
+				strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16); 
+				paths.push(new google.maps.LatLng(item.lat, item.lng));	
+				item.polyline = new google.maps.Polyline({ 
+					path: paths, 
+					geodesic: true, 
+					strokeColor: strokeColor, 
+					strokeOpacity: 1.0, 
+					strokeWeight: 4, 
+					map: workspace.map, 
+					icons: [{ 
+						icon: lineSymbol,
+						offset: '45%'
+					}] 
+				});	
+			} 	
+
+			paths = []; 
+			paths.push(new google.maps.LatLng(item.lat, item.lng)); 
 		} 
 
-		if (workspace.polyline) workspace.polyline.setMap(null); 		
-		workspace.polyline = new google.maps.Polyline({
-			path: paths,
-			geodesic: true,
-			strokeColor: '#FF0000',
-			strokeOpacity: 0.8,
-			strokeWeight: 5,
-			icons: [{
-				icon: lineSymbol,
-				offset: '100%'
-			}] 
-		});
-		workspace.polyline.setMap(workspace.map); 
+		strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16); 
+		if (paths.length > 0) {
+			new google.maps.Polyline({ 
+				path: paths, 
+				geodesic: true, 
+				strokeColor: strokeColor, 
+				strokeOpacity: 1.0, 
+				strokeWeight: 4,  
+				map: workspace.map,
+				icons: [{
+					icon: lineSymbol,
+					offset: '45%'
+				}] 
+			});	
+			paths = [];
+		} 
 
-		for (var i=0; i<payments.length; i++) {
-			payments[i].setMap(workspace.map); 
-		}
- 
 		if (workspace.locatorMarker) workspace.locatorMarker.setMap(null);
 		if (lastItem && workspace.tracker && workspace.tracker.state == 'OPEN') { 
 			var image = {
@@ -199,19 +252,87 @@
 				optimized: false  
 			});	
 		} 
+
+		/*
+		var polyline = new google.maps.Polyline({ 
+			path: paths, 
+			geodesic: true, 
+			strokeColor: strokeColor, 
+			strokeOpacity: 0.8, 
+			strokeWeight: 3,  
+			map: workspace.map  
+		});	
+		*/
+
+		/*
+		var polylines = []; 
+		for (var i=0; i<paths.length; i++) {
+			var item = paths[i]; 
+			var subpaths = [];
+			subpaths.push(new google.maps.LatLng(item.lat, item.lng)); 
+			item = paths[i+1];
+			if (item) subpaths.push(new google.maps.LatLng(item.lat, item.lng)); 
+
+			i++;
+			var polyline = new google.maps.Polyline({
+				path: subpaths,
+				geodesic: true,
+				strokeColor: strokeColor,
+				strokeOpacity: 0.8,
+				strokeWeight: 5
+			});	
+			polylines.push(polyline); 
+			//strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+			window.console.log('index='+i + ', strokeColor='+strokeColor + ', polyline='+polyline);
+			break;
+		} 
+
+		workspace.polylines = polylines;
+		for (var i=0; i<polylines.length; i++) {
+			polylines[i].setMap(workspace.map); 
+		} 
+		for (var i=0; i<payments.length; i++) {
+			payments[i].setMap(workspace.map); 
+		}*/
 	} 
+
+	function sortList( list ) { 
+		if (!list) return [];
+
+		var newarray = [];
+		for (var i=0; i<list.length; i++) {
+			newarray.push(list[i]); 
+		}
+
+		var comparator = function(a, b) {
+			if (!b.indexno) return -1; 
+
+			return a.indexno-b.indexno; 
+		}
+		newarray.sort(comparator); 
+		return newarray;
+	}
 
 	var socket = Socket.create('gmap');
 	socket.handlers.handler1 = function(x) {
 		if (!trackerid) return;		
 		if (!(x.status == 'OK')) return;
 		if (!(x.parentid.toLowerCase() == trackerid.toLowerCase())) return;
+
+		if (!workspace.paymentlogs) workspace.paymentlogs = []; 
 		if (!workspace.logs) workspace.logs = []; 
 
 		workspace.logs.push(x);
-		setTimeout(repaintHandler, 500); 
-		\$('.notification-icon').removeClass('button-icon-notification-bell').addClass('button-icon-notification-bell-on');
-		\$('.notification-count').html(workspace.logs.length).show();
+		if (x.reftype == 'PAYMENT') workspace.paymentlogs.push(x); 
+
+		sortedLogs = sortList(workspace.logs); 
+		sortedPaymentLogs = sortList(workspace.paymentlogs);
+		setTimeout(repaintHandler, 1000); 
+		var paymentcount = sortedPaymentLogs.length;
+		if (paymentcount > 0) {  
+			\$('.notification-icon').removeClass('button-icon-notification-bell').addClass('button-icon-notification-bell-on');
+			\$('.notification-count').html(paymentcount).show(); 
+		} 
 	} 
 
 	socket.handlers.notificationlist = function(o) {
