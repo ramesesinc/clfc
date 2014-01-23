@@ -80,11 +80,13 @@ WHERE parentid=$P{parentid}
 [findDetailPayment]
 SELECT dp.*, 
 	l.objid AS loanapp_objid, l.appno AS loanapp_appno, 
-	l.borrower_objid, l.borrower_name, b.address AS borrower_address 
+	l.borrower_objid, l.borrower_name, b.address AS borrower_address, 
+	r.code AS route_code, r.description AS route_description, r.area AS route_area  
 FROM batch_collectionsheet_detail_payment dp 
 	INNER JOIN batch_collectionsheet_detail d ON dp.parentid=d.objid 
 	INNER JOIN loanapp l ON d.appid=l.objid 
-	INNER JOIN borrower b ON l.borrower_objid=b.objid 
+	INNER JOIN loan_route r ON l.route_code=r.code 
+	INNER JOIN borrower b ON l.borrower_objid=b.objid  
 WHERE 
 	dp.objid=$P{objid} 
-	
+ 
