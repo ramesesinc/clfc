@@ -2,7 +2,9 @@ package com.rameses.paymentcollectionapp;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,38 +20,47 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
-public class Route extends Activity {
-	private Context context = this; 
-	private MySQLiteHelper db;
+public class Route extends ControlActivity {
+	private Context context = this;
 	private Bundle bundle;
-	private ServiceProxy svcProxy;
+	//private ServiceProxy svcProxy;
 	private ProgressDialog progressDialog;
-	private ServiceHelper svcHelper = new ServiceHelper(context);
-	private ProjectApplication application = null;
-	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_route);
+		setContentView(R.layout.template_footer);
+		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
+		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_route, rl_container, true);
 		setTitle("Select a Route: ");
 		Intent intent = getIntent();
+		int status = intent.getIntExtra("networkStatus", 2);
+		String mode = "NOT CONNECTED";
+		if (status == 1) mode = "ONLINE";
+		else if (status == 0) mode = "OFFLINE";
+		((TextView) findViewById(R.id.tv_mode)).setText(mode);
 		bundle = intent.getBundleExtra("bundle");
-		application = (ProjectApplication) context.getApplicationContext();
-		db = new MySQLiteHelper(context);
+		if (getDbHelper() == null) setDbHelper(new MySQLiteHelper(context));
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
+		getApp().setCurrentActivity(this);
 		progressDialog = new ProgressDialog(context);
 		
 		ArrayList bundleList = bundle.getParcelableArrayList("routes");
@@ -73,23 +84,12 @@ public class Route extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				RouteParcelable r = (RouteParcelable) parent.getItemAtPosition(position);
+				SQLiteDatabase db = getDbHelper().getReadableDatabase();
 				getCollectionsheets(r);
 			}
 		});
 		
-		if (svcHelper.isHostSet()) svcProxy = svcHelper.createServiceProxy("DeviceLoanBillingService");
-	}
-	
-	@Override
-	protected void onPause() {
-		if(db.isOpen) db.closeDb();
-		super.onPause();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		if(db.isOpen) db.closeDb();
-		super.onDestroy();
+		//if (svcHelper.isHostSet()) svcProxy = ApplicationUtil.getServiceProxy(context, "DeviceLoanBillingService");//svcHelper.createServiceProxy("DeviceLoanBillingService");
 	}
 	
 	private void getCollectionsheets(RouteParcelable r) {
@@ -106,23 +106,45 @@ public class Route extends Activity {
 			//String sessionid = bundle.getString("sessionid");
 			//String serverdate = bundle.getString("serverdate");
 			ArrayList bundleList = (ArrayList) bundle.getParcelableArrayList("collectionsheets");
-			Map<String, Object> map;
+			Map<String, Object> map = new HashMap<String, Object>();
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("routecode", bundle.getString("routecode"));
+			params.put("state", "ACTIVE");
 			params.put("routedescription", bundle.getString("routedescription"));
 			params.put("routearea", bundle.getString("routearea"));
+			params.put("sessionid", bundle.getString("sessionid"));
 			
-			if(!db.isOpen) db.openDb();
-			Cursor r = db.getSystemByName("trackerid");
-			if (r == null || r.getCount() == 0) {
-				map = new HashMap<String, Object>();
+			SQLiteDatabase db = getDbHelper().getReadableDatabase();
+			Date date = null;
+			try {
+				String dt = getDbHelper().getServerDate(db, getDbHelper().getCollectorid(db));
+				date = new SimpleDateFormat("yyyy-MM-dd").parse(dt);
+			} catch (Exception e) {}
+			if (date == null) {
+				map.clear();
+				map.put("serverdate", bundle.getString("serverdate"));
+				map.put("collectorid", getDbHelper().getCollectorid(db));
+				getDbHelper().insertCollectionDate(db, map);
+				if (getApp().getIsTickerRunning()) {
+					getApp().stopTicker();
+				}
+			}
+			
+			if (!getApp().getIsTickerRunning()) {
+				getApp().startTicker();
+			} 
+			//Cursor r = getDbHelper().getSystemByName("trackerid");
+			String trackerid = getDbHelper().getTrackerid(db);
+			if (trackerid == null || trackerid.equals("")) {
+				map.clear();
 				map.put("name", "trackerid");
 				map.put("value", bundle.getString("trackerid"));
-				db.insertSystem(map);
+				getDbHelper().insertSystem(db, map);
 			}
-			r = db.findSessionById(bundle.getString("sessionid"));
-			if (r == null || r.getCount() == 0) db.insertSession(bundle.getString("sessionid"));
-			db.insertRoute(params);
+			//r = getDbHelper().findSessionById(bundle.getString("sessionid"));
+			//if (r == null || r.getCount() == 0) getDbHelper().insertSession(bundle.getString("sessionid"));
+			params.put("collectorid", getDbHelper().getCollectorid(db));
+			getDbHelper().insertRoute(db, params);
 			/*Cursor cs = db.getCollectionsheetsByRoute(params.get("routecode").toString);
 			if (cs != null && cs.getCount() > 0) {
 				cs.moveToFirst();
@@ -134,7 +156,7 @@ public class Route extends Activity {
 					db.removeCollectionsheetByLoanappid(loanappid);
 				} while(cs.moveToNext());
 			}*/
-			db.removeCollectionsheetsByRoute(params.get("routecode").toString());
+			getDbHelper().removeCollectionsheetsByRoute(db, params.get("routecode").toString());
 			//db.insertSystem(sessionid, serverdate);
 			//byte[] barr;
 			Cursor itm = null;
@@ -148,32 +170,36 @@ public class Route extends Activity {
 				map.put("routecode", params.get("routecode").toString());
 				map.put("sessionid", bundle.getString("sessionid"));
 				map.put("type", "");
-				itm = db.getCollectionsheetByLoanappid(map.get("loanappid").toString());
-				if (itm == null || itm.getCount() == 0) db.insertCollectionsheet(map);
+				itm = getDbHelper().getCollectionsheetByLoanappid(db, map.get("loanappid").toString());
+				if (itm == null || itm.getCount() == 0) getDbHelper().insertCollectionsheet(db, map);
 				if (map.containsKey("payments")) {
 					list = (ArrayList<Map<String, Object>>) map.get("payments");
 					for(int j=0; j<list.size(); j++) {
 						m = (Map<String, Object>) list.get(j);
-						db.insertPayment(m);
+						getDbHelper().insertPayment(db, m);
 					}
 				}
 				if (map.containsKey("notes")) {
 					list = (ArrayList<Map<String, Object>>) map.get("notes");
 					for (int j=0; j<list.size(); j++) {
 						m = (Map<String, Object>) list.get(j);
-						db.insertNotes(m);
+						getDbHelper().insertNotes(db, m);
 					}
 				}
 				if (map.containsKey("remarks")) {
 					m = new HashMap<String, Object>();
 					m.put("loanappid", map.get("loanappid").toString());
 					m.put("remarks", map.get("remarks").toString());
-					db.insertRemarks(m);
+					getDbHelper().insertRemarks(db, m);
 				}
 			}
-			db.closeDb();
+			db.close();
+			itm.close();
 			
 			if (progressDialog.isShowing()) progressDialog.dismiss();
+			/*if (!getApp().getIsBackgroundProcessRunning()) {
+				getApp().startBackgroundProcess();
+			}*/
 			ApplicationUtil.showShortMsg(context, "Successfully downloaded billing!");
 		}
 	};
@@ -186,6 +212,15 @@ public class Route extends Activity {
 			ApplicationUtil.showLongMsg(context, bundle.getString("response"));
 		}
 	};
+	
+	private void insertToSystem(String name, String value) {
+		SQLiteDatabase db = getDbHelper().getReadableDatabase();
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("name", name);
+		params.put("value", value);
+		getDbHelper().insertSystem(db, params);
+		db.close();
+	}
 	
 	private class MyRunnable implements Runnable {
 		private RouteParcelable route;
@@ -204,29 +239,41 @@ public class Route extends Activity {
 			params.put("route_description", route.getDescription());
 			params.put("route_area", route.getArea());
 			params.put("billingid", route.getSessionid());
-			params.put("longitude", application.getLongitude());
-			params.put("latitude", application.getLatitude());
+			params.put("longitude", getApp().getLongitude());
+			params.put("latitude", getApp().getLatitude());
 			String terminalid = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
 			if (terminalid == null) {
 				terminalid = Build.ID;
 			}
 			params.put("terminalid", terminalid);
-			if (!db.isOpen) db.openDb();
-			params.put("userid", db.getCollectorid());
-			params.put("trackerid", db.getTrackerid());
-			if (db.isOpen) db.closeDb();
+			SQLiteDatabase db = getDbHelper().getReadableDatabase();
+			params.put("userid", getDbHelper().getCollectorid(db));
+			params.put("trackerid", getDbHelper().getTrackerid(db));
+			db.close();
+			ServiceProxy svcProxy = ApplicationUtil.getServiceProxy(context, "DeviceLoanBillingService");
 			try {
 				//ArrayList<CollectionSheetParcelable> list = (ArrayList<CollectionSheetParcelable>)sp1.invoke("getCollectionsheets", new Object[]{params});
 				Object result = svcProxy.invoke("downloadBilling", new Object[]{params});
 				Map<String, Object> map = (Map<String, Object>) result;
 				//xbundle.putString("sessionid", map.get("sessionid").toString());
 				//xbundle.putString("serverdate", map.get("serverdate").toString());
+				if (map.containsKey("settings")) {
+					Map<String, Object> settings = (Map<String, Object>) map.get("settings");
+					insertToSystem("host_online", settings.get("onlinehost").toString());
+					insertToSystem("host_offline", settings.get("offlinehost").toString());
+					insertToSystem("host_port", settings.get("port").toString());
+					insertToSystem("timeout_session", settings.get("sessiontimeout").toString());
+					insertToSystem("timeout_upload", settings.get("uploadtimeout").toString());
+					insertToSystem("timeout_tracker", settings.get("trackertimeout").toString());
+				}
+				
 				xbundle.putString("routecode", route.getCode());
 				xbundle.putString("routedescription", route.getDescription());
 				xbundle.putString("routearea", route.getArea());
 				xbundle.putString("sessionid", route.getSessionid());
 				xbundle.putParcelableArrayList("collectionsheets", ((ArrayList<CollectionSheetParcelable>)map.get("list")));
 				xbundle.putString("trackerid", map.get("trackerid").toString());
+				xbundle.putString("serverdate", map.get("serverdate").toString());
 				status = true;
 				msg=handler.obtainMessage();
 			}
