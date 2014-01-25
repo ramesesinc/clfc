@@ -11,12 +11,12 @@
 		<field name="jobtitle" />
 	</element>
 
-    <element name="updateLock" tablename="sys_user">
+    <element name="lock" tablename="sys_user">
         <field name="objid" primary="true" />
         <field name="lockid" />
     </element> 	
 
-    <element name="changePassword" tablename="sys_user">
+    <element name="password" tablename="sys_user">
         <field name="objid" primary="true" />
         <field name="pwd" />
         <field name="pwdlogincount" />

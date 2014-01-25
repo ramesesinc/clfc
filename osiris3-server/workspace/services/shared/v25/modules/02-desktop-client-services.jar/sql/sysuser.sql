@@ -1,3 +1,6 @@
+[findUser]
+SELECT * FROM sys_user where username=$P{username}  
+
 [getInfo]
 SELECT * FROM sys_user where username=$P{username}  
 
