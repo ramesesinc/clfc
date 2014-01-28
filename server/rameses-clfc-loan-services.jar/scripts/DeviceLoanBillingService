@@ -33,12 +33,30 @@ class DeviceLoanBillingService
 	@Service("MobileTrackerService")
 	def trackerSvc;
 
+	@Service("DeviceSettingsService")
+	def settingsSvc;
+
 	@ProxyMethod
 	public def getRoutes(params) {
-		def result = route.getList();
-		def list = [];
-		list.addAll(result)
-		return list;
+		if (!params.collectorid) throw new Exception("Please specify collectorid");
+		def date = dateSvc.parseCurrentDate();
+		def d = date.year+'-'+date.month+'-'+date.day;
+		def billing = ledger_billing.getBillingByCollectorid([collectorid: params.collectorid, billdate: d]);
+		def subbilling = ledger_billing.getBillingBySubCollectorid([subcollectorid: params.collectorid, billdate: d]);
+		if (!billing && !subbilling) throw new Exception('You have no billing to download for today.');
+
+		billing.addAll(subbilling);
+
+		def routes = [];
+		def list;
+		billing.each{bill->
+			list = ledger_billing.getRoutesByBillingid([billingid: bill.objid]);
+			list.each{
+				it.billingid = bill.objid;
+				routes.add(it);
+			}
+		}
+		return [routes: routes];
 	}
 
 
@@ -110,9 +128,10 @@ class DeviceLoanBillingService
 		ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
 		def session = trackerSvc.open([trackerid: params.trackerid]);
 		if (!session) {
-			params.trackerid = trackerSvc.start([lng: params.longitude, lat: params.latitude]).objid;
+			params.trackerid = trackerSvc.start([lng: params.longitude, lat: params.latitude, terminalid: params.terminalid, userid: params.userid]).objid;
 		}
-		return [list: list, trackerid: params.trackerid];
+		def settings = settingsSvc.getSettings([:]);
+		return [list: list, trackerid: params.trackerid, serverdate: dateSvc.serverDate, settings: settings];
 	}
 
 	@ProxyMethod
@@ -139,6 +158,7 @@ class DeviceLoanBillingService
 			list.add(it.objid);
 		}
 		collectionsheet.notes.each{
+
 			itm = batch_collectionsheet.read(it, "note");
 			if (!itm) {
 				itm = [:];
@@ -152,6 +172,9 @@ class DeviceLoanBillingService
 		}
 		//println 'list = '+list;
 		def data = batch_collectionsheet.read([objid: params.sessionid]);
+		if (params.totalcount) data.totalcount = params.totalcount;
+		if (params.totalamount) data.totalamount = params.totalamount;
+		batch_collectionsheet.update(data);
 		def total = batch_collectionsheet.findTotalDetailByParentId([parentid: params.sessionid]).total;
 		if (data.totalcount == total) {
 			//throw new Exception('stopping');
@@ -182,6 +205,7 @@ class DeviceLoanBillingService
 				state: 			'DRAFT',
 				dtposted: 		date,
 				postedby: 		collector.name,
+				trackerid: 		params.trackerid? params.trackerid : '',
 				dtcreated: 		date,
 				txndate: 		dateSvc.parse("yyyy-MM-dd", params.txndate),
 				route_code: 	params.routecode,
