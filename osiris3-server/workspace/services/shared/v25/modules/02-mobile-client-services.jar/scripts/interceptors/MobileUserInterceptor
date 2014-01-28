@@ -9,6 +9,9 @@ class MobileUserInterceptor
 	@Service('DefaultMobileOrgService')
 	def orgSvc;
 
+	@ActiveDB(value="var")
+	def var;
+
 	@Env 
 	def env;
 
@@ -76,7 +79,15 @@ class MobileUserInterceptor
 			else 
 				result.env.ROLES[key] = null; 
 		} 
-		
+		result.env.SETTINGS = [
+			ONLINE_HOST		: var.read([name: 'device_host_online']).value,
+			OFFLINE_HOST	: var.read([name: 'device_host_offline']).value,
+			PORT			: var.read([name: 'device_host_port']).value,
+			SESSION_TIMEOUT	: var.read([name: 'device_timeout_session']).value,
+			TRACKER_DELAY	: var.read([name: 'device_timeout_tracker']).value,
+			UPLOAD_DELAY	: var.read([name: 'device_timeout_upload']).value
+		];
+
 		return result;
 	}	
 }  

@@ -29,12 +29,12 @@ class MobileAuthInterceptor
 			throw new Exception("Access denied. Please check your username and password"); 
 		}
 
-		def info = svc.authenticate(username, password);
+		def info = userSvc.authenticate(username, password);
 		info.pwdlogincount = toInt(info.pwdlogincount); 
 
 		def pwd_change_login_count = toInt(var.pwd_change_login_count);
 		if (pwd_change_login_count > 0) {
-			svc.incrementLoginCount(username, info.pwdlogincount);
+			userSvc.incrementLoginCount(username, info.pwdlogincount);
 			info.pwdlogincount++;
 		}
 

@@ -26,7 +26,8 @@ class MobileTerminalService
 		if (!params.registeredby) throw new Exception('Please specify registeredby');
 
 		def entity = findTerminal([terminalid: params.terminalid]); 
-		if (entity) throw new Exception("Terminal ID is already assigned");
+		if (!entity) throw new Exception("Terminal ID does not exist.");
+		if (entity && entity.macaddress) throw new Exception("Terminal ID is already assigned");
 		
 		entity = findMacAddress([macaddress: params.macaddress]);
 		if (entity) throw new Exception("Terminal ID already exist. Please choose the recover option instead.");
@@ -37,7 +38,7 @@ class MobileTerminalService
 			macaddress 	: params.macaddress, 
 			registeredby: params.registeredby 
 		]; 
-		return em.create(entity); 
+		return em.update(entity); 
 	} 
 
     @ProxyMethod	
