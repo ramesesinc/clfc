@@ -13,8 +13,7 @@ class DesktopAuthenticationService
 	def svc;
 
 	@After(pattern="AuthenticationService.authenticate", eval="env.CLIENTTYPE=='desktop'") 
-	public void authenticate( evt ) 
-	{
+	public void authenticate( evt ) {
 		def username = evt.args[0];
 		def password = evt.args[1];
 		def resmap = authenticateImpl(username, password);
@@ -22,8 +21,7 @@ class DesktopAuthenticationService
 		evt.result.HANDLER = this;
 	} 
 
-	private Map authenticateImpl( username, password ) 
-	{
+	private Map authenticateImpl( username, password ) {
 		def isSA = username.toString().equalsIgnoreCase("sa");
 		if (isSA) {
 			if (password == var.sa_pwd) return [:]; 
@@ -32,12 +30,10 @@ class DesktopAuthenticationService
 		}
 
 		def info = svc.authenticate(username, password);
-		
 		info.pwdlogincount = toInt(info.pwdlogincount); 
 
 		def pwd_change_login_count = toInt(var.pwd_change_login_count);
-		if (pwd_change_login_count > 0) 
-		{
+		if (pwd_change_login_count > 0) {
 			svc.incrementLoginCount(username, info.pwdlogincount);
 			info.pwdlogincount++;
 		}

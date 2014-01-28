@@ -3,5 +3,7 @@
 	type		: 'home.action',	
 	title		: 'Administration',
 	description : 'Manage users, usergroups, organization and terminals',
-	icon		: '/images/admintool.png'
+	icon		: '/images/admintool.png',
+	domain 		: 'ADMIN',
+	role 		: 'SYSADMIN'
 }

@@ -177,18 +177,18 @@ class DeviceLoanBillingService
 		batch_collectionsheet.update(data);
 		def total = batch_collectionsheet.findTotalDetailByParentId([parentid: params.sessionid]).total;
 		if (data.totalcount == total) {
-			//throw new Exception('stopping');
-			def session = trackerSvc.open([objid: params.trackerid]);
-			if (session && session.state == 'OPEN') {
-				def map = [
-					trackerid: 	params.trackerid,
-					username: 	user? user.name : 'COLLECTOR NOT IDENTIFIED',
-					lng: 		params.longitude,
-					lat: 		params.latitude
-				]
-				trackerSvc.stop(map)
-			}
 			ledger_billing.changeStateUploaded([objid: params.sessionid]);
+		}
+
+		def session = trackerSvc.open([objid: params.trackerid]);
+		if (session && session.state == 'OPEN') {
+			def map = [
+				trackerid: 	params.trackerid,
+				username: 	user? user.name : 'COLLECTOR NOT IDENTIFIED',
+				lng: 		params.longitude,
+				lat: 		params.latitude
+			]
+			trackerSvc.stop(map)
 		}
 		return [list: list];
 	}

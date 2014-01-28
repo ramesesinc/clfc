@@ -9,7 +9,7 @@ class MobileUserInterceptor
 	@Service('DefaultMobileOrgService')
 	def orgSvc;
 
-	@ActiveDB(value="var")
+	@ActiveDB('mobile_var')
 	def var;
 
 	@Env 
@@ -79,15 +79,24 @@ class MobileUserInterceptor
 			else 
 				result.env.ROLES[key] = null; 
 		} 
-		result.env.SETTINGS = [
-			ONLINE_HOST		: var.read([name: 'device_host_online']).value,
-			OFFLINE_HOST	: var.read([name: 'device_host_offline']).value,
-			PORT			: var.read([name: 'device_host_port']).value,
-			SESSION_TIMEOUT	: var.read([name: 'device_timeout_session']).value,
-			TRACKER_DELAY	: var.read([name: 'device_timeout_tracker']).value,
-			UPLOAD_DELAY	: var.read([name: 'device_timeout_upload']).value
-		];
 
+		def settings = [:]; 
+		var.getDeviceSettings().each {
+			if (it.name == 'device_host_online') { 
+				settings.ONLINE_HOST = it.value; 
+			} else if (it.name == 'device_host_offline') {  
+				settings.OFFLINE_HOST = it.value;
+			} else if (it.name == 'device_host_port') { 
+				settings.PORT = it.value; 
+			} else if (it.name == 'device_timeout_session') { 
+				settings.SESSION_TIMEOUT = it.value; 
+			} else if (it.name == 'device_timeout_tracker') { 
+				settings.TRACKER_DELAY = it.value; 
+			} else if (it.name == 'device_timeout_upload') { 
+				settings.UPLOAD_DELAY = it.value; 
+			} 
+		}
+		result.env.SETTINGS = settings;
 		return result;
 	}	
 }  
