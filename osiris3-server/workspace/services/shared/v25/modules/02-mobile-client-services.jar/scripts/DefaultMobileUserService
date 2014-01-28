@@ -51,7 +51,7 @@ class DefaultMobileUserService
 
 		//initiate lock
 		def newlockid = 'LOCK'+new java.rmi.server.UID();
-		em.update([username: params.username, lockid: newlockid], 'lock');
+		em.updateLock([username: params.username, lockid: newlockid]);
 
 		//get account info
 		def info = getInfo( params.username ); 
