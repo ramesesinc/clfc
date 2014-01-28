@@ -18,7 +18,7 @@ class MobileAuthInterceptor
 		def password = evt.args[1];
 		def resmap = authenticateImpl(username, password);
 		evt.result.putAll(resmap);
-		evt.result.HANDLER = this;
+		evt.result.HANDLER = this; 
 	} 
 
 	private Map authenticateImpl( username, password ) {
