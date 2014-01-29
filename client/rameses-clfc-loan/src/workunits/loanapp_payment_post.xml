@@ -11,14 +11,14 @@
         
         <invoker type="formActions" action="back" caption="Back" mnemonic="b" 
             visibleWhen="#{mode != 'init' &amp;&amp; mode != 'edit'}" shortcut="ctrl B"/>
-        <invoker type="formActions" action="edit" caption="Edit"  role="FIELD_COLLECTOR" 
+        <invoker type="formActions" action="edit" caption="Edit"  role="CASHIER" 
             visibleWhen="#{isAllowEdit}" shortcut="ctrl E"/>
-        <invoker type="formActions" action="cancel" caption="Cancel" role="FIELD_COLLECTOR" 
+        <invoker type="formActions" action="cancel" caption="Cancel" role="CASHIER" 
             visibleWhen="#{mode == 'edit'}"/>
-        <invoker type="formActions" action="save" caption="Save" role="FIELD_COLLECTOR"
+        <invoker type="formActions" action="save" caption="Save" role="CASHIER"
             visibleWhen="#{isAllowSave}" mnemonic="s" shortcut="ctrl S"/>
             
-        <invoker type="formActions" action="post" caption="Post" role="FIELD_COLLECTOR,CASHIER" visibleWhen="#{isAllowPost}" mnemonic="p" shortcut="ctrl P"/>
+        <invoker type="formActions" action="post" caption="Post" role="CASHIER" visibleWhen="#{isAllowPost}" mnemonic="p" shortcut="ctrl P"/>
         <invoker type="formActions" action="viewExemptions" caption="Exemptions" visibleWhen="#{mode != 'init'}"/>
     </invokers>
     

@@ -46,7 +46,7 @@ class PostPaymentController
     }
     
     def next() {
-        iscollector = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.FIELD_COLLECTOR');
+        //iscollector = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.FIELD_COLLECTOR');
         mode = 'read';
         def data = paymentSvc.getUnpostedCollectionSheets([route_code: route]);
         entity = data.entity;
@@ -56,10 +56,11 @@ class PostPaymentController
             return null;
         }
         entity.cashbreakdown = paymentSvc.getCashBreakdown(entity);
-        if (entity.cashbreakdown.isEmpty() && iscollector) {
+        if (entity.cashbreakdown.isEmpty()) {
             mode = 'create';
             allowEdit = true;
         }
+        println 'mode = '+mode;
         denominationHandler.reload();
         return 'mgmtpage';
     }
@@ -175,17 +176,17 @@ class PostPaymentController
     }
     
     boolean getIsAllowPost() {
-        if (mode == 'init' || iscollector || breakdown == 0) return false;
+        if (mode == 'init' || getTotalbreakdown() == 0) return false;
         return true;
     }
     
     boolean getIsAllowSave() {
-        if (mode == 'init' || mode == 'read' || !iscollector) return false;
+        if (mode == 'init' || mode == 'read') return false;
         return true;
     }
     
     boolean getIsAllowEdit() {
-        if (mode == 'init' || mode != 'read' || !iscollector) return false;
+        if (mode == 'init' || mode != 'read') return false;
         return true;
     }
 }

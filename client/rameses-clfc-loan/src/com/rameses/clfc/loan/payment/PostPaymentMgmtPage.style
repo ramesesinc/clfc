@@ -2,3 +2,9 @@
     background-color: yellow;
     color: black;
 }
+"selectedDenomination" [mode == 'read'] {
+    readonly: true;
+}
+"selectedDenomination" [mode != 'read'] {
+    readonly: false;
+}

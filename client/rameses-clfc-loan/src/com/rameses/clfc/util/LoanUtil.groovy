@@ -200,6 +200,7 @@ class LoanUtil
                 [caption: 1.00, denomination: 1, qty: 0, amount: 0],
                 [caption: 0.50, denomination: 0.50, qty: 0, amount: 0],
                 [caption: 0.25, denomination: 0.25, qty: 0, amount: 0],
+                [caption: 0.10, denomination: 0.10, qty: 0, amount: 0],
                 [caption: 0.05, denomination: 0.05, qty: 0, amount: 0],
             ]
         }
