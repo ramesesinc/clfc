@@ -43,18 +43,13 @@ public class Settings extends ControlActivity {
 	private Intent intent;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		setTitle("Settings");
 		intent = getIntent();
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_settings, rl_container, true);
-		String mode = "NOT CONNECTED";
-		int status = intent.getIntExtra("networkStatus", 2);
-		if (status == 1) mode = "ONLINE";
-		else if (status == 0) mode = "OFFLINE";
-		((TextView) findViewById(R.id.tv_mode)).setText(mode);
 		if (getDbHelper() == null) setDbHelper(new MySQLiteHelper(context));
 		progressDialog = new ProgressDialog(context);
 		
@@ -71,14 +66,15 @@ public class Settings extends ControlActivity {
 	protected void onStart() {
 		super.onStart();
 		getApp().setCurrentActivity(this);
-		SQLiteDatabase db = getDbHelper().getReadableDatabase();
 		Map<String, Object> params = new HashMap<String, Object>();
+		SQLiteDatabase db = getDbHelper().getReadableDatabase();
 		params.put("onlinehost", getDbHelper().getOnlineHost(db));
 		params.put("offlinehost", getDbHelper().getOfflineHost(db));
 		params.put("port", getDbHelper().getPort(db));
 		params.put("sessiontimeout", getDbHelper().getSessionTimeout(db)+"");
 		params.put("uploadtimeout", getDbHelper().getUploadTimeout(db)+"");
 		params.put("trackertimeout", getDbHelper().getTrackerTimeout(db)+"");
+		db.close();
 		loadSettings(params);
 		
 		Button btn_save = (Button) findViewById(R.id.btn_save);
@@ -283,7 +279,7 @@ public class Settings extends ControlActivity {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("name", name);
 		map.put("value", value);
-		SQLiteDatabase db = getDbHelper().getReadableDatabase();
+		SQLiteDatabase db = getDbHelper().getWritableDatabase();
 		getDbHelper().insertSystem(db, map);
 		db.close();
 	}

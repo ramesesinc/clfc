@@ -41,8 +41,8 @@ public class CollectionSheet extends ControlActivity {
 	private String type = "";
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		setTitle("Collection Sheet");
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);

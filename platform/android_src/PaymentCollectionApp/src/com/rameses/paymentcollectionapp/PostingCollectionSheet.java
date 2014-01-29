@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.rameses.client.android.SessionContext;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -53,8 +55,8 @@ public class PostingCollectionSheet extends ControlActivity {
 	};*/
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout container = (RelativeLayout) findViewById(R.id.rl_container);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -112,7 +114,7 @@ public class PostingCollectionSheet extends ControlActivity {
 		int noOfUnposted = 0;
 
 		SQLiteDatabase db = getDbHelper().getReadableDatabase();
-		String collectorid = getDbHelper().getCollectorid(db);
+		String collectorid = SessionContext.getProfile().getUserId();
 		Cursor cursor = getDbHelper().getPostedCollectionSheets(db, searchtext, collectorid);
 		
 		//ArrayList<String> list = new ArrayList<String>();

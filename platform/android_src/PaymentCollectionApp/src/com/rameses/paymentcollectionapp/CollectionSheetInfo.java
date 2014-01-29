@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import org.w3c.dom.Text;
 
+import com.rameses.client.android.SessionContext;
 import com.rameses.service.ServiceProxy;
 
 import android.app.Activity;
@@ -70,8 +71,8 @@ public class CollectionSheetInfo extends ControlActivity {
 	private SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_collectionsheetinfo, rl_container, true);
@@ -97,7 +98,8 @@ public class CollectionSheetInfo extends ControlActivity {
 		if (getDbHelper() == null) setDbHelper(new MySQLiteHelper(context));
 		SQLiteDatabase db = getDbHelper().getReadableDatabase();
 		try {
-			Date dt = new SimpleDateFormat("yyyy-MM-dd").parse(getDbHelper().getServerDate(db, getDbHelper().getCollectorid(db)));
+			String collectorid =  SessionContext.getProfile().getUserId();
+			Date dt = new SimpleDateFormat("yyyy-MM-dd").parse(getDbHelper().getServerDate(db, collectorid));
 			txndate = new SimpleDateFormat("yyyy-MM-dd").format(dt);
 		} catch (Exception e) { ApplicationUtil.showShortMsg(context, "Error: ParseException"); }
 		db.close();
@@ -210,7 +212,7 @@ public class CollectionSheetInfo extends ControlActivity {
 						if (which == 0) {
 							showRemarksDialog("edit");
 						} else if (which == 1) {
-							SQLiteDatabase db = getDbHelper().getReadableDatabase();
+							SQLiteDatabase db = getDbHelper().getWritableDatabase();
 							/*try {
 								Map<String, Object> params = new HashMap<String, Object>();
 								params.put("detailid", detailid);
@@ -331,11 +333,11 @@ public class CollectionSheetInfo extends ControlActivity {
 	}
 	
 	@Override
-	protected void onDestroy() {
+	protected void onDestroyProcess() {
 		payment.close();
 		notes.close();
 		remarks.close();
-		super.onDestroy();
+		//super.onDestroy();
 	}
 	
 	private void addPaymentProperties(View child) {
@@ -411,8 +413,8 @@ public class CollectionSheetInfo extends ControlActivity {
 				params.put("paymentid", payment.getTag(R.id.paymentid));
 				params.put("loanappid", loanappid);
 				params.put("routecode", routecode);
-				SQLiteDatabase db = getDbHelper().getReadableDatabase();
-				params.put("collectorid", getDbHelper().getCollectorid(db));
+				SQLiteDatabase db = getDbHelper().getWritableDatabase();
+				params.put("collectorid", SessionContext.getProfile().getUserId());
 				params.put("reason", ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString());
 				ServiceProxy postingProxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
 				try {
@@ -755,16 +757,17 @@ public class CollectionSheetInfo extends ControlActivity {
 			if (et_remarks.trim().equals("")) {
 				ApplicationUtil.showShortMsg(context, "Remarks is required.");
 			} else {
+				String collectorid = SessionContext.getProfile().getUserId();
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("loanappid", loanappid);
 				map.put("state", "PENDING");
 				map.put("remarks", et_remarks);
 				map.put("longitude", getApp().getLongitude());
 				map.put("latitude", getApp().getLatitude());
-				SQLiteDatabase db = getDbHelper().getReadableDatabase();
+				SQLiteDatabase db = getDbHelper().getWritableDatabase();
 				map.put("trackerid", getDbHelper().getTrackerid(db));
-				map.put("collectorid", getDbHelper().getCollectorid(db));
-				String date = getDbHelper().getServerDate(db, getDbHelper().getCollectorid(db));
+				map.put("collectorid", collectorid);
+				String date = getDbHelper().getServerDate(db, collectorid);
 				Calendar c = Calendar.getInstance();
 				c.setTimeInMillis(Timestamp.valueOf(date).getTime());
 				c.add(Calendar.SECOND, getApp().getTickerCount());

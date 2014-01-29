@@ -6,6 +6,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/rameses-client-mobile.jar"/>
-	<classpathentry kind="lib" path="libs/rameses-common2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

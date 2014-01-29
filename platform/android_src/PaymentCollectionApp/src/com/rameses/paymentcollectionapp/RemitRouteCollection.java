@@ -31,17 +31,12 @@ public class RemitRouteCollection extends ControlActivity {
 	private ProgressDialog progressDialog;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_route, rl_container, true);
 		setTitle("Select a Route to close");
-		int status = getIntent().getIntExtra("networkStatus", 2);
-		String mode = "NOT CONNECTED";
-		if (status == 1) mode = "ONLINE";
-		else if (status == 0) mode = "OFFLINE";
-		((TextView) findViewById(R.id.tv_mode)).setText(mode);
 		if (getDbHelper() == null) setDbHelper(new MySQLiteHelper(context));
 		progressDialog = new ProgressDialog(context);
 	}
@@ -146,7 +141,7 @@ public class RemitRouteCollection extends ControlActivity {
 				Object response  = postingProxy.invoke("remitRouteCollection", new Object[]{params});
 				Map<String, Object> result = (Map<String, Object>) response;
 				if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
-					db = getDbHelper().getReadableDatabase();
+					db = getDbHelper().getWritableDatabase();
 					getDbHelper().remitRouteByCode(db, route.getCode());
 					db.close();
 				}

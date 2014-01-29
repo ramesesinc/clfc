@@ -3,12 +3,15 @@ package com.rameses.paymentcollectionapp;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.rameses.client.android.ClientContext;
+import com.rameses.client.android.SessionContext;
 import com.rameses.service.ServiceProxy;
 import com.rameses.util.Encoder;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
@@ -19,6 +22,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ApplicationUtil {
+	private static boolean isDeviceRegistered = false;
+	
+	public static boolean getIsDeviceRegistered() {
+		return isDeviceRegistered;
+	}
+	
+	public static void deviceResgistered() {
+		isDeviceRegistered = true;
+	}
+	
 	public static final void showLongMsg(Context context, String msg) {
 		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 	}
@@ -62,17 +75,19 @@ public class ApplicationUtil {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				SQLiteDatabase db = dbHelper.getReadableDatabase();
-				String username = dbHelper.getCollectorUsername(db);
-				String password = dbHelper.getCollectorPassword(db);
+				SQLiteDatabase db = dbHelper.getWritableDatabase();
+				String username = SessionContext.getProfile().getUserName();//dbHelper.getCollectorUsername(db);
+				String password = SessionContext.getProfile().get("encpwd").toString();//dbHelper.getCollectorPassword(db);
 
 				String et_password = ((EditText) dialog.findViewById(R.id.login_password)).getText().toString();
 				String encval = Encoder.MD5.encode(et_password, username);
 				if (!encval.equals(password)) {
 					showShortMsg(c, "Password incorrect!");
 				} else if (encval.equals(password)) {
+					String collectorid = SessionContext.getProfile().getUserId();
+					boolean hasDownloadedCollectionSheets = dbHelper.hasDownloadedCollectionsheet(db, collectorid);
 					ProjectApplication app = ((ControlActivity) c).getApp();
-					if (!app.getIsWaiterRunning()) {
+					if (!app.getIsWaiterRunning() && hasDownloadedCollectionSheets == true) {
 						app.startWaiter();
 					}
 					app.setIsIdleDialogShowing(false);
@@ -98,6 +113,18 @@ public class ApplicationUtil {
 		map.put("subtext", s);
 		
 		return map;
+	}
+	
+	public static final String getAppHost(Context context, int networkStatus) {
+		MySQLiteHelper dbHelper = new MySQLiteHelper(context);
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		String host = dbHelper.getOnlineHost(db);
+		if (networkStatus == 0) {
+			host = dbHelper.getOfflineHost(db);
+		}
+		host += ":"+dbHelper.getPort(db);
+		db.close();
+		return host;
 	}
 	
 	public static final ServiceProxy getServiceProxy(Context context, String serviceName) {

@@ -10,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.http.impl.conn.tsccm.RouteSpecificPool;
 
+import com.rameses.client.android.SessionContext;
 import com.rameses.service.ServiceProxy;
 
 import android.app.Activity;
@@ -40,17 +41,12 @@ public class SpecialCollection extends ControlActivity {
 	private ProgressDialog progressDialog;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_specialcollection, rl_container, true);
 		setTitle("Special Collection");
-		int status = getIntent().getIntExtra("networkStatus", 2);
-		String mode = "NOT CONNECTED";
-		if (status == 1) mode = "ONLINE";
-		else if (status == 0) mode = "OFFLINE";
-		((TextView) findViewById(R.id.tv_mode)).setText(mode);
 		progressDialog = new ProgressDialog(context);
 		progressDialog.setCancelable(false);
 		if (getDbHelper() == null) setDbHelper(new MySQLiteHelper(context));
@@ -113,7 +109,7 @@ public class SpecialCollection extends ControlActivity {
 			ArrayList routes = (ArrayList) bundle.getParcelableArrayList("routes");
 			
 			Map<String, Object> map;
-			SQLiteDatabase db = getDbHelper().getReadableDatabase();
+			SQLiteDatabase db = getDbHelper().getWritableDatabase();
 			for (int i=0; i<routes.size(); i++) {
 				map = (Map<String, Object>) routes.get(i);
 				if (getDbHelper().findRouteByCode(db, map.get("routecode").toString()).getCount() == 0) {
@@ -210,8 +206,8 @@ public class SpecialCollection extends ControlActivity {
 				} else {
 					Map<String, Object> params = new HashMap<String, Object>();
 					params.put("objid", "SCR"+UUID.randomUUID());
-					SQLiteDatabase db = getDbHelper().getReadableDatabase();
-					params.put("collectorid", getDbHelper().getCollectorid(db));
+					SQLiteDatabase db = getDbHelper().getWritableDatabase();
+					params.put("collectorid", SessionContext.getProfile().getUserId());
 					params.put("state", "PENDING");
 					params.put("remarks", remarks);
 					ServiceProxy postingProxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
@@ -221,6 +217,7 @@ public class SpecialCollection extends ControlActivity {
 					} catch (Exception e) {
 						ApplicationUtil.showShortMsg(context, "Error requesting for special collection.");
 					}
+					db.close();
 					loadRequests();
 					if (dialog.isShowing()) dialog.dismiss();
 				}

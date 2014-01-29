@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.rameses.client.android.SessionContext;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,8 +28,8 @@ public class CollectionSheetRoute extends ControlActivity {
 	private View header = null;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_collectionsheet_route, rl_container, true);
@@ -59,7 +61,7 @@ public class CollectionSheetRoute extends ControlActivity {
 		RouteParcelable r;
 		if (cursor != null && cursor.getCount() > 0) {
 			try {
-				String txndate = getDbHelper().getServerDate(db, getDbHelper().getCollectorid(db));
+				String txndate = getDbHelper().getServerDate(db, SessionContext.getProfile().getUserId());
 				c.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(txndate));
 			}
 			catch (Exception e) { Toast.makeText(context, "Error: ParseException", Toast.LENGTH_SHORT).show(); }

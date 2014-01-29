@@ -594,7 +594,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return "";
 	}
 	
-	public String getCollectorUsername(SQLiteDatabase db) {
+	/*public String getCollectorUsername(SQLiteDatabase db) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='collector_username'", null);
 		
 		if (result != null && result.getCount() > 0) {
@@ -602,9 +602,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			return result.getString(result.getColumnIndex("value"));
 		} 
 		return "";
-	}
+	}*/
 	
-	public String getCollectorPassword(SQLiteDatabase db) {
+	/*public String getCollectorPassword(SQLiteDatabase db) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='collector_password'", null);
 		
 		if (result != null && result.getCount() > 0) {
@@ -612,9 +612,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			return result.getString(result.getColumnIndex("value"));
 		}
 		return "";
-	}
+	}*/
 	
-	public String getCollectorName(SQLiteDatabase db) {
+	/*public String getCollectorName(SQLiteDatabase db) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='collector_name'", null);
 		
 		if (result != null && result.getCount() > 0) {
@@ -622,7 +622,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			return result.getString(result.getColumnIndex("value"));
 		}
 		return "";
-	}
+	}*/
 	
 	public String getCollectorState(SQLiteDatabase db) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='collector_state'", null);
@@ -634,7 +634,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		return "";
 	}
 
-	public String getCollectorid(SQLiteDatabase db) {
+	/*public String getCollectorid(SQLiteDatabase db) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='collectorid'", null);
 		
 		if (result != null && result.getCount() > 0) {
@@ -642,7 +642,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			return result.getString(result.getColumnIndex("value"));
 		}
 		return "";
-	}
+	}*/
 	
 	public int getTrackerTimeout(SQLiteDatabase db) {
 		Cursor result = db.rawQuery("SELECT * FROM "+TABLE_SYSTEM+" WHERE name='timeout_tracker'", null);
@@ -1108,6 +1108,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		}
 		
 		db.delete(TABLE_COLLECTIONSHEET, "routecode='"+code+"'", null);
+	}
+	
+	public void removeLocationTrackerByCollectorid(SQLiteDatabase db, String collectorid) {
+		db.delete(TABLE_LOCATION_TRACKER, "collectorid='"+collectorid+"'", null);
 	}
 	
 	public void removeAllCollectionsheets(SQLiteDatabase db) {

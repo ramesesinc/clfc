@@ -1,130 +1,119 @@
 package com.rameses.paymentcollectionapp;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.rameses.client.android.DeviceAppLoader;
-import com.rameses.client.interfaces.DeviceContext;
+import com.rameses.client.android.Loaders;
+import com.rameses.client.android.SessionContext;
+import com.rameses.client.android.UIApplication;
+import com.rameses.client.interfaces.UserProfile;
 import com.rameses.service.ServiceProxy;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Application;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class ProjectApplication extends Application implements DeviceContext {
+public class ProjectApplication extends UIApplication {
 	private Context context = this;
 	private WaiterThread waiter;
-	private NetworkCheckerThread networkChecker;
-	//private LocationTrackerThread locationTracker;
-	//private LocationTrackerBroadcastThread locationTrackerBroadcast;
-	//private LocationGetterThread locationGetter;
 	private TickerThread ticker;
 	private double longitude = 0.00;
 	private double latitude = 0.00;
 	private Activity currentActivity = null;
 	private ExecutorService threadPool = Executors.newSingleThreadExecutor();
-	private ExecutorService networkThreadPool = null;
-	//private ExecutorService locationUpdaterPool = null;
-	//private ExecutorService backgroundProcessPool = null;
-	//private ExecutorService locationTrackerPool = null;
-	//private ExecutorService locationTrackerBroadcasPool = null;
-	//private ExecutorService locationGetterPool = null;
 	private ExecutorService tickerPool = null;
 	private boolean isIdleDialogShowing = false;
-	private boolean isLoginDialogShowing = false;
-	//private boolean isBackgroundProcessRunning = false;
-	//private boolean isLocationTrackerRunning = false;
-	//private boolean isLocationTrackerBroadcastRunning = false;
 	private boolean isWaiterRunning = false;
-	private boolean isNetworkCheckerRunning = false;
-	//private boolean isLocationGetterRunning = false;
 	private boolean isTickerRunning = false; 
 	private int tickerCount = 0;
 	private int networkStatus = 0;
 	private MySQLiteHelper dbHelper = new MySQLiteHelper(context);
 	private ConnectivityManager connectivityManager;
 	private NetworkInfo networkInfo;
-	//private LocationManager locationManager;
-	//private DeviceLocationListener locationListener = new DeviceLocationListener();
+	private LocationManager locationManager;
+	private Location currentLocation = null;
+	private String GPS = LocationManager.GPS_PROVIDER;
+	private String NETWORK = LocationManager.NETWORK_PROVIDER;
+	private String PASSIVE = LocationManager.PASSIVE_PROVIDER;
 	
 	@Override
-	public void onCreate() {
-		super.onCreate();
-		Map<String, Object> env = new HashMap<String, Object>();
-		env.put("app.context", "clfc");
-		env.put("app.cluster", "osiris3");
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		env.put("app.host", dbHelper.getOnlineHost(db)+":"+dbHelper.getPort(db));
-		DeviceAppLoader.load(env, this);
-		//connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		//locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		startNetworkChecker();
-		//startLocationGetter();
-		//startLocationTrackerBroadcast();
+	protected void onCreateProcess() {
+		super.onCreateProcess();
+		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		Loaders.register(new LoaderRegistration());
 	}
 	
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+	@Override
+	protected void beforeLoad(Properties appenv) {
+		super.beforeLoad(appenv);
+		System.out.println("calling application load");
+		appenv.put("app.context", "clfc");
+		appenv.put("app.cluster", "osiris3");
+		//SQLiteDatabase db = dbHelper.getReadableDatabase();
+		appenv.put("app.host", ApplicationUtil.getAppHost(context, networkStatus));
+		//db.close();
 	}
+	
+	@Override
+	public void load() {
+		super.load();
+		System.out.println("calling load");
+	}
+	
+	@Override
+	protected void afterLoad() {
+		startGettingLocation(); 
+		getTaskManager().schedule(networkCheckerRunnable, 0, 5000);
+		getTaskManager().schedule(pendingVoidPaymentsRunnable, 0, 1000);
+		getTaskManager().schedule(pendingPaymentsRunnable, 0, 500);
+		getTaskManager().schedule(pendingRemarksRunnable, 0, 500);
+		getTaskManager().schedule(networkLocationRunnable, 0, 2000);
+		getTaskManager().schedule(locationTrackerRunnable, 0, 500);
+		//getTaskManager().schedule(locationTrackerBroadcastRunnable, 0, 1000);
+		System.out.println("finishing application load");
+	}
+	
 	public double getLongitude() { return this.longitude; }
-	
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
 	public double getLatitude() { return this.latitude; }
-	
+
 	public void setIsIdleDialogShowing(boolean isIdleDialogShowing) {
 		this.isIdleDialogShowing = isIdleDialogShowing;
 	}	
 	
 	public boolean getIsIdleDialogShowing() { return this.isIdleDialogShowing; }
-	
-	public void setIsLoginDialogShowing(boolean isLoginDialogShowing) {
-		this.isLoginDialogShowing = isLoginDialogShowing;
-	}
-	
-	public boolean getIsLoginDialogShowing() { return this.isLoginDialogShowing; }	
-	//public boolean getIsBackgroundProcessRunning() { return this.isBackgroundProcessRunning; }
-	//public boolean getIsLocationGetterRunnig() { return this.isLocationGetterRunning; }
-	//public boolean getIsLocationTrackerRunning() { return this.isLocationTrackerRunning; }
-	//public boolean getIsLocationTrackerBroadcastRunning() { return this.isLocationTrackerBroadcastRunning; }
-	public boolean getIsWaiterRunning() { return this.isWaiterRunning; }	
-	//public boolean getIsNetworkCheckerRunning() { return this.isNetworkCheckerRunning; }
+	public boolean getIsWaiterRunning() { return this.isWaiterRunning; }
 	public boolean getIsTickerRunning() { return this.isTickerRunning; }
 	
 	public int getTickerCount() { return this.tickerCount; }
 	
 	public int getNetworkStatus() { return this.networkStatus; }
 	
-	public boolean getIsSettingsSet() {
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		boolean flag = dbHelper.isSettingsSet(db);
-		db.close();
-		return flag;
-	}
-	
 	public void setCurrentActivity(Activity currentActivity) {
 		this.currentActivity = currentActivity;
+	}
+	
+	private void setLocation(Location location) {
+		longitude = location.getLongitude();
+		latitude = location.getLatitude();
+		currentLocation = location;
 	}
 	
 	public Activity getCurrentActivity() { return this.currentActivity; }
@@ -139,69 +128,63 @@ public class ProjectApplication extends Application implements DeviceContext {
 			public void run() {
 				SQLiteDatabase db = dbHelper.getReadableDatabase();
 				
-				String content = "Collector: "+dbHelper.getCollectorName(db)+"\n\nTo resume your session, enter your password";
+				String content = "Collector: "+SessionContext.getProfile().getFullName()+"\n\nTo resume your session, enter your password";
 				ApplicationUtil.showIdleDialog(a, content);
 			}
 		});
 	}	
 	
-	/*public void startBackgroundProcess() {
-		isBackgroundProcessRunning = true;
-		backgroundProcessPool = Executors.newSingleThreadExecutor();
-		backgroundProcessPool.submit(backgroundProcessThread)
-;	}
-	
-	public void stopBackgroundProcess() {
-		isBackgroundProcessRunning = false;
-		backgroundProcessPool.shutdown();
-		backgroundProcessPool = null;
-	}
-	
-	private Thread backgroundProcessThread = new Thread() {
+	private Runnable pendingVoidPaymentsRunnable = new Runnable() {
 		@Override
 		public void run() {
-			ServiceProxy postingProxy = null;
+			Map<String, Object> params = new HashMap<String, Object>();
 			SQLiteDatabase db = dbHelper.getWritableDatabase();
-			Map<String, Object> params;
-			Cursor voidPayments = dbHelper.getPendingVoidPayments(db);
+			Cursor pendingVoidPayments = dbHelper.getPendingVoidPayments(db);
 			
-			if (voidPayments != null && voidPayments.getCount() > 0) {
-				voidPayments.moveToFirst();
-				Boolean isApproved = false;
+			if (pendingVoidPayments != null && pendingVoidPayments.getCount() > 0) {
+				pendingVoidPayments.moveToFirst();
+				boolean isApproved = false;
 				String objid = "";
+				ServiceProxy proxy = null;
 				do {
-					params = new HashMap<String, Object>();
-					objid = voidPayments.getString(voidPayments.getColumnIndex("objid"));
+					objid = pendingVoidPayments.getString(pendingVoidPayments.getColumnIndex("objid"));
+					params.clear();
 					params.put("voidid", objid);
 					
-					postingProxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
+					proxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
 					try {
-						isApproved = (Boolean) postingProxy.invoke("isVoidPaymentApproved", new Object[]{params});
+						isApproved = (Boolean) proxy.invoke("isVoidPaymentApproved", new Object[]{params});
 					} catch (Exception e) {}
 					finally {
 						if (isApproved) {
 							dbHelper.approveVoidPayment(db, objid);
 						}
 					}
-				} while(voidPayments.moveToNext());
-				voidPayments.close();
+				} while(pendingVoidPayments.moveToNext());
+				pendingVoidPayments.close();
 			}
-			
+			db.close();
+		}
+	};
+	private Runnable pendingPaymentsRunnable = new Runnable() {
+		@Override
+		public void run() {
+			Map<String, Object> params = new HashMap<String, Object>();
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
 			Cursor pendingPayments = dbHelper.getPendingPayments(db);
-			
-			Map<String, Object> collectionsheet;
-			Map<String, Object> payment;
-			Map<String, Object> note;
-			Map<String, Object> remark;
-			Object response;
-			Map<String, Object> result;
-			String loanappid = "";
-			String routecode = ""; 
 			
 			if (pendingPayments != null && pendingPayments.getCount() > 0) {
 				pendingPayments.moveToFirst();
+				Map<String, Object> payment = new HashMap<String, Object>();
+				Map<String, Object> collectionsheet = new HashMap<String, Object>();
+				String loanappid = "";
+				String routecode = "";
+				ServiceProxy proxy = null;
 				do {
-					params = new HashMap<String, Object>();
+					params.clear();
+					payment.clear();
+					collectionsheet.clear();
+
 					loanappid = pendingPayments.getString(pendingPayments.getColumnIndex("loanappid"));
 					params.put("txndate", pendingPayments.getString(pendingPayments.getColumnIndex("txndate")));
 					params.put("trackerid", pendingPayments.getString(pendingPayments.getColumnIndex("trackerid")));
@@ -235,24 +218,41 @@ public class ProjectApplication extends Application implements DeviceContext {
 					collectionsheet.put("detailid", pendingPayments.getString(pendingPayments.getColumnIndex("detailid")));
 					params.put("collectionsheet", collectionsheet);
 					
-					postingProxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
+					proxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
 					try {
-						response = postingProxy.invoke("postPayment", new Object[]{params});
-						result = (Map<String, Object>) response;
-						if (result.get("response").toString().toLowerCase().equals("success")) {
+						Object response = proxy.invoke("postPayment", new Object[]{params});
+						Map<String, Object> result = (Map<String, Object>) response;
+						if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
 							dbHelper.approvePayment(db, pendingPayments.getString(pendingPayments.getColumnIndex("objid")));
 						}
 					} catch (Exception e) {}
+					
 				} while(pendingPayments.moveToNext());
 				pendingPayments.close();
 			}
-
+			try {
+				Thread.sleep(dbHelper.getUploadTimeout(db)*1000);
+			} catch (Exception e) { 
+				Log.w("pendingPaymentsRunnable", ""); 
+				LogUtil.log("pendingPaymentsRunnable");
+			}
+			db.close();
+		}
+	};
+	private Runnable pendingRemarksRunnable = new Runnable() {
+		@Override
+		public void run() {
+			Map<String, Object> params = new HashMap<String, Object>();
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
 			Cursor pendingRemarks = dbHelper.getPendingRemarks(db);
 			
 			if (pendingRemarks != null && pendingRemarks.getCount() > 0) {
 				pendingRemarks.moveToFirst();
+				String loanappid = "";
+				Map<String, Object> collectionsheet = new HashMap<String, Object>();
+				ServiceProxy proxy = null;
 				do {
-					params = new HashMap<String, Object>();
+					params.clear();
 					loanappid = pendingRemarks.getString(pendingRemarks.getColumnIndex("loanappid"));
 					params.put("txndate", pendingRemarks.getString(pendingRemarks.getColumnIndex("txndate")));
 					params.put("remarks", pendingRemarks.getString(pendingRemarks.getColumnIndex("remarks")));
@@ -270,10 +270,10 @@ public class ProjectApplication extends Application implements DeviceContext {
 					collectionsheet.put("routecode", pendingRemarks.getString(pendingRemarks.getColumnIndex("routecode")));
 					params.put("collectionsheet", collectionsheet);
 					
-					postingProxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
+					proxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
 					try {
-						response = postingProxy.invoke("updateRemarks", new Object[]{params});
-						result = (Map<String, Object>) response;
+						Object response = proxy.invoke("updateRemarks", new Object[]{params});
+						Map<String, Object> result = (Map<String, Object>) response;
 						if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
 							dbHelper.approveRemark(db, loanappid);
 						}
@@ -281,20 +281,35 @@ public class ProjectApplication extends Application implements DeviceContext {
 				} while(pendingRemarks.moveToNext());
 				pendingRemarks.close();
 			}
-
+			try {
+				Thread.sleep(dbHelper.getUploadTimeout(db)*1000);
+			} catch (Exception e) { 
+				Log.w("pendingRemarksRunnable", ""); 
+				LogUtil.log("pendingRemarksRunnable");
+			}
+			db.close();
+		}
+	};
+	private Runnable pendingRemarksRemovedRunnable = new Runnable() {
+		@Override
+		public void run() {
+			Map<String, Object> params = new HashMap<String, Object>();
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
 			Cursor pendingRemarksRemoved = dbHelper.getPendingRemarksRemoved(db);
 			
 			if (pendingRemarksRemoved != null && pendingRemarksRemoved.getCount() > 0) {
 				pendingRemarksRemoved.moveToFirst();
+				String loanappid = "";
+				ServiceProxy proxy = null;
 				do {
-					params = new HashMap<String, Object>();
+					params.clear();
 					loanappid = pendingRemarksRemoved.getString(pendingRemarksRemoved.getColumnIndex("loanappid"));
 					params.put("detailid", pendingRemarksRemoved.getString(pendingRemarksRemoved.getColumnIndex("detailid")));
 									
-					postingProxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
+					proxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
 					try {
-						response = postingProxy.invoke("removeRemarks", new Object[]{params});
-						result = (Map<String, Object>) response;
+						Object response = proxy.invoke("removeRemarks", new Object[]{params});
+						Map<String, Object>result = (Map<String, Object>) response;
 						if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
 							dbHelper.removeRemarksRemovedByAppid(db, loanappid);
 						}
@@ -304,16 +319,137 @@ public class ProjectApplication extends Application implements DeviceContext {
 			}
 			try {
 				Thread.sleep(dbHelper.getUploadTimeout(db)*1000);
-				db.close();
-				backgroundProcessPool.submit(backgroundProcessThread);
-			} catch (InterruptedException ie) { 
-				System.out.println("interrupted");
-			} catch (Exception e) { }
+			} catch (Exception e) { 
+				Log.w("pendingRemarksRemovedRunnable", ""); 
+				LogUtil.log("pendingRemarksRemovedRunnable");
+			}
 			db.close();
-			//backgroundProcessHandler.postDelayed(backgroundProcessRunnable, 3000);
-			//Executors.newSingleThreadExecutor().submit(new VoidPaymentStatusRunnable(voidPayments));			
 		}
-	};*/
+	};
+	private Runnable networkLocationRunnable = new Runnable() {
+		@Override
+		public void run() {
+			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+			if (isNetworkEnabled == true) {
+				DeviceLocationListener locationListener = new DeviceLocationListener();
+				float accuracy = 0.0f;
+				Location location = null;
+				do {
+					locationManager.requestLocationUpdates(NETWORK, 0, 0, locationListener, Looper.getMainLooper());
+					location = locationManager.getLastKnownLocation(NETWORK);
+					accuracy = location.getAccuracy();
+					//System.out.println("location accuracy = "+location.getAccuracy());
+					locationManager.removeUpdates(locationListener);
+				} while(location == null || Float.compare(accuracy, 0.0f) == 0 || Float.compare(accuracy, 25.0f) > 0);
+				setLocation(location);
+			}
+		}
+	};
+	private Runnable locationTrackerRunnable = new Runnable() {
+		@Override
+		public void run() {
+			if (longitude > 0 && latitude > 0) {
+				SQLiteDatabase db = dbHelper.getWritableDatabase();
+				
+				UserProfile profile = SessionContext.getProfile();
+				String collectorid = (profile == null? null : profile.getUserId());//dbHelper.getCollectorid(db);
+				if (collectorid != null) {
+					//System.out.println("collectorid = "+collectorid);
+					Map<String, Object> params = new HashMap<String, Object>();
+					params.put("objid", "TRCK"+UUID.randomUUID());
+					params.put("seqno", dbHelper.countLocationTrackerByCollectorid(db, collectorid)+1);
+					params.put("trackerid", dbHelper.getTrackerid(db));
+					params.put("collectorid", collectorid);
+					params.put("longitude", longitude);
+					params.put("latitude", latitude);
+					
+					dbHelper.insertLocationTracker(db, params);
+					db.close();
+				}
+			}
+			try {
+				SQLiteDatabase db = dbHelper.getReadableDatabase();
+				int timeout = dbHelper.getTrackerTimeout(db);
+				db.close();
+				Thread.sleep(timeout*1000);
+			} catch (Exception e) { 
+				Log.w("locationTrackerRunnable", "");
+				LogUtil.log("locationTrackerRunnable");
+			}
+		}
+	};
+	private Runnable locationTrackerBroadcastRunnable = new Runnable() {
+		@Override
+		public void run() {
+			SQLiteDatabase db = dbHelper.getReadableDatabase();
+			Cursor locationTracker = dbHelper.getLocationTrackerByCollectorid(db, SessionContext.getProfile().getUserId()+"");
+			db.close();
+			
+			if (locationTracker != null && locationTracker.getCount() > 0) {
+				locationTracker.moveToFirst();
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("objid", locationTracker.getString(locationTracker.getColumnIndex("objid")));
+				params.put("trackerid", locationTracker.getString(locationTracker.getColumnIndex("trackerid")));
+				params.put("longitude", locationTracker.getString(locationTracker.getColumnIndex("longitude")));
+				params.put("latitude", locationTracker.getString(locationTracker.getColumnIndex("latitude")));
+				
+				ServiceProxy proxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
+				for (int i = 0; i < 10; i++) {
+					try {
+						Object response = proxy.invoke("postLocation", new Object[]{params});
+						Map<String, Object> result = (Map<String, Object>) response;
+						if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
+							db = dbHelper.getReadableDatabase();
+							dbHelper.removeLocationTrackerById(db, params.get("objid").toString());
+							db.close();
+						}
+						break;
+					} catch (Exception e) { 
+						Log.w("locationTrackerBroadcastRunnable", ""); 
+						LogUtil.log("locationTrackerBroadcastRunnable");
+					}
+				}
+				locationTracker.close();
+			}
+		}
+	};
+	private Runnable networkCheckerRunnable = new Runnable() {
+		@Override
+		public void run() {
+			System.out.println("running network checker");
+			networkInfo = connectivityManager.getActiveNetworkInfo();
+			String mode = "NOT CONNECTED";
+			//System.out.println("network info = "+networkInfo);
+			if (networkInfo != null && networkInfo.isConnected()) {
+				if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+					networkStatus = 1;
+					mode = "ONLINE";
+				} else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+					networkStatus = 0;
+					mode = "OFFLINE";
+				}
+			}
+			final String m = mode;
+			if (getCurrentActivity() != null) {
+				getCurrentActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						//ApplicationUtil.showShortMsg(((Context) getCurrentActivity()), "mode = "+m);
+						View v = getCurrentActivity().findViewById(R.id.tv_mode);
+						if (v != null) {
+							((TextView) v).setText(m);
+						}
+					}
+				});
+			}
+		}
+	};
+	
+	public void startGettingLocation() {
+		locationManager.requestLocationUpdates(GPS, 0, 0, new DeviceLocationListener());
+		//locationManager.requestLocationUpdates(NETWORK,  0, 0, new DeviceLocationListener());
+		locationManager.requestLocationUpdates(PASSIVE, 0, 0, new DeviceLocationListener());
+	}
 	
 	public void startTicker() {
 		isTickerRunning = true;
@@ -345,230 +481,8 @@ public class ProjectApplication extends Application implements DeviceContext {
 		
 		public synchronized void softStop() {
 			stop = true;
-		}
-		
+		}		
 	}
-	
-	/*public void startLocationGetter() {
-		isLocationGetterRunning = false;
-		locationGetterPool = Executors.newSingleThreadExecutor();
-		locationGetter = new LocationGetterThread();
-		locationGetterPool.submit(locationGetter);
-	}
-	
-	public void stopLocationGetter() {
-		isLocationGetterRunning = false;
-		locationGetter.softStop();
-		locationGetterPool.shutdown();
-		locationGetterPool = null;
-	}
-	
-	private class LocationGetterThread extends Thread {
-		private boolean stop = false;
-		
-		@Override
-		public void run() {
-			Location location = null;
-			String provider = "";
-			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-			if (isNetworkEnabled == true) {
-				provider = LocationManager.NETWORK_PROVIDER;
-				locationManager.requestLocationUpdates(provider, 0, 0, locationListener, Looper.getMainLooper());
-				location = locationManager.getLastKnownLocation(provider);
-				if (location != null) {
-					longitude = location.getLongitude();
-					latitude = location.getLatitude();
-				}
-				locationManager.removeUpdates(locationListener);
-			}
-			if (!stop) {
-				try {
-					Thread.sleep(2000);
-					locationGetterPool.submit(locationGetter);
-				} catch (Exception e) {
-					
-				}
-			}
-		}
-		
-		public synchronized void softStop() {
-			stop = true;
-		}
-	}*/
-	
-	public void startNetworkChecker() {
-		isNetworkCheckerRunning = true;
-		networkThreadPool = Executors.newSingleThreadExecutor();
-		networkChecker = new NetworkCheckerThread();
-		networkThreadPool.submit(networkChecker);
-	}
-	
-	public void stopNetworkChecker() {
-		isNetworkCheckerRunning = false;
-		networkChecker.softStop();
-		networkThreadPool.shutdown();
-		networkThreadPool = null;
-	}
-	
-	private class NetworkCheckerThread extends Thread {
-		private boolean stop = false;
-		
-		@Override
-		public void run() {
-			networkInfo = connectivityManager.getActiveNetworkInfo();
-			String mode = "NOT CONNECTED";
-			if (networkInfo.isConnected()) {
-				if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-					networkStatus = 1;
-					mode = "ONLINE";
-					//System.out.println("status = ONLINE");
-					//online
-				} else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-					networkStatus = 0;
-					mode = "OFFLINE";
-					//System.out.println("status = OFFLINE");
-					//offline
-				}
-			}
-			if (getCurrentActivity() != null) {
-				getCurrentActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						View v = getCurrentActivity().findViewById(R.id.tv_mode);
-						if (v != null) {
-							String mode = "NOT CONNECTED";
-							if (networkStatus == 1) {
-								mode = "ONLINE";
-							} else if (networkStatus == 0) {
-								mode = "OFFLINE";
-							}
-							((TextView) v).setText(mode);
-						}
-					}
-				});
-			}
-			if (!stop) {
-				try {
-					Thread.sleep(1000);
-					networkThreadPool.submit(networkChecker);
-				} catch(Exception e) {}
-			}
-		}
-		
-		public synchronized void softStop() {
-			stop = true;
-		}
-	}
-	
-	/*public void startLocationTracker() {
-		isLocationTrackerRunning = true;
-		locationTrackerPool = Executors.newSingleThreadExecutor();
-		locationTracker = new LocationTrackerThread();
-		locationTrackerPool.submit(locationTracker);
-	}
-	
-	public void stopLocationTracker() {
-		isLocationTrackerRunning = false;
-		locationTracker.softStop();
-		locationTrackerPool.shutdown();
-		locationTrackerPool = null;
-	}
-	
-	private class LocationTrackerThread extends Thread {
-		private boolean stop = false;
-		
-		@Override
-		public void run() {
-			SQLiteDatabase db = dbHelper.getReadableDatabase();
-			if (longitude > 0 && latitude > 0) {
-				
-				String collectorid = dbHelper.getCollectorid(db);
-				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("objid", "TRCK"+UUID.randomUUID());
-				params.put("seqno", dbHelper.countLocationTrackerByCollectorid(db, collectorid)+1);
-				params.put("trackerid", dbHelper.getTrackerid(db));
-				params.put("collectorid", collectorid);
-				params.put("longitude", longitude);
-				params.put("latitude", latitude);
-				
-				dbHelper.insertLocationTracker(db, params);
-			}
-			
-			if (!stop) {
-				try {
-					Thread.sleep(dbHelper.getTrackerTimeout(db)*1000);
-					db.close();
-					locationTrackerPool.submit(locationTracker);
-				} catch (InterruptedException ie) {
-					System.out.println("interrupted");
-				} catch (Exception e) {}
-			}
-			db.close();
-		}
-		
-		public synchronized void softStop() {
-			stop = true;
-		}
-	}*/
-	
-	/*public void startLocationTrackerBroadcast() {
-		isLocationTrackerBroadcastRunning = true;
-		locationTrackerBroadcasPool = Executors.newSingleThreadExecutor();
-		locationTrackerBroadcast = new LocationTrackerBroadcastThread();
-		locationTrackerBroadcasPool.submit(locationTrackerBroadcast);
-	}
-	
-	public void stopLocationTrackerBroadcast() {
-		isLocationTrackerBroadcastRunning = false;
-		locationTrackerBroadcast.softStop();
-		locationTrackerBroadcasPool.shutdown();
-		locationTrackerBroadcasPool = null;
-	}
-	
-	private class LocationTrackerBroadcastThread extends Thread {
-		private boolean stop = false;
-		
-		@Override
-		public void run() {
-			SQLiteDatabase db = dbHelper.getReadableDatabase();
-			Cursor locationTracker = dbHelper.getLocationTrackerByCollectorid(db, dbHelper.getCollectorid(db));
-			db.close();
-			
-			if (locationTracker != null && locationTracker.getCount() > 0) {
-				locationTracker.moveToFirst();
-				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("objid", locationTracker.getString(locationTracker.getColumnIndex("objid")));
-				params.put("trackerid", locationTracker.getString(locationTracker.getColumnIndex("trackerid")));
-				params.put("longitude", locationTracker.getString(locationTracker.getColumnIndex("longitude")));
-				params.put("latitude", locationTracker.getString(locationTracker.getColumnIndex("latitude")));
-				
-				ServiceProxy proxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
-				
-				for (int i = 0; i < 10; i++) {
-					try {
-						Object response = proxy.invoke("postLocation", new Object[]{params});
-						Map<String, Object> result = (Map<String, Object>) response;
-						if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
-							db = dbHelper.getReadableDatabase();
-							dbHelper.removeLocationTrackerById(db, params.get("objid").toString());
-							db.close();
-						}
-						break;
-					} catch (Exception e) {}
-				}
-			}
-			if (!stop) {
-				try { 
-					Thread.sleep(1000);
-					locationTrackerBroadcasPool.submit(locationTrackerBroadcast);
-				} catch (Exception e) {}
-			}
-		}
-		
-		public synchronized void softStop() {
-			stop = true;
-		}
-	}*/
 	
 	public void startWaiter() {
 		isWaiterRunning = true;
@@ -607,7 +521,7 @@ public class ProjectApplication extends Application implements DeviceContext {
 				idle = System.currentTimeMillis() - lastUsed;
 				if (idle > period) {
 					idle = 0;
-					SQLiteDatabase db = dbHelper.getReadableDatabase();
+					SQLiteDatabase db = dbHelper.getWritableDatabase();
 					dbHelper.setIdleState(db);
 					db.close();
 					break;
@@ -617,7 +531,7 @@ public class ProjectApplication extends Application implements DeviceContext {
 				SQLiteDatabase db = dbHelper.getReadableDatabase();
 				String state = dbHelper.getAppState(db);
 				db.close();
-				if (state.equals("idle") && !isIdleDialogShowing && !getIsLoginDialogShowing()) {
+				if (state.equals("idle") && !isIdleDialogShowing) {
 					stopWaiter();
 					showIdleDialog(getCurrentActivity());
 				}
@@ -631,5 +545,36 @@ public class ProjectApplication extends Application implements DeviceContext {
 		public synchronized void softStop() {
 			stop = true;
 		}
+	}
+	
+	private class DeviceLocationListener implements LocationListener {
+		@Override
+		public void onLocationChanged(Location location) {
+			float accuracy = location.getAccuracy();
+			if (Float.compare(accuracy, 0.0f) > 0 && Float.compare(accuracy, 15.0f) <= 0) {
+				if (currentLocation == null || location.getTime() > currentLocation.getTime()) {
+					setLocation(location); 
+				}
+			}
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+			System.out.println("provider = "+provider);
+		}
+		
 	}
 }

@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
+import com.rameses.client.android.SessionContext;
 import com.rameses.service.ScriptServiceContext;
 import com.rameses.service.ServiceProxy;
 
@@ -41,18 +42,13 @@ public class Route extends ControlActivity {
 	private ProgressDialog progressDialog;
 		
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_route, rl_container, true);
 		setTitle("Select a Route: ");
 		Intent intent = getIntent();
-		int status = intent.getIntExtra("networkStatus", 2);
-		String mode = "NOT CONNECTED";
-		if (status == 1) mode = "ONLINE";
-		else if (status == 0) mode = "OFFLINE";
-		((TextView) findViewById(R.id.tv_mode)).setText(mode);
 		bundle = intent.getBundleExtra("bundle");
 		if (getDbHelper() == null) setDbHelper(new MySQLiteHelper(context));
 	}
@@ -84,7 +80,6 @@ public class Route extends ControlActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				RouteParcelable r = (RouteParcelable) parent.getItemAtPosition(position);
-				SQLiteDatabase db = getDbHelper().getReadableDatabase();
 				getCollectionsheets(r);
 			}
 		});
@@ -114,16 +109,17 @@ public class Route extends ControlActivity {
 			params.put("routearea", bundle.getString("routearea"));
 			params.put("sessionid", bundle.getString("sessionid"));
 			
-			SQLiteDatabase db = getDbHelper().getReadableDatabase();
+			SQLiteDatabase db = getDbHelper().getWritableDatabase();
 			Date date = null;
+			String collectorid = SessionContext.getProfile().getUserId();
 			try {
-				String dt = getDbHelper().getServerDate(db, getDbHelper().getCollectorid(db));
+				String dt = getDbHelper().getServerDate(db, collectorid);
 				date = new SimpleDateFormat("yyyy-MM-dd").parse(dt);
 			} catch (Exception e) {}
 			if (date == null) {
 				map.clear();
 				map.put("serverdate", bundle.getString("serverdate"));
-				map.put("collectorid", getDbHelper().getCollectorid(db));
+				map.put("collectorid", collectorid);
 				getDbHelper().insertCollectionDate(db, map);
 				if (getApp().getIsTickerRunning()) {
 					getApp().stopTicker();
@@ -143,7 +139,7 @@ public class Route extends ControlActivity {
 			}
 			//r = getDbHelper().findSessionById(bundle.getString("sessionid"));
 			//if (r == null || r.getCount() == 0) getDbHelper().insertSession(bundle.getString("sessionid"));
-			params.put("collectorid", getDbHelper().getCollectorid(db));
+			params.put("collectorid", collectorid);
 			getDbHelper().insertRoute(db, params);
 			/*Cursor cs = db.getCollectionsheetsByRoute(params.get("routecode").toString);
 			if (cs != null && cs.getCount() > 0) {
@@ -214,7 +210,7 @@ public class Route extends ControlActivity {
 	};
 	
 	private void insertToSystem(String name, String value) {
-		SQLiteDatabase db = getDbHelper().getReadableDatabase();
+		SQLiteDatabase db = getDbHelper().getWritableDatabase();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("name", name);
 		params.put("value", value);
@@ -247,7 +243,7 @@ public class Route extends ControlActivity {
 			}
 			params.put("terminalid", terminalid);
 			SQLiteDatabase db = getDbHelper().getReadableDatabase();
-			params.put("userid", getDbHelper().getCollectorid(db));
+			params.put("userid", SessionContext.getProfile().getUserId());
 			params.put("trackerid", getDbHelper().getTrackerid(db));
 			db.close();
 			ServiceProxy svcProxy = ApplicationUtil.getServiceProxy(context, "DeviceLoanBillingService");
@@ -275,7 +271,7 @@ public class Route extends ControlActivity {
 				xbundle.putString("trackerid", map.get("trackerid").toString());
 				xbundle.putString("serverdate", map.get("serverdate").toString());
 				status = true;
-				msg=handler.obtainMessage();
+				msg = handler.obtainMessage();
 			}
 			catch( TimeoutException te ) {
 				xbundle.putString("response", "Connection Timeout!");

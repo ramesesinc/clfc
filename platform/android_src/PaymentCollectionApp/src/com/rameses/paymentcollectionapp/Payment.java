@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.rameses.client.android.SessionContext;
 import com.rameses.service.ServiceProxy;
 
 import android.app.Activity;
@@ -53,8 +54,8 @@ public class Payment extends ControlActivity {
 	private BigDecimal defaultAmount = new BigDecimal("0").setScale(2);
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreateProcess(Bundle savedInstanceState) {
+		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_payment, rl_container, true);
@@ -87,7 +88,7 @@ public class Payment extends ControlActivity {
 
 		Calendar c = Calendar.getInstance();
 		SQLiteDatabase db = getDbHelper().getReadableDatabase();
-		String date = getDbHelper().getServerDate(db, getDbHelper().getCollectorid(db));
+		String date = getDbHelper().getServerDate(db, SessionContext.getProfile().getUserId());
 		try {
 			c.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));
 		}
@@ -181,8 +182,9 @@ public class Payment extends ControlActivity {
 	}
 	
 	private void savePayment() {
-		SQLiteDatabase db = getDbHelper().getReadableDatabase();
-		String date = getDbHelper().getServerDate(db, getDbHelper().getCollectorid(db));		
+		String collectorid = SessionContext.getProfile().getUserId();
+		SQLiteDatabase db = getDbHelper().getWritableDatabase();
+		String date = getDbHelper().getServerDate(db, collectorid);		
 		db.close();
 		
 		Calendar c = Calendar.getInstance();
@@ -206,42 +208,9 @@ public class Payment extends ControlActivity {
 		
 		db = getDbHelper().getReadableDatabase();
 		payment.put("trackerid", getDbHelper().getTrackerid(db));
-		payment.put("collectorid", getDbHelper().getCollectorid(db));
+		payment.put("collectorid", collectorid);
 		getDbHelper().insertPayment(db, payment);
 		db.close();
-		/*ServiceProxy proxy = new ServiceHelper(context).createServiceProxy("DevicePostingService");
-		try {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("txndate", txndate);
-			params.put("routecode", routecode);
-			params.put("payment", payment);
-			params.put("longitude", application.getLongitude());
-			params.put("latitude", application.getLatitude());
-			Map<String, Object> collectionsheet = new HashMap<String, Object>();
-			if (!db.isOpen) db.openDb();
-			params.put("sessionid", sessionid);
-			params.put("collectorid", db.getCollectorid());
-			params.put("trackerid", db.getTrackerid());
-			Cursor cs = db.getCollectionsheetByLoanappid(loanappid);
-			if (db.isOpen) db.closeDb();
-			
-			if (cs != null && cs.getCount() > 0 ) {
-				cs.moveToFirst();
-				collectionsheet.put("loanappid", loanappid);
-				collectionsheet.put("acctname", cs.getString(cs.getColumnIndex("acctname")));
-				collectionsheet.put("detailid", cs.getString(cs.getColumnIndex("detailid")));
-				params.put("type", cs.getString(cs.getColumnIndex("type")));
-			}
-			params.put("collectionsheet", collectionsheet);
-			
-			proxy.invoke("postPayment", new Object[]{params});
-			
-		} catch (Exception e) {}
-		finally {
-			db.openDb();
-			db.insertPayment(payment);
-			db.closeDb();
-		}*/
 		finish();
 	}
 }

@@ -1,8 +1,11 @@
 package com.rameses.paymentcollectionapp;
 
-import android.app.Activity;
+import com.rameses.client.android.UIActivity;
 
-public class ControlActivity extends Activity {
+import android.app.Activity;
+import android.widget.TextView;
+
+public class ControlActivity extends UIActivity {
 	private MySQLiteHelper dbHelper = null;
 	
 	public void setDbHelper(MySQLiteHelper dbHelper) {
@@ -19,6 +22,19 @@ public class ControlActivity extends Activity {
 	
 	public ProjectApplication getApp() {
 		return (ProjectApplication) this.getApplicationContext();
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		int networkStatus = getApp().getNetworkStatus();
+		String mode = "NOT CONNECTED";
+		if (networkStatus == 0) {
+			mode = "OFFLINE";
+		} else if (networkStatus == 1) {
+			mode = "ONLINE";
+		}
+		((TextView) findViewById(R.id.tv_mode)).setText(mode);
 	}
 	
 	@Override
