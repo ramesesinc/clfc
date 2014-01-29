@@ -29,10 +29,11 @@ class DevicePostingService
 	def trackerSvc;
 
 	@ProxyMethod
-	public void postPayment( params ) {
+	public def postPayment( params ) {
 		if (!params.payment) throw new Exception("Please specify payment.");
 		postCollectionSheet(params);
 
+		def response = "fail";
 		def itm = batch_collectionsheet.read(params.payment, "payment");
 		if (!itm) {
 			def cs = batch_collectionsheet.read([objid: params.sessionid]);
@@ -46,7 +47,8 @@ class DevicePostingService
 				refno: params.payment.refno,
 				paytype: params.payment.type,
 				payamount: params.payment.amount,
-				dtposted: dateSvc.serverDate,
+				paidby: params.payment.paidby,
+				dtposted: params.payment.txndate,
 				postedby: 'COLLECTOR NOT IDENTIFIED'
 			];
 			def user = sysuser.read([objid: params.collectorid]);
@@ -62,14 +64,17 @@ class DevicePostingService
 				remarks: 'RECEIVED PAYMENT FROM '+params.collectionsheet.acctname
 			];
 			trackerSvc.log(map);
+			response = "success";
 		}
+		return [response: response];
 	}
 
 	@ProxyMethod
-	public void postNote( params ) {
+	public def postNote( params ) {
 		if (!params.note) throw new Exception("Please specify note.");
 		postCollectionSheet(params);
 
+		def response = "fail";
 		def itm = batch_collectionsheet.read(params.note, "note");
 		if (!itm) {
 			itm = [
@@ -84,13 +89,19 @@ class DevicePostingService
 			def user = sysuser.read([objid: params.collectorid]);
 			if (user) itm.postedby = user.name;
 			batch_collectionsheet.create(itm, "note");
+			response = "success";
+		} else {
+			batch_collectionsheet.update(params.note, "note");
+			response = "success";
 		}
+		return [response: response];
 	}
 
 	private void postCollectionSheet( params ) {
 		if (!params.sessionid) throw new Exception("Please specify sessionid.");
 		params.totalcount = 0;
 		params.totalamount = 0;
+		println 'trackerid = '+params.trackerid;
 		device_billing.createBatchCollectionSheetHeader(params);
 		def cs = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");
@@ -109,29 +120,43 @@ class DevicePostingService
 	}
 
 	@ProxyMethod
-	public void removeNote( params ) {
+	public def removeNote( params ) {
 		batch_collectionsheet.delete([objid: params.noteid], "note");
+		return [resposnse: "success"];
 	}
 
 	@ProxyMethod
-	public void updateRemarks( params ) {
+	public def updateRemarks( params ) {
 		if (!params.collectionsheet) throw new Exception("Please specify collection sheet.");
 		postCollectionSheet(params)
+
 		def cs = batch_collectionsheet.read([objid: params.collectionsheet.detailid] ,"detail");
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");
 
 		cs.remarks = params.remarks;
 		batch_collectionsheet.update(cs, "detail");
+		/*def map = [
+			trackerid: params.trackerid,
+			txntype: params.type? params.type : 'NORMAL',
+			refid: params.payment.objid,
+			reftype: 'REMARKS',
+			lng: params.longitude,
+			lat: params.latitude,
+			remarks: 'RECEIVED PAYMENT FROM '+params.collectionsheet.acctname
+		];
+		trackerSvc.log(map);*/
+		return [response: "success"];
 	}
 
 	@ProxyMethod
-	public void removeRemarks( params ) {
+	public def removeRemarks( params ) {
 		if (!params.detailid) throw new Exception("Please specify detailid.");
 		def cs = batch_collectionsheet.read([objid: params.detailid], "detail");
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");
 
 		cs.remarks = null;
 		batch_collectionsheet.update(cs, "detail");
+		return [response: "success"];
 	}
 
 	@ProxyMethod
@@ -193,5 +218,36 @@ class DevicePostingService
 			list.add(it);
 		}
 		return [routes: routes, list: list, request: params];
+	}
+
+	@ProxyMethod
+	public def remitRouteCollection( params ) {
+		if (!params.sessionid) throw new Exception("Please specify sessionid.");
+		if (!params.routecode) throw new Exception("Please specify routecode.");
+		if (!params.totalcollection) throw new Exception("Please specify total collection sheets for remittance.");
+
+		def response = "fail";
+		def data = batch_collectionsheet.read([objid: params.sessionid]);
+		if (data) {
+			data.state = 'FOR_POSTING';
+			data.totalcount = params.totalcollection;
+			data.totalamount = params.totalamount;
+			batch_collectionsheet.update(data);
+
+			response = "success";
+		}
+
+		return [response: response];
+	}
+
+	@ProxyMethod
+	public def isBillingPosted( params ) {
+		if (!params.sessionid) throw new Exception("Please specify sessionid.");
+
+		def flag = false;
+		def data = batch_collectionsheet.read([objid: sessionid]);
+		if (data && data.state == 'POSTED') flag = true;
+
+		return flag;
 	}
 }

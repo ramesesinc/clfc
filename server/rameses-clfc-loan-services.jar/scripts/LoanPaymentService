@@ -90,11 +90,13 @@ class LoanPaymentService
 				cs.payments = batch_collectionsheet.getPaymentsByDetailid([parentid: cs.objid]);
 				cs.total = 0;
 				cs.payments.each{ 
+					cs.total += it.payamount;
 					voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
 					it.isvoided = 0;
 					if (voidrequest) {
 						if (voidrequest.state == "PENDING") throw new Exception("There are still pending void requests for this billing.");
 						it.isvoided = 1;
+						cs.total -= it.payamount;
 					}
 				}
 				cs.notes = batch_collectionsheet.getNotesByDetailid([parentid: cs.objid]);

@@ -98,7 +98,16 @@ class LoanLedgerBillingService extends ActiveCrudService
 
 	@ProxyMethod
 	public void createBilling( list, data, route ) {
+		try {
+			createBillingImpl(list, data, route);
+		} catch(e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	private void createBillingImpl( list, data, route ) {
 		def days = 0;
+
 		list.each{
 			def currentDate = dateSvc.parseDate(data.billdate, null).date;
 			def maturityDate = dateSvc.parseDate(it.dtmatured, null).date;
@@ -154,6 +163,7 @@ class LoanLedgerBillingService extends ActiveCrudService
 					detail.penalty = it.absentpenalty * (days > 0? days-1 : 0);
 					detail.amountdue += detail.penalty;
 				}
+				detail.days = days;
 				detail.balance = getBalance(detail, it.balance);
 			} else {
 				def compromise = ledger_compromise.read([objid: it.compromiseid]);

@@ -6,6 +6,9 @@ class DeviceLocationService {
 	@Service("MobileTrackerService")
 	def trackerSvc;
 
+	@Service("DateService")
+	def dateSvc;
+
 	@ProxyMethod
 	public def postLocation( params ) {
 		if (params.trackerid) {

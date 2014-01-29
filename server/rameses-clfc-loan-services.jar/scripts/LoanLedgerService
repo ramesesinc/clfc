@@ -20,6 +20,9 @@ class LoanLedgerService extends ActiveListService
 	@Service('LoanLedgerAdjustmentService')
 	def adjustmentSvc;
 
+	@Service("MobileTrackerService")
+	def trackerSvc;
+
 	@ProxyMethod
 	public def getColumns( params ) {
 		return [
@@ -161,12 +164,9 @@ class LoanLedgerService extends ActiveListService
 		if (!params.unpostedcollectionsheets) throw new Exception('Please specify unposted collection sheets');
 		if (!params.entity) throw new Exception('Please specify entity');
 
-		def m = ledger_billing.read(params.entity);
-		if (m.state != "UPLOADED") throw new Exception("This billing is not yet uploaded.");
-		
 		def ledger;
 		params.unpostedcollectionsheets.each{cs->
-			m = ledger_billing.read(cs, "detail");
+			def m = ledger_billing.read(cs, "detail");
 			if (!m) throw new Exception("No billing for borrower "+cs.borrowername);
 
 			ledger = em.read([objid: m.ledgerid]);
@@ -184,6 +184,7 @@ class LoanLedgerService extends ActiveListService
 				}
 			}
 		}
+		trackerSvc.stop([trackerid: params.entity.trackerid]);
 		batch_collectionsheet.changeStateApproved(params.entity);
 		ledger_billing.changeStateCompleted(params.entity);
 		return params;

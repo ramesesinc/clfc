@@ -1,0 +1,55 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import java.rmi.server.UID;
+
+class DeviceSettingsService 
+{
+	@ActiveDB(value="var")
+	def var;
+
+	@ActiveDB(value="device_setting")
+	def device_setting;
+
+	/*@ProxyMethod
+	public def saveSettings( params ) {
+		def data = device_setting.findSettingByTerminal(params);
+		if (!data) {
+			data = [
+				objid: 			'DS'+new UID(),
+				terminalid: 	params.terminalid,
+				onlinehost: 	params.onlinehost,
+				offlinehost: 	params.offlinehost,
+				port: 			params.port,
+				sessiontimeout: params.sessiontimeout,
+				uploadtimeout: 	params.uploadtimeout,
+				trackertimeout: params.trackertimeout
+			]
+			device_setting.create(data);
+		} else {
+			data.onlinehost = params.onlinehost;
+			data.offlinehost = params.offlinehost;
+			data.port = params.port;
+			data.sessiontimeout = params.sessiontimeout;
+			data.uploadtimeout = params.uploadtimeout;
+			data.trackertimeout = params.trackertimeout;
+			device_setting.update(data);
+		}
+		return data;
+	}*/
+
+	@ProxyMethod
+	public def getSettings( params ) {
+		def setting = device_setting.findSettingByTerminal(params);
+		if (!setting) {
+			setting = [
+				onlinehost: 	var.read([name: 'device_host_online'])?.value,
+				offlinehost: 	var.read([name: 'device_host_offline'])?.value,
+				port: 			var.read([name: 'device_host_port'])?.value,
+				sessiontimeout: var.read([name: 'device_timeout_session'])?.value,
+				uploadtimeout: 	var.read([name: 'device_timeout_upload'])?.value,
+				trackertimeout: var.read([name: 'device_timeout_tracker'])?.value
+			];
+		}
+		return setting;
+	}
+}

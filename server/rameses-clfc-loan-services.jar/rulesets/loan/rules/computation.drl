@@ -318,6 +318,7 @@ rule "amountPaid less than totalPayment"
 		else {
 			//System.out.println("current day: "+currentDay);
 			//System.out.println("amount paid = "+amountPaid);
+			//System.out.println("amount due = "+ad);
 			if( amountPaid >= ad ) {
 				amountPaid -= ad;
 				listItem.put("day", currentDay);

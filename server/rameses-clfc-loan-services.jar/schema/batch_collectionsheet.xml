@@ -4,6 +4,7 @@
 		<field name="state" required="true"/>
 		<field name="dtposted" required="true"/>
 		<field name="postedby" required="true"/>
+		<field name="trackerid" required="true"/>
 		<field name="txndate" required="true"/>
 		<field name="dtcreated" required="true"/>
 		<field name="route_code" required="true"/>
@@ -40,6 +41,7 @@
 		<field name="refno" required="true"/>
 		<field name="paytype" required="true"/>
 		<field name="payamount" required="true"/>
+		<field name="paidby" required="true"/>
 		<field name="dtposted" required="true"/>
 		<field name="postedby" required="true"/>
  	</element>
