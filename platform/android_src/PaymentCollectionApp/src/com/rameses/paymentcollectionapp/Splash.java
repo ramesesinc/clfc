@@ -1,6 +1,7 @@
 package com.rameses.paymentcollectionapp;
 
 import com.rameses.client.android.ClientContext;
+import com.rameses.client.android.Logger;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIActivity;
 import com.rameses.client.android.UIStartActivity;
@@ -19,6 +20,7 @@ public class Splash extends UIStartActivity {
 	private Context context = this;
 	private MySQLiteHelper dbHelper = null;
 	private ProjectApplication application = null;
+	private Logger logger = Logger.getLogger();
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -30,22 +32,15 @@ public class Splash extends UIStartActivity {
 	@Override
 	protected void onResumeProcess() {
 		super.onResumeProcess();
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		String terminalid = dbHelper.getTerminalid(db);
-		db.close();
-		if (terminalid == null || terminalid.equals("")) {
-			application.load();
+		System.out.println("sessionid before");
+		String sessionid = SessionContext.getSessionId();
+		System.out.println("sessionid after = "+sessionid);
+		if (sessionid == null || sessionid.equals("")) {
+			Intent intent = new Intent(context, Login.class);
+			startActivity(intent);
 		} else {
-			System.out.println("sessionid before");
-			String sessionid = SessionContext.getSessionId();
-			System.out.println("sessionid after = "+sessionid);
-			if (sessionid == null || sessionid.equals("")) {
-				Intent intent = new Intent(context, Login.class);
-				startActivity(intent);
-			} else {
-				System.out.println("move task to back");
-				moveTaskToBack(true);
-			}
+			System.out.println("move task to back");
+			moveTaskToBack(true);
 		}
 	}
 }

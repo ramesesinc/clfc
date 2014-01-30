@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 import com.rameses.client.android.ClientContext;
+import com.rameses.client.android.Logger;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.services.LoginService;
 import com.rameses.service.ServiceProxy;
@@ -40,7 +41,7 @@ public class Login extends SettingsMenuActivity {
 	private LayoutInflater inflater;
 	private EditText et_username = null;
 	private EditText et_password = null;
-	
+	private Logger logger = Logger.getLogger();
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -110,6 +111,7 @@ public class Login extends SettingsMenuActivity {
 		public void handleMessage(Message msg) {
 			Bundle data = msg.getData();
 			if (progressDialog.isShowing()) progressDialog.dismiss();
+			getApp().startWaiter();
 			startActivity(new Intent(context, Main.class));
 		}
 	};
@@ -142,7 +144,8 @@ public class Login extends SettingsMenuActivity {
 				msg = loginHandler.obtainMessage(); 
 				flag = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				logger.log(e);
 				data.putString("response", e.getMessage());
 			} finally {
 				msg.setData(data);

@@ -10,6 +10,7 @@ import android.telephony.TelephonyManager;
 
 import com.rameses.client.android.ClientContext;
 import com.rameses.client.android.InvokerProxy;
+import com.rameses.client.android.Logger;
 import com.rameses.client.interfaces.AppLoader;
 import com.rameses.client.interfaces.AppLoaderCaller;
 import com.rameses.client.services.TerminalService;
@@ -19,6 +20,7 @@ import com.rameses.service.ServiceProxy;
 public class LoaderRegistration implements AppLoader {
 	//private Context context = (Context) ClientContext.getCurrentContext().getDeviceContext();
 	private AppLoaderCaller caller;
+	private Logger logger = Logger.getLogger();
 	
 	@Override
 	public int getIndex() {
@@ -39,13 +41,14 @@ public class LoaderRegistration implements AppLoader {
 			//env.put("app.host", ApplicationUtil.getAppHost(context, application.getNetworkStatus()));
 			TerminalService svc = new TerminalService(); 
 			String terminalid = dbHelper.getTerminalid(db);
+			logger.log("loader registration terminalid = "+terminalid);
 			db.close();
 			String deviceId = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
 			Object response = svc.findTerminal(terminalid);
+			logger.log("response = "+response);
 			if (response == null) {
 				System.out.println("loader registration no response");
 				Intent intent = new Intent(context, RegistrationOption.class);
-				intent.setAction(Intent.ACTION_MAIN);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);
 			} else if (response instanceof Map) {
@@ -58,7 +61,6 @@ public class LoaderRegistration implements AppLoader {
 				} else {
 					System.out.println("loader registration macaddress not match");
 					Intent intent = new Intent(context, RegistrationOption.class);
-					intent.setAction(Intent.ACTION_MAIN);
 					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(intent);
 				}
@@ -66,7 +68,6 @@ public class LoaderRegistration implements AppLoader {
 		} catch (Exception e) {
 			System.out.println("loader registration exception");
 			Intent intent = new Intent(context, RegistrationOption.class);
-			intent.setAction(Intent.ACTION_MAIN);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(intent);
 		}

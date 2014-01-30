@@ -11,4 +11,13 @@
         android:layout_centerVertical="true"
         android:src="@drawable/loading32" />
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Initializing please  wait..."
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

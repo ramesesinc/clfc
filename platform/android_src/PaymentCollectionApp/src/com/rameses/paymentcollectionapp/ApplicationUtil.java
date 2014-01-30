@@ -77,7 +77,7 @@ public class ApplicationUtil {
 				// TODO Auto-generated method stub
 				SQLiteDatabase db = dbHelper.getWritableDatabase();
 				String username = SessionContext.getProfile().getUserName();//dbHelper.getCollectorUsername(db);
-				String password = SessionContext.getProfile().get("encpwd").toString();//dbHelper.getCollectorPassword(db);
+				String password = SessionContext.getPassword();//dbHelper.getCollectorPassword(db);
 
 				String et_password = ((EditText) dialog.findViewById(R.id.login_password)).getText().toString();
 				String encval = Encoder.MD5.encode(et_password, username);

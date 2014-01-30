@@ -239,7 +239,7 @@ public class Main extends ControlActivity {
 							Map env = ClientContext.getCurrentContext().getAppEnv();
 							env.put("app.host", ApplicationUtil.getAppHost(context, getApp().getNetworkStatus()));
 							LogoutService svc = new LogoutService();
-							try {
+							try { 
 								svc.logout();
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -248,8 +248,12 @@ public class Main extends ControlActivity {
 									@Override
 									public void run() {
 										if (progressDialog.isShowing()) progressDialog.dismiss();
+										getApp().stopWaiter();
 										DeviceManager.getInstance().closeAll();
 										UIApplication.getInstance().logout();
+										Intent intent = new Intent(context, Splash.class);
+										intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+										context.startActivity(intent);
 										//DeviceManager.getInstance().showActivity(Splash.class);
 									}
 								});
