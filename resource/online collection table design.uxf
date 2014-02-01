@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>13</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>104</x>
+      <y>52</y>
+      <w>286</w>
+      <h>247</h>
+    </coordinates>
+    <panel_attributes>online_collection
+--
+objid
+state (FOR_POSTING|POSTED)
+txndate
+collector_objid
+collector_name
+dtcreated
+createdby
+dtposted
+postedby</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>598</x>
+      <y>26</y>
+      <w>260</w>
+      <h>351</h>
+    </coordinates>
+    <panel_attributes>online_collection_detail
+--
+objid
+parentid
+loanapp_objid
+loanapp_appno
+borrower_objid
+borrower_name
+dtpaid
+paidby
+refno
+type (schedule|over)
+amount
+route_code
+route_description
+route_area</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>351</x>
+      <y>26</y>
+      <w>272</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+parentid..objid</panel_attributes>
+    <additional_attributes>39;65;247;65</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>481</x>
+      <y>390</y>
+      <w>325</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>online_collection_cashbreakdown
+--
+objid
+parentid
+denomination
+qty
+amount</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>325</x>
+      <y>260</y>
+      <w>187</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+parentid..objid</panel_attributes>
+    <additional_attributes>39;39;156;195</additional_attributes>
+  </element>
+</diagram>
