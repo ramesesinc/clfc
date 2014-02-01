@@ -65,6 +65,8 @@ class DevicePostingService
 			];
 			trackerSvc.log(map);
 			response = "success";
+		} else {
+			reponse = "sucess";
 		}
 		return [response: response];
 	}
@@ -101,7 +103,6 @@ class DevicePostingService
 		if (!params.sessionid) throw new Exception("Please specify sessionid.");
 		params.totalcount = 0;
 		params.totalamount = 0;
-		println 'trackerid = '+params.trackerid;
 		device_billing.createBatchCollectionSheetHeader(params);
 		def cs = batch_collectionsheet.read([objid: params.sessionid]);
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");
@@ -172,16 +173,24 @@ class DevicePostingService
 		if (!params.paymentid) throw new Exception("Please specify paymentid.");
 		if (!params.loanappid) throw new Exception("Please specify loanappid.");
 
-		def itm = [
-			objid: params.objid,
-			state: 'PENDING',
-			paymentid: params.paymentid,
-			routecode: params.routecode,
-			loanappid: params.loanappid,
-			collectorid: params.collectorid,
-			reason: params.reason
-		]
-		void_payment.create(itm);
+		def respose = "fail";
+		def itm = void_payment.read([objid: params.objid]);
+		if (itm) {
+			response = "success";
+		} else {
+			itm = [
+				objid: params.objid,
+				state: 'PENDING',
+				paymentid: params.paymentid,
+				routecode: params.routecode,
+				loanappid: params.loanappid,
+				collectorid: params.collectorid,
+				reason: params.reason
+			]
+			void_payment.create(itm);
+			response = "success";
+		}
+		return [response: response];
 	}
 
 	@ProxyMethod

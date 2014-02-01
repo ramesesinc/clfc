@@ -4,8 +4,11 @@ import com.rameses.services.extended.*;
 
 class LoanVoidPaymentService extends ActiveListService
 {
-	@ActiveDB("void_payment")
+	@ActiveDB(value="void_payment")
 	def em;
+
+	@Service("CustomerService")
+	def customerSvc;
 
 	@ProxyMethod
 	public def getNodes( params ) {
@@ -32,7 +35,15 @@ class LoanVoidPaymentService extends ActiveListService
 	}
 
 	@ProxyMethod
+	public def create( params ) {
+		params.state = 'PENDING';
+		em.create(params);
+		return open(params)
+	}
+
+	@ProxyMethod
 	public def approve( params ) {
+		em.update(params, "remarks");
 		em.changeStateApproved(params);
 		return params;
 	}
@@ -41,5 +52,11 @@ class LoanVoidPaymentService extends ActiveListService
 	public def open( params ) {
 		params = em.findVoidRequestById(params);
 		return params;
+	}
+
+	@ProxyMethod
+	public def openCustomer( params ) {
+		def customer = customerSvc.open(params);
+		return [address: customer.address, objid: customer.objid, name: customer.name];
 	}
 }

@@ -1,0 +1,34 @@
+import com.rameses.common.*;
+import com.rameses.annoations.*;
+import com.rameses.services.extended.*;
+
+class LoanOnlineCollection
+{
+	@Env
+	def env;
+
+	@ActiveDB(value="online_collection")
+	def collection;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def create( params ) {
+		def serverdate = dateSvc.serverDate;
+		def date = serverdate.toString().split(" ")[0];
+		def data = collection.findForPostingHeaderByTxndate([txndate: date]);
+		if (!data) {
+			data = [
+				objid		: params.parentid,
+				state		: 'FOR_POSTING',
+				txndate 	: date,
+				dtcreated	: serverdate,
+				createdby	: env.NAME
+			];
+			collection.create(data);
+		}
+		params.dtpaid = serverdate
+		collection.create(params, "detail");
+	}
+}

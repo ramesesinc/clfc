@@ -1,0 +1,35 @@
+<schema>
+
+	<element name="online_collection" tablename="online_collection">
+		<field name="objid" primary="true"/>
+		<field name="state" required="true"/>
+		<field name="txndate" required="true"/>
+		<field name="dtcreated" required="true"/>
+		<field name="createdby" required="true"/>
+		<field name="dtposted"/>
+		<field name="postedby"/>
+	</element>
+
+	<element name="detail" tablename="online_collection_detail">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/>
+		<field name="loanappid" required="true"/>
+		<field name="borrower_objid" required="true"/>
+		<field name="borrower_name" required="true"/>
+		<field name="dtpaid" required="true"/>
+		<field name="paidby" required="true"/>
+		<field name="refno" required="true"/>
+		<field name="type" required="true"/>
+		<field name="amount" required="true"/>
+		<field name="routecode" required="true"/>
+	</element>
+
+	<element name="breakdown" tablename="online_collection_cashbreakdown">
+		<field name="objid" primary="true"/>
+		<field name="parentid" required="true"/>
+		<field name="denomination" required="true"/>
+		<field name="qty" required="true"/>
+		<field name="amount" required="true"/>
+	</element>
+
+</schema>

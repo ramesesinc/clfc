@@ -11,8 +11,8 @@ INNER JOIN batch_collectionsheet_detail_payment bcdp ON bcd.objid=bcdp.parentid
 WHERE bcd.parentid=$P{parentid}
 
 [getUnpostedCollectionSheets]
-SELECT bcd.objid, l.objid AS appid, l.borrower_name AS borrowername, 
-	l.appno, bcd.remarks
+SELECT bcd.objid, l.objid AS appid, l.borrower_name AS borrower_name, 
+	l.borrower_objid AS borrower_objid, l.appno, bcd.remarks
 FROM loanapp l
 INNER JOIN batch_collectionsheet_detail bcd ON l.objid=bcd.appid
 WHERE bcd.parentid=$P{parentid}

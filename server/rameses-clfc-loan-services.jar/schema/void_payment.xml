@@ -8,6 +8,12 @@
 		<field name="loanappid" required="true" />
 		<field name="collectorid" required="true" />
 		<field name="reason" required="true" />
+		<feld name="remarks"/>
+	</element>
+
+	<element name="remarks" tablename="void_payment">
+		<field name="objid" primary="true"/>
+		<field name="remarks" required="true"/>
 	</element>
 	
 </schema>
