@@ -1,0 +1,15 @@
+"entity.reason" [mode != 'read'] {
+    enabled: true;
+}
+
+"entity.reason" [mode == 'read'] {
+    enabled: false;
+}
+
+"entity.remarks" [entity.state == 'PENDING'] {
+    enabled: true;
+}
+
+"entity.remarks" [entity.state != 'PENDING' || !isAllowApprove] {
+    enabled: false;
+}

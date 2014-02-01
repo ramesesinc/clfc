@@ -77,7 +77,7 @@ public class PostPaymentMgmtPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             }),
             new com.rameses.rcp.common.Column(new Object[]{
-                new Object[]{"name", "borrowername"}
+                new Object[]{"name", "borrower.name"}
                 , new Object[]{"caption", "Name"}
                 , new Object[]{"width", 150}
                 , new Object[]{"minWidth", 0}
@@ -199,7 +199,10 @@ public class PostPaymentMgmtPage extends javax.swing.JPanel {
                 , new Object[]{"typeHandler", new com.rameses.rcp.common.TextColumnHandler()}
             })
         });
+        xDataTable2.setDynamic(true);
         xDataTable2.setHandler("paymentsHandler");
+        xDataTable2.setImmediate(true);
+        xDataTable2.setName("selectedPayment");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

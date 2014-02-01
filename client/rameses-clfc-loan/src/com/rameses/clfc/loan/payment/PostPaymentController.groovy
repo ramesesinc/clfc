@@ -11,7 +11,7 @@ class PostPaymentController
 {    
     @Binding
     def binding;
-        
+
     @Service('LoanPaymentService')
     def paymentSvc;
     
@@ -26,10 +26,12 @@ class PostPaymentController
     def mode = 'init';
     def cashBreakdown;
     def selectedCollectionsheet = [:];
+    def selectedPayment;
     def unpostedCollectionSheets;
     def prevcashbreakdown = [];
     def breakdown;
     def allowEdit = false;
+    def iscashier = false;
     def iscollector = false;
 
     PostPaymentController() {
@@ -46,9 +48,10 @@ class PostPaymentController
     }
     
     def next() {
-        //iscollector = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.FIELD_COLLECTOR');
+        iscashier = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.CASHIER');
+        iscollector = ClientContext.currentContext.headers.ROLES.containsKey('LOAN.FIELD_COLLECTOR');
         mode = 'read';
-        def data = paymentSvc.getUnpostedCollectionSheets([route_code: route]);
+        def data = paymentSvc.getUnpostedCollectionSheets([route_code: route.code]);
         entity = data.entity;
         unpostedCollectionSheets = data.list;
         if (!unpostedCollectionSheets) {
@@ -56,11 +59,11 @@ class PostPaymentController
             return null;
         }
         entity.cashbreakdown = paymentSvc.getCashBreakdown(entity);
-        if (entity.cashbreakdown.isEmpty()) {
+        if (entity.cashbreakdown.isEmpty() && iscashier) {
             mode = 'create';
             allowEdit = true;
         }
-        println 'mode = '+mode;
+        //println 'mode = '+mode;
         denominationHandler.reload();
         return 'mgmtpage';
     }
@@ -91,6 +94,11 @@ class PostPaymentController
         paymentsHandler.reload();
         notesHandler.reload();
     }
+
+    public void setSelectedPayment( selectedPayment ) {
+        this.selectedPayment = selectedPayment;
+        binding.refresh('formActions');
+    }
     
     def collectionsheetHandler = [
         fetchList: {o->
@@ -103,6 +111,19 @@ class PostPaymentController
         fetchList: {o->
             if (!selectedCollectionsheet?.payments) selectedCollectionsheet?.payments = [];
             return selectedCollectionsheet.payments;
+        },
+        onOpenItem: {itm, colName->
+            if (itm.voidid) {
+                return InvokerUtil.lookupOpener('voidrequest:open', [payment: itm, collectionsheet: selectedCollectionsheet]);
+            } else {
+                def params = [
+                    route: route,
+                    collectionsheet: selectedCollectionsheet,
+                    payment: itm,
+                    requestedby: ClientContext.currentContext.headers.NAME
+                ];
+                return InvokerUtil.lookupOpener('voidrequest:create', params);
+            }
         }
     ] as BasicListModel;
 
@@ -137,7 +158,7 @@ class PostPaymentController
         if (!entity.cashbreakdown) return 0;
         return entity.cashbreakdown.amount.sum();
     }
-    
+
     def save() {
         if (getTotalamount() != getTotalbreakdown()) 
             throw new Exception('Total for denomination does not matched with total amount for unposted collection sheets.');
@@ -175,6 +196,17 @@ class PostPaymentController
         binding.refresh();
     }
     
+    boolean getIsAllowVoid() {
+        println 'is allow void';
+        /*println 'mode = '+mode;
+        println 'iscollector = '+iscollector;
+        println 'cashbreakdown = '+entity?.cashbreakdown;
+        println 'selected payment = '+selectedPayment;*/
+        def flag = true;
+        if (mode == 'init' || !iscollector || !selectedPayment) flag = false;
+        return flag;
+    }
+
     boolean getIsAllowPost() {
         if (mode == 'init' || getTotalbreakdown() == 0) return false;
         return true;

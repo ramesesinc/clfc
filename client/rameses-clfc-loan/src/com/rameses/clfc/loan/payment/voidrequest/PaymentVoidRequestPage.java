@@ -41,6 +41,8 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
         xDecimalField1 = new com.rameses.rcp.control.XDecimalField();
         jScrollPane1 = new javax.swing.JScrollPane();
         xTextArea1 = new com.rameses.rcp.control.XTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        xTextArea2 = new com.rameses.rcp.control.XTextArea();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setTitle("General Information");
@@ -96,10 +98,18 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 60));
         xTextArea1.setCaption("Reason");
         xTextArea1.setName("entity.reason");
-        xTextArea1.setReadonly(true);
+        xTextArea1.setRequired(true);
         jScrollPane1.setViewportView(xTextArea1);
 
         xFormPanel2.add(jScrollPane1);
+
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(0, 60));
+        xTextArea2.setCaption("Remarks");
+        xTextArea2.setName("entity.remarks");
+        xTextArea2.setRequired(true);
+        jScrollPane2.setViewportView(xTextArea2);
+
+        xFormPanel2.add(jScrollPane2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -118,7 +128,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(xFormPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -126,6 +136,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private com.rameses.rcp.control.XDecimalField xDecimalField1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XFormPanel xFormPanel2;
@@ -135,6 +146,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
     private com.rameses.rcp.control.XLabel xLabel4;
     private com.rameses.rcp.control.XLabel xLabel5;
     private com.rameses.rcp.control.XTextArea xTextArea1;
+    private com.rameses.rcp.control.XTextArea xTextArea2;
     // End of variables declaration//GEN-END:variables
     
 }
