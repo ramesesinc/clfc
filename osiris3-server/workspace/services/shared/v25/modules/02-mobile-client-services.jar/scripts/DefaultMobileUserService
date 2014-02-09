@@ -89,7 +89,7 @@ class DefaultMobileUserService
 
 		//initiate lock
 		def newlockid = 'LOCK'+new java.rmi.server.UID();
-		em.update([objid: params.userid, lockid: newlockid], 'lock');
+		em.updateLock([objid: params.userid, lockid: newlockid]);
 
 		info.pwd = params.password;
 		info.pwdexpirydate = null;
