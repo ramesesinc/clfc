@@ -15,6 +15,7 @@ platform/*/dist
 platform/*/build
 platform/*/build.xml
 platform/*/nbproject/private
+platform/*/*/bin
 platform/*/*/dist
 platform/*/*/build
 platform/*/*/build.xml
