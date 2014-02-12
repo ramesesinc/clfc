@@ -1,22 +1,28 @@
 [getList]
-SELECT llb.*, lls.parentid AS parentid, lls.subcollector_objid, lls.subcollector_username
+SELECT llb.*, lls.parentid AS parentid, lls.subcollector_objid, lls.subcollector_name
 FROM loan_ledger_billing llb
 LEFT JOIN loan_ledger_subbilling lls ON llb.objid=lls.objid
 LEFT JOIN loan_ledger_specialcollection llsc ON llb.objid=llsc.billingid
-WHERE (llb.createdby LIKE $P{searchtext} OR llb.collector_username LIKE $P{searchtext})
+WHERE (llb.createdby LIKE $P{searchtext} OR llb.collector_name LIKE $P{searchtext})
 	AND llb.state=$P{state}
 	AND llsc.objid IS NULL
 ORDER BY llb.billdate
 
 [getDefaultList]
 SELECT * FROM loan_ledger_billing
-WHERE createdby LIKE $P{searchtext} OR collector_username LIKE $P{searchtext}
+WHERE createdby LIKE $P{searchtext}
 ORDER BY billdate
 
 [getRoutesByBillingid]
 SELECT lr.* FROM loan_ledger_billing_route llbr
 INNER JOIN loan_route lr ON llbr.routecode=lr.code
 WHERE llbr.billingid=$P{billingid}
+
+[getUnuploadedRoutesByBillingid]
+SELECT lr.* FROM loan_ledger_billing_route llbr
+INNER JOIN loan_route lr ON llbr.routecode=lr.code
+WHERE llbr.billingid=$P{billingid}
+	AND llbr.uploaded=0
 
 [removeRouteByBillingid]
 DELETE FROM loan_ledger_billing_route WHERE billingid=$P{billingid}
@@ -83,9 +89,9 @@ SELECT MAX(sq.count) AS max, sq.groupbaseamount FROM (
 GROUP BY sq.groupbaseamount
 LIMIT 1
 
-[getStates]
-SELECT DISTINCT statey
-FROM loan_ledger_billing
+[changeState]
+UPDATE loan_ledger_billing SET state=$P{state}
+WHERE objid=$P{objid}
 
 [changeStateCompleted]
 UPDATE loan_ledger_billing SET state="COMPLETED"
@@ -103,24 +109,44 @@ WHERE objid=$P{objid}
 UPDATE loan_ledger_billing SET state="DRAFT"
 WHERE objid=$P{objid}
 
-[changeBatchCollectionSheetStateVoided]
-UPDATE batch_collectionsheet SET state="VOIDED"
-WHERE objid=$P{objid}
+[getPastDraftBillingsNotCollected]
+SELECT llb.*
+FROM loan_ledger_billing llb
+LEFT JOIN field_collection fc ON llb.objid=fc.objid
+WHERE llb.state='DRAFT'
+	AND llb.billdate < $P{date}
+	AND fc.objid IS NULL
 
-[changeBatchCollectionSheetStateDraft]
-UPDATE batch_collectionsheet SET state="DRAFT"
-WHERE objid=$P{objid}
+[getPastDraftBillingsCollected]
+SELECT * FROM loan_ledger_billing
+WHERE totalunposted > 0
+	AND state='DRAFT'
+	AND billdate < $P{date}
 
-[getPastDraftBillings]
+[getPastDraftBillingsNotRemitted]
 SELECT * FROM loan_ledger_billing
 WHERE state='DRAFT'
 	AND billdate < $P{date}
+	AND objid IN (SELECT DISTINCT(fieldcollectionid) FROM field_collection_route
+			WHERE fieldcollectionid=loan_ledger_billing.objid AND totalcount=0)
 
 [getBillingForSubCollection]
-SELECT llb.* 
-FROM loan_ledger_billing llb
-LEFT JOIN loan_ledger_specialcollection llsc ON llb.objid=llsc.billingid
-WHERE llb.collector_username LIKE $P{searchtext}
-	AND llb.state='DRAFT'
-	AND llsc.objid IS NULL
-ORDER BY llb.billdate
+SELECT * FROM loan_ledger_billing
+WHERE collector_name LIKE $P{searchtext}
+	AND state='DRAFT'
+ORDER BY billdate
+
+[findRouteByBillingidAndRoutecode]
+SELECT * FROM loan_ledger_billing_route
+WHERE billingid=$P{billingid}
+	AND routecode=$P{routecode}
+
+[routeDownloaded]
+UPDATE loan_ledger_billing_route SET downloaded=1
+WHERE billingid=$P{billingid}
+	AND routecode=$P{routecode}
+
+[routeUploaded]
+UPDATE loan_ledger_billing_route SET uploaded=1
+WHERE billingid=$P{billingid}
+	AND routecode=$P{routecode}

@@ -6,19 +6,52 @@ class LoanLedgerBillingTask
 	@ActiveDB(value="loan_ledger_billing")
 	def ledger_billing;
 
+	@ActiveDB(value="special_collection")
+	def special_collection
+
 	@Service("DateService")
 	def dateSvc;
 
 	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
-	public void cancelPastDraftBillings( task ) {
+	public void changeStateCancelledPastDraftBillingsNotCollected( task ) {
 		def date = dateSvc.serverDate;
-		def list = ledger_billing.getPastDraftBillings([date: date.toString().split(' ')[0]]);
+		def list = ledger_billing.getPastDraftBillingsNotCollected([date: date.toString().split(' ')[0]]);
+		println 'cancel past billing'
 		list.each{
 			it.dtcancelled = date;
 			it.cancelledby = 'SYSTEM';
-			it.remarks = 'Billing was not used.';
 			it.state = 'CANCELLED';
-			ledger_billing.update(it);
+			ledger_billing.update(it, "cancel");
+			ledger_billing.update(it, "state");
+		}
+	}
+
+	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
+	public void changeStateUnpostedPastDraftBillingsCollected( task ) {
+		def list = ledger_billing.getPastDraftBillingsCollected([date: dateSvc.serverDate.toString().split(' ')[0]]);
+		println 'unposted past billing'
+		list.each{
+			it.state = "UNPOSTED";
+			ledger_billing.update(it, "state");
+		}
+	}
+
+	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
+	public void changeStateUnremittedPastDraftBillingsCollected( task ) {
+		def list = ledger_billing.getPastDraftBillingsNotRemitted([date: dateSvc.serverDate.toString().split(' ')[0]]);
+		println 'unremitted past billing'
+		list.each{
+			it.state = "UNREMITTED";
+			ledger_billing.update(it, "state");
+		}
+	}
+
+	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
+	public void cancelSpecialCollection( task ) {
+		def list = special_collection.getSpecialCollectionsForCancellation([date: dateSvc.serverDate.toString().split(' ')[0]]);
+		list.each{
+			it.state = 'CANCELLED';
+			special_collection.changeState(it);
 		}
 	}
 }

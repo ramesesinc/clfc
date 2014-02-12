@@ -3,7 +3,7 @@ import com.rameses.annotations.*;
 
 class LoanSpecialCollectionLedgerLookupService
 {
-	@ActiveDB(value="loan_ledger_specialcollection")
+	@ActiveDB(value="special_collection")
 	def em;
 
 	@Service("DateService")

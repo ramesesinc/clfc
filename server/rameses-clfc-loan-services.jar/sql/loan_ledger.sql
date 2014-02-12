@@ -76,3 +76,14 @@ WHERE ll.objid=$P{ledgerid}
 SELECT * FROM loan_ledger
 WHERE state='OPEN'
 	AND $P{date} > dtmatured
+
+[getOpenLedgers]
+SELECT c.objid AS borrower_objid, c.name AS borrower_name, c.address AS borrower_address,
+	lr.code AS route_code, lr.description AS route_description, lr.area AS route_area,
+	la.appno AS loanapp_appno, la.objid AS loanapp_objid
+FROM loan_ledger ll
+INNER JOIN customer c ON ll.acctid=c.objid
+INNER JOIN loanapp la ON ll.appid=la.objid
+INNER JOIN loan_route lr ON la.route_code=lr.code
+WHERE ll.state='OPEN'
+	AND c.name LIKE $P{searchtext}

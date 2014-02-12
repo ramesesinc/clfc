@@ -1,19 +1,29 @@
 <schema>
 
 	<element name="void_payment" tablename="void_payment">
-		<field name="objid" primary="true" />
-		<field name="state" required="true" />
-		<field name="paymentid" required="true" />
+		<field name="objid" primary="true"/>
+		<field name="state" required="true"/>
+		<field name="dtfiled" required="true"/>
+		<field name="filedby" required="true"/>
+		<field name="txncode" required="true"/>
+		<field name="collectionid" required="true"/>
+		<field name="paymentid" required="true"/>
 		<field name="routecode" required="true"/>
-		<field name="loanappid" required="true" />
-		<field name="collectorid" required="true" />
-		<field name="reason" required="true" />
-		<feld name="remarks"/>
+		<field name="loanapp_objid" required="true"/>
+		<field name="loanapp_appno" required="true"/>
+		<field name="collector_objid" required="true"/>
+		<field name="collector_name" required="true"/>
+		<field name="reason" required="true"/>
+		<field name="dtapproved"/>
+		<field name="approvedby"/>
+		<field name="approvedremarks"/>
 	</element>
 
-	<element name="remarks" tablename="void_payment">
+	<element name="approve" tablename="void_payment">
 		<field name="objid" primary="true"/>
-		<field name="remarks" required="true"/>
+		<field name="dtapproved" required="true"/>
+		<field name="approvedby" required="true"/>
+		<field name="approvedremarks" required="true"/>
 	</element>
-	
+
 </schema>

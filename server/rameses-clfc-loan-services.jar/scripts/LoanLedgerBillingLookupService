@@ -11,7 +11,7 @@ class LoanLedgerBillingLookupService
 	public def getColumns( params ) {
 		return [
 			[name: 'billdate', caption: 'Billing Date'],
-			[name: 'collector.username', caption: 'Collector']
+			[name: 'collector.name', caption: 'Collector']
 		]
 	}
 
@@ -19,7 +19,9 @@ class LoanLedgerBillingLookupService
 	public def getList( params ) {
 		params.searchtext = (params.searchtext? params.searchtext+'%' : '%');
 		def list = ledger_billing.getBillingForSubCollection(params);
-		list.each{ it.routes = ledger_billing.getRoutesByBillingid([billingid: it.objid]); }
+		list.each{ 
+			it.routes = ledger_billing.getUnuploadedRoutesByBillingid([billingid: it.objid]); 
+		}
 		return list;
 	}
 }

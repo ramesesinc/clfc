@@ -4,11 +4,17 @@ import com.rameses.services.extended.*;
 
 class LoanVoidPaymentService extends ActiveListService
 {
+	@Env
+	def env;
+
 	@ActiveDB(value="void_payment")
 	def em;
 
 	@Service("CustomerService")
 	def customerSvc;
+
+	@Service("DateService")
+	def dateSvc;
 
 	@ProxyMethod
 	public def getNodes( params ) {
@@ -22,8 +28,9 @@ class LoanVoidPaymentService extends ActiveListService
 	public def getColumns( params ) {
 		return [
 			[name: 'state', caption: 'State'],
+			[name: 'txncode', caption: 'Txncode'],
 			[name: 'route.area', caption: 'Route Area'],
-			[name: 'appno', caption: 'App. No.'],
+			[name: 'loanapp.appno', caption: 'App. No.'],
 			[name: 'borrower.name', caption: 'Borrower'],
 			[name: 'collector.name', caption: 'Requested By'],
 			[name: 'reason', caption: 'Reason']
@@ -37,21 +44,30 @@ class LoanVoidPaymentService extends ActiveListService
 	@ProxyMethod
 	public def create( params ) {
 		params.state = 'PENDING';
+		params.dtfiled = dateSvc.serverDate;
+		params.filedby = (env.NAME? env.NAME : 'NOT IDENTIFIED');
 		em.create(params);
 		return open(params)
 	}
 
 	@ProxyMethod
 	public def approve( params ) {
-		em.update(params, "remarks");
+		params.dtapproved = dateSvc.serverDate;
+		params.approvedby = (env.NAME? env.NAME : 'NOT IDENTIFIED');
+		em.update(params, "approve");
 		em.changeStateApproved(params);
 		return params;
 	}
 
 	@ProxyMethod
 	public def open( params ) {
-		params = em.findVoidRequestById(params);
-		return params;
+		if (!params.txncode) throw new Exception("Please specify txncode.");
+
+		if (params.txncode == 'FIELD') {
+			return em.findFieldVoidRequestById(params);
+		} else if (params.txncode == 'ONLINE') {
+			return em.findOnlineVoidRequestById(params);
+		}
 	}
 
 	@ProxyMethod

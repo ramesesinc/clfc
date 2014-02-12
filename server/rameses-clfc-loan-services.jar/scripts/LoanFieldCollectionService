@@ -1,0 +1,151 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+
+class LoanFieldCollectionService
+{
+	@Env
+	def env;
+
+	@ActiveDB(value="field_collection")
+	def collection;
+
+	@ActiveDB(value="void_payment")
+	def void_payment;
+
+	@ActiveDB(value="loan_ledger_billing")
+	def ledger_billing;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@Service("UsergroupMemberLookupService")
+	def usergroupSvc;
+
+	@Service("LoanPaymentService")
+	def paymentSvc;
+
+	@Service("MobileTrackerService")
+	def trackerSvc;
+
+	@ProxyMethod
+	public def getCollectors() {
+		return usergroupSvc.getList([_tag: 'FIELD_COLLECTOR']);
+	}
+
+	@ProxyMethod
+	public def getFieldCollection( params ) {
+		if (!params.collectorid) throw new Exception("Please specify collectorid.");
+
+		def entity = collection.findFieldCollection(params);
+		if (entity) {
+			entity.routes = collection.getForPostingRoutesByFieldcollectionid([fielcollectionid: entity.objid]);
+			entity.cashbreakdown = getCashBreakdown(entity);
+		}
+
+		return entity;
+	}
+
+	@ProxyMethod
+	public def getLoans( params ) {
+		if (!params.fieldcollectionid) throw new Exception('Please specify fieldcollectionid.');
+		if (!params.routecode) throw new Exception('Please specify routecode.');
+
+		def list = collection.getLoansByParentidAndRoutecode([parentid: params.fieldcollectionid, routecode: params.routecode]);
+		list.each{cs->
+			cs.payments = collection.getPaymentsByParentid([parentid: cs.objid]);
+			cs.total = 0;
+			cs.payments.each{
+				it.voided = 0;
+				it.pending = 0;
+				cs.total += it.payamount;
+
+				def voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
+				if (voidrequest) {
+					it.voidid = voidrequest.objid;
+					if (voidrequest.state == 'APPROVED') {
+						it.voided = 1;
+						it.pending = 0;
+						cs.total -= it.payamount;
+					} else if (voidrequest.state == 'PENDING') {
+						it.pending = 1;
+					}
+				}
+			}
+		}
+
+		return list;
+	}
+
+	@ProxyMethod
+	public def saveCashBreakdown( params ) {
+		if (!params.cashbreakdown) throw new Exception("Please specify cashbreakdown.");
+
+		params.cashbreakdown.each{
+			it.objid = 'FCC'+new java.rmi.server.UID();
+			it.parentid = params.objid
+			collection.create(it, "denomination");
+		}
+
+		return getCashBreakdown(params);
+	}
+
+	@ProxyMethod
+	public def updateCashBreakdown( params ) {
+		if (!params.cashbreakdown) throw new Exception("Please specify cashbreakdown.");
+
+		params.cashbreakdown.each{
+			collection.update(it, "denomination");
+		}
+
+		return getCashBreakdown(params);
+	}
+
+	
+	private def getCashBreakdown( params ) {
+		return collection.getCashBreakdownByFieldcollectionid([parentid: params.objid]);//);
+	}
+
+	@ProxyMethod
+	public def post( params ) {
+		if (!params.routes) throw new Exception("Please specify routes.");
+
+		def pending = collection.findPendingVoidRequestByFieldcollectionid([fieldcollectionid: params.objid]);
+		if (pending) throw new Exception("There are still pending void payment request/s. Cannot post collection.");
+
+		def billing = ledger_billing.read([objid: params.objid]);
+		def collectionSheets;
+		params.routes.each{o->
+			collectionSheets = getLoans([routecode: o.route.code, fieldcollectionid: params.objid]);
+			collectionSheets.each{cs->
+				cs.payments.each{
+					if (it.voided == 0) {
+						it.appid = cs.loanapp.objid;
+						it.borrowername = cs.borrower.name;
+						it.entity = [
+							objid		: params.objid,
+							txndate		: params.billdate,
+							totalcount	: params.totalcount,
+							totalamount	: params.totalamount 
+						];
+						paymentSvc.postPayment(it);
+					}
+				}
+			}
+			billing.totalunposted -= 1;
+			billing.totalposted += 1;
+		}
+		ledger_billing.update(billing, "totalunposted");
+		ledger_billing.update(billing, "totalposted");
+		if (billing.totalfordownload == 0 && billing.totalunposted == 0) {
+			ledger_billing.changeStateCompleted(billing);
+		}
+
+		trackerSvc.stop([trackerid: params.trackerid, username: env.NAME? env.NAME : 'SYSTEM', lng: 0.00, lat: 0.00]);
+		collection.changeState([objid: params.objid, state: 'POSTED']);
+		params.dtposted = dateSvc.serverDate;
+		params.postedby = env.NAME? env.NAME : 'SYSTEM';
+		params.postedremarks = 'COLLECTION POSTED';
+		collection.update(params, "post");
+	}
+}

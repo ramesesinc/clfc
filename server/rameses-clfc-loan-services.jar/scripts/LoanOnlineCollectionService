@@ -1,0 +1,332 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+
+class LoanOnlineCollectionService
+{
+	@Env
+	def env;
+
+	@ActiveDB(value="online_collection")
+	def collection;
+
+	@ActiveDB(value="loan_ledger")
+	def ledger;
+
+	@ActiveDB(value="loan_exemption")
+	def exemption;
+
+	@ActiveDB(value="void_payment")
+	def void_payment;
+
+	@ActiveDB(value="loan_compromise")
+	def compromise;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@Service("SequenceService")
+	def seqSvc;
+
+	@Service("CalendarEventService")
+	def calendarSvc;
+
+	@Service("LoanPaymentService")
+	def paymentSvc;
+
+	@ProxyMethod
+	public def create( params ) {
+		if (!params.collector) throw new Exception("Please specify collector.");
+
+		def collector = collection.read(params.collector, "collector");
+		if (!collector) {
+			collection.create(params.collector, "collector");
+		}
+
+		def serverdate = dateSvc.serverDate;
+		def date = serverdate.toString().split(" ")[0];
+		def data = collection.findCollectionForPostingByTxndateAndCollector([txndate: date, collectorid: params.collector.objid]);
+		if (!data) {
+			data = [
+				objid		: params.parentid,
+				state		: 'FOR_POSTING',
+				txndate 	: date,
+				collector 	: params.collector,
+				dtcreated	: serverdate,
+				createdby	: params.collector.name
+			];
+			collection.create(data);
+		} else {
+			params.parentid = data.objid;
+		}
+		params.dtpaid = serverdate
+		collection.create(params, "detail");
+		def seqid = 'loanbill-'+params.route.code;
+		def currentSeries = seqSvc.getCurrentSeries(seqid);
+		seqSvc.updateNextSeries(seqid, (currentSeries+1));
+	}
+
+	@ProxyMethod
+	public def computeBilling( params ) {
+		def mLedger = ledger.findByAppId([appid: params.loanapp.objid]);
+		if (!mLedger) throw new Exception("Record does not exist or has already been deleted.");
+
+		def billing = [
+			ledgerid 		: mLedger.objid,
+			refno			: seqSvc.getCurrentSeries('loanbill-'+params.route.code).toString().padLeft(8, '0'),
+			interest 		: mLedger.interestamount,
+			dailydue 		: mLedger.dailydue,
+			paymentmethod 	: mLedger.paymentmethod,
+			term			: mLedger.term,
+			overduepenalty 	: mLedger.overduepenalty,
+			overpayment 	: mLedger.overpaymentamount,
+			dtmatured 		: mLedger.dtmatured,
+			others			: 0.00
+		]
+		def currentDate = dateSvc.serverDate;
+		def maturityDate = billing.dtmatured;
+		def amt = mLedger.dailydue;
+		if (mLedger.paymentmethod == 'over' && mLedger.overpaymentamount > 0) amt = mLedger.overpaymentamount; 
+		def days = dateSvc.getDaysDiff(mLedger.dtcurrentschedule, currentDate);
+		//println 'days = '+days;
+		billing.amountdue = (amt*days)+billing.others;
+		if (!mLedger.compromiseid) {					
+			if (currentDate > maturityDate) {
+				billing.penalty = days*mLedger.overduepenalty;
+				def amountdue = new BigDecimal((billing.penalty+(days * billing.interest)+mLedger.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
+				billing.amountdue = new BigDecimal(amountdue+'').setScale(2);
+				billing.days = days;
+			} else {
+				def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: mLedger.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
+				days -= noofholidays;
+				def cal = Calendar.getInstance();
+				cal.setTime(currentDate);
+				if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
+				days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: mLedger.dtcurrentschedule, enddate: currentDate, ledgerid: mLedger.objid]).size();
+				billing.penalty = mLedger.absentpenalty * (days > 0? days-1 : 0);
+				billing.amountdue += billing.penalty;
+			}
+			billing.days = days;
+			billing.balance = getBalance(billing, mLedger.balance);
+		} else {
+			def compromise = ledger_compromise.read([objid: mLedger.compromiseid]);
+			def type = compromise.compromisetype;
+			if (type == 'WAIVED_INTEREST') {
+				billing.penalty = days * mLedger.overduepenalty;
+				billing.balance = mLedger.balance + billing.penalty;
+			} else if (type == 'WAIVED_PENALTY') {
+				billing.balance = mLedger.balance + (days*mLedger.interest);
+			}
+
+		}
+		//println 'billing = '+billing;
+		return billing;
+	}
+/*	private void createBillingImpl( list, data, route ) {
+		def days = 0;
+
+		list.each{
+			def currentDate = dateSvc.parseDate(data.billdate, null).date;
+			def maturityDate = dateSvc.parseDate(it.dtmatured, null).date;
+			if (currentDate >  maturityDate && it.overduepenalty == 0.00) {
+				def p = product_type.read([name: it.producttypeid])
+				it.overduepenalty = ledgerSvc.computeOverduePenalty([balance: it.balance, pastduerate: (p.pastduerate? p.pastduerate : 0.00)]);
+				loan_ledger.update(it, 'overduepenalty');
+			}
+			def detail = [
+				objid: 'LLBD'+new UID(),
+				parentid: data.objid,
+				ledgerid: it.objid,
+				route_code: route? route.code : it.route.code,
+				acctid: it.acctid,
+				loanappid: it.loanappid,
+				acctname: it.acctname,
+				loanamount: it.loanamount,
+				loandate: it.loandate,
+				term: it.term,
+				appno: it.appno,
+				overpaymentamount: it.overpaymentamount,
+				txndate: currentDate,
+				dailydue: it.dailydue,
+				dtmatured: it.dtmatured,
+				producttypeid: it.producttypeid,
+				paymentmethod: it.paymentmethod,
+				interestamount: it.interestamount,
+				homeaddress: it.homeaddress,
+				collectionaddress: it.collectionaddress? it.collectionaddress : '',
+				interest: 0.00,
+				others: 0.00,
+				overduepenalty: it.overduepenalty
+			];
+			detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+detail.route_code, 8);
+			
+			def amt = it.dailydue;
+			if (it.paymentmethod == 'over' && it.overpaymentamount > 0) amt = it.overpaymentamount; 
+			days = dateSvc.getDaysDiff(it.dtcurrentschedule, currentDate);
+			detail.amountdue = (amt*days)+detail.others;
+			if (!it.compromiseid) {					
+				if (currentDate > maturityDate) {
+					detail.penalty = days*it.overduepenalty;
+					def amountdue = new BigDecimal((detail.penalty+(days * detail.interestamount)+it.balance)+'').setScale(0, BigDecimal.ROUND_CEILING);
+					detail.amountdue = new BigDecimal(amountdue+'').setScale(2);
+					detail.days = days;
+				} else {
+					def noofholidays = calendarSvc.getNoOfHolidays([lastscheduledate: it.dtcurrentschedule, item:[trialAndError: 0, totalDays: days]])
+					days -= noofholidays;
+					def cal = Calendar.getInstance();
+					cal.setTime(currentDate);
+					if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) days--;
+					days -= exemption.getExemptionsByStartdateAndEnddateAndLedgerid([startdate: it.dtcurrentschedule, enddate: currentDate, ledgerid: it.objid]).size();
+					detail.penalty = it.absentpenalty * (days > 0? days-1 : 0);
+					detail.amountdue += detail.penalty;
+				}
+				detail.days = days;
+				detail.balance = getBalance(detail, it.balance);
+			} else {
+				def compromise = ledger_compromise.read([objid: it.compromiseid]);
+				def type = compromise.compromisetype;
+				if (type == 'WAIVED_INTEREST') {
+					detail.penalty = days * it.overduepenalty;
+					detail.balance = it.balance + detail.penalty;
+				} else if (type == 'WAIVED_PENALTY') {
+					detail.balance = it.balance + (days*it.interestamount);
+				}
+
+			}
+			em.create(detail, "detail");
+		}
+	}*/
+
+	private def getBalance( params, balance ) {
+		def bal = balance? balance : 0.00;
+		if (balance == params.loanamount) {
+			def producttype = product_type.read([name: params.producttypeid]);
+			bal = params.loanamount*(producttype.term/100);
+			params.isfirstbill = 1;
+		} else {
+			def ledgeritem = ledger.findLastLedgerItemByParentId([parentid: params.ledgerid]);
+			if (params.overduepenalty > 0) {
+				bal += params.days*params.interest;
+			} else {
+				def avgamount = params.dailydue;
+				if (params.paymentmethod == 'over') avgamount = em.findAvgOverpaymentAmount([parentid: params.ledgerid]).groupbaseamount;
+				BigDecimal b = new BigDecimal(avgamount+'').setScale(2);
+				b = b.subtract(new BigDecimal(params.interest+'').setScale(2));
+				BigDecimal bd = new BigDecimal(balance+'').setScale(2)
+				bd = bd.divide(b, BigDecimal.ROUND_HALF_UP);
+				bal += (bd.setScale(0, BigDecimal.ROUND_HALF_UP)*params.interest);
+			}
+			
+			if (ledgeritem.interestbal > 0) {
+				params.amountdue += ledgeritem.interestbal;
+				bal += ledgeritem.interestbal;
+				params.interest += ledgeritem.interestbal;
+			}
+			if (ledgeritem.penaltybal > 0) {
+				params.amountdue += ledgeritem.penaltybal;
+				bal += ledgeritem.penaltybal;
+				params.penalty += ledgeritem.penaltybal;
+			}
+			params.isfirstbill = 0;
+		}
+		if (params.penalty > 0) bal += params.penalty;
+		bal = new BigDecimal(bal+'').setScale(0, BigDecimal.ROUND_CEILING);
+		bal = new BigDecimal(bal+'').setScale(2);
+		return bal;
+	}
+
+	@ProxyMethod
+	public def getCollectionForPosting( params ) {
+		if (!params.txndate) throw new Exception("Please specify txndate.");
+		if (!params.collector) throw new Exception("Please specify collector.");
+
+		def data = collection.findCollectionForPostingByTxndateAndCollector([txndate: params.txndate, collectorid: params.collector.objid]);
+		if (!data) throw new Exception('No collection for posting.');
+
+		data.payments = collection.getPayments([parentid: data.objid]);
+		data.payments.each{o->
+			o.voided = 0;
+			o.pending = 0;
+			def voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: o.objid]);
+			if (voidrequest) {
+				o.voidid = voidrequest.objid;
+				if (voidrequest.state == 'APPROVED') {
+					o.voided = 1;
+				} else if (voidrequest.state == 'PENDING') {
+					o.pending = 1;
+				}
+			}
+		}
+		data.cashbreakdown = getCashBreakdown(data);
+		return data;
+	}
+
+	@ProxyMethod
+	public def getCollectors() {
+		def list = collection.getCollectors();
+
+		list.each{o->
+			o.collectionDates = collection.getCollectionDateByCollector([collectorid: o.objid]);
+			o.collectionDates.each{
+				it.formatteddate = new java.text.SimpleDateFormat("MMM dd, yyyy").format(it.txndate);
+			}
+		}
+
+		return list;
+	}
+
+	@ProxyMethod
+	public def saveCashBreakdown( params ) {
+		if (!params.cashbreakdown) throw new Exception("Please specify cashbreakdown.");
+
+		params.cashbreakdown.each{
+			it.objid = 'OCD'+new java.rmi.server.UID();
+			it.parentid = params.objid;
+			collection.create(it, "denomination");
+		}
+		return getCashBreakdown(params);
+	}
+
+	@ProxyMethod
+	public def updateCashBreakdown( params ) {
+		if (!params.cashbreakdown) throw new Exception("Please specify cashbreakdown.");
+
+		params.cashbreakdown.each{
+			collection.update(it, "denomination");
+		}
+		return getCashBreakdown(params);
+	}
+
+	private def getCashBreakdown( params ) {
+		return collection.getCashBreakdown([parentid: params.objid]);
+	}
+
+	@ProxyMethod
+	public def post( params ) {
+		def pending = params.payment.find{ it.pending == 1};
+		if (pending) throw new Exception("There are still pending void payment request/s. Cannot post collection.");
+
+		def payments = params.payments;
+		params.remove('payments');
+		params.remove('cashbreakdown');
+		params.totalcount = payments.size();
+		params.totalamount = payments.amount.sum();
+
+		payments.each{
+			if (it.voided == 0) {
+				it.appid = it.loanapp.objid;
+				it.borrowername = it.borrower.name;
+				it.paytype = it.type;
+				it.payamount = it.amount;
+				it.entity = params;
+				paymentSvc.postPayment(it);
+			}
+		}
+
+		collection.changeState([objid: params.objid, state: 'POSTED']);
+		params.dtposted = dateSvc.serverDate;
+		params.postedby = env.NAME? env.NAME : 'SYSTEM';
+		collection.update(params, "post");
+		collection.delete(params.collector, "collector");
+	}
+}

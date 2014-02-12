@@ -41,6 +41,8 @@ class LoanLedgerBillingService extends ActiveCrudService
 			[caption: 'DRAFT', state: 'DRAFT'], 
 			[caption: 'CANCELLED', state: 'CANCELLED'], 
 			[caption: 'COMPLETED', state: 'COMPLETED'],
+			[caption: 'UNREMITTED', state: 'UNREMITTED'],
+			[caption: 'UNPOSTED', state: 'UNPOSTED'],
 			[caption: 'UPLOADED', state: 'UPLOADED'],
 			[caption: 'VOIDED', state: 'VOIDED']
 		];
@@ -49,11 +51,11 @@ class LoanLedgerBillingService extends ActiveCrudService
 	@ProxyMethod
 	public def getColumns( params ) {
 		return [
-			[name:'collector.username', caption:'Collector'],
+			[name:'collector.name', caption:'Collector'],
 			[name:'billdate', caption:'Billing Date'],
 			[name:'createdby', caption:'Created By'],
 			[name:'dtmodified', caption:'Date Modified'],
-			[name:'subcollector.username', caption:'Sub Collector']
+			[name:'subcollector.name', caption:'Sub Collector']
 		]
 	}
 
@@ -71,11 +73,25 @@ class LoanLedgerBillingService extends ActiveCrudService
 		def o = em.findBillingByBilldate([collectorid: data.collector.objid, billdate: data.billdate]);
 		if (o) throw new Exception('Billing '+data.billdate+' for collector '+data.collector.name+' has already been created.');
 
-		data.createdby = env.USER;
+		data.createdby = env.NAME? env.NAME : 'NOT IDENTIFIED';
 		data.dtcreated = dateSvc.serverDate;
 		data.dtmodified = data.dtcreated;
-		data.collector.username = data.collector.name;
+		data.modifiedby = data.createdby;
 		data.branchid = env.ORGID;
+		setFlags(data);
+	}
+
+	void beforeUpdate( data ) {
+		data.dtmodified = dateSvc.serverDate;
+		data.modifiedby = env.NAME? env.NAME : 'NOT IDENTIFIED';
+		setFlags(data);
+	}
+
+	private void setFlags( data ) {
+		data.totalfordownload = data.routes.size();
+		data.totaldownloaded = 0;
+		data.totalunposted = 0;
+		data.totalposted = 0;
 	}
 
 	void afterCreate( data ) {
@@ -117,29 +133,29 @@ class LoanLedgerBillingService extends ActiveCrudService
 				loan_ledger.update(it, 'overduepenalty');
 			}
 			def detail = [
-				objid: 'LLBD'+new UID(),
-				parentid: data.objid,
-				ledgerid: it.objid,
-				route_code: route? route.code : it.route.code,
-				acctid: it.acctid,
-				loanappid: it.loanappid,
-				acctname: it.acctname,
-				loanamount: it.loanamount,
-				loandate: it.loandate,
-				term: it.term,
-				appno: it.appno,
-				overpaymentamount: it.overpaymentamount,
-				txndate: currentDate,
-				dailydue: it.dailydue,
-				dtmatured: it.dtmatured,
-				producttypeid: it.producttypeid,
-				paymentmethod: it.paymentmethod,
-				interestamount: it.interestamount,
-				homeaddress: it.homeaddress,
-				collectionaddress: it.collectionaddress? it.collectionaddress : '',
-				interest: 0.00,
-				others: 0.00,
-				overduepenalty: it.overduepenalty
+				objid				: 'LLBD'+new UID(),
+				parentid 			: data.objid,
+				ledgerid 			: it.objid,
+				route_code 			: route? route.code : it.route.code,
+				acctid 				: it.acctid,
+				loanappid 			: it.loanappid,
+				acctname 			: it.acctname,
+				loanamount 			: it.loanamount,
+				loandate 			: it.loandate,
+				term 				: it.term,
+				appno 				: it.appno,
+				overpaymentamount 	: it.overpaymentamount,
+				txndate 			: currentDate,
+				dailydue 			: it.dailydue,
+				dtmatured 			: it.dtmatured,
+				producttypeid 		: it.producttypeid,
+				paymentmethod 		: it.paymentmethod,
+				interestamount 		: it.interestamount,
+				homeaddress 		: it.homeaddress,
+				collectionaddress 	: it.collectionaddress? it.collectionaddress : '',
+				interest 			: 0.00,
+				others 				: 0.00,
+				overduepenalty 		: it.overduepenalty
 			];
 			detail.refno = 'B'+seqSvc.getNextFormattedSeriesA('loanbill-'+detail.route_code, 8);
 			
@@ -220,21 +236,37 @@ class LoanLedgerBillingService extends ActiveCrudService
 
 	void updateRoute( data ) {
 		em.removeRouteByBillingid([billingid: data.objid]);
+		def params;
 		data.routes.each{o->
-			em.create([billingid: data.objid, routecode: o.code], 'billing_route');
+			params = [
+				billingid 	: data.objid,
+				routecode 	: o.code,
+				downloaded 	: 0,
+				uploaded 	: 0
+			];
+			em.create(params, 'billing_route');
 		}
 	}
 
 	void afterOpen( data ) {
-		data.collector.name = data.collector.username;
 		data.routes = em.getRoutesByBillingid([billingid: data.objid]);		
 	}
 
 	@ProxyMethod
 	public def resetBilling( params ) {
 		params.dtmodified = dateSvc.serverDate;
-		em.update(params, "datemodified");
+		params.modifiedby = env.NAME? env.NAME : 'NOT IDENTIFIED';
+		em.update(params, "modify");
+		def map = [
+			objid			: params.objid,
+			totalfordownload: params.routes.size(),
+			totaldownloaded	: 0,
+			totalunposted	: 0,
+			totalposted 	: 0 
+		]
+		em.update(map);
+		updateRoute(params);
 		updateBillingDetail(params);
-		em.removeBillingLockByBillingid([billingid: params.objid]);
+		//em.removeBillingLockByBillingid([billingid: params.objid]);
 	}
 }
