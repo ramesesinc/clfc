@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/collection" caption="New Sub Collection Sheet" action="create" role="ACCT_OFFICER" index="5"/>
+        <invoker folderid="/menu/txn/collection" caption="New Sub Collection Sheet" action="create" role="ACCT_OFFICER" index="7"/>
         <invoker type="quick_launcher" code="NSCS" caption="New Sub Collection Sheet" action="create" role="ACCT_OFFICER"/>
         
         <invoker type="ledgersubbilling:open" action="open" caption="Sub Collection Sheet" target="popup" resizable="false"/>

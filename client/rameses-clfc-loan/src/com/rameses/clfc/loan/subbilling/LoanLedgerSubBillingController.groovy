@@ -18,6 +18,9 @@ class LoanLedgerSubBillingController extends CRUDController
         entity.collector = o.collector;
         entity.billdate = o.billdate
         entity.routes = o.routes
+        entity.specialcollectionid = null;
+        if (o.specialcollectionid) entity.specialcollectionid = o.specialcollectionid;
+        println 'entity = '+o;
         binding.refresh('entity.collector|entity.billdate');
         listHandler.reload();
     }

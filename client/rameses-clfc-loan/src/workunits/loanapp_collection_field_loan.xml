@@ -1,0 +1,98 @@
+<workunit>
+    <invokers>
+        <invoker type="fcloan:open" action="open" target="window"/>
+        
+        <invoker type="formActions" action="close" tooltip="Close" mnemonic="c" immediate="true"/>
+    </invokers>
+    
+    <code>
+        <![CDATA[
+            import com.rameses.rcp.common.*;
+            import com.rameses.rcp.annotations.*;
+            import com.rameses.rcp.framework.*;
+            import com.rameses.osiris2.client.*;
+            import com.rameses.osiris2.common.*;
+            
+            class FieldCollectionLoanController
+            {
+                @Binding
+                def binding;
+            
+                @Service("LoanFieldCollectionService")
+                def service;
+                
+                def fieldcollectionid;
+                def route;
+                def collectionSheets;
+                def selectedCollectionSheet = [:];
+                def selectedPayment;
+                
+                void open() {
+                    collectionSheets = service.getLoans([fieldcollectionid: fieldcollectionid, routecode: route.code]);
+                    collectionSheetsHandler.reload();
+                }
+                
+                def close() {
+                    return '_close';
+                }
+                
+                def collectionSheetsHandler = [
+                    fetchList: {o->
+                        if (!collectionSheets) collectionSheets = [];
+                        return collectionSheets;
+                    }
+                ] as BasicListModel;
+                
+                def paymentsHandler = [
+                    fetchList: {
+                        if (!selectedCollectionSheet.payments) selectedCollectionSheet.payments = [];
+                        return selectedCollectionSheet.payments;
+                    },
+                    onOpenItem: {itm, colName->
+                        def params = [
+                            txncode             : 'FIELD',
+                            afterSaveHandler    : {o->
+                                selectedPayment.voidid = o.objid;
+                                selectedPayment.pending = 1;
+                                paymentsHandler.reload();
+                            },
+                            afterApproveHandler : {o->
+                                println 'calling after approve handler';
+                                selectedPayment.voided = 1;
+                                selectedPayment.pending = 0;
+                                selectedCollectionSheet.total = 0;
+                                def payments = selectedCollectionSheet.payments.findAll{ it.voided == 0 };
+                                if (payments.size() > 0) selectedCollectionSheet.total = payments.payamount.sum();
+                                collectionSheetsHandler.reload();
+                                paymentsHandler.reload();
+                                binding.refresh('totalcollection');
+                            }
+                        ]
+                        if (itm.voidid) {
+                            params.payment = itm;
+                            return InvokerUtil.lookupOpener('voidrequest:open', params);
+                        } else {
+                            params.route = route;
+                            params.collectionsheet = selectedCollectionSheet;
+                            params.payment = itm;
+                            params.collector = [
+                                objid   : ClientContext.currentContext.headers.USERID,
+                                name    : ClientContext.currentContext.headers.NAME
+                            ];
+                            return InvokerUtil.lookupOpener('voidrequest:create', params);
+                        }
+                    }
+                ] as BasicListModel;
+                
+                public void setSelectedCollectionSheet( selectedCollectionSheet ) {
+                    this.selectedCollectionSheet = selectedCollectionSheet;
+                    paymentsHandler.reload();
+                }
+            }
+        ]]>
+    </code>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.fieldcollection.FieldCollectionLoanPage"/>
+    </pages>
+</workunit>

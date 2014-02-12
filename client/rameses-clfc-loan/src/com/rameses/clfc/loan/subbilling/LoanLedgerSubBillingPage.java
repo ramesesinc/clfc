@@ -61,7 +61,7 @@ public class LoanLedgerSubBillingPage extends javax.swing.JPanel {
         xFormPanel2.setPadding(new java.awt.Insets(0, 0, 0, 0));
         xLookupField1.setCaption("Collector");
         xLookupField1.setCaptionWidth(100);
-        xLookupField1.setExpression("#{item.username}");
+        xLookupField1.setExpression("#{item.name}");
         xLookupField1.setHandler("collectorLookupHandler");
         xLookupField1.setName("entity.collector");
         xLookupField1.setPreferredSize(new java.awt.Dimension(230, 20));

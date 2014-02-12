@@ -14,26 +14,27 @@ class SpecialCollectionController extends CRUDController
     boolean allowCreate = false;
     boolean allowDelete = false;
     boolean allowApprove = false;
-    boolean allowEdit = false;
 
     def selectedLedger;
     def listModelHandler;
-        Map createEntity() {
-        return [ 
-            objid: 'LSC'+new UID(),
-            _specialcollectionrequest: listModelHandler?.selectedEntity,
-            ledgers: [],
-            routes: []
+    Map createEntity() {
+        def map = [
+            ledgers : [],
+            routes  : []
         ];
+        if (listModelHandler) {
+            map.putAll(listModelHandler.selectedEntity);
+        }
+        return map;
     }
 
-    void afterCreate( data ) {
+    /*void afterCreate( data ) {
         if (data._specialcollectionrequest) {
             data.collector = data._specialcollectionrequest.collector;
             data.collector.username = data.collector.name;
             data.remarks = data._specialcollectionrequest.remarks;
         }
-    }
+    }*/
 
     def listHandler = [
         fetchList: {
@@ -55,12 +56,16 @@ class SpecialCollectionController extends CRUDController
             entity.ledgers.add(o);
             listHandler.reload();
         }
-        return InvokerUtil.lookupOpener('specialcollectionledger:lookup', [onselect: handler, collectorid: entity.collector.objid, billdate: entity._specialcollectionrequest.dtrequested]);
+        return InvokerUtil.lookupOpener('specialcollectionledger:lookup', [onselect: handler, collectorid: entity.collector.objid, billdate: entity.dtrequested]);
     }
 
     def removeLedger() {
         if (MsgBox.confirm("You are about to remove this ledger. Continue?")) {
+            def route = selectedLedger.route;
             entity.ledgers.remove(selectedLedger);
+            if (!entity.ledgers.find{ it.route.code == route.code }) {
+                entity.routes.remove(route);
+            }
             listHandler.reload();
         }
     }

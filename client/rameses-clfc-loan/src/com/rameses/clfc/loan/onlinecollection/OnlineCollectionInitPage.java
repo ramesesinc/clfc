@@ -4,7 +4,7 @@
  * Created on September 26, 2013, 2:46 PM
  */
 
-package com.rameses.clfc.loan.payment;
+package com.rameses.clfc.loan.onlinecollection;
 
 import com.rameses.osiris2.themes.FormPage;
 import com.rameses.rcp.ui.annotations.Template;
@@ -14,10 +14,10 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  louie
  */
 @Template(FormPage.class)
-public class PostPaymentInitPage extends javax.swing.JPanel {
+public class OnlineCollectionInitPage extends javax.swing.JPanel {
     
     /** Creates new form PostPaymentInitPage */
-    public PostPaymentInitPage() {
+    public OnlineCollectionInitPage() {
         initComponents();
     }
     
@@ -30,19 +30,35 @@ public class PostPaymentInitPage extends javax.swing.JPanel {
     private void initComponents() {
         xFormPanel1 = new com.rameses.rcp.control.XFormPanel();
         xComboBox1 = new com.rameses.rcp.control.XComboBox();
+        xComboBox2 = new com.rameses.rcp.control.XComboBox();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
-        xTitledBorder1.setTitle(" Select a route ");
+        xTitledBorder1.setTitle(" Select a collector ");
         xFormPanel1.setBorder(xTitledBorder1);
         xFormPanel1.setCaptionBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         xFormPanel1.setPadding(new java.awt.Insets(10, 15, 10, 10));
-        xComboBox1.setCaption("Route");
-        xComboBox1.setExpression("#{item.description} - #{item.area}");
-        xComboBox1.setItems("routeList");
-        xComboBox1.setName("route");
+        xComboBox1.setCaption("Collector");
+        xComboBox1.setCaptionWidth(100);
+        xComboBox1.setExpression("#{item.name}");
+        xComboBox1.setImmediate(true);
+        xComboBox1.setItems("collectorList");
+        xComboBox1.setName("collector");
         xComboBox1.setPreferredSize(new java.awt.Dimension(300, 22));
         xComboBox1.setRequired(true);
         xFormPanel1.add(xComboBox1);
+
+        xComboBox2.setCaption("Collection Date");
+        xComboBox2.setCaptionWidth(100);
+        xComboBox2.setDepends(new String[] {"collector"});
+        xComboBox2.setDynamic(true);
+        xComboBox2.setExpression("#{item.formatteddate}");
+        xComboBox2.setImmediate(true);
+        xComboBox2.setItemKey("txndate");
+        xComboBox2.setItems("collectionDateList");
+        xComboBox2.setName("txndate");
+        xComboBox2.setPreferredSize(new java.awt.Dimension(120, 20));
+        xComboBox2.setRequired(true);
+        xFormPanel1.add(xComboBox2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -51,20 +67,21 @@ public class PostPaymentInitPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(xFormPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.rameses.rcp.control.XComboBox xComboBox1;
+    private com.rameses.rcp.control.XComboBox xComboBox2;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     // End of variables declaration//GEN-END:variables
     

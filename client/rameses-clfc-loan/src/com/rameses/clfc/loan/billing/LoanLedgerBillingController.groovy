@@ -39,7 +39,7 @@ class LoanLedgerBillingController extends CRUDController
         fetchList: { return entity.routes; }
     ] as BasicListModel;
     
-    void beforeSave(data) {
+    void beforeSave( data ) {
         if (!data.routes) throw new Exception('Please specify route(s) for this collector.');
     }
     

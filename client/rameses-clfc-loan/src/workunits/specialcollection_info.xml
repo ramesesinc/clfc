@@ -2,6 +2,8 @@
     <invokers>
         <invoker type="specialcollection:create" action="init" caption="Special Collection" target="window"/>
         <invoker type="specialcollection:open" action="open" caption="Special Collection" target="window"/>
+        
+        <invoker type="formActions" action="edit" caption="Edit" visibleWhen="#{mode == 'read' &amp;&amp; entity.state == 'FOR_DOWNLOAD'}"/>
     </invokers>
     
     <code class="com.rameses.clfc.ledger.specialcollection.SpecialCollectionController"/>

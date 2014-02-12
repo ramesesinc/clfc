@@ -15,6 +15,12 @@
             String defaultFileType = "voidrequest";
             
             boolean allowCreate = false;
+            
+            Map createOpenerParams() {
+                Map map = super.createOpenerParams();
+                map.txncode = selectedEntity.txncode;
+                return map;
+            }
         }
     </code>
 </workunit>

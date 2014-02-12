@@ -1,0 +1,29 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/txn/collection" action="init" caption="Online Collection" role="CASHIER" index="4"/>
+        <invoker type="quick_launcher" code="OCOL" action="init" caption="Online Collection" role="CASHIER"/> 
+        
+        <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W"
+            visibleWhen="#{mode == 'init'}" immediate="true"/>
+        <invoker type="formActions" action="next" caption="Next" mnemonic="n" shortcut="ctrl N"
+            visibleWhen="mode == 'init'"/>
+            
+        <invoker type="formActions" action="back" caption="Back" mnemonic="b" shortcut="ctrl B"
+            visibleWhen="#{mode != 'init' &amp;&amp; mode != 'edit'}"/>
+        <invoker type="formActions" action="cancel" caption="Cancel" mnemonic="c" shortcut="ctrl C"
+            visibleWhen="#{mode == 'edit'}"/>
+        <invoker type="formActions" action="save" caption="Save" mnemonic="s" shortcut="ctrl S"
+            visibleWhen="#{isAllowSave}"/>
+        <invoker type="formActions" action="edit" caption="Edit" mnemonic="e" shortcut="ctrl E"
+            visibleWhen="#{isAllowEdit}"/>
+        <invoker type="formActions" action="post" caption="Post" mnemonic="p" shortcut="ctrl P"
+            visibleWhen="#{isAllowPost}"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.onlinecollection.OnlineCollectionController" />
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.onlinecollection.OnlineCollectionInitPage"/>
+        <page template="com.rameses.clfc.loan.onlinecollection.OnlineCollectionPage" name="main"/>
+    </pages>
+</workunit>

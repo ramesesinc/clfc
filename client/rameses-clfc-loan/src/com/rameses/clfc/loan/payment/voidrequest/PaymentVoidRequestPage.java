@@ -51,7 +51,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
         xLineBorder1.setLineColor(new java.awt.Color(180, 180, 180));
         xLabel2.setBorder(xLineBorder1);
         xLabel2.setCaption("App. No.");
-        xLabel2.setExpression("#{entity.appno}");
+        xLabel2.setExpression("#{entity.loanapp.appno}");
         xLabel2.setPreferredSize(new java.awt.Dimension(120, 16));
         xFormPanel1.add(xLabel2);
 
@@ -86,7 +86,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
         xLineBorder5.setLineColor(new java.awt.Color(180, 180, 180));
         xLabel1.setBorder(xLineBorder5);
         xLabel1.setCaption("Requested By");
-        xLabel1.setExpression("#{entity.requestedby}");
+        xLabel1.setExpression("#{entity.collector.name}");
         xLabel1.setPreferredSize(new java.awt.Dimension(0, 16));
         xFormPanel2.add(xLabel1);
 
@@ -105,7 +105,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
 
         jScrollPane2.setPreferredSize(new java.awt.Dimension(0, 60));
         xTextArea2.setCaption("Remarks");
-        xTextArea2.setName("entity.remarks");
+        xTextArea2.setName("entity.approvedremarks");
         xTextArea2.setRequired(true);
         jScrollPane2.setViewportView(xTextArea2);
 

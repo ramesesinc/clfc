@@ -17,12 +17,6 @@
         
         class PaymentVoidRequestController extends CRUDController
         {
-            @Caller
-            def caller;
-        
-            @Binding
-            def binding;
-        
             @Service("LoanVoidPaymentService")
             def svc;
             
@@ -33,58 +27,56 @@
             boolean allowEdit = false;
             boolean allowDelete = false;
               
-            def route
-            def collectionsheet
+            def route;
+            def collectionsheet;
             def payment;
-            def requestedby;
+            def collector;
+            def txncode;
+            def afterApproveHandler;
+            def afterSaveHandler;
             
             Map createEntity() {
                 return [
-                    objid: 'PVR'+new UID(),
-                    state: 'DRAFT',
-                    route: route,
-                    paymentid: payment.objid,
-                    payamount: payment.payamount,
-                    loanappid: collectionsheet.appid,
-                    borrower: svc.openCustomer(collectionsheet.borrower),
-                    appno: collectionsheet.appno,
-                    requestedby: requestedby
+                    objid       : 'PVR'+new UID(),
+                    state       : 'DRAFT',
+                    route       : route,
+                    paymentid   : payment.objid,
+                    payamount   : payment.payamount,
+                    loanapp     : collectionsheet.loanapp,
+                    borrower    : svc.openCustomer(collectionsheet.borrower),
+                    collector   : collector,
+                    txncode     : txncode
                 ];
             }
             
             void beforeSave( Object data ) { 
                 data.routecode = data.route.code;
-                data.collectorid = ClientContext.currentContext.headers.USERID;
             }
             
             void afterSave( Object data ) {
-                if (payment) {
-                    payment.voidid = data.objid;
-                }
+                println 'data after save = '+data;
+                println 'afterSaveHandler = '+afterSaveHandler;
+                if (afterSaveHandler) afterSaveHandler(data);
             }
             
             void beforeOpen( Object data ) {
-                if (payment) data.objid = payment.voidid;
+                if (payment) {
+                    data.objid = payment.voidid;
+                }
+                data.txncode = txncode;
+                println 'data = '+data;
             }
             
             def approve() {
                 super.approve();
-                if (entity.state == 'APPROVED' &amp;&amp; payment) {
-                    payment.isvoided = 1;
-                    if (collectionsheet) {
-                        collectionsheet.total = 0;
-                        def payments = collectionsheet.payments.findAll{ it.objid != payment.objid};
-                        payments.each{
-                            if (it.isvoided == 0) collectionsheet.total += it.payamount;
-                        }
-                        caller.binding.refresh('totalamount');
-                    }
+                if (entity.state == 'APPROVED') {
+                    if (afterApproveHandler) afterApproveHandler(entity);
                 }
             }
             
             boolean getIsAllowApprove() {
-                if (ClientContext.currentContext.headers.ROLES.containsKey("LOAN.APPROVER")) return true;
-                return false;
+                if (!ClientContext.currentContext.headers.ROLES.containsKey("LOAN.APPROVER")) return false;
+                return true;
             }
          }
     </code>

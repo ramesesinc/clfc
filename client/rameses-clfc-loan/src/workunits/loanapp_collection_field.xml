@@ -1,0 +1,34 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/menu/txn/collection" action="init" caption="Field Collection" role="FIELD_COLLECTOR,CASHIER" index="5"/>
+        <invoker type="quick_launcher" code="FCOL" action="init" caption="Field Collection" role="FIELD_COLLECTOR,CASHIER"/> 
+        
+        <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
+            shortcut="ctrl W" visibleWhen="#{mode == 'init'}" immediate="true"/>
+            
+        <invoker type="formActions" action="next" caption="Next" mnemonic="n" 
+            shortcut="ctrl N" visibleWhen="#{mode == 'init'}"/>
+            
+        <invoker type="formActions" action="back" caption="Back" mnemonic="b" 
+            visibleWhen="#{mode != 'init' &amp;&amp; mode != 'edit'}" shortcut="ctrl B"/>
+        <invoker type="formActions" action="cancel" caption="Cancel" role="CASHIER" 
+            visibleWhen="#{mode == 'edit'}" mnemonic="c" shortcut="ctrl C"/>
+        <invoker type="formActions" action="edit" caption="Edit" role="CASHIER" 
+            visibleWhen="#{isAllowEdit}" mnemonic="e" shortcut="ctrl E"/>
+        <invoker type="formActions" action="save" caption="Save" role="CASHIER"
+            visibleWhen="#{isAllowSave}" mnemonic="s" shortcut="ctrl S"/>
+       
+        <invoker type="formActions" action="post" caption="Post" role="CASHIER" 
+            visibleWhen="#{isAllowPost}" mnemonic="p" shortcut="ctrl P"/>
+        <!--
+        <invoker type="formActions" action="viewExemptions" caption="Exemptions" visibleWhen="#{mode != 'init'}"/>
+        -->
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.fieldcollection.FieldCollectionController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.fieldcollection.FieldCollectionInitPage"/>
+        <page template="com.rameses.clfc.loan.fieldcollection.FieldCollectionPage" name="main"/>
+    </pages>
+</workunit>

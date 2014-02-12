@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/collection" caption="New Collection Sheet" action="create" role="ACCT_OFFICER" index="4" separator="before"/>
+        <invoker folderid="/menu/txn/collection" caption="New Collection Sheet" action="create" role="ACCT_OFFICER" index="6" separator="before"/>
         <invoker type="quick_launcher" code="NCS" caption="New Collection Sheet" action="create" role="ACCT_OFFICER"/> 
         
         <invoker type="ledgerbilling:open" action="open" caption="Collection Sheet" target="popup" resizable="false"/>  
