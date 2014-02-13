@@ -3,6 +3,7 @@ package com.rameses.clfc.android.main;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,10 @@ import com.rameses.util.MapProxy;
 
 public class RouteAdapter extends BaseAdapter 
 {
-	private RouteListActivity activity;
+	private Activity activity;
 	private List<Map> list;
 	
-	public RouteAdapter(RouteListActivity activity, List<Map> list) {
+	public RouteAdapter(Activity activity, List<Map> list) {
 		this.activity = activity;
 		this.list = list;
 	}

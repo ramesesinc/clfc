@@ -39,7 +39,7 @@ public class RegistrationOptionActivity extends SettingsMenuActivity
 	
 	public void onStartProcess() { 
 		super.onStartProcess();
-		
+		System.out.println("app settings -> "+getApp().getAppSettings().getAll());
 		new UIAction(this, R.id.btn_next) {
 			protected void onClick() {
 				try {

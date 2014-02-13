@@ -8,10 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
+import com.rameses.client.android.UIDialog;
 
 public class RouteListActivity extends ControlActivity 
 {
@@ -31,6 +35,36 @@ public class RouteListActivity extends ControlActivity
 		Bundle bundle = intent.getExtras();
 		routes = (List<Map>) bundle.getSerializable("routes");
 		progressDialog = new ProgressDialog(this);
+	}
+	
+	protected void onStartProcess() {
+		super.onStartProcess();
+		
+		System.out.println("routes -> "+routes);
+		ListView lv_route = (ListView) findViewById(R.id.lv_route);
+		lv_route.setAdapter(new RouteAdapter(this, routes));
+		lv_route.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				//RouteParcelable r = (RouteParcelable) parent.getItemAtPosition(position);
+				//getCollectionsheets(r);
+				//Map route = (Map) parent.getItemAtPosition(position);
+				//System.out.println("route -> "+route);
+				//new DownloadBillingController(this, progressDialog, route).execute();
+				try { 
+					selectedItem(parent, view, position, id); 
+				} catch (Throwable t) {
+					UIDialog.showMessage(t, RouteListActivity.this); 
+				}
+			}
+		});
+	}
+	
+	private void selectedItem(AdapterView<?> parent, View view, int position, long id) throws Exception {
+		Map route = (Map) parent.getItemAtPosition(position);
+		System.out.println("route -> "+route);
+		new DownloadBillingController(this, progressDialog, route).execute();
 	}
 	
 }

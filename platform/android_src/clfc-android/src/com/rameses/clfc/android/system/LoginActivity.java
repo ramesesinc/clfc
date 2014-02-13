@@ -55,8 +55,8 @@ public class LoginActivity extends SettingsMenuActivity
 	protected void onStartProcess() {
 		super.onStartProcess();
 
-		setValue(R.id.login_username, "cao");
-		setValue(R.id.login_password, "1");
+		setValue(R.id.login_username, "quesa");
+		setValue(R.id.login_password, "amor1");
 		requestFocus(R.id.login_username);		
 		new UIAction(this, R.id.btn_login) {
 			protected void onClick() {
@@ -149,7 +149,7 @@ public class LoginActivity extends SettingsMenuActivity
 				HashMap<String,Object> map = new HashMap();
 				if (port > 0) map.put("host_port", port);				
 				if (onlinehost != null) map.put("host_online", onlinehost);
-				if (offlinehost != null) map.put("host_offline", onlinehost);
+				if (offlinehost != null) map.put("host_offline", offlinehost);
 				if (uploadtimeout > 0) map.put("timeout_upload", uploadtimeout);				
 				if (sessiontimeout > 0) map.put("timeout_session", sessiontimeout);
 				if (trackertimeout > 0) map.put("timeout_tracker", trackertimeout);

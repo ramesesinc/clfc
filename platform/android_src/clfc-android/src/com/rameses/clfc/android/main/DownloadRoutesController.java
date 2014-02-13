@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,15 +16,14 @@ import com.rameses.clfc.android.services.LoanBillingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIActivity;
-import com.rameses.client.android.UIDialog;
 import com.rameses.db.android.SQLTransaction;
 
-class DownloadController 
+class DownloadRoutesController 
 {
 	private UIActivity activity;
 	private ProgressDialog progressDialog;
 	
-	DownloadController(UIActivity activity, ProgressDialog progressDialog) {
+	DownloadRoutesController(UIActivity activity, ProgressDialog progressDialog) {
 		this.activity = activity;
 		this.progressDialog = progressDialog;
 	}
@@ -40,7 +40,8 @@ class DownloadController
 			Bundle data = msg.getData();			
 			Object o = data.getSerializable("response"); 
 			if (o instanceof Throwable) {
-				UIDialog.showMessage(o, activity);				
+				Throwable t = (Throwable)o;
+				ApplicationUtil.showShortMsg("[ERROR] " + t.getMessage());		
 			} else {
 				ApplicationUtil.showShortMsg("[ERROR] " + o);	
 			} 
@@ -50,32 +51,13 @@ class DownloadController
 	private Handler successhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			activity.getHandler().post(new RouteFetcher());
+			Bundle data = msg.getData();
+			if (progressDialog.isShowing()) progressDialog.dismiss();
+			Intent intent = new Intent(activity, RouteListActivity.class);
+			intent.putExtra("routes", data.getSerializable("response"));
+			activity.startActivity(intent);
 		}
 	};	
-	
-	private class RouteFetcher implements Runnable 
-	{
-		@Override
-		public void run() {
-			try {
-				String userid = SessionContext.getProfile().getUserId();
-				Map params = new HashMap();
-				params.put("collectorid", userid);				
-				LoanBillingService svc = new LoanBillingService();
-				ArrayList list = (ArrayList) svc.getRoutes(params);
-				System.out.println("routes->" + list);
-				//Intent intent = new Intent(activity, RouteListActivity.class);
-				//intent.putExtra("routes", list);
-				//activity.startActivity(intent);
-			} catch(Throwable t) {
-				UIDialog.showMessage(t, activity); 
-				t.printStackTrace();
-			} finally {
-				if (progressDialog.isShowing()) progressDialog.dismiss();
-			}			
-		}
-	}
 	
 	private class ActionProcess implements Runnable 
 	{
@@ -85,10 +67,22 @@ class DownloadController
 			Message message = null;
 			try {
 				progressDialog.setMessage("processing...");
+				activity.runOnUiThread(new Runnable() {
+					public void run() {
+						if (!progressDialog.isShowing()) progressDialog.show();
+					}
+				});
 				
 				processDB();
-				new RouteFetcher().run();
-				data.putString("response", "success");
+				//new RouteFetcher().run();
+
+				String userid = SessionContext.getProfile().getUserId();
+				Map params = new HashMap();
+				params.put("collectorid", userid);
+				LoanBillingService svc = new LoanBillingService();
+				ArrayList routes = (ArrayList) svc.getRoutes(params);
+
+				data.putSerializable("response", routes);
 				handler = successhandler;
 				message = handler.obtainMessage();
 				

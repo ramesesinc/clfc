@@ -6,6 +6,7 @@
 			detailid text, 
 			seqno numeric,  
 			appno text,  
+			acctid text,
 			acctname text,  
 			amountdue numeric,  
 			overpaymentamount numeric,  

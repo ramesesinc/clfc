@@ -125,6 +125,14 @@
                    android:text="@string/txt_overpayment"
                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
+               <TextView
+                   android:id="@+id/TextView02"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_toRightOf="@+id/tv_info_paidby"
+                   android:text="@string/semicolon"
+                   android:textAppearance="?android:attr/textAppearanceMedium" />
+
                <EditText
                    android:id="@+id/et_overpayment"
                    android:layout_width="wrap_content"
@@ -135,15 +143,6 @@
                    android:layout_toRightOf="@+id/TextView02"
                    android:ems="10"
                    android:inputType="numberDecimal" />
-
-               <TextView
-                   android:id="@+id/TextView02"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_alignParentTop="true"
-                   android:layout_toRightOf="@+id/tv_info_paidby"
-                   android:text="@string/semicolon"
-                   android:textAppearance="?android:attr/textAppearanceMedium" />
 
            </RelativeLayout>
 
@@ -178,7 +177,7 @@
                    android:layout_marginLeft="5dp"
                    android:layout_toRightOf="@+id/TextView04"
                    android:ems="10"
-                   android:inputType="textPersonName"
+                   android:inputType="textPersonName|textCapCharacters"
                    android:textAllCaps="true" >
 
                    <requestFocus />
@@ -193,14 +192,16 @@
                android:paddingTop="20dp" >
 
                <Button
-                   android:id="@+id/ll_specialcollection"
+                   android:id="@+id/btn_ok"
                    android:layout_width="80dp"
                    android:layout_height="wrap_content"
                    android:layout_alignParentRight="true"
                    android:layout_alignParentTop="true"
+                   android:layout_centerHorizontal="true"
+                   android:layout_centerVertical="true"
                    android:layout_marginRight="20dp"
-                   android:gravity="center_vertical|center_horizontal"
                    android:text="@string/txt_btn_ok" />
+
            </RelativeLayout>
 
        </LinearLayout>

@@ -29,7 +29,6 @@ public class CollectionSheetRoute extends ControlActivity {
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
-		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.template_footer);
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_collectionsheet_route, rl_container, true);

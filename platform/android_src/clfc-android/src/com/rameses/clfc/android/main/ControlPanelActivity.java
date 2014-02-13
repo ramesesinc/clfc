@@ -20,6 +20,7 @@ import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.system.ChangePasswordActivity;
 import com.rameses.client.android.Platform;
+import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIDialog;
 
 public class ControlPanelActivity extends ControlActivity 
@@ -41,10 +42,10 @@ public class ControlPanelActivity extends ControlActivity
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
-				
+		
 		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list.add(ApplicationUtil.createMenuItem("download", "Download", null, R.drawable.download));
-		//list.add(ApplicationUtil.createMenuItem("payment", "Payment(s)", txndate, R.drawable.payment));
+		list.add(ApplicationUtil.createMenuItem("payment", "Payment(s)", null, R.drawable.payment));
 		list.add(ApplicationUtil.createMenuItem("posting", "Posting", null, R.drawable.posting));
 		list.add(ApplicationUtil.createMenuItem("request", "Request Special Collection", null, R.drawable.request));
 		list.add(ApplicationUtil.createMenuItem("remit", "Remit", null, R.drawable.remit));
@@ -84,12 +85,11 @@ public class ControlPanelActivity extends ControlActivity
 			startActivity(intent); 
 			
 		} else if (itemId.equals("download")) {
-			new DownloadController(this, progressDialog).execute();
+			new DownloadRoutesController(this, progressDialog).execute();
 						
 		} else if (itemId.equals("payment")) {
-			//Intent intent = new Intent(context, CollectionSheetRoute.class);
-			//intent.putExtra("networkStatus", getApp().getNetworkStatus());
-			//startActivity(intent);
+			Intent intent = new Intent(this, CollectionRouteListActivity.class);
+			startActivity(intent);
 			
 		} else if (itemId.equals("posting")) {
 			//Intent intent = new Intent(context, PostingCollectionSheet.class);

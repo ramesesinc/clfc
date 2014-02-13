@@ -20,11 +20,11 @@ public class AppSettingsImpl extends AppSettings
 	}
 	
 	public String getOnlineHost() {  
-		return getString("host_online", "121.97.60.200"); 
+		return getString("host_online", "192.168.0.178"); 
 	}
 	
 	public String getOfflineHost() {  
-		return getString("host_offline", "192.168.1.102"); 
+		return getString("host_offline", "192.168.0.178"); 
 	}
 	
 	public int getPort() {  

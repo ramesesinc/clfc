@@ -19,7 +19,7 @@ public class SplashActivity extends UIMain
 		Platform.getTaskManager().schedule(new Runnable() {
 
 			public void run() { 
-				try { 
+				try {
 					SplashActivity.this.load();
 				} catch(Throwable t) {
 					t.printStackTrace();
@@ -35,6 +35,7 @@ public class SplashActivity extends UIMain
 	private void load() {
 		System.out.println("splash activity loaded");
     	ApplicationImpl app = (ApplicationImpl) Platform.getApplication();
+    	app.getAppSettings();
     	app.load(); 
     }
 }
