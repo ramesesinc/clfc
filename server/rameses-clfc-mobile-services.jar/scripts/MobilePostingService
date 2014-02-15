@@ -63,6 +63,7 @@ class MobilePostingService
 			];
 			trackerSvc.log(tracker);
 		}
+		println "post payment";
 		return [response: "success"];
 	}
 
@@ -74,6 +75,7 @@ class MobilePostingService
 		def loan = field_collection.read([objid: params.collectionsheet.detailid], "loan");
 		loan.remarks = params.remarks;
 		field_collection.update(loan, "loan");
+		println "update remarks";
 		/*
 		def cs = batch_collectionsheet.read([objid: params.collectionsheet.detailid] ,"detail");
 		if (!cs) throw new Exception("Collection sheet does not exist or has already been deleted.");
@@ -104,6 +106,7 @@ class MobilePostingService
 		def loan = field_collection.read([objid: params.detailid], "loan");
 		loan.remarks = '';
 		field_collection.update(loan, "loan");
+		println "remove remarks";
 		return [response: "success"];
 	}
 
@@ -162,7 +165,7 @@ class MobilePostingService
 		def itm = void_payment.read([objid: params.voidid]);
 		if (!itm) throw new Exception("Void payment record does not exist or has already been deleted.");
 
-		return (itm.state == 'APPROVED')? true : false;
+		return (itm.state == 'APPROVED');
 	}
 
 	@ProxyMethod
@@ -174,10 +177,11 @@ class MobilePostingService
 		if (!itm) {
 			itm = [
 				objid 		: params.objid,
-				state 		: 'PENDING',
+				state 		: params.state,
 				dtfiled 	: params.txndate,
 				filedby 	: (params.collector? params.collector.name : 'NOT IDENTIFIED'),
 				txncode 	: 'FIELD',
+				collectionid: params.collectionid,
 				paymentid	: params.paymentid,
 				routecode 	: params.routecode,
 				loanapp 	: params.loanapp,
@@ -193,44 +197,11 @@ class MobilePostingService
 	public def postSpecialCollectionRequest( params ) {
 		if (!params.collector) throw new Exception("Please specify collector.");
 
-		params.state = 'PENDING';
 		params.dtrequested = dateSvc.serverDate;
 		params.requestedby = params.collector.name;
 		params.downloaded = 0;
 		special_collection.create(params);
-	}
-
-	@ProxyMethod
-	public def downloadSpecialCollection( params ) {
-		params = special_collection.read(params);
-		if (!params) throw new Exception("Special collection request does now exist or has already been deleted.");
-		if (params.state == 'PENDING') throw new Exception("Request is still pending.");
-
-		def routes = [];
-		def mRoutes = special_collection.getRoutesBySpecialcollectionid([specialcollectionid: params.objid]);
-		def map;
-		mRoutes.each{
-			map = [
-				routecode 		: it.route.code,
-				routedescription: it.route.description,
-				routearea 		: it.route.area
-			];
-			routes.add(map);
-		}
-
-		def loans = [];
-		def mLoans = special_collection.getBillingDetailsBySpecialcollectionid([specialcollectionid: params.objid]);
-		mLoans.each{
-			it.sessionid = params.billingid;
-			it.routecode = it.route.code;
-			it.remove("route");
-			loans.add(it);
-		}
-
-		params.state = 'DOWNLOADED';
-		params.downloaded = 1;
-		special_collection.update(params);
-		return [routes: routes, list: loans, request: params];
+		return [ response: "success" ];
 	}
 
 	@ProxyMethod

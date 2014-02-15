@@ -9,6 +9,9 @@ class MobileBillingService
 	@ActiveDB(value="loan_ledger_billing")
 	def ledger_billing;
 
+	@ActiveDB(value="special_collection")
+	def special_collection;
+
 	@Service('DateService')
 	def dateSvc;
 
@@ -119,5 +122,38 @@ class MobileBillingService
 			params.trackerid = trackerSvc.start([lng: params.longitude, lat: params.latitude, terminalid: params.terminalid, userid: params.userid]).objid;
 		}
 		return [billings: list, trackerid: params.trackerid];
-	}	
+	}		
+
+	@ProxyMethod
+	public def downloadSpecialCollection( params ) {
+		params = special_collection.read(params);
+		if (!params) throw new Exception("Special collection request does now exist or has already been deleted.");
+		if (params.state == 'PENDING') throw new Exception("Request is still pending.");
+
+		def routes = [];
+		def mRoutes = special_collection.getRoutesBySpecialcollectionid([specialcollectionid: params.objid]);
+		def map;
+		mRoutes.each{
+			map = [
+				code 		: it.route.code,
+				description : it.route.description,
+				area 		: it.route.area
+			];
+			routes.add(map);
+		}
+
+		def loans = [];
+		def mLoans = special_collection.getBillingDetailsBySpecialcollectionid([specialcollectionid: params.objid]);
+		mLoans.each{
+			it.sessionid = params.billingid;
+			it.routecode = it.route.code;
+			it.remove("route");
+			loans.add(it);
+		}
+
+		params.state = 'DOWNLOADED';
+		params.downloaded = 1;
+		special_collection.update(params);
+		return [routes: routes, list: loans, request: params];
+	}
 }

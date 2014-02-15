@@ -10,17 +10,20 @@ class MobileLocationService
 	def dateSvc;
 
 	@ProxyMethod
-	public void postLocation( params ) {
+	public def postLocation( params ) {
+		def reponse = "fail";
 		if (params.trackerid) {
 			def map = [
 				trackerid	: params.trackerid,
 				txntype		: 'NORMAL',
-				refid		: 'TRCK'+new java.rmi.server.UID(),
+				refid		: params.objid,
 				reftype		: 'TRACK',
 				lng 		: params.longitude,
 				lat 		: params.latitude
 			];
 			trackerSvc.log(map);
+			response = "success";
 		}
+		return [response: response];
 	}
 }
