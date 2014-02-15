@@ -10,17 +10,27 @@ public class DBRouteService extends AbstractDBMapper
 {
 	public String getTableName() { return "route"; }
 	
-	public List<Map> getRouteByCollectorid(String collectorid) throws Exception {
+	public List<Map> getRoutesByCollectorid(String collectorid) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = "SELECT * FROM "+getTableName()+" ORDER BY routedescription";
-			Map params = new HashMap();
-			params.put("collectorid", collectorid);
-			return ctx.getList(sql, params);
+			String sql = "SELECT * FROM "+getTableName()+" WHERE collectorid=? ORDER BY routedescription";
+			return ctx.getList(sql, new Object[]{collectorid});
 		} catch(Exception e) {
 			throw e; 
 		} finally {
 			ctx.close(); 
 		}	
+	}
+	
+	public boolean hasRoutesByCollectorid(String collectorid) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT routecode FROM "+getTableName()+" WHERE collectorid=? LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{collectorid}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
 	}
 }

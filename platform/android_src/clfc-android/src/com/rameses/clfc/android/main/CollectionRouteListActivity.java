@@ -19,14 +19,13 @@ import android.widget.TextView;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBRouteService;
+import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.db.android.DBTransaction;
 import com.rameses.db.android.SQLTransaction;
 
 public class CollectionRouteListActivity extends ControlActivity 
-{
-	private ProgressDialog progressDialog;
-	
+{	
 	protected void onCreateProcess(Bundle savedInstanceState) {
 		setContentView(R.layout.template_footer);
 		setTitle("Collection Sheet");
@@ -34,15 +33,12 @@ public class CollectionRouteListActivity extends ControlActivity
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.activity_collectionsheet_route, rl_container, true);
-		
-		progressDialog = new ProgressDialog(this);
 	}
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
 
 		SQLTransaction txn = new SQLTransaction("clfc.db");
-		List<Map> list = new ArrayList<Map>();
 		try {
 			txn.beginTransaction();
 			onStartProcessImpl(txn);
@@ -54,24 +50,29 @@ public class CollectionRouteListActivity extends ControlActivity
 		
 	}
 	
-	private void onStartProcessImpl(SQLTransaction txn) {
+	private void onStartProcessImpl(SQLTransaction txn) throws Exception {
 
 		String billdate = "Collection Date: ";
 		TextView tv_billdate = (TextView) findViewById(R.id.tv_billdate);
 		ListView lv_route = (ListView) findViewById(R.id.lv_route);
 		
-		List<Map> list = txn.getList("SELECT * FROM route WHERE collectorid=? ORDER BY routedescription", new Object[]{SessionContext.getProfile().getUserId()});
+		DBRouteService dbRs = new DBRouteService();
+		dbRs.setDBContext(txn.getContext());
+		List<Map> list = dbRs.getRoutesByCollectorid(SessionContext.getProfile().getUserId());
 		List<Map> routes = new ArrayList<Map>();
-		Map params;
-		Map itm;
-		for (int i=0; i<list.size(); i++) {
-			itm = (Map) list.get(i);
-			params = new HashMap();
-			params.put("code", itm.get("routecode").toString());
-			params.put("description", itm.get("routedescription").toString());
-			params.put("area", itm.get("routearea").toString());
-			params.put("state", itm.get("state").toString());
-			routes.add(params);
+		if (!list.isEmpty()) {
+			billdate += new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
+			Map params;
+			Map itm;
+			for (int i=0; i<list.size(); i++) {
+				itm = (Map) list.get(i);
+				params = new HashMap();
+				params.put("code", itm.get("routecode").toString());
+				params.put("description", itm.get("routedescription").toString());
+				params.put("area", itm.get("routearea").toString());
+				params.put("state", itm.get("state").toString());
+				routes.add(params);
+			}
 		}
 		tv_billdate.setText(billdate);
 		View header = (View) getLayoutInflater().inflate(R.layout.header_route, null);

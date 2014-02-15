@@ -18,10 +18,14 @@ import android.widget.RelativeLayout;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
+import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.db.DBRouteService;
+import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.system.ChangePasswordActivity;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIDialog;
+import com.rameses.db.android.SQLTransaction;
 
 public class ControlPanelActivity extends ControlActivity 
 {
@@ -36,20 +40,33 @@ public class ControlPanelActivity extends ControlActivity
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.activity_control_panel, rl_container, true);
+		
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setCancelable(false);
 	} 
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
+		System.out.println("serverDate -> " + Platform.getApplication().getServerDate().toString());
+		
+		SQLTransaction txn = new SQLTransaction("clfc.db");
+		DBRouteService dbRs = new DBRouteService();
+		dbRs.setDBContext(txn.getContext());
+		
+		String txndate = null;
+		try {
+			if (dbRs.hasRoutesByCollectorid(SessionContext.getProfile().getUserId())) {
+				txndate = new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
+			}
+		} catch (Exception e) {;}
 		
 		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list.add(ApplicationUtil.createMenuItem("download", "Download", null, R.drawable.download));
-		list.add(ApplicationUtil.createMenuItem("payment", "Payment(s)", null, R.drawable.payment));
+		list.add(ApplicationUtil.createMenuItem("payment", "Payment(s)", txndate, R.drawable.payment));
 		list.add(ApplicationUtil.createMenuItem("posting", "Posting", null, R.drawable.posting));
 		list.add(ApplicationUtil.createMenuItem("request", "Request Special Collection", null, R.drawable.request));
 		list.add(ApplicationUtil.createMenuItem("remit", "Remit", null, R.drawable.remit));
-		list.add(ApplicationUtil.createMenuItem("changepassword", "Change Password", null, R.drawable.ic_launcher));
+		list.add(ApplicationUtil.createMenuItem("changepassword", "Change Password", null, R.drawable.change_password));
 		list.add(ApplicationUtil.createMenuItem("logout", "Logout", null, R.drawable.logout));
 		
 		GridView gv_menu = (GridView) findViewById(R.id.gv_menu);		
@@ -92,19 +109,23 @@ public class ControlPanelActivity extends ControlActivity
 			startActivity(intent);
 			
 		} else if (itemId.equals("posting")) {
-			//Intent intent = new Intent(context, PostingCollectionSheet.class);
-			//intent.putExtra("networkStatus", getApp().getNetworkStatus());
-			//startActivity(intent);
+			Intent intent = new Intent(this, PostingListActivity.class);
+			startActivity(intent);
 			
 		} else if (itemId.equals("request")) {
-			//Intent intent = new Intent(context, SpecialCollection.class);
-			//intent.putExtra("networkStatus", getApp().getNetworkStatus());
-			//startActivity(intent);
+			SQLTransaction txn = new SQLTransaction("clfc.db");
+			DBSystemService dbSys = new DBSystemService();
+			dbSys.setDBContext(txn.getContext());
 			
+			if (dbSys.hasBilling()) {
+				Intent intent = new Intent(this, SpecialCollectionActivity.class);
+				startActivity(intent);
+			} else {
+				ApplicationUtil.showShortMsg("You have no billing downloaded. Download billing first before you can request for special collection.");
+			}
 		} else if (itemId.equals("remit")) {
-//			Intent intent = new Intent(context, RemitRouteCollection.class);
-//			intent.putExtra("networkStatus", getApp().getNetworkStatus());
-//			startActivity(intent);
+			Intent intent = new Intent(this, RemitRouteCollectionActivity.class);
+			startActivity(intent);
 			
 		} 	
 	} 

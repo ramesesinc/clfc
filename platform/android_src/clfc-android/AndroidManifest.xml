@@ -45,6 +45,9 @@
         <activity android:name="com.rameses.clfc.android.main.CollectionSheetListActivity"  android:screenOrientation="portrait"/>
         <activity android:name="com.rameses.clfc.android.main.CollectionSheetInfoActivity"  android:screenOrientation="portrait"/>
         <activity android:name="com.rameses.clfc.android.main.PaymentActivity"  android:screenOrientation="portrait"/>
+        <activity android:name="com.rameses.clfc.android.main.PostingListActivity"  android:screenOrientation="portrait"/>
+        <activity android:name="com.rameses.clfc.android.main.SpecialCollectionActivity"  android:screenOrientation="portrait"/>
+        <activity android:name="com.rameses.clfc.android.main.RemitRouteCollectionActivity"  android:screenOrientation="portrait"/>
     </application>
 </manifest>
     

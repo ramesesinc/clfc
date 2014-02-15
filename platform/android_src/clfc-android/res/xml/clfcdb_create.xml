@@ -105,7 +105,8 @@
 		CREATE TABLE SPECIALCOLLECTION ( 
 			objid text PRIMARY KEY,  
 			state text,  
-			remarks text  
+			remarks text ,
+			collectorid text
 		) 
     </sql>
     <sql>

@@ -40,7 +40,6 @@ public class RouteListActivity extends ControlActivity
 	protected void onStartProcess() {
 		super.onStartProcess();
 		
-		System.out.println("routes -> "+routes);
 		ListView lv_route = (ListView) findViewById(R.id.lv_route);
 		lv_route.setAdapter(new RouteAdapter(this, routes));
 		lv_route.setOnItemClickListener(new AdapterView.OnItemClickListener() {

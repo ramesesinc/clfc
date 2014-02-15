@@ -20,4 +20,8 @@ public class LoanBillingService extends AbstractService
 	public Map downloadBilling(Map params) {
 		return (Map) invoke("downloadBilling", params);
 	}
+	
+	public Map downloadSpecialCollection(Map params) {
+		return (Map) invoke("downloadSpecialCollection", params);
+	}
 }

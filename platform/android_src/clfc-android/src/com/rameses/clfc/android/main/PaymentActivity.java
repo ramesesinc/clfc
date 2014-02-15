@@ -25,6 +25,7 @@ import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.client.android.NetworkLocationProvider;
+import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIAction;
 import com.rameses.client.android.UIDialog;
@@ -168,8 +169,7 @@ public class PaymentActivity extends ControlActivity {
 	private void onApproveImpl(SQLTransaction txn) throws Exception {
 		DBSystemService dbSys = new DBSystemService();
 		dbSys.setDBContext(txn.getContext());
-		
-		String txndate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+
 		Location location = NetworkLocationProvider.getLocation();
 		Map params = new HashMap();
 		params.put("objid", "PT"+UUID.randomUUID().toString());
@@ -177,7 +177,7 @@ public class PaymentActivity extends ControlActivity {
 		params.put("loanappid", loanappid);
 		params.put("detailid", detailid);
 		params.put("refno", getValueAsString(R.id.tv_payment_refno));
-		params.put("txndate", txndate);
+		params.put("txndate", Platform.getApplication().getServerDate().toString());
 		params.put("paymentamount", Double.parseDouble(et_amount.getText().toString()));
 		params.put("paymenttype", type);
 		params.put("routecode", routecode);
@@ -190,37 +190,4 @@ public class PaymentActivity extends ControlActivity {
 		
 		txn.insert("payment", params);
 	}	
-	
-//	private void savePayment() {
-//		String collectorid = SessionContext.getProfile().getUserId();
-//		SQLiteDatabase db = getDbHelper().getWritableDatabase();
-//		String date = getDbHelper().getServerDate(db, collectorid);		
-//		db.close();
-//		
-//		Calendar c = Calendar.getInstance();
-//		c.setTimeInMillis(Timestamp.valueOf(date).getTime());
-//		c.add(Calendar.SECOND, getApp().getTickerCount());
-//		txndate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime());
-//		Map<String, Object> payment = new HashMap<String, Object>();
-//		payment.put("objid", "PT"+UUID.randomUUID().toString());
-//		payment.put("loanappid", loanappid);
-//		payment.put("detailid", detailid);
-//		payment.put("refno", tv_refno.getText().toString());
-//		payment.put("txndate", txndate);
-//		payment.put("amount", Double.parseDouble(et_amount.getText().toString()));
-//		payment.put("routecode", routecode);
-//		payment.put("type", type);
-//		payment.put("isfirstbill", isfirstbill);
-//		payment.put("longitude", getApp().getLongitude());
-//		payment.put("latitude", getApp().getLatitude());
-//		payment.put("state", "PENDING");
-//		payment.put("paidby", et_paidby.getText().toString());
-//		
-//		db = getDbHelper().getReadableDatabase();
-//		payment.put("trackerid", getDbHelper().getTrackerid(db));
-//		payment.put("collectorid", collectorid);
-//		getDbHelper().insertPayment(db, payment);
-//		db.close();
-//		finish();
-//	}
 }

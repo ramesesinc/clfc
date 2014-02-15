@@ -120,14 +120,23 @@ public class DownloadBillingController
 			Map params = new HashMap();
 			String sql = "SELECT * FROM system WHERE name='trackerid'";
 			Map record = txn.find(sql);
-			if (record == null || map.isEmpty()) {
+			if (record == null || record.isEmpty()) {
 				params.clear();
 				params.put("name", "trackerid");
 				params.put("value", map.get("trackerid").toString());
 				txn.insert("system", params);
 			}
+
+			String sessionid = route.get("billingid").toString();
+			sql = "SELECT * FROM system WHERE name='billingid'";
+			record = txn.find(sql);
+			if (record == null || record.isEmpty()) {
+				params.clear();
+				params.put("name", "billingid");
+				params.put("value", sessionid);
+				txn.insert("system", params);
+			}
 			
-			String sessionid = SessionContext.getSessionId();
 			params.clear();
 			params.put("routecode",route.get("code").toString());
 			params.put("state", "ACTIVE");
@@ -153,6 +162,7 @@ public class DownloadBillingController
 					cs.put("detailid", params.get("objid").toString());
 					cs.put("seqno", Integer.parseInt(params.get("seqno").toString()));
 					cs.put("appno", params.get("appno").toString());
+					cs.put("acctid", params.get("acctid").toString());
 					cs.put("acctname", params.get("acctname").toString());
 					cs.put("loanamount", Double.parseDouble(params.get("loanamount").toString()));
 					cs.put("term", Integer.parseInt(params.get("term").toString()));

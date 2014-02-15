@@ -1,5 +1,6 @@
 package com.rameses.clfc.android.db;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -50,8 +51,7 @@ public class DBPaymentService extends AbstractDBMapper
 		DBContext ctx = createDBContext();
 		try {
 			String sql = "SELECT objid FROM "+getTableName()+" WHERE loanappid=?";
-			System.out.println("list -> "+ctx.getList(sql, new Object[]{loanappid}));
-			return 0;
+			return ctx.getCount(sql, new Object[]{loanappid});
 		} catch (Exception e) {
 			throw e;
 		} finally {
@@ -71,4 +71,46 @@ public class DBPaymentService extends AbstractDBMapper
 		}
 	}
 	
+	public List<Map> getPendingPayments() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING'";
+			return ctx.getList(sql, new Object[]{});
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
+	
+	public void approvePaymentById(String id) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "UPDATE "+getTableName()+" SET state='APPROVED' WHERE objid='"+id+"'";
+			ctx.execute(sql);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
+	
+	public BigDecimal getTotalCollectionsByRoutecode(String routecode) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT * FROM "+getTableName()+" WHERE routecode=?";
+			List<Map> list = ctx.getList(sql, new Object[]{routecode});
+			BigDecimal amount = new BigDecimal("0").setScale(2);
+			Map map;
+			for (int i=0; i<list.size(); i++) {
+				map = (Map) list.get(i);
+				amount = amount.add(new BigDecimal(map.get("amount").toString()).setScale(2));
+			}
+			return amount;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
 }

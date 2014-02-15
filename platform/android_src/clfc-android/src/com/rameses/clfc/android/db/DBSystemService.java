@@ -12,9 +12,8 @@ public class DBSystemService extends AbstractDBMapper
 	public String getTrackerid() throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = "SELECT value FROM "+ getTableName() +" WHERE name=?";
-			Map map = ctx.find(sql, new Object[]{"trackerid"});
-			System.out.println("map -> "+map);
+			String sql = "SELECT value FROM "+getTableName()+" WHERE name='trackerid'";
+			Map map = ctx.find(sql, new Object[]{});
 			return map.get("value").toString();
 			//return (ctx.getCount(sql, new Object[]{}) > 0);
 		} catch(Exception e) {
@@ -22,5 +21,30 @@ public class DBSystemService extends AbstractDBMapper
 		} finally {
 			ctx.close(); 
 		}	
+	}
+	
+	public boolean hasBilling() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT name FROM "+getTableName()+" WHERE name='billingid' LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
+	
+	public String getBillingid() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT value FROM "+getTableName()+" WHERE name='billingid'";
+			Map map = ctx.find(sql, new Object[]{});
+			return map.get("value").toString();
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
 	}
 }

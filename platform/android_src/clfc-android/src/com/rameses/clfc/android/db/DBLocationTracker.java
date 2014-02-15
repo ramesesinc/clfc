@@ -1,5 +1,8 @@
 package com.rameses.clfc.android.db;
 
+import java.util.List;
+import java.util.Map;
+
 import com.rameses.db.android.DBContext;
 
 public class DBLocationTracker extends AbstractDBMapper  
@@ -18,4 +21,15 @@ public class DBLocationTracker extends AbstractDBMapper
 		}
 	}
 	
+	public List<Map> getLocationTrackers() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT * FROM "+getTableName()+" ORDER BY seqno";
+			return ctx.getList(sql, new Object[]{});
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
 }

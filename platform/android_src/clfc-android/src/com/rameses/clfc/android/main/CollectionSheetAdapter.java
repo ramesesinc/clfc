@@ -72,6 +72,7 @@ public class CollectionSheetAdapter extends BaseAdapter
 		try {
 			noOfPayments = dbPs.noOfPaymentsByLoanappid(loanappid);
 		} catch (Exception e) {
+			e.printStackTrace();
 			noOfPayments = 0;
 		}
 		
@@ -86,7 +87,8 @@ public class CollectionSheetAdapter extends BaseAdapter
 		}
 
 		iv_info_paid.setVisibility(View.GONE);
-		if (noOfVoids > 0 && noOfPayments > noOfVoids) {
+		System.out.println("no of voids -> "+noOfVoids+" no of payments -> "+noOfPayments);
+		if (noOfPayments > 0 && noOfPayments > noOfVoids) {
 			iv_info_paid.setVisibility(View.VISIBLE);
 		}
 		return v;

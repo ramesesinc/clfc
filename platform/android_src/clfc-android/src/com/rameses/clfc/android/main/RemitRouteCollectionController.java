@@ -1,0 +1,185 @@
+package com.rameses.clfc.android.main;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+
+import com.rameses.clfc.android.ApplicationUtil;
+import com.rameses.clfc.android.db.DBCollectionSheet;
+import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.services.LoanPostingService;
+import com.rameses.client.android.Platform;
+import com.rameses.client.android.UIActivity;
+import com.rameses.db.android.SQLTransaction;
+
+public class RemitRouteCollectionController 
+{
+	private UIActivity activity;
+	private ProgressDialog progressDialog;
+	private Map route;
+	
+	RemitRouteCollectionController(UIActivity activity, ProgressDialog progressDialog, Map route) {
+		this.activity = activity;
+		this.progressDialog = progressDialog;
+		this.route = route;
+	}
+
+	void execute() throws Exception {
+		Platform.runAsync(new RemitCollectionActionProcess());
+	}
+	
+	private Handler errorhandler = new Handler() {  
+		@Override
+		public void handleMessage(Message msg) {
+			if (progressDialog.isShowing()) progressDialog.dismiss();
+			
+			Bundle data = msg.getData();			
+			Object o = data.getSerializable("response"); 
+			if (o instanceof Throwable) {
+				Throwable t = (Throwable)o;
+				ApplicationUtil.showShortMsg("[ERROR] " + t.getMessage());		
+			} else {
+				ApplicationUtil.showShortMsg("[ERROR] " + o);	
+			} 
+		} 
+	}; 
+	
+	private Handler successhandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			((RemitRouteCollectionActivity) activity).loadRoutes();
+			if (progressDialog.isShowing()) progressDialog.dismiss();
+			ApplicationUtil.showShortMsg("Collection for route "+route.get("routedescriptio").toString()+" - "+route.get("routearea").toString()+" successfully remitted.");
+		}
+	};
+	
+	private class RemitCollectionActionProcess implements Runnable {
+		public void run() {
+			Bundle data = new Bundle();
+			Message message = null;
+			Handler handler = null;
+			try {
+				Map params = getParameters();
+				
+				LoanPostingService svc = new LoanPostingService();
+				Map response = svc.remitRouteCollection(params);				
+				
+				data.putString("response", response.get("response").toString());
+				message = successhandler.obtainMessage();
+				handler = successhandler;
+			} catch (Throwable t) {
+				data.putSerializable("response", t);
+				message = errorhandler.obtainMessage();
+				handler = errorhandler;
+			}
+			
+			message.setData(data);
+			handler.sendMessage(message);
+		}
+		
+		private Map getParameters() throws Exception {
+			Map params = new HashMap();
+			SQLTransaction txn = new SQLTransaction("clfc.db");
+			try {
+				txn.beginTransaction();
+				params = getParametersImpl(txn);
+				txn.commit();
+			} catch (Exception e) {
+				throw e;
+			} finally {
+				txn.endTransaction();
+			}
+			return params;
+		}
+		
+		private Map getParametersImpl(SQLTransaction txn) throws Exception {
+			DBPaymentService dbPs = new DBPaymentService();
+			dbPs.setDBContext(txn.getContext());
+			
+			DBCollectionSheet dbCs = new DBCollectionSheet();
+			dbCs.setDBContext(txn.getContext());
+			
+			Map params = new HashMap();
+			params.put("routecode", route.get("code").toString());
+			params.put("sessionid", route.get("sessionid").toString());
+			params.put("totalcollection", dbCs.getTotalCollectionSheetsByRoutecode(route.get("code").toString()));
+			params.put("totalamount", dbPs.getTotalCollectionsByRoutecode(route.get("code").toString()));
+			return params;
+		}
+	}
+
+//	private Handler responseHandler = new Handler() {
+//		@Override
+//		public void handleMessage(Message msg) {
+//			Bundle bundle = msg.getData();
+//			if(progressDialog.isShowing()) progressDialog.dismiss();
+//			ApplicationUtil.showShortMsg(context, bundle.getString("response"));
+//		}
+//	};
+//	
+//	private Handler remitHandler = new Handler() {
+//		@Override
+//		public void handleMessage(Message msg) {
+//			Bundle bundle = msg.getData();
+//			String description = bundle.getString("routedescription");
+//			String area = bundle.getString("routearea");
+//			loadRoutes();
+//			if(progressDialog.isShowing()) progressDialog.dismiss();
+//			ApplicationUtil.showShortMsg(context, "Successfully remitted collection for route "+description+" - "+area);
+//		}
+//	};
+
+	
+	
+//	private class RemitRunnable implements Runnable {
+//		private RouteParcelable route;
+//		
+//		RemitRunnable(RouteParcelable route) {
+//			this.route = route;
+//		}
+//		
+//		@Override
+//		public void run() {
+//			Map<String, Object> params = new HashMap<String, Object>();
+//			params.put("routecode", route.getCode());
+//			params.put("sessionid", route.getSessionid());
+//			SQLiteDatabase db = getDbHelper().getReadableDatabase();
+//			params.put("totalcollection", getDbHelper().getTotalCollectionSheetsByRoutecode(db, route.getCode()));
+//			params.put("totalamount", getDbHelper().getTotalCollectionsByRoutecode(db, route.getCode()));
+//			db.close();
+//			boolean status = false;
+//			Message msg = responseHandler.obtainMessage();
+//			Bundle bundle = new Bundle();
+//			ServiceProxy postingProxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
+//			try {
+//				Object response  = postingProxy.invoke("remitRouteCollection", new Object[]{params});
+//				Map<String, Object> result = (Map<String, Object>) response;
+//				if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
+//					db = getDbHelper().getWritableDatabase();
+//					getDbHelper().remitRouteByCode(db, route.getCode());
+//					db.close();
+//				}
+//				bundle.putString("routedescription", route.getDescription());
+//				bundle.putString("routearea", route.getArea());
+//				msg = remitHandler.obtainMessage();
+//				//bundle.putString("response", "Successfully remitted collection for route "+route.getDescription()+" - "+route.getArea());
+//				status = true;
+//			} catch( TimeoutException te ) {
+//				bundle.putString("response", "Connection Timeout!");
+//			} catch( IOException ioe ) {
+//				bundle.putString("response", "Error connecting to Server.");
+//			} catch( Exception e ) { 
+//				bundle.putString("response", e.getMessage());
+//				e.printStackTrace(); 
+//			} finally {
+//				msg.setData(bundle);
+//				if (status == true) remitHandler.sendMessage(msg);
+//				else responseHandler.sendMessage(msg);
+//			}
+//		}
+//	}
+}
