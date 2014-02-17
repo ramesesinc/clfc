@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +20,8 @@ import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBRouteService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
-import com.rameses.db.android.DBTransaction;
+import com.rameses.db.android.ExecutionHandler;
+import com.rameses.db.android.SQLExecutor;
 import com.rameses.db.android.SQLTransaction;
 
 public class CollectionRouteListActivity extends ControlActivity 
@@ -37,53 +37,51 @@ public class CollectionRouteListActivity extends ControlActivity
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
-
-		SQLTransaction txn = new SQLTransaction("clfc.db");
-		try {
-			txn.beginTransaction();
-			onStartProcessImpl(txn);
-			txn.commit();
-		} catch(Exception e) {;}
-		finally {
-			txn.endTransaction();
-		}
 		
+		try {
+			SQLTransaction txn = new SQLTransaction("clfc.db");
+			txn.execute(new ExecutionHandlerImpl()); 
+		} catch(Throwable e) {
+			System.out.println("[CollectionRouteListActivity] error caused by "+e.getClass().getName() + ": " + e.getMessage()); 
+		}
 	}
 	
-	private void onStartProcessImpl(SQLTransaction txn) throws Exception {
-
-		String billdate = "Collection Date: ";
-		TextView tv_billdate = (TextView) findViewById(R.id.tv_billdate);
-		ListView lv_route = (ListView) findViewById(R.id.lv_route);
-		
-		DBRouteService dbRs = new DBRouteService();
-		dbRs.setDBContext(txn.getContext());
-		List<Map> list = dbRs.getRoutesByCollectorid(SessionContext.getProfile().getUserId());
-		List<Map> routes = new ArrayList<Map>();
-		if (!list.isEmpty()) {
-			billdate += new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
-			Map params;
-			Map itm;
-			for (int i=0; i<list.size(); i++) {
-				itm = (Map) list.get(i);
-				params = new HashMap();
-				params.put("code", itm.get("routecode").toString());
-				params.put("description", itm.get("routedescription").toString());
-				params.put("area", itm.get("routearea").toString());
-				params.put("state", itm.get("state").toString());
-				routes.add(params);
+	private class ExecutionHandlerImpl implements ExecutionHandler 
+	{
+		public void execute(SQLExecutor txn) throws Exception {
+			String billdate = "Collection Date: ";
+			TextView tv_billdate = (TextView) findViewById(R.id.tv_billdate);
+			ListView lv_route = (ListView) findViewById(R.id.lv_route);
+			
+			DBRouteService dbRs = new DBRouteService();
+			dbRs.setDBContext(txn.getContext());
+			List<Map> list = dbRs.getRoutesByCollectorid(SessionContext.getProfile().getUserId());
+			List<Map> routes = new ArrayList<Map>();
+			if (!list.isEmpty()) {
+				billdate += new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
+				Map params;
+				Map itm;
+				for (int i=0; i<list.size(); i++) {
+					itm = (Map) list.get(i);
+					params = new HashMap();
+					params.put("code", itm.get("routecode").toString());
+					params.put("description", itm.get("routedescription").toString());
+					params.put("area", itm.get("routearea").toString());
+					params.put("state", itm.get("state").toString());
+					routes.add(params);
+				}
 			}
-		}
-		tv_billdate.setText(billdate);
-		View header = (View) getLayoutInflater().inflate(R.layout.header_route, null);
-		lv_route.addHeaderView(header, null, false);
-		lv_route.setAdapter(new RouteAdapter(this, routes));
-		lv_route.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				selectedItem(parent, view, position, id);
-			}
-		});
+			tv_billdate.setText(billdate);
+			View header = (View) getLayoutInflater().inflate(R.layout.header_route, null);
+			lv_route.addHeaderView(header, null, false);
+			lv_route.setAdapter(new RouteAdapter(CollectionRouteListActivity.this, routes));
+			lv_route.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					selectedItem(parent, view, position, id);
+				}
+			}); 
+		} 
 	}
 	
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) {
