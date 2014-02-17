@@ -20,8 +20,8 @@ public class SettingsActivity extends UIActivity
 {
 	private ProgressDialog progressDialog;
 	
-	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
+		super.onCreateProcess(savedInstanceState); 
 		setContentView(R.layout.template_footer);
 		setTitle("Settings");
 		
