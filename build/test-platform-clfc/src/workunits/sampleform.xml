@@ -16,7 +16,7 @@
     import com.rameses.rcp.annotations.*;
     import com.rameses.osiris2.client.*;
     import com.rameses.osiris2.common.*;
-
+    
     class SampleFormController implements ViewHandler
     {        
         @Binding
@@ -45,19 +45,58 @@
             if (pagename == 'page2') binding.requestFocus('entity.text2'); 
         } 
         
-        def state0() {
-            if (true) throw new com.rameses.util.BreakException();
-            
+        void state0() {
             entity.state = 0;
-            return Inv.lookupOpener('var:lookup', [:]); 
         } 
         void state1() {
             entity.state = 1;
-            if (true) throw new Exception('error...');
         } 
+        
         void stateNull() {
             entity.state = null;
         }      
+        
+        void print() {
+            println 'before-print';
+            def params = [
+                handler: {o-> 
+                    println 'received response-> ' + o;
+                }
+            ];
+            Modal.show('test-textarea:open', params);
+            println 'after-print';
+        }
+        
+        def lookupHandler = InvokerUtil.lookupOpener('var:lookup', [:]); 
+        
+        
+        def person;
+        def suggestlist = [
+            [name:'flores, worgie'],
+            [name:'nazareno, elmo'],
+            [name:'zamora, jessie'],
+            [name:'retiza, arnel'],
+            [name:'louie, carl'],
+        ];
+        
+        def suggestHandler = [
+            fetchList: {params->                 
+                println 'suggesthandler fetchlist... ' + params;
+                if (params.searchtext == null) return [];
+                
+                return suggestlist.findAll {
+                    def txt1 = it.name.toLowerCase();
+                    def txt2 = params.searchtext.toLowerCase();
+                    println 'txt1='+txt1 + ', txt2='+txt2;
+                    return (txt1.indexOf(txt2) >= 0);
+                };
+            },
+            onselect: {o-> 
+                println 'suggesthandler onselect...' + o;
+                person = o;
+            }
+        ] as SuggestModel 
+        
         
         def photo;
         void refreshPhoto() {
@@ -82,12 +121,24 @@
         ] as CameraModel 
         
         def fingerPrintHandler = [
-            onselect: {bytes-> 
-                photo = bytes;
+            onselect: {info-> 
+                photo = info.rightThumbData; 
                 binding.refresh('photo'); 
+                info.exportToFile(FingerPrintModel.RIGHT_THUMB, 'right_thumb.jpg'); 
             }
         ] as FingerPrintModel
         
+        void captureFingerPrint() {
+            def handler = [
+                onselect: {info-> 
+                    photo = info.rightThumbData; 
+                    binding.refresh('photo'); 
+                    info.exportToFile(FingerPrintModel.RIGHT_THUMB, 'right_thumb.jpg'); 
+                }
+            ] as FingerPrintModel
+            
+            com.rameses.rcp.fingerprint.FingerPrintViewer.open(handler);
+        }         
         
         def actionFieldHandler = [
         

@@ -15,6 +15,7 @@
 
     class SampleBasicListController 
     {        
+        def state = 'read';
         def title = "Basic List";
         def selectedRow = [:]; 
         def itemStatus;
@@ -39,7 +40,8 @@
                 return [
                     [name:'name', caption:'Name', editable:true],
                     [name:'value', caption:'Value', editable:true],
-                    [name:'description', caption:'Description', editable:true] 
+                    [name:'description', caption:'Description', editable:true],
+                    [name:'amtpaid', caption:'AmtPaid', type:'decimal', editable:true]
                 ];
             }, 
             
@@ -50,7 +52,7 @@
             validate: {li-> 
                 println 'validate-> item:'+li.item;
             }
-        ] as BasicListModel 
+        ] as EditorListModel 
         
         void showInfo() {
             MsgBox.alert(selectedRow);

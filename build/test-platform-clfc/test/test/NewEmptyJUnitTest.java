@@ -38,7 +38,7 @@ public class NewEmptyJUnitTest extends TestCase {
 //        ctab.addTab("Tab#1", new TestPanel(ctab));
 //        ctab.addTab("Tab#2", new TestPanel(ctab));
 //        ctab.addTab("Tab#3", new TestPanel(ctab));
-//        B
+//        
         JDialog d = new JDialog();
         d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         d.setModal(true);        

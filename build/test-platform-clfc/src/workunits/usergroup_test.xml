@@ -1,0 +1,6 @@
+<workunit> 
+    <invokers> 
+        <invoker type="domain:formActions" caption="Test1" visibleWhen="#{selectedEntity.user.username=='QUESA'}"/>
+        <invoker type="domain:formActions" caption="Test2" visibleWhen="#{selectedEntity.user.username!='QUESA'}"/>
+    </invokers>  
+</workunit>

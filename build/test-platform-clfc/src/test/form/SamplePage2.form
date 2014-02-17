@@ -104,6 +104,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="xFingerPrint1" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <Component id="xButton3" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="197" max="32767" attributes="0"/>
               </Group>
@@ -119,7 +120,9 @@
                       <Component id="xCamera1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="xFingerPrint1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="196" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="xButton3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="148" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -140,6 +143,12 @@
           <Properties>
             <Property name="handler" type="java.lang.String" value="fingerPrintHandler"/>
             <Property name="text" type="java.lang.String" value="FingerPrint"/>
+          </Properties>
+        </Component>
+        <Component class="com.rameses.rcp.control.XButton" name="xButton3">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="captureFingerPrint"/>
+            <Property name="text" type="java.lang.String" value="FingerPrint Capture"/>
           </Properties>
         </Component>
       </SubComponents>

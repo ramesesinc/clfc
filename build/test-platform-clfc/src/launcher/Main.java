@@ -16,11 +16,13 @@ public class Main
         //dumpSystemInfo();
         
         Map env = new HashMap();
-        env.put("app.debugMode", "true");         
-        env.put("app.cluster", "osiris3");
-        env.put("app.context", "clfc");
+        env.put("app.debugMode", "true"); 
+        env.put("app.cluster", "osiris3"); 
+        env.put("app.context", "clfc"); 
         env.put("app.host", "localhost:8070");
         env.put("readTimeout", "30000"); 
+        
+        env.put("ws.host", "localhost:8060");
         
         Map profile = new HashMap();
         profile.put("CLIENTTYPE", "desktop");

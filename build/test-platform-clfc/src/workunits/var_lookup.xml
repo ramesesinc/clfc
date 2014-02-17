@@ -1,4 +1,4 @@
-<workunit extends="wtemplates/ServiceLookupController.xml" serviceName="VarLookupService">
+<workunit extends="wtemplates/ServiceLookupController.xml" serviceName="VarService" allowSearch="true">
     <invokers>
         <invoker type="var:lookup" caption="Lookup Variables" width="800"/> 
     </invokers> 

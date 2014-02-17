@@ -1,0 +1,35 @@
+<workunit> 
+    <invokers>
+        <invoker folderid="/menu/transaction" caption="Complex Form"/>
+        <invoker folderid="/master/test" caption="Sample Form"/>
+        
+        <invoker type="formActions" caption="Action1" action="action1"/>
+        <invoker type="formActions" caption="Action2" action="action2"/>
+    </invokers>
+    
+    <code>
+    import com.rameses.rcp.common.*;
+    import com.rameses.rcp.annotations.*;
+    import com.rameses.osiris2.client.*;
+    import com.rameses.osiris2.common.*;
+    
+    class ComplexFormController 
+    {        
+        @Binding
+        def binding;
+        
+        def entity = [:];
+        
+        def subform = Inv.lookupOpener('complex2form', [:]); 
+        
+        void action1() {
+            println 'Complex2FormController: binding-> ' + binding.codeBean;
+        }         
+        
+    }
+    </code>
+    
+    <pages>
+        <page template="test.form.ComplexPage"/> 
+    </pages>
+</workunit>

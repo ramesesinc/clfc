@@ -3,6 +3,7 @@
         <invoker folderid="/menu/transaction" caption="Test TextArea"/>
         <invoker folderid="/master/test" caption="Test TextArea"/> 
         
+        <invoker type="test-textarea:open" caption="Test TextArea" action="showOrgPlugin"/> 
         <invoker type="org:formActions" caption="Org plugin" action="showOrgPlugin"/> 
         <invoker type="city:formActions" caption="Org-City plugin" action="showOrgPlugin"/> 
     </invokers>
@@ -16,6 +17,7 @@
 
     class TestTextAreaController 
     {        
+        def handler;
         def entity = [
             remarks: ''' 
                 #1 The quick brown fox jumps over the lazy dog. 
@@ -28,6 +30,7 @@
         
         void showOrgPlugin() {
             println 'showOrgPlugin is invoked...';
+            if (handler) handler(this);
         } 
     }
     ]]>

@@ -15,20 +15,32 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="xActionBar1" pref="556" max="32767" attributes="0"/>
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="xActionField1" alignment="0" max="32767" attributes="1"/>
-                      <Component id="xTextField2" alignment="0" max="32767" attributes="1"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="xTextField1" min="-2" pref="168" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="xButton1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="xButton2" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="xActionBar1" pref="556" max="32767" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="xTextField2" alignment="0" max="32767" attributes="1"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="xTextField1" min="-2" pref="168" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="xButton1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="xButton2" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="xLabel1" alignment="0" pref="340" max="32767" attributes="0"/>
+                          <Component id="xLookupField1" alignment="0" pref="340" max="32767" attributes="0"/>
+                          <Component id="xSuggest1" alignment="0" pref="340" max="32767" attributes="0"/>
+                          <Component id="xActionField1" alignment="1" pref="340" max="32767" attributes="1"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="226" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -43,9 +55,15 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="xTextField2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="xActionField1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="206" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="xSuggest1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="xLookupField1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="xLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="150" max="32767" attributes="0"/>
               <Component id="xActionBar1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -85,6 +103,26 @@
       <Properties>
         <Property name="handler" type="java.lang.String" value="actionFieldHandler"/>
         <Property name="name" type="java.lang.String" value="actionfield"/>
+      </Properties>
+    </Component>
+    <Component class="com.rameses.rcp.control.XSuggest" name="xSuggest1">
+      <Properties>
+        <Property name="expression" type="java.lang.String" value="#{item.name}"/>
+        <Property name="handler" type="java.lang.String" value="suggestHandler"/>
+        <Property name="itemExpression" type="java.lang.String" value="#{item.name}"/>
+        <Property name="name" type="java.lang.String" value="person"/>
+      </Properties>
+    </Component>
+    <Component class="com.rameses.rcp.control.XLookupField" name="xLookupField1">
+      <Properties>
+        <Property name="handler" type="java.lang.String" value="lookupHandler"/>
+        <Property name="name" type="java.lang.String" value="entity.var"/>
+        <Property name="visibleWhen" type="java.lang.String" value="#{entity.state == 1}"/>
+      </Properties>
+    </Component>
+    <Component class="com.rameses.rcp.control.XLabel" name="xLabel1">
+      <Properties>
+        <Property name="expression" type="java.lang.String" value="state=#{entity.state}"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -26,6 +26,7 @@ public class NewEmptyJUnitTest2 extends TestCase {
     protected void setUp() throws Exception {
 //last-modified: 1380077412000
 //date-Wed Sep 25 10:50:12 CST 2013        
+        StringBuffer sb = new StringBuffer();
     }
 
     protected void tearDown() throws Exception {

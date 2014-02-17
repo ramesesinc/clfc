@@ -38,6 +38,7 @@ public class SamplePage2 extends javax.swing.JPanel {
         xPhoto1 = new com.rameses.rcp.control.XPhoto();
         xCamera1 = new com.rameses.rcp.control.XCamera();
         xFingerPrint1 = new com.rameses.rcp.control.XFingerPrint();
+        xButton3 = new com.rameses.rcp.control.XButton();
 
         jLabel1.setText("This is page2");
 
@@ -61,6 +62,9 @@ public class SamplePage2 extends javax.swing.JPanel {
         xFingerPrint1.setHandler("fingerPrintHandler");
         xFingerPrint1.setText("FingerPrint");
 
+        xButton3.setName("captureFingerPrint");
+        xButton3.setText("FingerPrint Capture");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -72,7 +76,8 @@ public class SamplePage2 extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(xCamera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xFingerPrint1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(xFingerPrint1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(xButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(197, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -84,7 +89,9 @@ public class SamplePage2 extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(xCamera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(xFingerPrint1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addComponent(xButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(148, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -134,6 +141,7 @@ public class SamplePage2 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private com.rameses.rcp.control.XButton xButton1;
     private com.rameses.rcp.control.XButton xButton2;
+    private com.rameses.rcp.control.XButton xButton3;
     private com.rameses.rcp.control.XCamera xCamera1;
     private com.rameses.rcp.control.XFingerPrint xFingerPrint1;
     private com.rameses.rcp.control.XPhoto xPhoto1;

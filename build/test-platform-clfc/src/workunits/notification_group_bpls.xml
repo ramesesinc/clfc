@@ -1,0 +1,5 @@
+<workunit> 
+    <invokers> 
+        <invoker type="notification-group" caption="Business Permit and Licensing" group="BPLS"/>
+    </invokers>  
+</workunit>

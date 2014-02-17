@@ -1,0 +1,6 @@
+"entity.*" [entity.state == 0] {
+    readonly: true; 
+}
+"entity.*" [entity.state == 1] {
+    readonly: false; 
+}

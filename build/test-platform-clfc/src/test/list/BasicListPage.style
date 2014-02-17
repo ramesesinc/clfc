@@ -6,3 +6,7 @@
     text-decoration: underline; 
     text-decoration: strikethrough;
 } 
+"listHandler:item.(amtpaid|name|value)"[ state == 'read' ]{ 
+    background-color: #a5a5a5;
+    editable: false; 
+} 
