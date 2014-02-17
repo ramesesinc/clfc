@@ -15,7 +15,6 @@ public class DBSystemService extends AbstractDBMapper
 			String sql = "SELECT value FROM "+getTableName()+" WHERE name='trackerid'";
 			Map map = ctx.find(sql, new Object[]{});
 			return map.get("value").toString();
-			//return (ctx.getCount(sql, new Object[]{}) > 0);
 		} catch(Exception e) {
 			throw e; 
 		} finally {
