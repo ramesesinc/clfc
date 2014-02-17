@@ -47,6 +47,35 @@ class LoanFieldCollectionService
 	}
 
 	@ProxyMethod
+	public def getCurrentLoans( params ) {
+		params.billdate = dateSvc.serverDate.toString().split(' ')[0];
+		def loans = collection.getCurrentLoansByRoutecode(params);
+
+		loans.each{cs->
+			cs.payments = collection.getPaymentsByParentid([parentid: cs.objid]);
+			cs.total = 0;
+			cs.payments.each{
+				it.voided = 0;
+				it.pending = 0;
+				cs.total += it.payamount;
+
+				def voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
+				if (voidrequest) {
+					it.voidid = voidrequest.objid;
+					if (voidrequest.state == 'APPROVED') {
+						it.voided = 1;
+						it.pending = 0;
+						cs.total -= it.payamount;
+					} else if (voidrequest.state == 'PENDING') {
+						it.pending = 1;
+					}
+				}
+			}
+		}
+		return loans;
+	}
+
+	@ProxyMethod
 	public def getLoans( params ) {
 		if (!params.fieldcollectionid) throw new Exception('Please specify fieldcollectionid.');
 		if (!params.routecode) throw new Exception('Please specify routecode.');

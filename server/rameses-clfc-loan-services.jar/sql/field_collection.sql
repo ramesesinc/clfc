@@ -1,7 +1,7 @@
 [findFieldCollection]
 SELECT * FROM field_collection
 WHERE collector_objid=$P{collectorid}
-	AND state IN ('DRAFT', 'FOR_POSTING')
+	AND state='FOR_POSTING'
 
 [getForPostingRoutesByFieldcollectionid]
 SELECT lr.code AS route_code, lr.description AS route_description, lr.area AS route_area,
@@ -35,6 +35,14 @@ WHERE fieldcollectionid=$P{fieldcollectionid}
 [getRoutesByFieldcollectionid]
 SELECT * FROM field_collection_route
 WHERE fieldcollectionid=$P{fieldcollectionid}
+
+[getCurrentLoansByRoutecode]
+SELECT fcl.* 
+FROM field_collection fc
+INNER JOIN field_collection_loan fcl ON fc.objid=fcl.parentid
+WHERE fc.billdate=$P{billdate}
+	AND fcl.routecode=$P{routecode}
+ORDER BY fcl.borrower_name
 
 [changeState]
 UPDATE field_collection SET state=$P{state}
