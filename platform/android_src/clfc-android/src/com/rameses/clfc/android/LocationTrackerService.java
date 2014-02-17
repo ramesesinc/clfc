@@ -12,7 +12,9 @@ import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.interfaces.UserProfile;
-import com.rameses.db.android.DBTransaction;
+import com.rameses.db.android.ExecutionHandler;
+import com.rameses.db.android.SQLExecutor;
+import com.rameses.db.android.SQLTransaction;
 
 class LocationTrackerService 
 {
@@ -37,7 +39,8 @@ class LocationTrackerService
 		
 		public void run() {
 			try {
-				runImpl();
+				SQLTransaction txn = new SQLTransaction("clfc.db"); 
+				txn.execute(new ExecutionHandlerImpl()); 
 			} catch(Throwable t) {
 				t.printStackTrace();
 			}
@@ -48,51 +51,50 @@ class LocationTrackerService
 				t.printStackTrace();
 			}			
 		}	
-		
-		private void runImpl() {
-			final AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
-			DBTransaction txn = new DBTransaction("clfc.db") {
-				
-				protected void onExecute() throws Exception {
+	}
+	
+	private class ExecutionHandlerImpl implements ExecutionHandler
+	{
+		@Override
+		public void execute(SQLExecutor sqlexec) throws Exception {
+			AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
+			
+			Location loc = NetworkLocationProvider.getLocation();
+			double lng = (loc == null? 0.0: loc.getLongitude());
+			double lat = (loc == null? 0.0: loc.getLatitude());
+			if (lng > 0.0 && lat > 0.0) {				
+				UserProfile profile = SessionContext.getProfile();
+				String collectorid = (profile == null? null : profile.getUserId());
+				if (collectorid != null) {
+					DBLocationTracker dbloc = new DBLocationTracker();
+					dbloc.setDBContext(sqlexec.getContext());
+					int count = dbloc.getCountByCollectorid(collectorid);
+												
+					Map params = new HashMap();
+					params.put("objid", "TRCK"+UUID.randomUUID());
+					params.put("seqno",  count+1);
+					params.put("trackerid", sets.getString("trackerid"));
+					params.put("collectorid", collectorid);
+					params.put("longitude", lng);
+					params.put("latitude", lat);
 					
-					Location loc = NetworkLocationProvider.getLocation();
-					double lng = (loc == null? 0.0: loc.getLongitude());
-					double lat = (loc == null? 0.0: loc.getLatitude());
-					if (lng > 0.0 && lat > 0.0) {				
-						UserProfile profile = SessionContext.getProfile();
-						String collectorid = (profile == null? null : profile.getUserId());
-						if (collectorid != null) {
-							DBLocationTracker dbloc = new DBLocationTracker();
-							dbloc.setDBContext(getContext());
-							int count = dbloc.getCountByCollectorid(collectorid);
-														
-							Map params = new HashMap();
-							params.put("objid", "TRCK"+UUID.randomUUID());
-							params.put("seqno",  count+1);
-							params.put("trackerid", sets.getString("trackerid"));
-							params.put("collectorid", collectorid);
-							params.put("longitude", lng);
-							params.put("latitude", lat);
-							
-							DBLocationTracker lt = new DBLocationTracker();
-							lt.setDBContext(getContext());
-							lt.create(params);  
-						}
-					}
-					
-					int timeout = 1;
-					try { 
-						timeout = sets.getTrackerTimeout(); 
-					} catch(Throwable t) {;} 
-					
-					try {
-						Thread.sleep(timeout*1000);
-					} catch(Throwable t) {;}
-				}				
-			};
-			txn.execute();
+					DBLocationTracker lt = new DBLocationTracker();
+					lt.setDBContext(sqlexec.getContext());
+					lt.create(params);  
+				}
+			}
+			
+			int timeout = 1;
+			try { 
+				timeout = sets.getTrackerTimeout(); 
+			} catch(Throwable t) {;} 
+			
+			try {
+				Thread.sleep(timeout*1000);
+			} catch(Throwable t) {;}			
 		}
 	}
+	
 	
 	/*
 	private Runnable locationTrackerBroadcastRunnable = new Runnable() {
