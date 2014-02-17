@@ -55,8 +55,8 @@ public class LoginActivity extends SettingsMenuActivity
 	protected void onStartProcess() {
 		super.onStartProcess();
 
-		setValue(R.id.login_username, "quesa");
-		setValue(R.id.login_password, "amor1");
+//		setValue(R.id.login_username, "quesa");
+//		setValue(R.id.login_password, "amor1");
 		requestFocus(R.id.login_username);		
 		new UIAction(this, R.id.btn_login) {
 			protected void onClick() {

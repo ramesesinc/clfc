@@ -38,7 +38,7 @@ public class CollectionRouteListActivity extends ControlActivity
 	protected void onStartProcess() {
 		super.onStartProcess();
 		
-		try {
+		try { 
 			SQLTransaction txn = new SQLTransaction("clfc.db");
 			txn.execute(new ExecutionHandlerImpl()); 
 		} catch(Throwable e) {

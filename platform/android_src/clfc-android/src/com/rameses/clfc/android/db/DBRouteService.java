@@ -33,4 +33,16 @@ public class DBRouteService extends AbstractDBMapper
 			ctx.close();
 		}
 	}
+	
+	public void remitRouteByRoutecode(String routecode) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "UPDATE "+getTableName()+" SET state='REMITTED' WHERE routecode=?";
+			ctx.execute(sql, new Object[]{routecode});
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
 }

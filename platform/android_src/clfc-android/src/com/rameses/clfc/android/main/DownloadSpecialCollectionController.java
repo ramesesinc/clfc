@@ -54,7 +54,11 @@ public class DownloadSpecialCollectionController
 	private Handler successhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			((SpecialCollectionActivity) activity).loadRequests();
+			activity.getHandler().post(new Runnable() {
+				public void run() {
+					((SpecialCollectionActivity) activity).loadRequests();
+				}
+			});
 			if (progressDialog.isShowing()) progressDialog.dismiss();
 			ApplicationUtil.showShortMsg("Successfully downloaded billing!", activity);
 		}

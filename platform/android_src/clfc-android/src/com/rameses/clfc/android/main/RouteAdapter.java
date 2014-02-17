@@ -51,6 +51,7 @@ public class RouteAdapter extends BaseAdapter
 		}
 		
 		MapProxy item = new MapProxy(list.get(position));
+		System.out.println("description -> "+item.getString("description")+" state -> "+item.getString("state"));
 		if ("REMITTED".equals(item.getString("state"))) {
 			((TextView) overlay).setTextColor(activity.getResources().getColor(R.color.green));
 			((TextView) overlay).setText("REMITTED");

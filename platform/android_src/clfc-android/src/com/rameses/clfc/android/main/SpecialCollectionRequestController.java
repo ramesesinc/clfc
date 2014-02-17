@@ -60,7 +60,11 @@ public class SpecialCollectionRequestController
 	private Handler successhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			((SpecialCollectionActivity) activity).loadRequests();
+			activity.runOnUiThread(new Runnable() {
+				public void run() {
+					((SpecialCollectionActivity) activity).loadRequests();
+				}
+			});
 			if (progressDialog.isShowing()) progressDialog.dismiss();
 			if (dialog.isShowing()) dialog.dismiss();
 		}

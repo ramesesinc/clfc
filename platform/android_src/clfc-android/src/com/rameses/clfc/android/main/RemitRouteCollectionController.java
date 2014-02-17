@@ -11,6 +11,7 @@ import android.os.Message;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.db.DBRouteService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.UIActivity;
@@ -51,9 +52,13 @@ public class RemitRouteCollectionController
 	private Handler successhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			((RemitRouteCollectionActivity) activity).loadRoutes();
+			activity.runOnUiThread(new Runnable() {
+				public void run() {
+					((RemitRouteCollectionActivity) activity).loadRoutes();
+				}
+			});
 			if (progressDialog.isShowing()) progressDialog.dismiss();
-			ApplicationUtil.showShortMsg("Collection for route "+route.get("routedescriptio").toString()+" - "+route.get("routearea").toString()+" successfully remitted.");
+			ApplicationUtil.showShortMsg("Collection for route "+route.get("description").toString()+" - "+route.get("area").toString()+" successfully remitted.");
 		}
 	};
 	
@@ -66,12 +71,19 @@ public class RemitRouteCollectionController
 				Map params = getParameters();
 				
 				LoanPostingService svc = new LoanPostingService();
-				Map response = svc.remitRouteCollection(params);				
+				Map response = svc.remitRouteCollection(params);	
+				
+				SQLTransaction txn = new SQLTransaction("clfc.db");
+				DBRouteService dbRs = new DBRouteService();
+				dbRs.setDBContext(txn.getContext());
+				
+				dbRs.remitRouteByRoutecode(route.get("code").toString());
 				
 				data.putString("response", response.get("response").toString());
 				message = successhandler.obtainMessage();
 				handler = successhandler;
 			} catch (Throwable t) {
+				t.printStackTrace();
 				data.putSerializable("response", t);
 				message = errorhandler.obtainMessage();
 				handler = errorhandler;

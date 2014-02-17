@@ -123,7 +123,8 @@ class LogoutController
 				processRoute(txn, routecode);
 				txn.delete("route", "routecode=?", new Object[]{routecode});
 			}
-						
+
+			txn.delete("system", "name IN ('trackerid','billingid')");
 			txn.delete("location_tracker", "collectorid=?", new Object[]{collectorid});			
 			try { 
 				new LogoutService().logout(); 

@@ -160,7 +160,7 @@ public class PaymentActivity extends ControlActivity {
 				};
 				String message = "Amount Paid: "+amt.toString();
 				if (type.equals("over") && isfirstbill == 1) message += "\nOverpayment: "+amt2.toString();
-				message += "\n\nEnsure all information are correct. Continue?";
+				message += "\n\nEnsure that all information are correct. Continue?";
 				dialog.confirm(message);				
 			}
 		}

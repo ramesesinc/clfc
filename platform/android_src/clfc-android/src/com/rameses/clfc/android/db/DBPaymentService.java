@@ -104,7 +104,7 @@ public class DBPaymentService extends AbstractDBMapper
 			Map map;
 			for (int i=0; i<list.size(); i++) {
 				map = (Map) list.get(i);
-				amount = amount.add(new BigDecimal(map.get("amount").toString()).setScale(2));
+				amount = amount.add(new BigDecimal(map.get("paymentamount").toString()).setScale(2));
 			}
 			return amount;
 		} catch (Exception e) {

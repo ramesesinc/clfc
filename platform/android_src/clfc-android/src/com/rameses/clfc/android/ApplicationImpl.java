@@ -211,7 +211,7 @@ public class ApplicationImpl extends UIApplication
 					params.put("routecode", map.get("routecode").toString());
 					params.put("mode", mode);
 					params.put("trackerid", trackerid);
-					params.put("longitiude", Double.parseDouble(map.get("longitude").toString()));
+					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
 					params.put("latitude", Double.parseDouble(map.get("latitude").toString()));
 					params.put("collector", collector);
 					params.put("collectionsheet", collectionSheet);
