@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import android.os.Handler;
-import android.os.SystemClock;
 
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBLocationTracker;
@@ -24,6 +23,8 @@ import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIApplication;
+import com.rameses.db.android.ExecutionHandler;
+import com.rameses.db.android.SQLExecutor;
 import com.rameses.db.android.SQLTransaction;
 
 public class ApplicationImpl extends UIApplication 
@@ -42,9 +43,9 @@ public class ApplicationImpl extends UIApplication
 		new Handler().postDelayed(services, 1);
 		
 		Platform.getTaskManager().schedule(new ApprovePendingVoidRequest(), 0, 2000);
-		Platform.getTaskManager().schedule(new PostPendingPayments(), 0);
-		Platform.getTaskManager().schedule(new PostPendingRemarks(), 0);
-		Platform.getTaskManager().schedule(new PostPendingRemarksRemoved(), 0);
+		Platform.getTaskManager().schedule(new PostPendingPayments());
+		Platform.getTaskManager().schedule(new PostPendingRemarks());
+		Platform.getTaskManager().schedule(new PostPendingRemarksRemoved());
 		Platform.getTaskManager().schedule(new PostLocationTracker(), 0, 2000);
 	}
 	
@@ -92,26 +93,23 @@ public class ApplicationImpl extends UIApplication
 		});
 	}
 	
-	private class ApprovePendingVoidRequest implements Runnable {
+	private class ApprovePendingVoidRequest implements Runnable, ExecutionHandler 
+	{
 		public void run() {
 //			System.out.println("ApprovePendingVoidRequest");
-			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
-				txn.beginTransaction();
-				runImpl(txn);
-				txn.commit();
-			} catch (Throwable t) {;}
-			finally {
-				txn.endTransaction();
-			}			
+				SQLTransaction txn = new SQLTransaction("clfc.db");
+				txn.execute(this);
+			} catch (Throwable t) {
+				System.out.println("[ApprovePendingVoidRequest] error caused by " + t.getClass().getName() + ": " + t.getMessage()); 
+			}
 		}
 		
-		private void runImpl(SQLTransaction txn) throws Exception {
+		public void execute(SQLExecutor txn) throws Exception {
 			DBVoidService dbVs = new DBVoidService();
 			dbVs.setDBContext(txn.getContext());
 			
 			List<Map> list = dbVs.getPendingVoidRequests();
-
 			if (!list.isEmpty()) {
 				LoanPostingService svc = new LoanPostingService();
 				Map map;
@@ -132,30 +130,27 @@ public class ApplicationImpl extends UIApplication
 		}
 	}
 	
-	private class PostPendingPayments implements Runnable {
+	private class PostPendingPayments implements Runnable, ExecutionHandler 
+	{
 		public void run() {
 //			System.out.println("PostPendingPayments");
-			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
-				txn.beginTransaction();
-				runImpl(txn);
-				txn.commit();
+				SQLTransaction txn = new SQLTransaction("clfc.db");
+				txn.execute(this);
 			} catch (Throwable t) {
+				System.out.println("[PostPendingPayments] error caused by " + t.getClass().getName() + ": " + t.getMessage());
 				t.printStackTrace();
-			}
-			finally {
-				txn.endTransaction();
-			}
+			} 
+			
 			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
 			Platform.getTaskManager().schedule(new PostPendingPayments(), delay*1000);
 		}
 		
-		private void runImpl(SQLTransaction txn) throws Exception {
+		public void execute(SQLExecutor txn) throws Exception {
 			DBPaymentService dbPs = new DBPaymentService();
 			dbPs.setDBContext(txn.getContext());
 			
 			List<Map> list = dbPs.getPendingPayments();
-			
 			if (!list.isEmpty()) {				
 				DBCollectionSheet dbCs = new DBCollectionSheet();
 				dbCs.setDBContext(txn.getContext());
@@ -227,7 +222,7 @@ public class ApplicationImpl extends UIApplication
 						try {
 							response = svc.postPayment(params);
 							break;
-						} catch (Exception e) {;} 
+						} catch (Throwable e) {;} 
 					}
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
 						dbPs.approvePaymentById(map.get("objid").toString());
@@ -237,29 +232,26 @@ public class ApplicationImpl extends UIApplication
 		}		
 	}
 	
-	private class PostPendingRemarks implements Runnable {
+	private class PostPendingRemarks implements Runnable, ExecutionHandler 
+	{
 		public void run() {
 //			System.out.println("PostPendingRemarks");
-			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
-				txn.beginTransaction();
-				runImpl(txn);
-				txn.commit();
-			} catch (Throwable t) {;}
-			finally {
-				txn.endTransaction();
+				SQLTransaction txn = new SQLTransaction("clfc.db");
+				txn.execute(this);
+			} catch (Throwable t) {
+				System.out.println("[PostPendingRemarks] error caused by " + t.getClass().getName() + ": " + t.getMessage());
 			}
 
 			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
 			Platform.getTaskManager().schedule(new PostPendingRemarks(), delay*1000);
 		}
 		
-		private void runImpl(SQLTransaction txn) throws Exception {
+		public void execute(SQLExecutor txn) throws Exception {
 			DBRemarksService dbRs = new DBRemarksService();
 			dbRs.setDBContext(txn.getContext());
 			
 			List<Map> list = dbRs.getPendingRemarks();
-			
 			if (!list.isEmpty()) {
 				DBCollectionSheet dbCs = new DBCollectionSheet();
 				dbCs.setDBContext(txn.getContext());					
@@ -315,7 +307,7 @@ public class ApplicationImpl extends UIApplication
 						try {
 							response = svc.updateRemarks(params);
 							break;
-						} catch (Exception e) {;}
+						} catch (Throwable e) {;}
 					}
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
 						dbRs.approveRemarksByLoanappid(map.get("loanappid").toString());
@@ -325,28 +317,26 @@ public class ApplicationImpl extends UIApplication
 		}
 	}
 	
-	private class PostPendingRemarksRemoved implements Runnable {
+	private class PostPendingRemarksRemoved implements Runnable, ExecutionHandler  
+	{
 		public void run() {
 //			System.out.println("PostPendingRemarksRemoved");
-			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
-				txn.beginTransaction();
-				runImpl(txn);
-				txn.commit();
-			} catch (Throwable t) {;}
-			finally {
-				txn.endTransaction();
+				SQLTransaction txn = new SQLTransaction("clfc.db");
+				txn.execute(this);
+			} catch (Throwable t) {
+				System.out.println("[PostPendingRemarksRemoved] error caused by " + t.getClass().getName() + ": " + t.getMessage());
 			}
+
 			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
 			Platform.getTaskManager().schedule(new PostPendingRemarksRemoved(), delay*1000);
 		}
 		
-		private void runImpl(SQLTransaction txn) throws Exception {
+		public void execute(SQLExecutor txn) throws Exception {
 			DBRemarksRemoved dbRr = new DBRemarksRemoved();
 			dbRr.setDBContext(txn.getContext());
 			
 			List<Map> list = dbRr.getPendingRemarksRemoved();
-			
 			if (!list.isEmpty()) {
 				
 				Map map;
@@ -364,7 +354,7 @@ public class ApplicationImpl extends UIApplication
 						try {
 							response = svc.removeRemarks(params);
 							break;
-						} catch (Exception e) {;}
+						} catch (Throwable e) {;}
 					}
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
 						txn.delete("remarks_removed", "loanappid='"+map.get("loanappid").toString()+"'");
@@ -374,26 +364,23 @@ public class ApplicationImpl extends UIApplication
 		}
 	}
 
-	private class PostLocationTracker implements Runnable {
+	private class PostLocationTracker implements Runnable, ExecutionHandler  
+	{
 		public void run() {
 //			System.out.println("PostLocationTracker");
-			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
-				txn.beginTransaction();
-				runImpl(txn);
-				txn.commit();
-			} catch (Throwable t) {;}
-			finally {
-				txn.endTransaction();
-			}
+				SQLTransaction txn = new SQLTransaction("clfc.db");
+				txn.execute(this);
+			} catch (Throwable t) {
+				System.out.println("[PostLocationTracker] error caused by " + t.getClass().getName() + ": " + t.getMessage());
+			} 
 		}
 		
-		private void runImpl(SQLTransaction txn) throws Exception {
+		public void execute(SQLExecutor txn) throws Exception {
 			DBLocationTracker dbLt = new DBLocationTracker();
 			dbLt.setDBContext(txn.getContext());
 			
 			List<Map> list = dbLt.getLocationTrackers();
-			
 			if (!list.isEmpty()) {
 				DBSystemService dbSys = new DBSystemService();
 				dbSys.setDBContext(txn.getContext());
@@ -417,7 +404,7 @@ public class ApplicationImpl extends UIApplication
 						try {
 							response = svc.postLocation(params);
 							break;
-						} catch (Exception e) {;}
+						} catch (Throwable e) {;}
 					}
 					
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
