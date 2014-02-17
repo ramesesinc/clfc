@@ -143,6 +143,9 @@ class MobilePostingService
 				totalcount			: 0
 			];
 			field_collection.create(route, "route");
+
+			itm.state = 'DRAFT';
+			field_collection.changeState(itm);
 		}
 
 		def loan = field_collection.read([objid: params.collectionsheet.detailid], "loan");
@@ -236,7 +239,7 @@ class MobilePostingService
 		} else {
 			special_collection.routeUploaded([billingid: params.sessionid, routecode: params.routecode]);
 		}
-		return [response: "success"];
+		return [response: "success", state: "REMITTED"];
 	}
 
 	@ProxyMethod
