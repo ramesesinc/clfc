@@ -1,0 +1,17 @@
+<workunit>
+    <invokers>
+        <invoker folderid="/explorer/txn/loan" action="init" caption="Collections" role="FIELD_COLLECTOR, ACCT_OFFICER"/>
+        
+        <invoker type="formActions" action="close" immediate="true" visibleWhen="#{page == 'init'}"/>
+        <invoker type="formActions" action="next" mnemonic="n" shortcut="ctrl N" visibleWhen="#{page == 'init'}"/>
+        
+        <invoker type="formActions" action="back" mnemonic="b" shortcut="ctrl B" visibleWhen="#{page == 'main'}"/>
+    </invokers>
+    
+    <code class="com.rameses.clfc.loan.collection.CollectionController"/>
+    
+    <pages>
+        <page template="com.rameses.clfc.loan.collection.CollectionInitPage"/>
+        <page template="com.rameses.clfc.loan.collection.CollectionPage" name="main"/>
+    </pages>
+</workunit>

@@ -1,7 +1,7 @@
 <workunit>
     <invokers>
-        <invoker folderid="/menu/txn/collection" action="init" caption="Field Collection" role="FIELD_COLLECTOR,CASHIER" index="5"/>
-        <invoker type="quick_launcher" code="FCOL" action="init" caption="Field Collection" role="FIELD_COLLECTOR,CASHIER"/> 
+        <invoker folderid="/menu/txn/collection" action="init" caption="Field Collection" role="CASHIER" index="5"/>
+        <invoker type="quick_launcher" code="FCOL" action="init" caption="Field Collection" role="CASHIER"/> 
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" 
             shortcut="ctrl W" visibleWhen="#{mode == 'init'}" immediate="true"/>
