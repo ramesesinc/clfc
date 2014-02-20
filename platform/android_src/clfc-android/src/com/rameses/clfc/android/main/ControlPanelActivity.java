@@ -47,7 +47,7 @@ public class ControlPanelActivity extends ControlActivity
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
-		System.out.println("serverDate -> " + Platform.getApplication().getServerDate().toString());
+		//System.out.println("serverDate -> " + Platform.getApplication().getServerDate().toString());
 		
 		SQLTransaction txn = new SQLTransaction("clfc.db");
 		DBRouteService dbRs = new DBRouteService();
@@ -56,9 +56,11 @@ public class ControlPanelActivity extends ControlActivity
 		String txndate = null;
 		try {
 			if (dbRs.hasRoutesByCollectorid(SessionContext.getProfile().getUserId())) {
-				txndate = new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
+				txndate = ApplicationUtil.formatDate(Platform.getApplication().getServerDate(), "MMM dd, yyyy");//new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
 			}
-		} catch (Exception e) {;}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list.add(ApplicationUtil.createMenuItem("download", "Download", null, R.drawable.download));
@@ -88,7 +90,9 @@ public class ControlPanelActivity extends ControlActivity
 	}
 	
 	protected void afterBackPressed() {
-		Platform.getApplication().suspendSuspendTimer(); 
+		if (SessionContext.getSessionId() != null) {
+			Platform.getApplication().suspendSuspendTimer();
+		} 
 	}
 	
 	private void selectionChanged(AdapterView<?> parent, View view, int position, long id) throws Exception {

@@ -12,10 +12,11 @@ public class DBRemarksRemoved extends AbstractDBMapper
 	public List<Map> getPendingRemarksRemoved() throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = " SELECT rr.*, cs.detailid " +
-						 " FROM "+getTableName()+" rr " +
-						 "    INNER JOIN collectionsheet cs ON rr.loanappid=cs.loanappid " +
-						 " WHERE rr.state='PENDING'";
+//			String sql = " SELECT rr.*, cs.detailid " +
+//						 " FROM "+getTableName()+" rr " +
+//						 "    INNER JOIN collectionsheet cs ON rr.loanappid=cs.loanappid " +
+//						 " WHERE rr.state='PENDING'";
+			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING'";
 			return ctx.getList(sql, new Object[]{});
 		} catch (Exception e) {
 			throw e;

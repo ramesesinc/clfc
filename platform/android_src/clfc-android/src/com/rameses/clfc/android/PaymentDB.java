@@ -5,23 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.rameses.db.android.AbstractDB;
 
-public class MainDB extends AbstractDB 
+public class PaymentDB extends AbstractDB 
 {
-	private static MainDB instance;	
-	public static MainDB getInstance() {
-		return instance; 
-	}
-	
-	
-	public MainDB(Context ctx, String dbname, int dbversion) {
+	public PaymentDB(Context ctx, String dbname, int dbversion) {
 		super(ctx, dbname, dbversion); 
-		MainDB.instance = this;
 	}
 
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
 		try { 
-			loadDBResource(sqldb, "clfcdb_create"); 
-			System.out.println("clfc created");
+			loadDBResource(sqldb, "clfcpaymentdb_create");
 		} catch(RuntimeException re) {
 			throw re; 
 		} catch(Exception e) {
@@ -31,7 +23,7 @@ public class MainDB extends AbstractDB
 
 	protected void onUpgradeProcess(SQLiteDatabase sqldb, int arg1, int arg2) {
 		try { 
-			loadDBResource(sqldb, "clfcdb_upgrade");
+			loadDBResource(sqldb, "clfcpaymentdb_upgrade");
 			onCreate(sqldb); 
 		} catch(RuntimeException re) {
 			throw re; 

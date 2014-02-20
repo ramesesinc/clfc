@@ -7,13 +7,15 @@ import com.rameses.db.android.DBContext;
 
 public class DBSystemService extends AbstractDBMapper 
 {
-	public String getTableName() { return "system"; }
+	public String getTableName() { return "sys_var"; }
 	
 	public String getTrackerid() throws Exception {
 		DBContext ctx = createDBContext();
 		try {
 			String sql = "SELECT value FROM "+getTableName()+" WHERE name='trackerid'";
 			Map map = ctx.find(sql, new Object[]{});
+			
+			if (map == null) return null;
 			return map.get("value").toString();
 		} catch(Exception e) {
 			throw e; 
@@ -39,6 +41,8 @@ public class DBSystemService extends AbstractDBMapper
 		try {
 			String sql = "SELECT value FROM "+getTableName()+" WHERE name='billingid'";
 			Map map = ctx.find(sql, new Object[]{});
+
+			if (map == null) return null;
 			return map.get("value").toString();
 		} catch (Exception e) {
 			throw e;

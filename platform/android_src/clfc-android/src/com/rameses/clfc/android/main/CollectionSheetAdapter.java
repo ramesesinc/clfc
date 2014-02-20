@@ -64,7 +64,7 @@ public class CollectionSheetAdapter extends BaseAdapter
 		tv_info_name.setText(item.get("acctname").toString());
 		
 		String loanappid = item.get("loanappid").toString();
-		SQLTransaction txn = new SQLTransaction("clfc.db");
+		SQLTransaction txn = new SQLTransaction("clfcpayment.db");
 		DBPaymentService dbPs = new DBPaymentService();
 		dbPs.setDBContext(txn.getContext());
 		

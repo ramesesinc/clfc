@@ -1,6 +1,7 @@
 package com.rameses.clfc.android.main;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.ProgressDialog;
@@ -11,6 +12,7 @@ import android.os.Message;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.clfc.android.db.DBRouteService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
@@ -95,30 +97,61 @@ public class RemitRouteCollectionController
 		
 		private Map getParameters() throws Exception {
 			Map params = new HashMap();
-			SQLTransaction txn = new SQLTransaction("clfc.db");
+			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+			SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
 			try {
-				txn.beginTransaction();
-				params = getParametersImpl(txn);
-				txn.commit();
+				clfcdb.beginTransaction();
+				paymentdb.beginTransaction();
+				remarksdb.beginTransaction();
+				params = getParametersImpl(clfcdb, paymentdb, remarksdb);
+				clfcdb.commit();
+				paymentdb.commit();
+				remarksdb.commit();
 			} catch (Exception e) {
 				throw e;
 			} finally {
-				txn.endTransaction();
+				clfcdb.endTransaction();
+				paymentdb.endTransaction();
+				remarksdb.endTransaction();
 			}
 			return params;
 		}
 		
-		private Map getParametersImpl(SQLTransaction txn) throws Exception {
-			DBPaymentService dbPs = new DBPaymentService();
-			dbPs.setDBContext(txn.getContext());
-			
+		private Map getParametersImpl(SQLTransaction clfcdb, SQLTransaction paymentdb, SQLTransaction remarksdb) throws Exception {			
 			DBCollectionSheet dbCs = new DBCollectionSheet();
-			dbCs.setDBContext(txn.getContext());
+			dbCs.setDBContext(clfcdb.getContext());
+			
+			DBPaymentService dbPs = new DBPaymentService();
+			dbPs.setDBContext(paymentdb.getContext());
+			
+			DBRemarksService dbRs = new DBRemarksService();
+			dbRs.setDBContext(remarksdb.getContext());
+			
+			int totalcollectionsheets = 0;
+			List<Map> list = dbCs.getCollectionSheetsByRoutecode(route.get("code").toString());
+			if (!list.isEmpty()) {
+				Map map;
+				String loanappid = "";
+				boolean haspayment = false;
+				boolean hasremarks = false;
+				for (int i=0; i<list.size(); i++) {
+					map = (Map) list.get(i);
+					
+					loanappid = map.get("loanappid").toString();
+					haspayment = dbPs.hasPaymentsByLoanappid(loanappid);
+					hasremarks = dbRs.hasRemarksByLoanappi(loanappid);
+					
+					if (haspayment == true || hasremarks == true) {
+						totalcollectionsheets++;
+					}
+				}
+			}
 			
 			Map params = new HashMap();
 			params.put("routecode", route.get("code").toString());
 			params.put("sessionid", route.get("sessionid").toString());
-			params.put("totalcollection", dbCs.getTotalCollectionSheetsByRoutecode(route.get("code").toString()));
+			params.put("totalcollection", totalcollectionsheets);
 			params.put("totalamount", dbPs.getTotalCollectionsByRoutecode(route.get("code").toString()));
 			return params;
 		}

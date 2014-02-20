@@ -11,12 +11,10 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +22,7 @@ import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBSystemService;
+import com.rameses.client.android.Location;
 import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
@@ -144,17 +143,22 @@ public class PaymentActivity extends ControlActivity {
 			if (flag == true) {
 				UIDialog dialog = new UIDialog(this) {
 					public void onApprove() {
-						SQLTransaction txn = new SQLTransaction("clfc.db");
+						SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+						SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
 						try { 
-							txn.beginTransaction();
-							onApproveImpl(txn);
-							txn.commit();
+							clfcdb.beginTransaction();
+							paymentdb.beginTransaction();
+							onApproveImpl(clfcdb, paymentdb);
+							clfcdb.commit();
+							paymentdb.commit();
 							finish();
 						} catch (Throwable t) {
 							t.printStackTrace();
+							Platform.getLogger().log(t);
 							UIDialog.showMessage(t, PaymentActivity.this); 
 						} finally {
-							txn.endTransaction();
+							clfcdb.endTransaction();
+							paymentdb.endTransaction();
 						}
 					}
 				};
@@ -166,9 +170,9 @@ public class PaymentActivity extends ControlActivity {
 		}
 	}
 	
-	private void onApproveImpl(SQLTransaction txn) throws Exception {
+	private void onApproveImpl(SQLTransaction clfcdb, SQLTransaction paymentdb) throws Exception {
 		DBSystemService dbSys = new DBSystemService();
-		dbSys.setDBContext(txn.getContext());
+		dbSys.setDBContext(clfcdb.getContext());
 
 		Location location = NetworkLocationProvider.getLocation();
 		Map params = new HashMap();
@@ -188,6 +192,6 @@ public class PaymentActivity extends ControlActivity {
 		params.put("trackerid", dbSys.getTrackerid());
 		params.put("collectorid", SessionContext.getProfile().getUserId());
 		
-		txn.insert("payment", params);
+		paymentdb.insert("payment", params);
 	}	
 }

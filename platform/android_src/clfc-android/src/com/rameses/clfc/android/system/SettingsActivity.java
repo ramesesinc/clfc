@@ -1,5 +1,6 @@
 package com.rameses.clfc.android.system;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +8,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.clfc.android.ApplicationUtil;
@@ -19,6 +22,7 @@ import com.rameses.client.android.UIActivity;
 public class SettingsActivity extends UIActivity 
 {
 	private ProgressDialog progressDialog;
+	private Spinner spinner;
 	
 	protected void onCreateProcess(Bundle savedInstanceState) {
 		super.onCreateProcess(savedInstanceState); 
@@ -30,6 +34,8 @@ public class SettingsActivity extends UIActivity
 		inflater.inflate(R.layout.activity_settings, rl_container, true);
 		progressDialog = new ProgressDialog(this);
 		
+		spinner = (Spinner) findViewById(R.id.spinner_debug_enabled);
+		
 		setProperty(R.id.et_host_port, "datatype", "integer");
 		setProperty(R.id.et_timeout_session, "datatype", "integer");
 		setProperty(R.id.et_timeout_upload, "datatype", "integer");
@@ -39,8 +45,13 @@ public class SettingsActivity extends UIActivity
 
 	protected void onStartProcess() {
 		super.onStartProcess();
+
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.boolean_array, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 		loadSettings();
-		
+       
 		new UIAction(this, R.id.btn_save) {
 			protected void onClick() {
 				try { 
@@ -61,6 +72,7 @@ public class SettingsActivity extends UIActivity
 		Object sessiontimeout = getValue(R.id.et_timeout_session);
 		Object uploadtimeout = getValue(R.id.et_timeout_upload);
 		Object trackertimeout = getValue(R.id.et_timeout_tracker);
+		Object debugenabled = spinner.getSelectedItem();
 		
 		if (isEmpty(onlinehost)) {
 			requestFocus(R.id.et_host_online); 
@@ -97,8 +109,9 @@ public class SettingsActivity extends UIActivity
 			map.put("timeout_session", sessiontimeout);
 			map.put("timeout_upload", uploadtimeout);
 			map.put("timeout_tracker", trackertimeout);
-			Platform.getApplication().getAppSettings().putAll(map); 			
-			
+			map.put("debug_enabled", debugenabled);
+			Platform.getApplication().getAppSettings().putAll(map); 	
+						
 			if (progressDialog.isShowing()) progressDialog.dismiss(); 
 			ApplicationUtil.showShortMsg("Settings successfully saved!");			
 		}
@@ -112,5 +125,12 @@ public class SettingsActivity extends UIActivity
 		setValue(R.id.et_timeout_session, sets.getSessionTimeout());
 		setValue(R.id.et_timeout_upload, sets.getUploadTimeout());
 		setValue(R.id.et_timeout_tracker, sets.getTrackerTimeout());
+		
+		if (sets.getDebugEnabled().equals("true")) {
+			spinner.setSelection(0);
+		} else {
+			spinner.setSelection(1);
+		}
+//		setValue(R.id.et_debugEnabled, sets.getDebugEnabled());
 	} 	
 }

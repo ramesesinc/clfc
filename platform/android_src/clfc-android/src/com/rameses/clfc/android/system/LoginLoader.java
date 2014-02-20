@@ -2,6 +2,7 @@ package com.rameses.clfc.android.system;
 
 import android.content.Intent;
 
+import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIDialog;
@@ -21,6 +22,7 @@ public class LoginLoader implements AppLoader
 	
 	public void load() {
 		println("started");
+		
 		String sessionid = SessionContext.getSessionId();
 		if (sessionid == null || sessionid.length() == 0) {
 			try {

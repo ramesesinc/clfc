@@ -8,7 +8,7 @@ import com.rameses.db.android.DBContext;
 
 public class DBVoidService extends AbstractDBMapper
 {
-	public String getTableName() { return "void"; }
+	public String getTableName() { return "void_request"; }
 	
 	public int noOfVoidPaymentsByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();

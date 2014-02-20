@@ -1,5 +1,6 @@
 package com.rameses.clfc.android;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +59,13 @@ public final class ApplicationUtil
 		UIApplication app = Platform.getApplication();
 		return ((AppSettingsImpl) app.getAppSettings()).getAppHost(networkStatus);
 	}	
+	
+	public static String formatDate(Date date, String format) {
+		System.out.println("date -> "+date+" format -> "+format);
+		if (date == null) return null;
+		
+		return new java.text.SimpleDateFormat(format).format(date);
+	}
 	
 	private ApplicationUtil() {
 	}

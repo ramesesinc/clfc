@@ -30,23 +30,29 @@ import com.rameses.db.android.SQLTransaction;
 public class ApplicationImpl extends UIApplication 
 {
 	private MainDB maindb;
+	private TrackerDB trackerdb;
+	private PaymentDB paymentdb;
+	private VoidRequestDB requestdb;
+	private RemarksDB remarksdb;
+	private RemarksRemovedDB remarksremoveddb;
 	private int networkStatus;
 	private AppSettingsImpl appSettings;
 	
 	protected void onCreateProcess() {
 		super.onCreateProcess();
-
+		
+		Platform.setDebug(true);
 		NetworkLocationProvider.setEnabled(true);
 		maindb = new MainDB(this, "clfc.db", 1);
+		trackerdb = new TrackerDB(this, "clfctracker.db", 1);
+		paymentdb = new PaymentDB(this, "clfcpayment.db", 1);
+		requestdb = new VoidRequestDB(this, "clfcrequest.db", 1);
+		remarksdb = new RemarksDB(this, "clfcremarks.db", 1);
+		remarksremoveddb = new RemarksRemovedDB(this, "clfcremarksremoved.db", 1);
 		
 		AppServices services = new AppServices(this);
 		new Handler().postDelayed(services, 1);
-		
-		Platform.getTaskManager().schedule(new ApprovePendingVoidRequest(), 0, 2000);
-		Platform.getTaskManager().schedule(new PostPendingPayments());
-		Platform.getTaskManager().schedule(new PostPendingRemarks());
-		Platform.getTaskManager().schedule(new PostPendingRemarksRemoved());
-		Platform.getTaskManager().schedule(new PostLocationTracker(), 0, 2000);
+
 	}
 	
 	protected AppSettings createAppSettings() {
@@ -54,7 +60,9 @@ public class ApplicationImpl extends UIApplication
 	}
 
 	public Logger createLogger() {
-		return Logger.create("clfclog.txt");
+		Logger logger = Logger.create("clfclog.txt");
+		//ApplicationUtil.showShortMsg("logger -> "+logger.toString());
+		return logger;
 	} 	
 
 	protected void beforeLoad(Properties appenv) {
@@ -91,328 +99,6 @@ public class ApplicationImpl extends UIApplication
 				SuspendDialog.show(content);
 			}
 		});
-	}
-	
-	private class ApprovePendingVoidRequest implements Runnable, ExecutionHandler 
-	{
-		public void run() {
-//			System.out.println("ApprovePendingVoidRequest");
-			try {
-				SQLTransaction txn = new SQLTransaction("clfc.db");
-				txn.execute(this);
-			} catch (Throwable t) {
-				System.out.println("[ApprovePendingVoidRequest] error caused by " + t.getClass().getName() + ": " + t.getMessage()); 
-			}
-		}
-		
-		public void execute(SQLExecutor txn) throws Exception {
-			DBVoidService dbVs = new DBVoidService();
-			dbVs.setDBContext(txn.getContext());
-			
-			List<Map> list = dbVs.getPendingVoidRequests();
-			if (!list.isEmpty()) {
-				LoanPostingService svc = new LoanPostingService();
-				Map map;
-				Map params = new HashMap();
-				boolean isApproved = false;
-				for (int i=0; i<list.size(); i++) {
-					map = (Map) list.get(i);
-					
-					params.clear();
-					params.put("voidid", map.get("objid").toString());
-					
-					isApproved = svc.isVoidPaymentApproved(params);
-					if (isApproved) {
-						dbVs.approveVoidPaymentById(map.get("objid").toString());
-					}
-				}
-			}
-		}
-	}
-	
-	private class PostPendingPayments implements Runnable, ExecutionHandler 
-	{
-		public void run() {
-//			System.out.println("PostPendingPayments");
-			try {
-				SQLTransaction txn = new SQLTransaction("clfc.db");
-				txn.execute(this);
-			} catch (Throwable t) {
-				System.out.println("[PostPendingPayments] error caused by " + t.getClass().getName() + ": " + t.getMessage());
-				t.printStackTrace();
-			} 
-			
-			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
-			Platform.getTaskManager().schedule(new PostPendingPayments(), delay*1000);
-		}
-		
-		public void execute(SQLExecutor txn) throws Exception {
-			DBPaymentService dbPs = new DBPaymentService();
-			dbPs.setDBContext(txn.getContext());
-			
-			List<Map> list = dbPs.getPendingPayments();
-			if (!list.isEmpty()) {				
-				DBCollectionSheet dbCs = new DBCollectionSheet();
-				dbCs.setDBContext(txn.getContext());
-				
-				DBSystemService dbSys = new DBSystemService();
-				dbSys.setDBContext(txn.getContext());
-				
-				String trackerid = dbSys.getTrackerid();
-				
-				Map collector = new HashMap();
-				collector.put("objid", SessionContext.getProfile().getUserId());
-				collector.put("name", SessionContext.getProfile().getFullName());
-
-				String mode = "";
-				Map map;
-				Map mCollectionSheet;
-				Map params = new HashMap();
-				Map loanapp = new HashMap();
-				Map payment = new HashMap();
-				Map response = new HashMap();
-				Map borrower = new HashMap();
-				Map collectionSheet = new HashMap();
-				LoanPostingService svc = new LoanPostingService();
-				for (int i=0; i<list.size(); i++) {
-					map = (Map) list.get(i);
-					
-					mode = "OFFLINE";
-					if (networkStatus == 1) {
-						mode = "ONLINE";
-					}
-					
-					mCollectionSheet = dbCs.findCollectionSheetByLoanappid(map.get("loanappid").toString());
-					collectionSheet.clear();
-					collectionSheet.put("detailid", mCollectionSheet.get("detailid").toString());
-					
-					loanapp.clear();
-					loanapp.put("objid", mCollectionSheet.get("loanappid").toString());
-					loanapp.put("appno", mCollectionSheet.get("appno").toString());
-					collectionSheet.put("loanapp", loanapp);
-					
-					System.out.println("cs -> "+mCollectionSheet);
-					borrower.clear();
-					borrower.put("objid", mCollectionSheet.get("acctid").toString());
-					borrower.put("name", mCollectionSheet.get("acctname").toString());
-					collectionSheet.put("borrower", borrower);
-					
-					payment.clear();
-					payment.put("objid", map.get("objid").toString());
-					payment.put("refno", map.get("refno").toString());
-					payment.put("txndate", map.get("txndate").toString());
-					payment.put("type", map.get("paymenttype").toString());
-					payment.put("amount", map.get("paymentamount").toString());
-					payment.put("paidby", map.get("paidby").toString());
-					
-					params.clear();
-					params.put("type", mCollectionSheet.get("type").toString());
-					params.put("sessionid", mCollectionSheet.get("sessionid").toString());
-					params.put("routecode", map.get("routecode").toString());
-					params.put("mode", mode);
-					params.put("trackerid", trackerid);
-					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
-					params.put("latitude", Double.parseDouble(map.get("latitude").toString()));
-					params.put("collector", collector);
-					params.put("collectionsheet", collectionSheet);
-					params.put("payment", payment);
-					
-					response.clear();
-					for (int j=0; j<10; j++) {
-						try {
-							response = svc.postPayment(params);
-							break;
-						} catch (Throwable e) {;} 
-					}
-					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						dbPs.approvePaymentById(map.get("objid").toString());
-					}
-				}
-			}
-		}		
-	}
-	
-	private class PostPendingRemarks implements Runnable, ExecutionHandler 
-	{
-		public void run() {
-//			System.out.println("PostPendingRemarks");
-			try {
-				SQLTransaction txn = new SQLTransaction("clfc.db");
-				txn.execute(this);
-			} catch (Throwable t) {
-				System.out.println("[PostPendingRemarks] error caused by " + t.getClass().getName() + ": " + t.getMessage());
-			}
-
-			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
-			Platform.getTaskManager().schedule(new PostPendingRemarks(), delay*1000);
-		}
-		
-		public void execute(SQLExecutor txn) throws Exception {
-			DBRemarksService dbRs = new DBRemarksService();
-			dbRs.setDBContext(txn.getContext());
-			
-			List<Map> list = dbRs.getPendingRemarks();
-			if (!list.isEmpty()) {
-				DBCollectionSheet dbCs = new DBCollectionSheet();
-				dbCs.setDBContext(txn.getContext());					
-				
-				Map collector = new HashMap();
-				collector.put("objid", SessionContext.getProfile().getUserId());
-				collector.put("name", SessionContext.getProfile().getFullName());
-				
-				String mode = "";
-				Map map;
-				Map mCollectionSheet;
-				Map params = new HashMap();
-				Map loanapp = new HashMap();
-				Map borrower = new HashMap();
-				Map response = new HashMap();
-				Map collectionSheet = new HashMap();
-				LoanPostingService svc = new LoanPostingService();
-				for (int i=0; i<list.size(); i++) {
-					map = (Map) list.get(i);
-					
-					mode = "OFFLINE";
-					if (networkStatus == 1) {
-						mode = "ONLINE";
-					}
-					
-					mCollectionSheet = dbCs.findCollectionSheetByLoanappid(map.get("loanappid").toString());
-					collectionSheet.clear();
-					collectionSheet.put("detailid", mCollectionSheet.get("detailid").toString());
-					
-					loanapp.clear();
-					loanapp.put("objid", mCollectionSheet.get("loanappid").toString());
-					loanapp.put("appno", mCollectionSheet.get("appno").toString());
-					collectionSheet.put("loanapp", loanapp);
-					
-					borrower.clear();
-					borrower.put("objid", mCollectionSheet.get("acctid").toString());
-					borrower.put("name", mCollectionSheet.get("acctname").toString());
-					collectionSheet.put("borrower", borrower);
-					
-					params.clear();
-					params.put("sessionid", mCollectionSheet.get("sessionid").toString());
-					params.put("routecode", mCollectionSheet.get("routecode").toString());
-					params.put("mode", mode);
-					params.put("trackerid", map.get("trackerid").toString());
-					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
-					params.put("latitiude", Double.parseDouble(map.get("latitude").toString()));
-					params.put("collector", collector);
-					params.put("collectionsheet", collectionSheet);
-					params.put("remarks", map.get("remarks").toString());
-					
-					response.clear();
-					for (int j=0; j<10; j++) {
-						try {
-							response = svc.updateRemarks(params);
-							break;
-						} catch (Throwable e) {;}
-					}
-					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						dbRs.approveRemarksByLoanappid(map.get("loanappid").toString());
-					}
-				}
-			}
-		}
-	}
-	
-	private class PostPendingRemarksRemoved implements Runnable, ExecutionHandler  
-	{
-		public void run() {
-//			System.out.println("PostPendingRemarksRemoved");
-			try {
-				SQLTransaction txn = new SQLTransaction("clfc.db");
-				txn.execute(this);
-			} catch (Throwable t) {
-				System.out.println("[PostPendingRemarksRemoved] error caused by " + t.getClass().getName() + ": " + t.getMessage());
-			}
-
-			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
-			Platform.getTaskManager().schedule(new PostPendingRemarksRemoved(), delay*1000);
-		}
-		
-		public void execute(SQLExecutor txn) throws Exception {
-			DBRemarksRemoved dbRr = new DBRemarksRemoved();
-			dbRr.setDBContext(txn.getContext());
-			
-			List<Map> list = dbRr.getPendingRemarksRemoved();
-			if (!list.isEmpty()) {
-				
-				Map map;
-				Map params = new HashMap();
-				Map response = new HashMap();
-				LoanPostingService svc = new LoanPostingService();
-				for (int i=0; i<list.size(); i++) {
-					map = (Map) list.get(i);
-					
-					params.clear();
-					params.put("detailid", map.get("detailid").toString());
-					
-					response.clear();
-					for (int j=0; i<10; j++) {
-						try {
-							response = svc.removeRemarks(params);
-							break;
-						} catch (Throwable e) {;}
-					}
-					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						txn.delete("remarks_removed", "loanappid='"+map.get("loanappid").toString()+"'");
-					}
-				}
-			}
-		}
-	}
-
-	private class PostLocationTracker implements Runnable, ExecutionHandler  
-	{
-		public void run() {
-//			System.out.println("PostLocationTracker");
-			try {
-				SQLTransaction txn = new SQLTransaction("clfc.db");
-				txn.execute(this);
-			} catch (Throwable t) {
-				System.out.println("[PostLocationTracker] error caused by " + t.getClass().getName() + ": " + t.getMessage());
-			} 
-		}
-		
-		public void execute(SQLExecutor txn) throws Exception {
-			DBLocationTracker dbLt = new DBLocationTracker();
-			dbLt.setDBContext(txn.getContext());
-			
-			List<Map> list = dbLt.getLocationTrackers();
-			if (!list.isEmpty()) {
-				DBSystemService dbSys = new DBSystemService();
-				dbSys.setDBContext(txn.getContext());
-				
-				String trackerid = dbSys.getTrackerid();
-				Map map;
-				Map params = new HashMap();
-				Map response = new HashMap();
-				LoanLocationService svc = new LoanLocationService();
-				for (int i=0; i<list.size(); i++) {
-					map = (Map) list.get(i);
-					
-					params.clear();
-					params.put("objid", map.get("objid").toString());
-					params.put("trackerid", trackerid);
-					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
-					params.put("latitude", Double.parseDouble(map.get("latitude").toString()));
-					
-					response.clear();
-					for (int j=0; j<10; j++) {
-						try {
-							response = svc.postLocation(params);
-							break;
-						} catch (Throwable e) {;}
-					}
-					
-					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						txn.delete("location_tracker", "objid=?", new Object[]{map.get("objid").toString()});
-					}
-				}
-			}
-		}
 	}
 	
 }

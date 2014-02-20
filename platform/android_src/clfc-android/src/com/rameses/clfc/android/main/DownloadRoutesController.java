@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.rameses.clfc.android.ApplicationUtil;
+import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.clfc.android.services.LoanBillingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
@@ -98,49 +100,91 @@ class DownloadRoutesController
 		}
 		
 		private void processDB() throws Exception {
-			SQLTransaction txn = new SQLTransaction("clfc.db");
+			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+			SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
 			try {
-				txn.beginTransaction();
-				execute(txn);
-				txn.commit();
+				clfcdb.beginTransaction();
+				paymentdb.beginTransaction();
+				remarksdb.beginTransaction();
+				execute(clfcdb, paymentdb, remarksdb);
+				clfcdb.commit();
+				paymentdb.commit();
+				remarksdb.commit();
 			} catch(Exception e) {
 				throw e; 
 			} finally { 
-				txn.endTransaction();  
+				clfcdb.endTransaction();  
+				paymentdb.endTransaction();  
+				remarksdb.endTransaction();  
 			} 
 		}
 				
-		private void execute(SQLTransaction txn) throws Exception {
+		private void execute(SQLTransaction clfcdb, SQLTransaction paymentdb, SQLTransaction remarksdb) throws Exception {
 			String msg = "There are still collection sheets to upload. Please upload the collection sheets before downloading current collection sheets.";
-			String sql = "" +
-			" SELECT p.* FROM payment p " +
-			"    INNER JOIN collectionsheet cs ON p.loanappid=cs.loanappid " +
-			" WHERE p.state='PENDING' LIMIT 1 ";
-			List<Map> pendings = txn.getList(sql);
-			if (!pendings.isEmpty()) {
-				pendings.clear();
-				throw new Exception(msg);
-			} 
+//			String sql = "" +
+//			" SELECT p.* FROM payment p " +
+//			"    INNER JOIN collectionsheet cs ON p.loanappid=cs.loanappid " +
+//			" WHERE p.state='PENDING' LIMIT 1 ";
+//			String sql = "SELECT * FROM collectionsheet";
+//			List<Map> list = clfcdb.getList(sql);//txn.getList(sql);
+//			if (!list.isEmpty()) {
+//				boolean flag = flag;
+//
+//				DBPaymentService dbPs = new DBPaymentService();
+//				dbPs.setDBContext(paymentdb.getContext());
+//				
+//				DBRemarksService dbRs = new DBRemarksService();
+//				dbRs.setDBContext(remarksdb.getContext());
+//				Map map;
+//				for (int i=0; i<list.size(); i++) {
+//					map = (Map) list.get(i);
+//					
+//				}
+//				
+//				if (flag == true) {
+//					throw new Exception(msg);
+//				}
+//			}
 			
-			sql = "" + 
-			" SELECT n.* FROM notes n " +
-			"    INNER JOIN collectionsheet cs ON n.loanappid=cs.loanappid " +
-			" WHERE n.state='PENDING' ";			
-			pendings = txn.getList(sql);
-			if (!pendings.isEmpty()) {
-				pendings.clear();
-				throw new Exception(msg);
-			} 
+			DBPaymentService dbPs = new DBPaymentService();
+			dbPs.setDBContext(paymentdb.getContext());
 			
-			sql = "" + 
-			" SELECT r.* FROM remarks r " +
-			"    INNER JOIN collectionsheet cs ON r.loanappid=cs.loanappid" +
-			" WHERE r.state='PENDING' ";	
-			pendings = txn.getList(sql);
-			if (!pendings.isEmpty()) {
-				pendings.clear();
+			if (dbPs.hasUnpostedPayments()) {
 				throw new Exception(msg);
-			} 
+			}
+			
+			DBRemarksService dbRs = new DBRemarksService();
+			dbRs.setDBContext(remarksdb.getContext());
+			
+			if (dbRs.hasUnpostedRemarks()) {
+				throw new Exception(msg);
+			}
+			
+//			if (!pendings.isEmpty()) {
+//				pendings.clear();
+//				throw new Exception(msg);
+//			} 
+			
+//			sql = "" + 
+//			" SELECT n.* FROM notes n " +
+//			"    INNER JOIN collectionsheet cs ON n.loanappid=cs.loanappid " +
+//			" WHERE n.state='PENDING' ";			
+//			pendings = txn.getList(sql);
+//			if (!pendings.isEmpty()) {
+//				pendings.clear();
+//				throw new Exception(msg);
+//			} 
+//			
+//			sql = "" + 
+//			" SELECT r.* FROM remarks r " +
+//			"    INNER JOIN collectionsheet cs ON r.loanappid=cs.loanappid" +
+//			" WHERE r.state='PENDING' ";	
+//			pendings = txn.getList(sql);
+//			if (!pendings.isEmpty()) {
+//				pendings.clear();
+//				throw new Exception(msg);
+//			} 
 		}
 		
 		private void getRoutes() {

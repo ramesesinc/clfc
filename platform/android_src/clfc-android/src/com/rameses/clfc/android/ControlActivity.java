@@ -3,6 +3,7 @@ package com.rameses.clfc.android;
 import android.widget.TextView;
 
 import com.rameses.client.android.Platform;
+import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIActivity;
 
 public class ControlActivity extends UIActivity 
@@ -28,6 +29,8 @@ public class ControlActivity extends UIActivity
 	@Override
 	public void onUserInteraction() {
 		super.onUserInteraction();
-		Platform.getApplication().restartSuspendTimer(); 
+		if (SessionContext.getSessionId() != null) {
+			Platform.getApplication().restartSuspendTimer();
+		} 
 	}
 }

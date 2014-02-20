@@ -29,43 +29,6 @@
 		) 
     </sql> 
     <sql>
-		CREATE TABLE PAYMENT (  
-			objid text PRIMARY KEY,  
-			state text,  
-			refno text,  
-			txndate text,  
-			paymenttype text,  
-			paymentamount numeric,  
-			paidby text,  
-			loanappid text,  
-			detailid text, 
-			routecode text,  
-			isfirstbill numeric, 
-			longitude numeric,  
-			latitude numeric,  
-			trackerid text,  
-			collectorid text  
-		) 
-    </sql>
-    <sql>
-		CREATE TABLE REMARKS ( 
-			loanappid text PRIMARY KEY,  
-			state text,  
-			remarks text,  
-			longitude text,  
-			latitude text,  
-			trackerid text,  
-			collectorid text,  
-			txndate text  
-		) 
-    </sql>
-    <sql>
-		CREATE TABLE REMARKS_REMOVED ( 
-			loanappid text PRIMARY KEY, 
-			state text 
-		) 
-    </sql>
-    <sql>
 		CREATE TABLE NOTES ( 
 			objid text PRIMARY KEY,  
 			state text,  
@@ -76,7 +39,7 @@
 		) 
     </sql> 
     <sql>
-		CREATE TABLE SYSTEM ( 
+		CREATE TABLE SYS_VAR ( 
 			name text PRIMARY KEY,   
 			value text 
 		) 
@@ -92,43 +55,11 @@
 		) 
     </sql>
     <sql>
-		CREATE TABLE VOID ( 
-			objid text PRIMARY KEY,  
-			paymentid text,  
-			loanappid text,  
-			state text,  
-			collectorid text,  
-			reason text 
-		) 
-    </sql>
-    <sql>
 		CREATE TABLE SPECIALCOLLECTION ( 
 			objid text PRIMARY KEY,  
 			state text,  
 			remarks text ,
 			collectorid text
-		) 
-    </sql>
-    <sql>
-		CREATE TABLE TRACKER ( 
-			trackerid text PRIMARY KEY,  
-			collectorid text 
-		) 
-    </sql>
-    <sql>
-		CREATE TABLE COLLECTION_DATE ( 
-			collectorid text, 
-			serverdate text  
-		) 
-    </sql>
-    <sql>
-		CREATE TABLE LOCATION_TRACKER ( 
-			objid text PRIMARY KEY,  
-			seqno numeric,  
-			trackerid text,  
-			collectorid text,  
-			longitude numeric,  
-			latitude numeric 
 		) 
     </sql>
 </db>

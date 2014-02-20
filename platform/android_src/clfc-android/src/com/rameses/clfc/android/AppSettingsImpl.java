@@ -43,4 +43,8 @@ public class AppSettingsImpl extends AppSettings
 		return getInt("timeout_tracker", 10); 
 	} 
 	
+	public String getDebugEnabled() {
+		return getString("debug_enabled", "false");
+	}
+	
 }

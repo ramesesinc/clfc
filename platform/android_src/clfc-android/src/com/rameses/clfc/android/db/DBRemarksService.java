@@ -9,6 +9,30 @@ public class DBRemarksService extends AbstractDBMapper
 {
 	public String getTableName() { return "remarks"; }
 	
+	public boolean hasUnpostedRemarks() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT loanappid FROM "+getTableName()+" WHERE state='PENDING' LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
+	
+	public boolean hasRemarksByLoanappi(String loanappid) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT loanappid FROM "+getTableName()+" WHERE loanappid=? LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{loanappid}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			ctx.close();
+		}
+	}
+	
 	public Map findRemarksByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();
 		try {

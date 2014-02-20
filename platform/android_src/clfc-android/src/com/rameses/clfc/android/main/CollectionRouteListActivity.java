@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBRouteService;
@@ -32,7 +33,7 @@ public class CollectionRouteListActivity extends ControlActivity
 
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.activity_collectionsheet_route, rl_container, true);
+		inflater.inflate(R.layout.activity_collectionsheet_route, rl_container);
 	}
 	
 	protected void onStartProcess() {
@@ -42,6 +43,7 @@ public class CollectionRouteListActivity extends ControlActivity
 			SQLTransaction txn = new SQLTransaction("clfc.db");
 			txn.execute(new ExecutionHandlerImpl()); 
 		} catch(Throwable e) {
+			Platform.getLogger().log(e);
 			System.out.println("[CollectionRouteListActivity] error caused by "+e.getClass().getName() + ": " + e.getMessage()); 
 		}
 	}
@@ -57,8 +59,11 @@ public class CollectionRouteListActivity extends ControlActivity
 			dbRs.setDBContext(txn.getContext());
 			List<Map> list = dbRs.getRoutesByCollectorid(SessionContext.getProfile().getUserId());
 			List<Map> routes = new ArrayList<Map>();
+			System.out.println("billdate -> "+billdate);
 			if (!list.isEmpty()) {
-				billdate += new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
+				String str = ApplicationUtil.formatDate(Platform.getApplication().getServerDate(), "MMM dd, yyyy");//new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
+				System.out.println("str -> "+str);
+				billdate += str;
 				Map params;
 				Map itm;
 				for (int i=0; i<list.size(); i++) {
@@ -71,6 +76,8 @@ public class CollectionRouteListActivity extends ControlActivity
 					routes.add(params);
 				}
 			}
+			System.out.println("tv billdate -> "+tv_billdate);
+			System.out.println("billdate2 -> "+billdate);
 			tv_billdate.setText(billdate);
 			View header = (View) getLayoutInflater().inflate(R.layout.header_route, null);
 			lv_route.addHeaderView(header, null, false);

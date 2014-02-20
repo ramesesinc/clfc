@@ -1,0 +1,3 @@
+<db>    
+	<sql> DROP TABLE IF EXISTS location_tracker </sql>
+</db>

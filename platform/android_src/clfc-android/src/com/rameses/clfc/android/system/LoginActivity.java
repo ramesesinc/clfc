@@ -12,16 +12,15 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
+import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.SettingsMenuActivity;
-import com.rameses.client.android.AbstractActivity;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIAction;
 import com.rameses.client.android.UIApplication;
 import com.rameses.client.android.UIDialog;
-import com.rameses.client.android.UIMain;
 import com.rameses.client.interfaces.UserSetting;
 import com.rameses.client.services.LoginService;
 
@@ -55,6 +54,16 @@ public class LoginActivity extends SettingsMenuActivity
 	protected void onStartProcess() {
 		super.onStartProcess();
 
+//		AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
+//		boolean flag = false;
+//		if (sets.getDebugEnabled().equals("true")) {
+//			 flag = true;
+//		}
+//		Platform.setDebug(flag);
+		//Platform.setDebug((Boolean) sets.get("debug_enabled")); 
+//	     File dir = Environment.getExternalStorageDirectory();
+//	     File file = new File(dir, "clfclog.txt");
+//	     new UIDialog().showMessage("clfclog.txt file is exist -> "+file.exists());
 //		setValue(R.id.login_username, "quesa");
 //		setValue(R.id.login_password, "amor1");
 		requestFocus(R.id.login_username);		

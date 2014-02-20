@@ -9,7 +9,9 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.rameses.clfc.android.ApplicationUtil;
+import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIActivity;
@@ -30,8 +32,7 @@ class LogoutController
 	}
 	
 	void execute() throws Exception {
-		DBPaymentService ps = new DBPaymentService();
-		if (ps.hasUnpostedTransactions()) { 
+		if (hasUnpostedTransactions()) { 
 			ApplicationUtil.showShortMsg("Cannot logout. There are still unposted transactions");
 			
 		} else {
@@ -48,6 +49,64 @@ class LogoutController
 		}		
 	}
 	
+	private boolean hasUnpostedTransactions() throws Exception {
+		SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+		SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+		SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+		try {
+			paymentdb.beginTransaction();
+			remarksdb.beginTransaction();
+			boolean flag = hasUnpostedTransactionsImpl(paymentdb, remarksdb, clfcdb);
+			paymentdb.commit();
+			remarksdb.commit();
+			return flag;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			paymentdb.endTransaction();
+			remarksdb.endTransaction();
+		}
+	}
+	
+	private boolean hasUnpostedTransactionsImpl(SQLTransaction paymentdb, SQLTransaction remarksdb, SQLTransaction clfcdb) throws Exception {		
+		DBPaymentService dbPs = new DBPaymentService();
+		dbPs.setDBContext(paymentdb.getContext());
+		
+		if (dbPs.hasUnpostedPayments()) return true;
+		
+		DBRemarksService dbRs = new DBRemarksService();
+		dbRs.setDBContext(remarksdb.getContext());
+		
+		if (dbRs.hasUnpostedRemarks()) return true;
+		
+		DBCollectionSheet dbCs = new DBCollectionSheet();
+		dbCs.setDBContext(clfcdb.getContext());
+		
+		boolean flag = false;
+		List<Map> list = dbCs.getUnremittedCollectionSheets();
+		if (!list.isEmpty()) {
+			String sql = "";
+			String loanappid = "";
+			Map map;
+			for (int i=0; i<list.size(); i++) {
+				map = (Map) list.get(i);
+				
+				loanappid = map.get("loanappid").toString();
+				sql = "SELECT objid FROM payment WHERE loanappid=? LIMIT 1";
+				if (!paymentdb.getList(sql, new Object[]{loanappid}).isEmpty()) {
+					flag = true;
+					break;
+				}
+				
+				sql = "SELECT loanappid FROM remarks WHERE loanappid=? LIMIT 1";
+				if (!remarksdb.getList(sql, new Object[]{loanappid}).isEmpty()) {
+					flag = true;
+					break;
+				}
+			}
+		}
+		return flag;
+	}
 
 	
 	private Handler errorhandler = new Handler() {  
@@ -101,31 +160,35 @@ class LogoutController
 		}
 		
 		private void runImpl() throws Exception {
-			SQLTransaction txn = new SQLTransaction("clfc.db");
+			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			SQLTransaction trackerdb = new SQLTransaction("clfctracker.db");
 			try {
-				txn.beginTransaction();
-				execute(txn);
-				txn.commit();
+				clfcdb.beginTransaction();
+				trackerdb.beginTransaction();
+				execute(clfcdb, trackerdb);
+				clfcdb.commit();
+				trackerdb.commit();
 			} catch(Exception e) {
 				throw e; 
 			} finally { 
-				txn.endTransaction();  
+				clfcdb.endTransaction();  
+				trackerdb.endTransaction();
 			} 
 		}
 				
-		private void execute(SQLTransaction txn) throws Exception {
+		private void execute(SQLTransaction clfcdb, SQLTransaction trackerdb) throws Exception {
 			
 			String collectorid = SessionContext.getProfile().getUserId();
-			List<Map> routes = txn.getList("SELECT * FROM route WHERE collectorid='"+collectorid+"' AND state='REMITTED'");
+			List<Map> routes = clfcdb.getList("SELECT * FROM route WHERE collectorid='"+collectorid+"' AND state='REMITTED'");
 			while (!routes.isEmpty()) {
 				Map data = routes.remove(0);
 				String routecode = MapProxy.getString(data, "routecode");
-				processRoute(txn, routecode);
-				txn.delete("route", "routecode=?", new Object[]{routecode});
+				processRoute(clfcdb, routecode);
+				clfcdb.delete("route", "routecode=?", new Object[]{routecode});
 			}
 
-			txn.delete("system", "name IN ('trackerid','billingid')");
-			txn.delete("location_tracker", "collectorid=?", new Object[]{collectorid});			
+			clfcdb.delete("sys_var", "name IN ('trackerid','billingid')");
+			trackerdb.delete("location_tracker", "collectorid=?", new Object[]{collectorid});			
 			try { 
 				new LogoutService().logout(); 
 			} catch (Exception e) { 
@@ -133,18 +196,45 @@ class LogoutController
 			}			
 		} 
 		
-		private void processRoute(SQLTransaction txn, String routecode) throws Exception {
+		private void processRoute(SQLTransaction clfcdb, String routecode) throws Exception {
+			SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+			SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+			SQLTransaction remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
+			SQLTransaction requestdb = new SQLTransaction("clfcrequest.db");
+			try {
+				paymentdb.beginTransaction();
+				remarksdb.beginTransaction();
+				remarksremoveddb.beginTransaction();
+				requestdb.beginTransaction();
+				
+				processRouteImpl(clfcdb, paymentdb, remarksdb, remarksremoveddb, requestdb, routecode);
+				
+				paymentdb.commit();
+				remarksdb.commit();
+				remarksremoveddb.commit();
+				requestdb.commit();
+			} catch (Exception e) {
+				throw e;
+			} finally {
+				paymentdb.endTransaction();
+				remarksdb.endTransaction();
+				remarksremoveddb.endTransaction();
+				requestdb.endTransaction();
+			}
+		}
+		
+		private void processRouteImpl(SQLTransaction clfcdb, SQLTransaction paymentdb, SQLTransaction remarksdb, SQLTransaction remarksremoveddb, SQLTransaction requestdb, String routecode) throws Exception {
 			String sql = "SELECT * FROM collectionsheet WHERE routecode=? ORDER BY seqno";
-			List<Map> sheets = txn.getList(sql, new Object[]{routecode});
+			List<Map> sheets = clfcdb.getList(sql, new Object[]{routecode});
 			while (!sheets.isEmpty()) {
 				Map data = sheets.remove(0);
 				String loanappid = MapProxy.getString(data, "loanappid");
-				txn.delete("void", "loanappid=?", new Object[]{loanappid});
-				txn.delete("payment", "loanappid=?", new Object[]{loanappid});
-				txn.delete("notes", "loanappid=?", new Object[]{loanappid});
-				txn.delete("remarks", "loanappid=?", new Object[]{loanappid});
-				txn.delete("remarks_removed", "loanappid=?", new Object[]{loanappid});
-				txn.delete("collectionsheet", "loanappid=?", new Object[]{loanappid});
+				requestdb.delete("void_request", "loanappid=?", new Object[]{loanappid});
+				paymentdb.delete("payment", "loanappid=?", new Object[]{loanappid});
+				clfcdb.delete("notes", "loanappid=?", new Object[]{loanappid});
+				remarksdb.delete("remarks", "loanappid=?", new Object[]{loanappid});
+				remarksremoveddb.delete("remarks_removed", "loanappid=?", new Object[]{loanappid});
+				clfcdb.delete("collectionsheet", "loanappid=?", new Object[]{loanappid});
 			} 
 		}
 	}	

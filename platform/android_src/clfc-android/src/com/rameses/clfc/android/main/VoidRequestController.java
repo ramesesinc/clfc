@@ -3,6 +3,7 @@ package com.rameses.clfc.android.main;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -27,12 +28,16 @@ public class VoidRequestController
 	private ProgressDialog progressDialog;
 	private Map params;
 	private View view;
+	private LayoutInflater inflater;
+	private AlertDialog dialog;
 	
-	VoidRequestController(UIActivity activity, ProgressDialog progressDialog, Map params, View view) {
+	VoidRequestController(UIActivity activity, ProgressDialog progressDialog, Map params, View view, AlertDialog dialog) {
 		this.activity = activity;
 		this.progressDialog = progressDialog;
 		this.params = params;
 		this.view = view;
+		this.dialog = dialog;
+		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
 	public void execute() throws Exception {
@@ -62,12 +67,13 @@ public class VoidRequestController
 			try {
 				saveVoidRequest(msg);
 			} catch (Throwable t) {
+				t.printStackTrace();
 				UIDialog.showMessage(t, activity);
 			}
 		}
 		
 		private void saveVoidRequest(Message msg) throws Exception {
-			SQLTransaction txn = new SQLTransaction("clfc.db");
+			SQLTransaction txn = new SQLTransaction("clfcrequest.db");
 			try {
 				Map mParams = new HashMap();
 				mParams.put("objid", params.get("objid").toString());
@@ -81,18 +87,21 @@ public class VoidRequestController
 				map = (Map) params.get("loanapp");
 				mParams.put("loanappid", map.get("objid").toString());
 				
-				txn.insert("void", mParams);
+				txn.insert("void_request", mParams);
 				
-				View overlay = ((LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.overlay_void_text, (RelativeLayout) view);
+				View overlay = inflater.inflate(R.layout.overlay_void_text, null);
 				RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 				layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
 				((TextView) overlay).setTextColor(activity.getResources().getColor(R.color.red));
 				((TextView) overlay).setText("VOID REQUEST PENDING");
 				overlay.setLayoutParams(layoutParams);
+				((RelativeLayout) view).addView(overlay);
 				view.setClickable(false);
 				view.setOnClickListener(null);
 				view.setOnLongClickListener(null);
+				if (dialog.isShowing()) dialog.dismiss();
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw e;
 			}
 		}

@@ -1,14 +1,7 @@
 <db>    
 	<sql> DROP TABLE IF EXISTS collectionsheet </sql>
-	<sql> DROP TABLE IF EXISTS payment </sql>
-	<sql> DROP TABLE IF EXISTS remarks </sql>
-	<sql> DROP TABLE IF EXISTS remarks_removed </sql>
 	<sql> DROP TABLE IF EXISTS notes </sql>
-	<sql> DROP TABLE IF EXISTS system </sql>
-	<sql> DROP TABLE IF EXISTS host </sql>
+	<sql> DROP TABLE IF EXISTS sys_var </sql>
 	<sql> DROP TABLE IF EXISTS route </sql>
-	<sql> DROP TABLE IF EXISTS void </sql>
 	<sql> DROP TABLE IF EXISTS specialcollection </sql>
-	<sql> DROP TABLE IF EXISTS collection_date </sql>
-	<sql> DROP TABLE IF EXISTS location_tracker </sql>
 </db>

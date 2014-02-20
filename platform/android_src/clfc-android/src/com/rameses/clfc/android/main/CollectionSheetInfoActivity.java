@@ -15,7 +15,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,7 +34,7 @@ import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.db.DBVoidService;
-import com.rameses.clfc.android.services.LoanPostingService;
+import com.rameses.client.android.Location;
 import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
@@ -88,22 +87,35 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 
 	protected void onStartProcess() {
 		super.onStartProcess();
-		SQLTransaction txn = new SQLTransaction("clfc.db");
+		
+		SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+		SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+		SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+		SQLTransaction requestdb = new SQLTransaction("clfcrequest.db");
 		try {
-			txn.beginTransaction();
-			onStartPocessImpl(txn);
-			txn.commit();
+			clfcdb.beginTransaction();
+			paymentdb.beginTransaction();
+			remarksdb.beginTransaction();
+			requestdb.beginTransaction();
+			onStartPocessImpl(clfcdb, paymentdb, remarksdb, requestdb);
+			clfcdb.commit();
+			paymentdb.commit();
+			remarksdb.commit();
+			requestdb.commit();
 		}  catch (Throwable t) {
 			t.printStackTrace();
 			UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
 		} finally {
-			txn.endTransaction();
+			clfcdb.endTransaction();
+			paymentdb.endTransaction();
+			remarksdb.endTransaction();
+			requestdb.endTransaction();
 		}
 	}
 
-	private void onStartPocessImpl(SQLTransaction txn) throws Exception {
+	private void onStartPocessImpl(SQLTransaction clfcdb, SQLTransaction paymentdb, SQLTransaction remarksdb, SQLTransaction requestdb) throws Exception {
 		DBCollectionSheet dbCs = new DBCollectionSheet();
-		dbCs.setDBContext(txn.getContext());
+		dbCs.setDBContext(clfcdb.getContext());
 		
 		Map collectionSheet = new HashMap();
 		try {
@@ -164,7 +176,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		((TextView) findViewById(R.id.tv_info_term)).setText(term+" days");
 		
 		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(txn.getContext());
+		dbPs.setDBContext(paymentdb.getContext());
 		
 		ArrayList payments = new ArrayList();
 		try {
@@ -184,7 +196,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 			Map payment;
 			Map voidRequest;
 			DBVoidService dbVs = new DBVoidService();
-			dbVs.setDBContext(txn.getContext());
+			dbVs.setDBContext(requestdb.getContext());
 			for (int i=0; i<payments.size(); i++) {
 				child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
 				payment = (Map) payments.get(i);
@@ -232,7 +244,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		}
 		
 		DBRemarksService dbRs = new DBRemarksService();
-		dbRs.setDBContext(txn.getContext());
+		dbRs.setDBContext(remarksdb.getContext());
 		
 		try {
 			remarks = dbRs.findRemarksByLoanappid(loanappid);
@@ -256,29 +268,33 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 					 CharSequence[] items = {"Edit Remarks", "Remove Remarks"};
 					 UIDialog dialog = new UIDialog() {
 						 public void onSelectItem(int index) {
-							 SQLTransaction txn = new SQLTransaction("clfc.db");
+							 SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+							 SQLTransaction remarkremoveddb = new SQLTransaction("clfcremarksremoved.db");
 							 try {
-								 txn.beginTransaction();
-								 onSelectedItemImpl(txn, index);
-								 txn.commit();
+								 remarksdb.beginTransaction();
+								 remarkremoveddb.beginTransaction();
+								 onSelectedItemImpl(remarksdb, remarkremoveddb, index);
+								 remarksdb.commit();
+								 remarkremoveddb.commit();
 							 } catch (Throwable t) {
 								 UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
 							 } finally {
-								 txn.endTransaction();
+								 remarksdb.endTransaction();
+								 remarkremoveddb.endTransaction();
 							 }
 						 }
 						 
-						 private void onSelectedItemImpl(SQLTransaction txn, int index) {
+						 private void onSelectedItemImpl(SQLTransaction remarksdb, SQLTransaction remarksremoveddb, int index) {
 							 switch(index) {
 							 	case 0:
 							 		showRemarksDialog("edit");
 							 		break;
 							 	case 1:
-							 		txn.delete("remarks", "loanappid='"+loanappid+"'");
+							 		remarksdb.delete("remarks", "loanappid='"+loanappid+"'");
 							 		Map params = new HashMap();
 							 		params.put("loanappid", loanappid);
 							 		params.put("state", "PENDING");
-							 		txn.insert("remarks_removed", params);
+							 		remarksremoveddb.insert("remarks_removed", params);
 									remarks = null;
 									rl_remarks.setVisibility(View.GONE);
 									ApplicationUtil.showShortMsg("Successfully removed remarks.");
@@ -412,7 +428,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				SQLTransaction txn = new SQLTransaction("clfc.db");
 				try {
 					txn.beginTransaction();
-					onClickImpl(txn, view);
+					onClickImpl(txn, payment);
 					txn.commit();
 				} catch (Throwable t) {
 					UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
@@ -452,7 +468,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				params.put("reason", ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString());
 				
 				try {
-					new VoidRequestController(CollectionSheetInfoActivity.this, progressDialog, params, view).execute();
+					new VoidRequestController(CollectionSheetInfoActivity.this, progressDialog, params, view, dialog).execute();
 				} catch (Throwable t) {
 					UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
 				}
@@ -548,16 +564,20 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 			case R.id.payment_addpayment:
-				SQLTransaction txn = new SQLTransaction("clfc.db");				
+				SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+				SQLTransaction requestdb = new SQLTransaction("clfcrequest.db");
 				try { 
-					txn.beginTransaction();
-					addPaymentImpl(txn);
-					txn.commit();
+					paymentdb.beginTransaction();
+					requestdb.beginTransaction();
+					addPaymentImpl(paymentdb, requestdb);
+					paymentdb.commit();
+					requestdb.commit();
 				} catch (Throwable t) {
 					t.printStackTrace();
 					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
 				} finally {
-					txn.endTransaction();
+					paymentdb.endTransaction();
+					requestdb.endTransaction();
 				}
 				break;
 			case R.id.payment_addremarks:
@@ -567,12 +587,12 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		return true;
 	}
 	
-	private void addPaymentImpl(SQLTransaction txn) throws Exception {
+	private void addPaymentImpl(SQLTransaction paymentdb, SQLTransaction requestdb) throws Exception {
 		DBVoidService dbVs = new DBVoidService();
-		dbVs.setDBContext(txn.getContext());
+		dbVs.setDBContext(requestdb.getContext());
 		
 		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(txn.getContext());
+		dbPs.setDBContext(paymentdb.getContext());
 		if (dbVs.hasPendingVoidRequestByLoanappid(loanappid)) {
 			ApplicationUtil.showShortMsg("[ERROR] Cannot add payment. No confirmation for void requested at the moment.");
 			
@@ -631,27 +651,31 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		 }
 		 @Override
 		 public void onClick(View v) {
-			 // TODO Auto-generated method stub
-			 	SQLTransaction txn = new SQLTransaction("clfc.db");
+			 // TODO Auto-generated method stub 
+			 	SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			 	SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
 			 	try {
-			 		txn.beginTransaction();
-			 		onClickImpl(txn, mode);
-			 		txn.commit();
+			 		clfcdb.beginTransaction();
+			 		remarksdb.beginTransaction();
+			 		onClickImpl(clfcdb, remarksdb, mode);
+			 		clfcdb.commit();
+			 		remarksdb.commit();
 			 	} catch (Throwable t) {
 					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 			 		
 			 	} finally {
-			 		txn.endTransaction();
+			 		clfcdb.endTransaction();
+			 		remarksdb.endTransaction();
 			 	}
 			 }
 		 }
 		 
-		 private void onClickImpl(SQLTransaction txn, String mode) throws Exception {
+		 private void onClickImpl(SQLTransaction clfcdb, SQLTransaction remarksdb, String mode) throws Exception {
 			 String mRemarks = ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString();
 			 if (mRemarks.trim().equals("")) {
 				 ApplicationUtil.showShortMsg("Remarks is required.");
 			 } else {
 				DBSystemService dbSys = new DBSystemService();
-				dbSys.setDBContext(txn.getContext());
+				dbSys.setDBContext(clfcdb.getContext());
 				
 				Location location = NetworkLocationProvider.getLocation();
 				String collectorid = SessionContext.getProfile().getUserId();
@@ -667,16 +691,16 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				params.put("txndate", Platform.getApplication().getServerDate().toString());
 				 
 				if (mode.equals("create")) {
-					txn.insert("remarks", params);
+					remarksdb.insert("remarks", params);
 					rl_remarks.setVisibility(View.VISIBLE);
 					ApplicationUtil.showShortMsg("Successfully added remark.");
 				} else if (!mode.equals("create")) {
-					txn.update("remarks", "loanappid='"+loanappid+"'", params);
+					remarksdb.update("remarks", "loanappid='"+loanappid+"'", params);
 					ApplicationUtil.showShortMsg("Successfully updated remark.");
 				}
 				
 				DBRemarksService dbRs = new DBRemarksService();
-				dbRs.setDBContext(txn.getContext());
+				dbRs.setDBContext(remarksdb.getContext());
 				remarks = dbRs.findRemarksByLoanappid(loanappid);
 				((TextView) findViewById(R.id.tv_info_remarks)).setText(mRemarks);
 				dialog.dismiss();

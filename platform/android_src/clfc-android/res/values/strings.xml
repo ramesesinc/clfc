@@ -83,7 +83,9 @@
 	<string name="txt_offline">Offline</string>
 	<string name="txt_port">Port</string>
 	<string name="header_timeout">Time out</string>
-	<string name="txt_timeout_session">Session (sec.)</string>
+	<string name="header_debug">Debug</string>
+	<string name="txt_debug_enabled">Enabled</string>
+	<string name="txt_timeout_session">Session (min.)</string>
 	<string name="txt_timeout_upload">Upload (sec.)</string>
 	<string name="txt_timeout_tracker">Tracker (sec.)</string>
 	<string name="btn_save">Save</string>

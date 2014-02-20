@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.ProgressDialog;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +12,7 @@ import android.os.Message;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.services.LoanBillingService;
+import com.rameses.client.android.Location;
 import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
@@ -86,6 +86,8 @@ public class DownloadBillingController
 				
 				LoanBillingService svc = new LoanBillingService();
 				Map map = svc.downloadBilling(params);
+				
+				Platform.getLogger().log("[DownloadBillingController.ActionProcess.run] map-> "+map);
 				runImpl(map);
 				
 				data.putString("response", "success");
@@ -104,37 +106,45 @@ public class DownloadBillingController
 		}
 		
 		private void runImpl(Map map) throws Exception {
-			SQLTransaction txn = new SQLTransaction("clfc.db");
+			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+			SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
 			try {
-				txn.beginTransaction();
-				execute(txn, map);
-				txn.commit();
+				clfcdb.beginTransaction();
+				paymentdb.beginTransaction();
+				remarksdb.beginTransaction();
+				execute(clfcdb, paymentdb, remarksdb, map);
+				clfcdb.commit();
+				paymentdb.commit();
+				remarksdb.commit();
 			} catch (Exception e) {
 				throw e;
 			} finally {
-				txn.endTransaction();
+				clfcdb.endTransaction();
+				paymentdb.endTransaction();
+				remarksdb.endTransaction();
 			}
 		}
 		
-		private void execute(SQLTransaction txn, Map map) throws Exception {
+		private void execute(SQLTransaction clfcdb, SQLTransaction paymentdb, SQLTransaction remarksdb, Map map) throws Exception {			
 			Map params = new HashMap();
-			String sql = "SELECT * FROM system WHERE name='trackerid'";
-			Map record = txn.find(sql);
+			String sql = "SELECT * FROM sys_var WHERE name='trackerid'";
+			Map record = clfcdb.find(sql);
 			if (record == null || record.isEmpty()) {
 				params.clear();
 				params.put("name", "trackerid");
 				params.put("value", map.get("trackerid").toString());
-				txn.insert("system", params);
+				clfcdb.insert("sys_var", params);
 			}
 
 			String sessionid = route.get("billingid").toString();
-			sql = "SELECT * FROM system WHERE name='billingid'";
-			record = txn.find(sql);
+			sql = "SELECT * FROM sys_var WHERE name='billingid'";
+			record = clfcdb.find(sql);
 			if (record == null || record.isEmpty()) {
 				params.clear();
 				params.put("name", "billingid");
 				params.put("value", sessionid);
-				txn.insert("system", params);
+				clfcdb.insert("sys_var", params);
 			}
 			
 			params.clear();
@@ -144,10 +154,10 @@ public class DownloadBillingController
 			params.put("routearea", route.get("area").toString());
 			params.put("sessionid", sessionid);
 			params.put("collectorid", SessionContext.getProfile().getUserId());
-			txn.insert("route", params);
+			clfcdb.insert("route", params);
 			
 			DBCollectionSheet dbCs = new DBCollectionSheet();
-			dbCs.setDBContext(txn.getContext());
+			dbCs.setDBContext(clfcdb.getContext());
 			ArrayList billings = (ArrayList) map.get("billings");
 			ArrayList list;
 			String loanappid;
@@ -182,9 +192,8 @@ public class DownloadBillingController
 					cs.put("collectionaddress", params.get("collectionaddress").toString());
 					cs.put("sessionid", sessionid);
 					cs.put("type", "");
-					txn.insert("collectionsheet", cs);
-				}
-				
+					clfcdb.insert("collectionsheet", cs);
+				}				
 				
 				if (params.containsKey("payments")) {
 					list = (ArrayList<Map>) params.get("payments");
@@ -206,7 +215,7 @@ public class DownloadBillingController
 						p.put("paidby", map.get("paidby").toString());
 						p.put("trackerid", map.get("trackerid").toString());
 						p.put("collectorid", map.get("collectorid").toString());
-						txn.insert("payment", p);
+						paymentdb.insert("payment", p);
 					}
 				}
 				
@@ -221,14 +230,15 @@ public class DownloadBillingController
 						n.put("fromdate", map.get("fromdate").toString());
 						n.put("todate", map.get("todate").toString());
 						n.put("remarks", map.get("remarks").toString());
-						txn.insert("notes", map);
+						clfcdb.insert("notes", map);
 					}
 				}
+				
 				if (params.containsKey("remarks")) {
 					map = new HashMap();
 					map.put("loanappid", params.get("loanappid").toString());
 					map.put("remarks", params.get("remarks").toString());
-					txn.insert("remarks", map);
+					remarksdb.insert("remarks", map);
 				}
 			}
 		}
