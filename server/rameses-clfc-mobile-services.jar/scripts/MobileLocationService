@@ -11,15 +11,17 @@ class MobileLocationService
 
 	@ProxyMethod
 	public def postLocation( params ) {
-		def reponse = "fail";
+		def response = "fail";
 		if (params.trackerid) {
+			println 'params -> '+params;
 			def map = [
 				trackerid	: params.trackerid,
 				txntype		: 'NORMAL',
 				refid		: params.objid,
 				reftype		: 'TRACK',
 				lng 		: params.longitude,
-				lat 		: params.latitude
+				lat 		: params.latitude,
+				state		: params.state
 			];
 			trackerSvc.log(map);
 			response = "success";

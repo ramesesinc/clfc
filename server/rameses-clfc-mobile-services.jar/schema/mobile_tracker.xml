@@ -25,6 +25,7 @@
 		<field name="lng" required="true"/>
 		<field name="lat" required="true"/>
 		<field name="remarks"/>
+		<field name="state"/>
     </element> 
 
     <element name="close-tracker" tablename="mobile_tracker">
