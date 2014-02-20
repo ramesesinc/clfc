@@ -173,12 +173,14 @@ rule "currentDay greater than term"
 		double totalPenalty = (td-1)*ap;
 		int currentDay = p.getCurrentDay();
 		int totaldays = java.lang.Integer.parseInt(lastPayment.get("totaldays").toString());
+		System.out.println("current day = "+currentDay);
 		int tempDays = currentDay-trm;
 		int days = p.getDays()-tempDays;
 		if( offset > 0 ) {
 			days = totaldays-p.getDays();
 			totalInterest = days*i;
 		}
+
 		double partialPayment = (ad*days)-(totalInterest+totalPenalty);
 		double tempBalance = balance-partialPayment;
 		int add = 0;
@@ -196,7 +198,7 @@ rule "currentDay greater than term"
 			}
 		}
 		
-		if( amountPaid >= tempBalance ) {
+		if ( amountPaid >= tempBalance ) {
 			if( balance >= tempBalance ) {
 				listItem.put("partialPayment", balance);
 				if( add == 0 ) results.add( listItem );
@@ -207,15 +209,17 @@ rule "currentDay greater than term"
 			}
 			amountPaid -= tempBalance;
 			balance = 0;
-		}
-		else {
+		} else {
+			//System.out.println("days = "+days +" total days = "+td);
 			if( days == td ) {
+		//System.out.println("pass 1");
 				if( balance >= tempBalance ) {
 					balance -= amountPaid;
 					if( add == 0 ) results.add( listItem );
 				}
 			}
 			else if( days < td ) {
+		//System.out.println("pass 2");
 				totalInterest = td*i;
 				double a = (ad*td)-(totalInterest+totalPenalty);
 				balance -= a;
@@ -226,6 +230,7 @@ rule "currentDay greater than term"
 			}
 			amountPaid = 0;
 		}
+		System.out.println("results -> "+results);
 		p.setAmountPaid( amountPaid );
 		p.setBalance( balance );
 		update( p );
@@ -314,12 +319,11 @@ rule "amountPaid less than totalPayment"
 			totalInterest+=i;
 			currentDay++;
 			if( amountPaid < ad ) amountPaid = 0;
-		}
-		else {
+		} else {
 			//System.out.println("current day: "+currentDay);
 			//System.out.println("amount paid = "+amountPaid);
 			//System.out.println("amount due = "+ad);
-			if( amountPaid >= ad ) {
+			/*if( amountPaid >= ad ) {
 				amountPaid -= ad;
 				listItem.put("day", currentDay);
 				listItem.put("partialPayment", "");
@@ -330,8 +334,7 @@ rule "amountPaid less than totalPayment"
 				totalInterest+=i;
 				currentDay++;
 				if (amountPaid < i) amountPaid = 0;
-			}
-			else if( amountPaid > 0 ) 
+			} else if( amountPaid > 0 ) */
 				amountPaid = 0;
 		}
 		if( amountPaid == 0 ) {

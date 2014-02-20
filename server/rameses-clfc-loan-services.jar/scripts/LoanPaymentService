@@ -53,12 +53,12 @@ class LoanPaymentService
 		if (!params.cashbreakdown) throw new Exception('Please specify denominations.');
 		params.cashbreakdown.each{ 
 			def itm = [
-				objid: 'BPCB'+new UID(),
-				parentid: params.objid,
-				caption: it.caption,
-				denomination: it.denomination? it.denomination : 0.00,
-				qty: it.qty? it.qty : 0,
-				amount: it.amount? it.amount : 0.00
+				objid 		: 'BPCB'+new UID(),
+				parentid 	: params.objid,
+				caption 	: it.caption,
+				denomination: (it.denomination? it.denomination : 0.00),
+				qty 		: (it.qty? it.qty : 0),
+				amount 		: (it.amount? it.amount : 0.00)
 			]
 			batch_collectionsheet.create(itm, 'cashbreakdown'); 
 		}
@@ -114,12 +114,12 @@ class LoanPaymentService
 		def o = loan_payment.read(params.entity);
 		if(o) {
 			def itm = [
-				objid: 		'LPDTL'+new UID(),
-				parentid: 	o.objid,
-				refno: 		params.refno,
-				appid: 		params.appid,
-				paytype: 	params.paytype,
-				payamount: 	params.payamount
+				objid		: 'LPDTL'+new UID(),
+				parentid 	: o.objid,
+				refno 		: params.refno,
+				appid 		: params.appid,
+				paytype 	: params.paytype,
+				payamount 	: params.payamount
 			]
 			loan_payment.create(itm, "detail");
 		}
@@ -130,11 +130,11 @@ class LoanPaymentService
 		def itm = loan_payment.read(data);
 		if (!itm) {
 			itm = [
-				objid: 			data.objid,
-				txndate: 		data.txndate,
-				dtcreated: 		dateSvc.serverDate,
-				totalcount: 	data.totalcount,
-				totalamount: 	data.totalamount
+				objid 		: data.objid,
+				txndate 	: data.txndate,
+				dtcreated 	: dateSvc.serverDate,
+				totalcount 	: data.totalcount,
+				totalamount : data.totalamount
 			]
 			loan_payment.create(itm);
 		}
@@ -172,18 +172,27 @@ class LoanPaymentService
 		def interval = 0;
 		def lastscheduledate = dateSvc.add(ledger.dtstarted, "-1");
 		if (ledgeritem) interval = ledgeritem.day;
+		/*if (params.txndate.toString() == '2007-07-24') {
+			println 'interval -> '+interval;
+			println 'last schedule date -> '+lastscheduledate;
+		}*/
 
 		lastscheduledate = dateSvc.add(lastscheduledate, (interval+1)+'');
 		txndate = dateSvc.parseDate(txndate, null).date;
 		def days = dateSvc.getDaysDiff(lastscheduledate, txndate);
 
+		/*if (params.txndate.toString() == '2007-07-23') {
+			println 'last schedule date -> '+ lastscheduledate;
+			println 'txndate -> '+txndate;
+			println 'days -> '+days;
+		}*/
 		def ref = [
-			term: producttype.term,
-			amountDue: ledger.dailydue,
-			interest: ledger.interestamount,
-			absentPenalty: ledger.absentpenalty,
-			balance: ledger.totalprincipal,
-			overduePenalty: ledger.overduepenalty,
+			term 			: producttype.term,
+			amountDue 		: ledger.dailydue,
+			interest 		: ledger.interestamount,
+			absentPenalty 	: ledger.absentpenalty,
+			balance 		: ledger.totalprincipal,
+			overduePenalty 	: ledger.overduepenalty,
 			underpaymentRate: producttype.underpaymentpenalty
 		]
 		
@@ -214,17 +223,17 @@ class LoanPaymentService
 		def req = new RuleRequest("loan");
 		//println 'data total days = '+data.totalDays;
 		def paymentFact = [
-			days: 1,
-			balance: ref.balance,
-			currentDay: data.currentDay
+			days 		: 1,
+			balance 	: ref.balance,
+			currentDay 	: data.currentDay
 		];
 		def referencesFact = [
 			underpaymentRate: producttype.underpaymentpenalty,
-			term: producttype.term,
-			absentPenalty: ledger.absentpenalty,
-			overduePenalty: ledger.overduepenalty,
-			amountDue: ledger.dailydue,
-			overpaymentAmt: (ledger.overpaymentamount > 0)? ledger.overpaymentamount : params.payamount 
+			term			: producttype.term,
+			absentPenalty 	: ledger.absentpenalty,
+			overduePenalty 	: ledger.overduepenalty,
+			amountDue 		: ledger.dailydue,
+			overpaymentAmt 	: (ledger.overpaymentamount > 0)? ledger.overpaymentamount : params.payamount 
 		];
 
 		def compromiseFact = [ isCompromise: data.isCompromise ];
@@ -323,16 +332,22 @@ class LoanPaymentService
 		referencesFact.isOverdue = item.isOverdue;
 		referencesFact.noOfHolidays = item.noOfHolidays;
 		//println params.txndate;
+		//println 'total payment = '+referencesFact.totalPayment;
+
 		ruleSvc.execute( req );
 		//println params.txndate;
-		/*if (params.txndate.toString() == '2011-08-25') {
-			results.each{ println it; }
-			throw new Exception('stop')
-		}*/
 		//results.each{ println it } 
 		//results.each{ println it; }
 		//throw new Exception('stopping');
 
+		/*if (params.txndate.toString() == '2007-07-23') {
+			results.each{
+				println it
+			}
+			//println "payment fact -> "+paymentFact;
+			//println "references fact -> "+referencesFact;
+			throw new Exception("stop");
+		}*/
 		def lastitem;
 		if (results.size() > 0) {
 			lastitem = results[results.size()-1];
@@ -399,8 +414,8 @@ class LoanPaymentService
 
 			itm.dtpaid = txndate;//it.dtpaid? it.dtpaid : null;
 			itm.refno = params.refno;//it.refno? it.refno : null;
-			itm.day = it.day? it.day : data.currentDay;
-			itm.balance = it.balance? it.balance : ref.balance;
+			itm.day = (it.day? it.day : data.currentDay);
+			itm.balance = (it.balance? it.balance : ref.balance);
 			itm.balance = new BigDecimal(itm.balance).setScale(2, BigDecimal.ROUND_HALF_UP);
 			itm.partialpayment = it.partialPayment? new BigDecimal(it.partialPayment).setScale(2, BigDecimal.ROUND_HALF_UP) : 0.00;
 			itm.baseamount = it.baseamount? it.baseamount : 0.00;
@@ -422,9 +437,9 @@ class LoanPaymentService
 
 	private def createLedgerItem( ledger ) {
 		return [
-			objid: 		'LDGRITM'+new UID(),
-			parentid: 	ledger.objid,
-			state: 		'RECEIVED'
+			objid 	: 'LDGRITM'+new UID(),
+			parentid: ledger.objid,
+			state 	: 'RECEIVED'
 		]
 	}
 
