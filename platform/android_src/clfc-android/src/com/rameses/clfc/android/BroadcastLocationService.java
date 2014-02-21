@@ -10,6 +10,7 @@ import com.rameses.clfc.android.db.DBLocationTracker;
 import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.services.LoanLocationService;
 import com.rameses.client.android.Platform;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 public class BroadcastLocationService 
@@ -34,32 +35,31 @@ public class BroadcastLocationService
 		public void run() {
 //			System.out.println("PostLocationTracker");
 			SQLTransaction trackerdb = new SQLTransaction("clfctracker.db");
-			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			DBContext clfcdb = new DBContext("clfc.db");
 			try {
-//				SQLTransaction txn = new SQLTransaction("clfc.db");
-//				txn.execute(this);
 				trackerdb.beginTransaction();
-				clfcdb.beginTransaction();
+//				clfcdb.beginTransaction();
 				runImpl(trackerdb, clfcdb);
 				trackerdb.commit();
-				clfcdb.commit();
+//				clfcdb.commit();
 			} catch (Throwable t) {
 				t.printStackTrace();
 				System.out.println("[BroadcastLocation.RunnableImpl] error caused by " + t.getClass().getName() + ": " + t.getMessage());
 			} finally {
 				trackerdb.endTransaction();
-				clfcdb.endTransaction();
+				clfcdb.close();
 			}
 		}
 		
-		private void runImpl(SQLTransaction trackerdb, SQLTransaction clfcdb) throws Exception {
+		private void runImpl(SQLTransaction trackerdb, DBContext clfcdb) throws Exception {
 			DBLocationTracker dbLt = new DBLocationTracker();
 			dbLt.setDBContext(trackerdb.getContext());
 			
 			List<Map> list = dbLt.getLocationTrackers();
 			if (!list.isEmpty()) {
 				DBSystemService dbSys = new DBSystemService();
-				dbSys.setDBContext(clfcdb.getContext());
+				dbSys.setDBContext(clfcdb);
+				dbSys.setCloseable(false);
 				
 				String trackerid = dbSys.getTrackerid();
 				Map map;

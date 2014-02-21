@@ -83,6 +83,7 @@ public class VoidRequestController
 				
 				Map map = (Map) params.get("collector");
 				mParams.put("collectorid", map.get("objid").toString());
+				mParams.put("collectorname", map.get("name").toString());
 				
 				map = (Map) params.get("loanapp");
 				mParams.put("loanappid", map.get("objid").toString());

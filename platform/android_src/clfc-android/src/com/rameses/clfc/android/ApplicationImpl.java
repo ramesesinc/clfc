@@ -1,21 +1,11 @@
 package com.rameses.clfc.android;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
 import java.util.Properties;
 
+import android.os.Environment;
 import android.os.Handler;
 
-import com.rameses.clfc.android.db.DBCollectionSheet;
-import com.rameses.clfc.android.db.DBLocationTracker;
-import com.rameses.clfc.android.db.DBPaymentService;
-import com.rameses.clfc.android.db.DBRemarksRemoved;
-import com.rameses.clfc.android.db.DBRemarksService;
-import com.rameses.clfc.android.db.DBSystemService;
-import com.rameses.clfc.android.db.DBVoidService;
-import com.rameses.clfc.android.services.LoanLocationService;
-import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.AbstractActivity;
 import com.rameses.client.android.AppSettings;
 import com.rameses.client.android.Logger;
@@ -23,9 +13,6 @@ import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIApplication;
-import com.rameses.db.android.ExecutionHandler;
-import com.rameses.db.android.SQLExecutor;
-import com.rameses.db.android.SQLTransaction;
 
 public class ApplicationImpl extends UIApplication 
 {
@@ -37,11 +24,22 @@ public class ApplicationImpl extends UIApplication
 	private RemarksRemovedDB remarksremoveddb;
 	private int networkStatus;
 	private AppSettingsImpl appSettings;
+
+	public File getLogFile() {
+		// TODO Auto-generated method stub
+		File dir = Environment.getExternalStorageDirectory();
+		return new File(dir, "clfclog.txt");
+	}
 	
+	protected void init() {
+		super.init();
+//		System.out.println(getClass().getProtectionDomain());
+	}
+
 	protected void onCreateProcess() {
 		super.onCreateProcess();
 		
-		Platform.setDebug(true);
+//		Platform.setDebug(true);
 		NetworkLocationProvider.setEnabled(true);
 		maindb = new MainDB(this, "clfc.db", 1);
 		trackerdb = new TrackerDB(this, "clfctracker.db", 1);
@@ -53,6 +51,12 @@ public class ApplicationImpl extends UIApplication
 		AppServices services = new AppServices(this);
 		new Handler().postDelayed(services, 1);
 
+		AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
+		boolean flag = false;
+		if ("true".equals(sets.getDebugEnabled())) {
+			flag = true;
+		}
+		Platform.setDebug(flag);
 	}
 	
 	protected AppSettings createAppSettings() {

@@ -13,6 +13,7 @@ public abstract class AbstractDBMapper
 	private DBContext dbContext;
 	private String DB_NAME;
 	private String TABLE_NAME;
+	private boolean closeable = true;
 	
 	public AbstractDBMapper() {
 		this.DB_NAME = getDatabaseName();
@@ -33,6 +34,12 @@ public abstract class AbstractDBMapper
 			return dbContext; 
 		} 
 	} 
+	
+	public void setCloseable(boolean closeable) {
+		this.closeable = closeable;
+	}
+	
+	public boolean isCloseable() { return closeable; }
 	
 	public Properties find(String objid) throws Exception {
 		String sql = "select * from "+ TABLE_NAME +" where objid=?";
@@ -76,7 +83,7 @@ public abstract class AbstractDBMapper
 			ctx.insert(TABLE_NAME, params); 
 		} catch(Exception e) {
 			throw e; 
-		} finally {
+		} finally { 
 			ctx.close(); 
 		}
 	}	

@@ -19,7 +19,7 @@ public class ChangePwdOnLogonLoader implements AppLoader
 		this.caller = caller;
 	}	
 
-	public void load() {				
+	public void load() {		
 		try { 
 			String sessionid = SessionContext.getSessionId();
 			if (sessionid == null || sessionid.length() == 0) {

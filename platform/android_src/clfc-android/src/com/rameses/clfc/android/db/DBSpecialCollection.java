@@ -17,7 +17,7 @@ public class DBSpecialCollection extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -29,7 +29,7 @@ public class DBSpecialCollection extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 }

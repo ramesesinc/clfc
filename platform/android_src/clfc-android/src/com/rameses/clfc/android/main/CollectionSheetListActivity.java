@@ -18,7 +18,7 @@ import android.widget.RelativeLayout;
 
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
-import com.rameses.db.android.SQLTransaction;
+import com.rameses.clfc.android.db.DBCollectionSheet;
 
 public class CollectionSheetListActivity extends ControlActivity {
 	private Context context = this;
@@ -101,27 +101,18 @@ public class CollectionSheetListActivity extends ControlActivity {
 	}
 	
 	private void loadCollectionSheets(String searchtext) {
-		SQLTransaction txn = new SQLTransaction("clfc.db");
+		DBCollectionSheet dbCs = new DBCollectionSheet();		
 		try {
-			txn.beginTransaction();
-			loadCollectionSheetsImpl(txn, searchtext);
-			txn.commit();
+			Map params = new HashMap();
+			params.put("routecode", routecode);
+			searchtext = (!searchtext.equals("")? searchtext+"%" : "%");
+			params.put("searchtext", searchtext);
+			List<Map> list = dbCs.getCollectionSheetsByRoutecodeAndSearchtext(params);//txn.getList(, params);
+			lv_collectionsheet.setAdapter(new CollectionSheetAdapter(this, list));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		finally {
-			txn.endTransaction();
-		}
 	}	
-	
-	private void loadCollectionSheetsImpl(SQLTransaction txn, String searchtext) {
-		Map params = new HashMap();
-		params.put("routecode", routecode);
-		searchtext = (!searchtext.equals("")? searchtext+"%" : "%");
-		params.put("searchtext", searchtext);
-		List<Map> list = txn.getList("SELECT * FROM collectionsheet WHERE acctname LIKE $P{searchtext} AND routecode=$P{routecode}", params);
-		lv_collectionsheet.setAdapter(new CollectionSheetAdapter(this, list));
-	}
 	
 	/*
 	private void showDialog(CollectionSheetParcelable c) {

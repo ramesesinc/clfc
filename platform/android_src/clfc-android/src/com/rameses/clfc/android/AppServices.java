@@ -21,7 +21,7 @@ class AppServices implements Runnable
 		broadcastLocation = new BroadcastLocationService(app);
 	} 
 	
-	public void run() {
+	public void run() { 
 		networkChecker.start();
 		locationTracker.start();
 		voidRequest.start();

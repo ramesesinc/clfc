@@ -23,6 +23,7 @@ import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIAction;
 import com.rameses.client.android.UIDialog;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 public class PostingListActivity extends ControlActivity {
@@ -75,30 +76,32 @@ public class PostingListActivity extends ControlActivity {
 	}
 	
 	private void loadCollectionSheets() {
-		SQLTransaction clfcdb = new SQLTransaction("clfc.db");
-		SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
-		SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+		DBContext clfcdb = new DBContext("clfc.db");
+		DBContext paymentdb = new DBContext("clfcpayment.db");
+		DBContext remarksdb = new DBContext("clfcremarks.db");
 		try {
-			clfcdb.beginTransaction();
-			paymentdb.beginTransaction();
-			remarksdb.beginTransaction();
+//			clfcdb.beginTransaction();
+//			paymentdb.beginTransaction();
+//			remarksdb.beginTransaction();
 			loadCollectionSheetsImpl(clfcdb, paymentdb, remarksdb);
-			clfcdb.commit();
-			paymentdb.commit();
-			remarksdb.commit();
+//			clfcdb.commit();
+//			paymentdb.commit();
+//			remarksdb.commit();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			UIDialog.showMessage(t, PostingListActivity.this);
 		} finally {
-			clfcdb.endTransaction();
-			paymentdb.endTransaction();
-			remarksdb.endTransaction();
+			clfcdb.close();
+			paymentdb.close();
+			remarksdb.close();
 		}
 	}
 	
-	private void loadCollectionSheetsImpl(SQLTransaction clfcdb, SQLTransaction paymentdb, SQLTransaction remarksdb) throws Exception {
+	private void loadCollectionSheetsImpl(DBContext clfcdb, DBContext paymentdb, DBContext remarksdb) throws Exception {
 		DBCollectionSheet dbCs = new DBCollectionSheet();
-		dbCs.setDBContext(clfcdb.getContext());
+		dbCs.setDBContext(clfcdb);
+		dbCs.setCloseable(false);
+		
 		String searchtext = et_search.getText().toString();
 		if (searchtext == null || searchtext.equals("")) {
 			searchtext = "%";
@@ -117,7 +120,7 @@ public class PostingListActivity extends ControlActivity {
 		LinearLayout ll_posted = (LinearLayout) findViewById(R.id.ll_posted);
 		ll_posted.removeAllViewsInLayout();
 		
-		LinearLayout ll_unposted = (LinearLayout) findViewById(R.id.ll_posted);
+		LinearLayout ll_unposted = (LinearLayout) findViewById(R.id.ll_unposted);
 		ll_unposted.removeAllViewsInLayout();
 		
 		List<Map> list = dbCs.getCollectionSheetsByCollectorid(SessionContext.getProfile().getUserId());
@@ -126,13 +129,18 @@ public class PostingListActivity extends ControlActivity {
 			Map map;
 			String loanappid = "";
 			DBPaymentService dbPs = new DBPaymentService();
-			dbPs.setDBContext(paymentdb.getContext());
+			dbPs.setDBContext(paymentdb);
+			dbPs.setCloseable(false);
 			
 			DBRemarksService dbRs = new DBRemarksService();
-			dbRs.setDBContext(remarksdb.getContext());
+			dbRs.setDBContext(remarksdb);
+			dbRs.setCloseable(false);
+			
 			boolean posted = false;
 			boolean haspayment = false;
 			boolean hasremarks = false;
+			boolean hasunpostedpayments = false;
+			boolean hasunpostedremarks = false; 
 			for (int i=0; i<list.size(); i++) {
 				map = (Map) list.get(i);
 				
@@ -141,19 +149,27 @@ public class PostingListActivity extends ControlActivity {
 				loanappid = map.get("loanappid").toString();
 				
 				haspayment = dbPs.hasPaymentsByLoanappid(loanappid);
-				hasremarks = dbRs.hasRemarksByLoanappi(loanappid);
+				hasremarks = dbRs.hasRemarksByLoanappid(loanappid);
 				if (haspayment == true || hasremarks == true) {
 					posted = false;
-					if (!dbPs.hasUnpostedPaymentsByLoanappid(loanappid)) {
+					
+					hasunpostedpayments = dbPs.hasUnpostedPaymentsByLoanappid(loanappid);
+					System.out.println("loanappid -> "+loanappid);
+					System.out.println("has payment -> "+haspayment);
+					System.out.println("has unposted payments -> "+hasunpostedpayments);
+					if (haspayment && !hasunpostedpayments) {
 						posted = true;
 					} else {
 						posted = false;
 					}
 					
-					if (!dbRs.hasUnpostedRemarks()) {
+					hasunpostedremarks = dbRs.hasUnpostedRemarksByLoanappid(loanappid);
+					System.out.println("has remarks -> "+hasremarks);
+					System.out.println("has unposted remarks -> "+hasunpostedremarks);
+					if (hasremarks && !hasunpostedremarks) {
 						posted = true;
 					} else {
-						posted = false;
+						posted = false; 
 					}
 
 					child = inflater.inflate(R.layout.item_string, null);

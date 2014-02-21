@@ -6,7 +6,8 @@
 			paymentid text,  
 			loanappid text,  
 			state text,  
-			collectorid text,  
+			collectorid text, 
+			collectorname text, 
 			reason text 
 		) 
     </sql>

@@ -59,7 +59,8 @@
 			objid text PRIMARY KEY,  
 			state text,  
 			remarks text ,
-			collectorid text
+			collectorid text,
+			collectorname text
 		) 
     </sql>
 </db>

@@ -85,6 +85,7 @@ public class DownloadSpecialCollectionController
 				handler = successhandler;
 			} catch (Throwable t) {
 				t.printStackTrace();
+				Platform.getLogger().log(t);
 				data.putSerializable("response", t);
 				message = errorhandler.obtainMessage();
 				handler = errorhandler;

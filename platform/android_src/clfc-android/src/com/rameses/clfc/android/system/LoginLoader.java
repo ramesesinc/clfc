@@ -22,7 +22,8 @@ public class LoginLoader implements AppLoader
 	
 	public void load() {
 		println("started");
-		
+
+		Platform.getApplication().syncServerDate();		
 		String sessionid = SessionContext.getSessionId();
 		if (sessionid == null || sessionid.length() == 0) {
 			try {

@@ -14,6 +14,7 @@ import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.interfaces.UserProfile;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 class LocationTrackerService 
@@ -40,20 +41,18 @@ class LocationTrackerService
 		
 		public void run() {
 			SQLTransaction trackerdb = new SQLTransaction("clfctracker.db");
-			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			DBContext clfcdb = new DBContext("clfc.db");
 			try {
 				trackerdb.beginTransaction();
-				clfcdb.beginTransaction();
 				runImpl(trackerdb, clfcdb);
 				trackerdb.commit();
-				clfcdb.commit();
 //				SQLTransaction txn = new SQLTransaction("clfctracker.db"); 
 //				txn.execute(new ExecutionHandlerImpl()); 
 			} catch(Throwable t) {
 				t.printStackTrace();
 			} finally {
 				trackerdb.endTransaction();
-				clfcdb.endTransaction();
+				clfcdb.close();
 			}
 
 			AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
@@ -65,7 +64,7 @@ class LocationTrackerService
 			Platform.getTaskManager().schedule(new RunnableImpl(), timeout*1000);		
 		}	
 		
-		private void runImpl(SQLTransaction trackerdb, SQLTransaction clfcdb) throws Exception {
+		private void runImpl(SQLTransaction trackerdb, DBContext clfcdb) throws Exception {
 			List tables = trackerdb.getList("SELECT * FROM sqlite_master WHERE type='table'");
 			
 			Location loc = NetworkLocationProvider.getLocation();
@@ -80,7 +79,9 @@ class LocationTrackerService
 					int count = dbloc.getCountByCollectorid(collectorid);
 					
 					DBSystemService dbSys = new DBSystemService();
-					dbSys.setDBContext(clfcdb.getContext());
+					dbSys.setDBContext(clfcdb);
+					dbSys.setCloseable(false);
+					
 					String trackerid = dbSys.getTrackerid();
 					if (trackerid == null) return;
 																	

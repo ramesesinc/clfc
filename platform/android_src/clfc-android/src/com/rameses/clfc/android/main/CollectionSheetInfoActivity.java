@@ -39,11 +39,16 @@ import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIDialog;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 public class CollectionSheetInfoActivity extends ControlActivity {
 	private String loanappid = "";
 	private String detailid = "";
+	private String appno = "";
+	private String acctid = "";
+	private String acctname = "";
+	private String sessionid = "";
 	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
 	private BigDecimal dailydue = new BigDecimal("0").setScale(2);
 	private String routecode = "";
@@ -88,42 +93,38 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 	protected void onStartProcess() {
 		super.onStartProcess();
 		
-		SQLTransaction clfcdb = new SQLTransaction("clfc.db");
-		SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
-		SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
-		SQLTransaction requestdb = new SQLTransaction("clfcrequest.db");
+		DBContext clfcdb = new DBContext("clfc.db");
+		DBContext paymentdb = new DBContext("clfcpayment.db");
+		DBContext remarksdb = new DBContext("clfcremarks.db");
+		DBContext requestdb = new DBContext("clfcrequest.db");
 		try {
-			clfcdb.beginTransaction();
-			paymentdb.beginTransaction();
-			remarksdb.beginTransaction();
-			requestdb.beginTransaction();
+//			clfcdb.beginTransaction();
+//			paymentdb.beginTransaction();
+//			remarksdb.beginTransaction();
+//			requestdb.beginTransaction();
 			onStartPocessImpl(clfcdb, paymentdb, remarksdb, requestdb);
-			clfcdb.commit();
-			paymentdb.commit();
-			remarksdb.commit();
-			requestdb.commit();
+//			clfcdb.commit();
+//			paymentdb.commit();
+//			remarksdb.commit();
+//			requestdb.commit();
 		}  catch (Throwable t) {
 			t.printStackTrace();
 			UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
 		} finally {
-			clfcdb.endTransaction();
-			paymentdb.endTransaction();
-			remarksdb.endTransaction();
-			requestdb.endTransaction();
+			clfcdb.close();
+			paymentdb.close();
+			remarksdb.close();
+			requestdb.close();
 		}
 	}
 
-	private void onStartPocessImpl(SQLTransaction clfcdb, SQLTransaction paymentdb, SQLTransaction remarksdb, SQLTransaction requestdb) throws Exception {
+	private void onStartPocessImpl(DBContext clfcdb, DBContext paymentdb, DBContext remarksdb, DBContext requestdb) throws Exception {
 		DBCollectionSheet dbCs = new DBCollectionSheet();
-		dbCs.setDBContext(clfcdb.getContext());
+		dbCs.setDBContext(clfcdb);
 		
 		Map collectionSheet = new HashMap();
-		try {
-			collectionSheet = dbCs.findCollectionSheetByLoanappid(loanappid);
-		} catch (Exception e) {;}
+		collectionSheet = dbCs.findCollectionSheetByLoanappid(loanappid);
 		
-		String acctname = "";
-		String appno = "";
 		BigDecimal amountdue = new BigDecimal("0").setScale(2);
 		BigDecimal loanamount = new BigDecimal("0").setScale(2);
 		BigDecimal balance = new BigDecimal("0").setScale(2);
@@ -136,7 +137,8 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		String collectionaddress = "";
 		
 		if (collectionSheet != null || !collectionSheet.isEmpty()) {
-			System.out.println("collection sheet -> "+collectionSheet);
+			acctid = collectionSheet.get("acctid").toString();
+			sessionid = collectionSheet.get("sessionid").toString();
 			acctname = collectionSheet.get("acctname").toString();
 			appno = collectionSheet.get("appno").toString();
 			amountdue = new BigDecimal(collectionSheet.get("amountdue").toString());
@@ -176,7 +178,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		((TextView) findViewById(R.id.tv_info_term)).setText(term+" days");
 		
 		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(paymentdb.getContext());
+		dbPs.setDBContext(paymentdb);
 		
 		ArrayList payments = new ArrayList();
 		try {
@@ -196,7 +198,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 			Map payment;
 			Map voidRequest;
 			DBVoidService dbVs = new DBVoidService();
-			dbVs.setDBContext(requestdb.getContext());
+			dbVs.setDBContext(requestdb);
 			for (int i=0; i<payments.size(); i++) {
 				child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
 				payment = (Map) payments.get(i);
@@ -244,7 +246,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		}
 		
 		DBRemarksService dbRs = new DBRemarksService();
-		dbRs.setDBContext(remarksdb.getContext());
+		dbRs.setDBContext(remarksdb);
 		
 		try {
 			remarks = dbRs.findRemarksByLoanappid(loanappid);
@@ -564,20 +566,20 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 			case R.id.payment_addpayment:
-				SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
-				SQLTransaction requestdb = new SQLTransaction("clfcrequest.db");
+				DBContext paymentdb = new DBContext("clfcpayment.db");
+				DBContext requestdb = new DBContext("clfcrequest.db");
 				try { 
-					paymentdb.beginTransaction();
-					requestdb.beginTransaction();
+//					paymentdb.beginTransaction();
+//					requestdb.beginTransaction();
 					addPaymentImpl(paymentdb, requestdb);
-					paymentdb.commit();
-					requestdb.commit();
+//					paymentdb.commit();
+//					requestdb.commit();
 				} catch (Throwable t) {
 					t.printStackTrace();
 					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
 				} finally {
-					paymentdb.endTransaction();
-					requestdb.endTransaction();
+					paymentdb.close();
+					requestdb.close();
 				}
 				break;
 			case R.id.payment_addremarks:
@@ -587,12 +589,12 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		return true;
 	}
 	
-	private void addPaymentImpl(SQLTransaction paymentdb, SQLTransaction requestdb) throws Exception {
+	private void addPaymentImpl(DBContext paymentdb, DBContext requestdb) throws Exception {
 		DBVoidService dbVs = new DBVoidService();
-		dbVs.setDBContext(requestdb.getContext());
+		dbVs.setDBContext(requestdb);
 		
 		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(paymentdb.getContext());
+		dbPs.setDBContext(paymentdb);
 		if (dbVs.hasPendingVoidRequestByLoanappid(loanappid)) {
 			ApplicationUtil.showShortMsg("[ERROR] Cannot add payment. No confirmation for void requested at the moment.");
 			
@@ -606,6 +608,10 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 			intent.putExtra("refno", refno);
 			intent.putExtra("paymenttype", paymenttype);
 			intent.putExtra("overpayment", overpayment.toString());
+			intent.putExtra("appno", appno);
+			intent.putExtra("borrowerid", acctid);
+			intent.putExtra("borrowername", acctname);
+			intent.putExtra("sessionid", sessionid);
 			
 			if (dbPs.hasPaymentsByLoanappid(loanappid)) {
 				refno += (dbPs.noOfPaymentsByLoanappid(loanappid)+1);
@@ -688,6 +694,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				params.put("latitude", location.getLatitude());
 				params.put("trackerid", dbSys.getTrackerid());
 				params.put("collectorid", SessionContext.getProfile().getUserId());
+				params.put("collectorname", SessionContext.getProfile().getFullName());
 				params.put("txndate", Platform.getApplication().getServerDate().toString());
 				 
 				if (mode.equals("create")) {

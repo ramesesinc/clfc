@@ -9,14 +9,15 @@
 			paymenttype text,  
 			paymentamount numeric,  
 			paidby text,  
-			loanappid text,  
+			loanappid text,
 			detailid text, 
 			routecode text,  
 			isfirstbill numeric, 
 			longitude numeric,  
 			latitude numeric,  
 			trackerid text,  
-			collectorid text  
+			collectorid text,
+			collectorname text
 		) 
     </sql>
 </db>

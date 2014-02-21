@@ -27,7 +27,6 @@ public class ControlPanelLoader implements AppLoader
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			current.startActivity(intent);
 			caller.resume();
-			Platform.getApplication().syncServerDate();
 		} catch(Throwable t) { 
 			UIDialog.showMessage(t); 
 		} 

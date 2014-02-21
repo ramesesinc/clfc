@@ -12,6 +12,7 @@ import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLExecutor;
 import com.rameses.db.android.SQLTransaction;
 
@@ -37,13 +38,13 @@ public class RemarksService
 		public void run() {
 //			System.out.println("PostPendingRemarks");
 			SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
-			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			DBContext clfcdb = new DBContext("clfc.db");
 			try {
 				remarksdb.beginTransaction();
-				clfcdb.beginTransaction();
+//				clfcdb.beginTransaction();
 				runImpl(remarksdb, clfcdb);
 				remarksdb.commit();
-				clfcdb.commit();
+//				clfcdb.commit();
 //				SQLTransaction txn = new SQLTransaction("clfc.db");
 //				txn.execute(this);
 			} catch (Throwable t) {
@@ -51,25 +52,27 @@ public class RemarksService
 				System.out.println("[RemarksService.RunnableImpl] error caused by " + t.getClass().getName() + ": " + t.getMessage());
 			} finally {
 				remarksdb.endTransaction();
-				clfcdb.endTransaction();
+				clfcdb.close();
 			}
 
 			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
 			Platform.getTaskManager().schedule(new RunnableImpl(), delay*1000);
 		}
 		
-		private void runImpl(SQLTransaction remarksdb, SQLTransaction clfcdb) throws Exception {
+		private void runImpl(SQLTransaction remarksdb, DBContext clfcdb) throws Exception {
 			DBRemarksService dbRs = new DBRemarksService();
 			dbRs.setDBContext(remarksdb.getContext());
 			
 			List<Map> list = dbRs.getPendingRemarks();
-			System.out.println("list -> "+list);
+//			System.out.println("list -> "+list);
 			if (!list.isEmpty()) {
 				DBCollectionSheet dbCs = new DBCollectionSheet();
-				dbCs.setDBContext(clfcdb.getContext());	
+				dbCs.setDBContext(clfcdb);	
+				dbCs.setCloseable(false);
 				
 				DBSystemService dbSys = new DBSystemService();
-				dbSys.setDBContext(clfcdb.getContext());
+				dbSys.setDBContext(clfcdb);
+				dbSys.setCloseable(false);
 				
 				Map collector = new HashMap();
 				collector.put("objid", SessionContext.getProfile().getUserId());

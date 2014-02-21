@@ -126,6 +126,7 @@ public class SpecialCollectionRequestController
 			params.put("state", map.get("state").toString());
 			params.put("remarks", map.get("remarks").toString());
 			params.put("collectorid", SessionContext.getProfile().getUserId());
+			params.put("collectorname", SessionContext.getProfile().getFullName());
 			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
 				txn.beginTransaction();

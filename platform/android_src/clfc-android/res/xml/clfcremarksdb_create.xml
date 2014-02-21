@@ -9,6 +9,7 @@
 			latitude text,  
 			trackerid text,  
 			collectorid text,  
+			collectorname text,
 			txndate text  
 		) 
     </sql>

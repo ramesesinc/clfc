@@ -35,6 +35,10 @@ public class PaymentActivity extends ControlActivity {
 	private String detailid = "";
 	private String refno = "";
 	private String type = "";
+	private String borrowerid = "";
+	private String borrowername = "";
+	private String appno = "";
+	private String sessionid = "";
 	private EditText et_amount;
 	private EditText et_overpayment;
 	private String routecode = "";
@@ -55,6 +59,10 @@ public class PaymentActivity extends ControlActivity {
 		loanappid = intent.getStringExtra("loanappid");
 		detailid = intent.getStringExtra("detailid");
 		refno = intent.getStringExtra("refno");
+		appno = intent.getStringExtra("appno");
+		borrowerid = intent.getStringExtra("borrowerid");
+		borrowername = intent.getStringExtra("borrowername");
+		sessionid = intent.getStringExtra("sessionid");
 		routecode = intent.getStringExtra("routecode");
 		type = intent.getStringExtra("paymenttype");
 		isfirstbill = intent.getIntExtra("isfirstbill", 0);
@@ -178,19 +186,24 @@ public class PaymentActivity extends ControlActivity {
 		Map params = new HashMap();
 		params.put("objid", "PT"+UUID.randomUUID().toString());
 		params.put("state", "PENDING");
-		params.put("loanappid", loanappid);
-		params.put("detailid", detailid);
 		params.put("refno", getValueAsString(R.id.tv_payment_refno));
 		params.put("txndate", Platform.getApplication().getServerDate().toString());
-		params.put("paymentamount", Double.parseDouble(et_amount.getText().toString()));
 		params.put("paymenttype", type);
+		params.put("paymentamount", Double.parseDouble(et_amount.getText().toString()));
+		params.put("paidby", getValueAsString(R.id.et_payment_paidby));
+		params.put("loanappid", loanappid);
+//		params.put("appno", appno);
+		params.put("detailid", detailid);
 		params.put("routecode", routecode);
 		params.put("isfirstbill", isfirstbill);
 		params.put("longitude", location.getLongitude());
 		params.put("latitude", location.getLatitude());
-		params.put("paidby", getValueAsString(R.id.et_payment_paidby));
 		params.put("trackerid", dbSys.getTrackerid());
 		params.put("collectorid", SessionContext.getProfile().getUserId());
+		params.put("collectorname", SessionContext.getProfile().getFullName());
+//		params.put("borrowerid", borrowerid);
+//		params.put("borrowername", borrowername);
+//		params.put("sessionid", sessionid);
 		
 		paymentdb.insert("payment", params);
 	}	

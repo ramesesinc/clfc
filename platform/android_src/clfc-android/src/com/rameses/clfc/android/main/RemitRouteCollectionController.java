@@ -140,7 +140,7 @@ public class RemitRouteCollectionController
 					
 					loanappid = map.get("loanappid").toString();
 					haspayment = dbPs.hasPaymentsByLoanappid(loanappid);
-					hasremarks = dbRs.hasRemarksByLoanappi(loanappid);
+					hasremarks = dbRs.hasRemarksByLoanappid(loanappid);
 					
 					if (haspayment == true || hasremarks == true) {
 						totalcollectionsheets++;

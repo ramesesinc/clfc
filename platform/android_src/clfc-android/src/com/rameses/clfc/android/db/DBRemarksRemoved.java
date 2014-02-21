@@ -21,7 +21,7 @@ public class DBRemarksRemoved extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 }

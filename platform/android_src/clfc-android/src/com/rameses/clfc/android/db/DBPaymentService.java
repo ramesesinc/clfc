@@ -31,19 +31,19 @@ public class DBPaymentService extends AbstractDBMapper
 		} catch(Exception e) {
 			throw e; 
 		} finally {
-			ctx.close(); 
+			if (isCloseable()) ctx.close(); 
 		}		
 	}
 	
 	public boolean hasUnpostedPaymentsByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = "SELECT objid FROM "+getTableName()+" WHERE state='PENDING' AND loanappid=?";
+			String sql = "SELECT objid FROM "+getTableName()+" WHERE state='PENDING' AND loanappid=? LIMIT 1";
 			return (ctx.getCount(sql, new Object[]{loanappid}) > 0);
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -55,7 +55,7 @@ public class DBPaymentService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class DBPaymentService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class DBPaymentService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -91,7 +91,7 @@ public class DBPaymentService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -103,7 +103,7 @@ public class DBPaymentService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -122,7 +122,7 @@ public class DBPaymentService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 }

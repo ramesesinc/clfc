@@ -10,6 +10,7 @@ import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBRemarksRemoved;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 public class RemarksRemovedService 
@@ -34,27 +35,27 @@ public class RemarksRemovedService
 		public void run() {
 //			System.out.println("PostPendingRemarksRemoved");
 			SQLTransaction remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
-			SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+			DBContext clfcdb = new DBContext("clfc.db");
 			try {
 				remarksremoveddb.beginTransaction();
-				clfcdb.beginTransaction();
+//				clfcdb.beginTransaction();
 				runImpl(remarksremoveddb, clfcdb);
 				remarksremoveddb.commit();
-				clfcdb.commit();
+//				clfcdb.commit();
 //				SQLTransaction txn = new SQLTransaction("clfc.db");
 //				txn.execute(this);
 			} catch (Throwable t) {
 				System.out.println("[RemarksRemovedService.RunnableImpl] error caused by " + t.getClass().getName() + ": " + t.getMessage());
 			} finally {
 				remarksremoveddb.endTransaction();
-				clfcdb.endTransaction();
+				clfcdb.close();
 			}
 
 			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
 			Platform.getTaskManager().schedule(new RunnableImpl(), delay*1000);
 		}
 		
-		private void runImpl(SQLTransaction remarksremoveddb, SQLTransaction clfcdb) throws Exception {
+		private void runImpl(SQLTransaction remarksremoveddb, DBContext clfcdb) throws Exception {
 			DBRemarksRemoved dbRr = new DBRemarksRemoved();
 			dbRr.setDBContext(remarksremoveddb.getContext());
 			
@@ -67,9 +68,10 @@ public class RemarksRemovedService
 				LoanPostingService svc = new LoanPostingService();
 				
 				DBCollectionSheet dbCs = new DBCollectionSheet();
-				dbCs.setDBContext(clfcdb.getContext());
-				Map collectionSheet = new HashMap();
+				dbCs.setDBContext(clfcdb);
+				dbCs.setCloseable(false);
 				
+				Map collectionSheet = new HashMap();
 				for (int i=0; i<list.size(); i++) {
 					map = (Map) list.get(i);
 

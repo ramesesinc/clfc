@@ -17,11 +17,23 @@ public class DBRemarksService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
-	public boolean hasRemarksByLoanappi(String loanappid) throws Exception {
+	public boolean hasUnpostedRemarksByLoanappid(String loanappid) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT loanappid FROM "+getTableName()+" WHERE state='PENDING' AND loanappid=? LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{loanappid}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
+	public boolean hasRemarksByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
 			String sql = "SELECT loanappid FROM "+getTableName()+" WHERE loanappid=? LIMIT 1";
@@ -29,7 +41,7 @@ public class DBRemarksService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -41,7 +53,7 @@ public class DBRemarksService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -53,7 +65,7 @@ public class DBRemarksService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	} 
 	
@@ -65,7 +77,7 @@ public class DBRemarksService extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 }

@@ -17,7 +17,19 @@ public class DBCollectionSheet extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
+	public List<Map> getCollectionSheetsByRoutecodeAndSearchtext(Map params) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT * FROM collectionsheet WHERE acctname LIKE $P{searchtext} AND routecode=$P{routecode}";
+			return ctx.getList(sql, params);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -29,7 +41,7 @@ public class DBCollectionSheet extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -43,19 +55,21 @@ public class DBCollectionSheet extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
 	public Map findCollectionSheetByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();
+		System.out.println("DBContext -> "+ctx);
 		try {
 			String sql = "SELECT * FROM "+getTableName()+ " WHERE loanappid=?";
+			System.out.println("loanappid -> "+loanappid);
 			return ctx.find(sql, new Object[]{loanappid});
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
@@ -69,7 +83,7 @@ public class DBCollectionSheet extends AbstractDBMapper
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			ctx.close();
+			if (isCloseable()) ctx.close();
 		}
 	}
 	
