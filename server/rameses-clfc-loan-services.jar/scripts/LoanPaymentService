@@ -333,21 +333,32 @@ class LoanPaymentService
 		referencesFact.noOfHolidays = item.noOfHolidays;
 		//println params.txndate;
 		//println 'total payment = '+referencesFact.totalPayment;
-
-		ruleSvc.execute( req );
+		//if (params.txndate.toString() == '2010-11-04') {
+			//results.each{
+			//	println it
+			//}
+		//	println "payment fact -> "+paymentFact;
+		//	println "references fact -> "+referencesFact;
+		//	throw new Exception("stop");
+		//}
+		try {
+			ruleSvc.execute( req );	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//println params.txndate;
 		//results.each{ println it } 
 		//results.each{ println it; }
 		//throw new Exception('stopping');
 
-		/*if (params.txndate.toString() == '2007-07-23') {
-			results.each{
-				println it
-			}
+		//if (params.txndate.toString() == '2014-02-13') {
+		//	results.each{
+		//		println it
+		//	}
 			//println "payment fact -> "+paymentFact;
 			//println "references fact -> "+referencesFact;
-			throw new Exception("stop");
-		}*/
+		//	throw new Exception("stop");
+		//}
 		def lastitem;
 		if (results.size() > 0) {
 			lastitem = results[results.size()-1];
