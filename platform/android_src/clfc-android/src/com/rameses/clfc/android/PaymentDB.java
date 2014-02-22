@@ -14,6 +14,7 @@ public class PaymentDB extends AbstractDB
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
 		try { 
 			loadDBResource(sqldb, "clfcpaymentdb_create");
+			System.out.println("clfcpaymentdb created");
 		} catch(RuntimeException re) {
 			throw re; 
 		} catch(Exception e) {

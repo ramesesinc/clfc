@@ -41,22 +41,32 @@ public class ApplicationImpl extends UIApplication
 		
 //		Platform.setDebug(true);
 		NetworkLocationProvider.setEnabled(true);
-		maindb = new MainDB(this, "clfc.db", 1);
-		trackerdb = new TrackerDB(this, "clfctracker.db", 1);
-		paymentdb = new PaymentDB(this, "clfcpayment.db", 1);
-		requestdb = new VoidRequestDB(this, "clfcrequest.db", 1);
-		remarksdb = new RemarksDB(this, "clfcremarks.db", 1);
-		remarksremoveddb = new RemarksRemovedDB(this, "clfcremarksremoved.db", 1);
+		try {
+//			System.out.println("passing 1");
+			maindb = new MainDB(this, "clfc.db", 1);
+//			System.out.println("passing 2");
+			trackerdb = new TrackerDB(this, "clfctracker.db", 1);
+//			System.out.println("passing 3");
+			paymentdb = new PaymentDB(this, "clfcpayment.db", 1);
+//			System.out.println("passing 4");
+			requestdb = new VoidRequestDB(this, "clfcrequest.db", 1);
+//			System.out.println("passing 5");
+			remarksdb = new RemarksDB(this, "clfcremarks.db", 1);
+//			System.out.println("passing 6");
+			remarksremoveddb = new RemarksRemovedDB(this, "clfcremarksremoved.db", 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		AppServices services = new AppServices(this);
 		new Handler().postDelayed(services, 1);
 
-		AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
-		boolean flag = false;
-		if ("true".equals(sets.getDebugEnabled())) {
-			flag = true;
-		}
-		Platform.setDebug(flag);
+//		AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
+//		boolean flag = false;
+//		if ("true".equals(sets.getDebugEnabled())) {
+//			flag = true;
+//		}
+//		Platform.setDebug(flag);
 	}
 	
 	protected AppSettings createAppSettings() {

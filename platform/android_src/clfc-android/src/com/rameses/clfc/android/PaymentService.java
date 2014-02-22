@@ -40,7 +40,7 @@ public class PaymentService
 //			System.out.println("PostPendingPayments");
 			SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
 			DBContext clfcdb = new DBContext("clfc.db"); 
-			System.out.println("clfcdb -> "+clfcdb);
+//			System.out.println("clfcdb -> "+clfcdb);
 			try {
 				paymentdb.beginTransaction();
 //				clfcdb.beginTransaction();
@@ -62,7 +62,7 @@ public class PaymentService
 		}
 		
 		private void runImpl(SQLTransaction paymentdb, DBContext clfcdb) throws Exception {
-			System.out.println(PaymentService.this);
+//			System.out.println(PaymentService.this);
 			DBPaymentService dbPs = new DBPaymentService();
 			dbPs.setDBContext(paymentdb.getContext());
 			
@@ -108,13 +108,13 @@ public class PaymentService
 //				System.out.println("pass 3");
 				MapProxy proxy;
 				for (int i=0; i<list.size(); i++) { 
-					System.out.println("loop PaymentService items");
+//					System.out.println("loop PaymentService items");
 					proxy = new MapProxy((Map) list.get(i));
 					
-					mode = "OFFLINE";
+					mode = "ONLINE_WIFI";
 					networkStatus = ((ApplicationImpl) Platform.getApplication()).getNetworkStatus();
 					if (networkStatus == 1) {
-						mode = "ONLINE";
+						mode = "ONLINE_MOBILE";
 					}
 					
 					collector.clear();

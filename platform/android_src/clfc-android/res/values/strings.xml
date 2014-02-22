@@ -79,8 +79,8 @@
 	<string name="txt_paidby">Paid By</string>
 	<string name="txt_url">URL</string>
 	<string name="header_host">Host</string>
-	<string name="txt_online">Online</string>
-	<string name="txt_offline">Offline</string>
+	<string name="txt_online">Mobile</string>
+	<string name="txt_offline">WIFI</string>
 	<string name="txt_port">Port</string>
 	<string name="header_timeout">Time out</string>
 	<string name="header_debug">Debug</string>

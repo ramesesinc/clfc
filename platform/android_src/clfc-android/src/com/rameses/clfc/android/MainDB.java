@@ -21,7 +21,7 @@ public class MainDB extends AbstractDB
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
 		try { 
 			loadDBResource(sqldb, "clfcdb_create"); 
-			System.out.println("clfc created");
+			System.out.println("clfcdb created");
 		} catch(RuntimeException re) {
 			throw re; 
 		} catch(Exception e) {
@@ -32,6 +32,7 @@ public class MainDB extends AbstractDB
 	protected void onUpgradeProcess(SQLiteDatabase sqldb, int arg1, int arg2) {
 		try { 
 			loadDBResource(sqldb, "clfcdb_upgrade");
+			System.out.println("clfcdb upgraded");
 			onCreate(sqldb); 
 		} catch(RuntimeException re) {
 			throw re; 

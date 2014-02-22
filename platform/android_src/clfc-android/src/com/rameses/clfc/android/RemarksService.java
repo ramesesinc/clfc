@@ -91,10 +91,10 @@ public class RemarksService
 				for (int i=0; i<list.size(); i++) {
 					map = (Map) list.get(i);
 					
-					mode = "OFFLINE";
+					mode = "ONLINE_WIFI";
 					networkStatus = ((ApplicationImpl) Platform.getApplication()).getNetworkStatus();
 					if (networkStatus == 1) {
-						mode = "ONLINE";
+						mode = "ONLINE_MOBILE";
 					}
 					
 					mCollectionSheet = dbCs.findCollectionSheetByLoanappid(map.get("loanappid").toString());

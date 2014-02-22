@@ -14,6 +14,7 @@ public class RemarksRemovedDB extends AbstractDB
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
 		try { 
 			loadDBResource(sqldb, "clfcremarksremoveddb_create");
+			System.out.println("clfcremarksremoveddb created");
 		} catch(RuntimeException re) {
 			throw re; 
 		} catch(Exception e) {

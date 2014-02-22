@@ -46,6 +46,7 @@ public class PaymentActivity extends ControlActivity {
 	private int totaldays = 0;
 	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
 	private BigDecimal defaultAmount = new BigDecimal("0").setScale(2);
+	private String objid = "";
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -54,8 +55,7 @@ public class PaymentActivity extends ControlActivity {
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.activity_payment, rl_container, true);
 		
-		Intent intent = getIntent();
-		
+		Intent intent = getIntent();		
 		loanappid = intent.getStringExtra("loanappid");
 		detailid = intent.getStringExtra("detailid");
 		refno = intent.getStringExtra("refno");
@@ -71,6 +71,8 @@ public class PaymentActivity extends ControlActivity {
 		overpayment = new BigDecimal(amt).setScale(2);
 		amt = intent.getStringExtra("amount");
 		defaultAmount = new BigDecimal(amt).setScale(2);
+		
+		objid = "PT"+UUID.randomUUID().toString();
 	}
 	
 	@Override
@@ -184,7 +186,7 @@ public class PaymentActivity extends ControlActivity {
 
 		Location location = NetworkLocationProvider.getLocation();
 		Map params = new HashMap();
-		params.put("objid", "PT"+UUID.randomUUID().toString());
+		params.put("objid", objid);
 		params.put("state", "PENDING");
 		params.put("refno", getValueAsString(R.id.tv_payment_refno));
 		params.put("txndate", Platform.getApplication().getServerDate().toString());

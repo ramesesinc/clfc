@@ -14,6 +14,7 @@ public class VoidRequestDB extends AbstractDB
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
 		try { 
 			loadDBResource(sqldb, "clfcrequestdb_create");
+			System.out.println("clfcrequestdb created");
 		} catch(RuntimeException re) {
 			throw re; 
 		} catch(Exception e) {

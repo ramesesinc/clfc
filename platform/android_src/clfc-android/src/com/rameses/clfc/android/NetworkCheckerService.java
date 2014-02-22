@@ -51,11 +51,11 @@ class NetworkCheckerService
 			final String[] modes = new String[]{"NOT CONNECTED"};
 			if (networkInfo != null && networkInfo.isConnected()) {
 				if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-					app.setNetworkStatus(1);
-					modes[0] = "ONLINE";
+					app.setNetworkStatus(1); 
+					modes[0] = "ONLINE_MOBILE";
 				} else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
 					app.setNetworkStatus(0);
-					modes[0] = "OFFLINE";
+					modes[0] = "ONLINE_WIFI";
 				}
 			}
 			

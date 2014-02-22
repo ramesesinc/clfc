@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,10 +22,8 @@ import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.client.android.SessionContext;
-import com.rameses.client.android.UIAction;
 import com.rameses.client.android.UIDialog;
 import com.rameses.db.android.DBContext;
-import com.rameses.db.android.SQLTransaction;
 
 public class PostingListActivity extends ControlActivity {
 	private Context context = this;
@@ -54,12 +53,20 @@ public class PostingListActivity extends ControlActivity {
 		super.onStartProcess();
 
 		loadCollectionSheets();
-		new UIAction(this, R.id.ib_refresh) {
-			protected void onClick(View view) {
-				view.setBackgroundResource(android.R.drawable.list_selector_background);
+		ImageButton ib_refresh = (ImageButton) findViewById(R.id.ib_refresh);
+		ib_refresh.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				v.setBackgroundResource(android.R.drawable.list_selector_background);
 				loadCollectionSheets();
 			}
-		};
+		});
+//		new UIAction(this, R.id.ib_refresh) {
+//			protected void onClick(View view) {
+//				
+//			}
+//		};
 		
 		et_search.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -119,9 +126,11 @@ public class PostingListActivity extends ControlActivity {
 		View child = null;
 		LinearLayout ll_posted = (LinearLayout) findViewById(R.id.ll_posted);
 		ll_posted.removeAllViewsInLayout();
+		ll_posted.removeAllViews();
 		
 		LinearLayout ll_unposted = (LinearLayout) findViewById(R.id.ll_unposted);
 		ll_unposted.removeAllViewsInLayout();
+		ll_unposted.removeAllViews();
 		
 		List<Map> list = dbCs.getCollectionSheetsByCollectorid(SessionContext.getProfile().getUserId());
 		
@@ -159,25 +168,29 @@ public class PostingListActivity extends ControlActivity {
 					System.out.println("has unposted payments -> "+hasunpostedpayments);
 					if (haspayment && !hasunpostedpayments) {
 						posted = true;
-					} else {
+					} else if (haspayment && hasunpostedpayments) {
 						posted = false;
 					}
 					
+					System.out.println("posted = "+posted);
 					hasunpostedremarks = dbRs.hasUnpostedRemarksByLoanappid(loanappid);
 					System.out.println("has remarks -> "+hasremarks);
 					System.out.println("has unposted remarks -> "+hasunpostedremarks);
 					if (hasremarks && !hasunpostedremarks) {
 						posted = true;
-					} else {
+					} else if (hasremarks && hasunpostedremarks) {
 						posted = false; 
 					}
 
+					System.out.println("posted = "+posted);
 					child = inflater.inflate(R.layout.item_string, null);
 					((TextView) child.findViewById(R.id.tv_item_str)).setText(map.get("acctname").toString());
 					if (posted == true) {
+						System.out.println("Posted = "+noOfPosted);
 						noOfPosted++;
 						ll_posted.addView(child);
 					} else {
+						System.out.println("Unposted = "+noOfUnposted);
 						noOfUnposted++;
 						ll_unposted.addView(child);
 					}

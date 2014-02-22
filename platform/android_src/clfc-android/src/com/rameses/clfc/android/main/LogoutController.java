@@ -235,6 +235,7 @@ class LogoutController
 				remarksdb.delete("remarks", "loanappid=?", new Object[]{loanappid});
 				remarksremoveddb.delete("remarks_removed", "loanappid=?", new Object[]{loanappid});
 				clfcdb.delete("collectionsheet", "loanappid=?", new Object[]{loanappid});
+				clfcdb.delete("specialcollection", "collectorid=?", new Object[]{SessionContext.getProfile().getUserId()});
 			} 
 		}
 	}	

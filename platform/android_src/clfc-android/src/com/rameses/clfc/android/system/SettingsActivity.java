@@ -76,11 +76,11 @@ public class SettingsActivity extends UIActivity
 		
 		if (isEmpty(onlinehost)) {
 			requestFocus(R.id.et_host_online); 
-			ApplicationUtil.showShortMsg("Host for online is required");
+			ApplicationUtil.showShortMsg("Host for mobile is required");
 			
 		} else if (isEmpty(offlinehost)) {
 			requestFocus(R.id.et_host_offline); 
-			ApplicationUtil.showShortMsg("Host for offline is required");
+			ApplicationUtil.showShortMsg("Host for WIFI is required");
 			
 		} else if (isEmpty(port)) {
 			requestFocus(R.id.et_host_port); 

@@ -25,6 +25,7 @@ public class SpecialCollectionRequestController
 	private ProgressDialog progressDialog;
 	private String  remarks;
 	private AlertDialog dialog;
+	private String objid = "";
 	
 	SpecialCollectionRequestController(UIActivity activity, ProgressDialog progressDialog, String remarks, AlertDialog dialog) {
 		this.activity = activity;
@@ -37,6 +38,7 @@ public class SpecialCollectionRequestController
 		if (remarks == null || remarks.equals("")) {
 			ApplicationUtil.showShortMsg("Remarks is required.");
 		} else {
+			objid = "SCR"+UUID.randomUUID();
 			Platform.runAsync(new ActionProcess());
 		}
 	}
@@ -67,6 +69,7 @@ public class SpecialCollectionRequestController
 			});
 			if (progressDialog.isShowing()) progressDialog.dismiss();
 			if (dialog.isShowing()) dialog.dismiss();
+			ApplicationUtil.showShortMsg("Special collection request successfuly posted.", activity);
 		}
 	};	
 	
@@ -159,7 +162,7 @@ public class SpecialCollectionRequestController
 			dbSys.setDBContext(txn.getContext());
 			
 			Map params = new HashMap();
-			params.put("objid", "SCR"+UUID.randomUUID());
+			params.put("objid", objid);
 			params.put("billingid", dbSys.getBillingid());
 			params.put("state", "PENDING");
 			params.put("remarks", remarks);

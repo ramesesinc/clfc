@@ -18,6 +18,7 @@ import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.UIActivity;
 import com.rameses.db.android.SQLTransaction;
+import com.rameses.util.MapProxy;
 
 public class RemitRouteCollectionController 
 {
@@ -68,8 +69,15 @@ public class RemitRouteCollectionController
 		public void run() {
 			Bundle data = new Bundle();
 			Message message = null;
-			Handler handler = null;
+			Handler handler = null; 
 			try {
+				progressDialog.setMessage("Remitting collections for route: "+MapProxy.getString(route, "description")+" - "+MapProxy.getString(route, "area"));
+				activity.runOnUiThread(new Runnable() {
+					public void run() {
+						if (!progressDialog.isShowing()) progressDialog.show();
+					}
+				});
+				
 				Map params = getParameters();
 				
 				LoanPostingService svc = new LoanPostingService();

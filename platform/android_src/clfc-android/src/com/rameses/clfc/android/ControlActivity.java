@@ -18,9 +18,9 @@ public class ControlActivity extends UIActivity
 		String mode = "NOT CONNECTED";		
 		int networkStatus = getApp().getNetworkStatus();
 		if (networkStatus == 0) {
-			mode = "OFFLINE";
+			mode = "ONLINE_WIFI"; 
 		} else if (networkStatus == 1) {
-			mode = "ONLINE";
+			mode = "ONLINE_MOBILE";  
 		}
 		((TextView) findViewById(R.id.tv_mode)).setText(mode);		
 	}
