@@ -1,6 +1,5 @@
 package com.rameses.clfc.android.db;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.rameses.db.android.DBContext;

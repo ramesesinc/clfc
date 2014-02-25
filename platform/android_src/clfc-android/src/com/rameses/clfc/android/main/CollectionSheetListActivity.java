@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,19 +14,24 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 
-public class CollectionSheetListActivity extends ControlActivity {
+public class CollectionSheetListActivity extends ControlActivity 
+{
 	private Context context = this;
 	private ListView lv_collectionsheet;
 	private String routecode = "";
 	private String type = "";
+	private Map item;
+	private int isfirstbill;
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -81,8 +88,9 @@ public class CollectionSheetListActivity extends ControlActivity {
 	}
 	
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) {
-		Map item = (Map) parent.getItemAtPosition(position);
-		if (Integer.parseInt(item.get("isfirstbill").toString()) != 1) {
+		item = (Map) parent.getItemAtPosition(position);
+		isfirstbill = Integer.parseInt(item.get("isfirstbill").toString());
+		if (isfirstbill != 1) {
 			Intent intent = new Intent(this, CollectionSheetInfoActivity.class);
 			intent.putExtra("acctname", item.get("acctname").toString());
 			intent.putExtra("loanappid", item.get("loanappid").toString());
@@ -93,6 +101,8 @@ public class CollectionSheetListActivity extends ControlActivity {
 			intent.putExtra("paymenttype", item.get("type").toString());
 			intent.putExtra("isfirstbill", Integer.parseInt(item.get("isfirstbill").toString()));
 			startActivity(intent);
+		} else if (isfirstbill == 0) {
+			showPaymentTypeDialog(item);
 		}
 	}
 	
@@ -114,9 +124,7 @@ public class CollectionSheetListActivity extends ControlActivity {
 		}
 	}	
 	
-	/*
-	private void showDialog(CollectionSheetParcelable c) {
-		final CollectionSheetParcelable cs = c;
+	private void showPaymentTypeDialog(final Map map) {
 		CharSequence[] items = {"Schedule", "Overpayment"};
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Payment Method");
@@ -146,7 +154,7 @@ public class CollectionSheetListActivity extends ControlActivity {
 						if (type.equals(null) || type.equals("")) Toast.makeText(context, "Please select payment method.", Toast.LENGTH_SHORT).show();
 						else {
 							dialog.dismiss();
-							showCollectionSheetInfo(cs);
+							showCollectionSheetInfo(map);
 						}
 					}
 				});
@@ -155,37 +163,37 @@ public class CollectionSheetListActivity extends ControlActivity {
 		dialog.show();		
 	}
 	
-	private void showCollectionSheetInfo(CollectionSheetParcelable cs) {
-		Intent intent = new Intent(context, CollectionSheetInfo.class);
-		intent.putExtra("acctname", cs.getAcctname());
-		intent.putExtra("loanappid", cs.getLoanappid());
-		intent.putExtra("detailid", cs.getDetailid());
-		intent.putExtra("appno", cs.getAppno());
-		intent.putExtra("amountdue", cs.getAmountdue());
+	private void showCollectionSheetInfo(Map map) {
+		Intent intent = new Intent(context, CollectionSheetInfoActivity.class);
+		intent.putExtra("acctname", map.get("acctname").toString());
+		intent.putExtra("loanappid", map.get("loanappid").toString());
+		intent.putExtra("detailid", map.get("detailid").toString());
+		intent.putExtra("appno", map.get("appno").toString());
+		intent.putExtra("amountdue", Double.parseDouble(map.get("amountdue").toString()));
 		intent.putExtra("routecode", routecode);
 		intent.putExtra("paymenttype", type);
-		intent.putExtra("isfirstbill", cs.getIsfirstbill());
+		intent.putExtra("isfirstbill", Integer.parseInt(map.get("isfirstbill").toString()));
 		startActivity(intent);		
 	}
-
-	private void loadCollectionsheets(Cursor list) {
-		ArrayList<CollectionSheetParcelable> collectionsheets=new ArrayList<CollectionSheetParcelable>();
-		CollectionSheetParcelable cs;
-		if(list.getCount() > 0) {
-			list.moveToFirst();
-			do {
-				cs=new CollectionSheetParcelable();
-				cs.setLoanappid(list.getString(list.getColumnIndex("loanappid")));
-				cs.setDetailid(list.getString(list.getColumnIndex("detailid")));
-				cs.setAppno(list.getString(list.getColumnIndex("appno")));
-				cs.setAcctname(list.getString(list.getColumnIndex("acctname")));
-				cs.setAmountdue(list.getDouble(list.getColumnIndex("amountdue")));
-				cs.setIsfirstbill(list.getInt(list.getColumnIndex("isfirstbill")));
-				collectionsheets.add(cs);
-			} while(list.moveToNext());
-			list.close();
-		}
-		
-		lv_collectionsheet.setAdapter(new CollectionSheetAdapter(context, collectionsheets));
-	}*/
+//
+//	private void loadCollectionsheets(Cursor list) {
+//		ArrayList<CollectionSheetParcelable> collectionsheets=new ArrayList<CollectionSheetParcelable>();
+//		CollectionSheetParcelable cs;
+//		if(list.getCount() > 0) {
+//			list.moveToFirst();
+//			do {
+//				cs=new CollectionSheetParcelable();
+//				cs.setLoanappid(list.getString(list.getColumnIndex("loanappid")));
+//				cs.setDetailid(list.getString(list.getColumnIndex("detailid")));
+//				cs.setAppno(list.getString(list.getColumnIndex("appno")));
+//				cs.setAcctname(list.getString(list.getColumnIndex("acctname")));
+//				cs.setAmountdue(list.getDouble(list.getColumnIndex("amountdue")));
+//				cs.setIsfirstbill(list.getInt(list.getColumnIndex("isfirstbill")));
+//				collectionsheets.add(cs);
+//			} while(list.moveToNext());
+//			list.close();
+//		}
+//		
+//		lv_collectionsheet.setAdapter(new CollectionSheetAdapter(context, collectionsheets));
+//	}
 }

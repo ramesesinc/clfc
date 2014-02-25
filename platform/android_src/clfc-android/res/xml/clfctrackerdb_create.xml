@@ -9,6 +9,12 @@
 			longitude numeric,  
 			latitude numeric,
 			state numeric
-		) 
+		)
+    </sql>
+    <sql>
+		CREATE TABLE prev_location ( 
+			longitude numeric,  
+			latitude numeric
+		)
     </sql>
 </db>

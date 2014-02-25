@@ -17,8 +17,8 @@ public class BroadcastLocationService
 {
 	private ApplicationImpl app;
 	private Handler handler;
-	private SQLTransaction trackerdb = new SQLTransaction("clfctracker.db");
-	private DBContext clfcdb = new DBContext("clfc.db");
+	private SQLTransaction trackerdb;
+	private DBContext clfcdb;
 	private DBContext trackerdb2 = new DBContext("clfctracker.db");
 	private DBLocationTracker locationTracker = new DBLocationTracker();
 	private DBSystemService systemSvc = new DBSystemService();
@@ -52,10 +52,12 @@ public class BroadcastLocationService
 	{
 		public void run() {
 //			System.out.println("PostLocationTracker");
+			trackerdb = new SQLTransaction("clfctracker.db");
+			clfcdb = new DBContext("clfc.db");
 			try {
 				trackerdb.beginTransaction();
 //				clfcdb.beginTransaction();
-				runImpl();
+				runImpl(trackerdb, clfcdb);
 				trackerdb.commit();
 //				clfcdb.commit();
 			} catch (Throwable t) {
@@ -78,7 +80,7 @@ public class BroadcastLocationService
 			}
 		}
 		
-		private void runImpl() throws Exception {
+		private void runImpl(SQLTransaction trackerdb, DBContext clfcdb) throws Exception {
 			locationTracker.setDBContext(trackerdb.getContext());
 			
 			list = locationTracker.getLocationTrackers();
