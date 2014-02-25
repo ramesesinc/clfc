@@ -98,7 +98,7 @@ public class BroadcastLocationService
 					params.put("trackerid", trackerid);
 					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
 					params.put("latitude", Double.parseDouble(map.get("latitude").toString()));
-					params.put("state", map.get("state"));
+					params.put("state", 1);
 					
 					response.clear();
 					for (int j=0; j<10; j++) {
