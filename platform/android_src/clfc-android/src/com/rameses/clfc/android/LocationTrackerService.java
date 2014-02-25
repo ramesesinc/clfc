@@ -116,8 +116,14 @@ class LocationTrackerService
 					params.put("longitude", lng);
 					params.put("latitude", lat);
 					
+					System.out.println("inserting paramas = "+params);
 					trackerdb.insert("location_tracker", params);
 					
+					Platform.getMainActivity().getHandler().post(new Runnable() {
+						public void run() {
+							app.broadcastLocationSvc.start();
+						}
+					});
 //					params.clear();
 //					params.put("longitude", lng);
 //					params.put("latitude", lng);
