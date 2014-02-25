@@ -24,4 +24,16 @@ public class DBRemarksRemoved extends AbstractDBMapper
 			if (isCloseable()) ctx.close();
 		}
 	}
+	
+	public boolean hasPendingRemarksRemoved() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING' LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
 }

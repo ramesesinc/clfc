@@ -17,9 +17,34 @@ import com.rameses.util.MapProxy;
 
 public class PaymentService 
 {
-
 	private ApplicationImpl app;
 	private Handler handler;
+	private SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+	private DBContext clfcdb = new DBContext("clfc.db");
+	private DBContext paymentdb2 = new DBContext("clfcpayment.db");
+	private DBPaymentService paymentSvc = new DBPaymentService();
+	private DBCollectionSheet collectionSheetSvc = new DBCollectionSheet();
+	private DBSystemService systemSvc = new DBSystemService();
+	
+	private String mode = "";
+	private String trackerid;
+	private Map mCollectionSheet;
+	private Map params = new HashMap();
+	private Map loanapp = new HashMap();
+	private Map payment = new HashMap(); 
+	private Map response = new HashMap();
+	private Map borrower = new HashMap();
+	private Map collector = new HashMap();
+	private Map collectionSheet = new HashMap();
+	private int networkStatus = 0;
+	private MapProxy proxy;
+	private int size;
+	private int delay;
+	private List<Map> list;
+	private LoanPostingService svc = new LoanPostingService();
+	private boolean hasUnpostedPayments = false;
+
+	private boolean serviceStarted = false;
 	
 	public PaymentService(ApplicationImpl app) {
 		this.app = app;
@@ -29,22 +54,23 @@ public class PaymentService
 		if (handler == null) { 
 			handler = new Handler();
 //			new RunnableImpl().run(); 
-			Platform.getTaskManager().schedule(new RunnableImpl(), 0);
+			if (serviceStarted == false) {
+				serviceStarted = true;
+				Platform.getTaskManager().schedule(runnableImpl, 0);
+			}
 		} 
 	}
 	
-	private class RunnableImpl implements Runnable
-	{
-
+	private Runnable runnableImpl = new Runnable() {
 		public void run() {
 //			System.out.println("PostPendingPayments");
-			SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
-			DBContext clfcdb = new DBContext("clfc.db"); 
+//			paymentdb = new SQLTransaction("clfcpayment.db");
+//			clfcdb = new DBContext("clfc.db"); 
 //			System.out.println("clfcdb -> "+clfcdb);
 			try {
 				paymentdb.beginTransaction();
 //				clfcdb.beginTransaction();
-				runImpl(paymentdb, clfcdb);
+				runImpl();
 				paymentdb.commit();
 //				clfcdb.commit();
 //				SQLTransaction txn = new SQLTransaction("clfc.db");
@@ -56,63 +82,43 @@ public class PaymentService
 				paymentdb.endTransaction();
 				clfcdb.close();
 			}
-
-			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
-			Platform.getTaskManager().schedule(new RunnableImpl(), delay*1000);
+			
+			try {
+				paymentSvc.setDBContext(paymentdb2);
+				hasUnpostedPayments = paymentSvc.hasUnpostedPayments();
+			} catch (Exception e) {;}
+			
+			if (hasUnpostedPayments == true) {
+				delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
+				Platform.getTaskManager().schedule(runnableImpl, delay*1000);				
+			} else if (hasUnpostedPayments == false) {
+				serviceStarted = false;
+			}
 		}
 		
-		private void runImpl(SQLTransaction paymentdb, DBContext clfcdb) throws Exception {
-//			System.out.println(PaymentService.this);
-			DBPaymentService dbPs = new DBPaymentService();
-			dbPs.setDBContext(paymentdb.getContext());
+		private void runImpl() throws Exception {
+			paymentSvc.setDBContext(paymentdb.getContext());
 			
 //			System.out.println("pass 1");
-			List<Map> list = dbPs.getPendingPayments();
-			if (!list.isEmpty()) {		
-				DBCollectionSheet dbCs = new DBCollectionSheet();
-				dbCs.setDBContext(clfcdb); 
-				dbCs.setCloseable(false);
+			list = paymentSvc.getPendingPayments();
+			if (!list.isEmpty()) {						
+				collectionSheetSvc.setDBContext(clfcdb); 
+				collectionSheetSvc.setCloseable(false);
 				
-				DBSystemService dbSys = new DBSystemService();
-				dbSys.setDBContext(clfcdb); 
-				dbSys.setCloseable(false);
+				systemSvc.setDBContext(clfcdb); 
+				systemSvc.setCloseable(false);
 
 //				System.out.println("pass 2");
-				String trackerid = dbSys.getTrackerid();
-//				String sql = "SELECT * FROM sys_var WHERE name='trackerid'";
-//				String trackerid = null;
-//				try {
-//					Map map = clfcdb.find(sql, new Object[]{});
-//					trackerid = MapProxy.getString(map, "value");
-//				} catch (Exception e) {
-//					throw e;
-//				}
-//				String trackerid = clfcdb.fin//dbSys.getTrackerid();
+				trackerid = systemSvc.getTrackerid();
 				
-//				if (SessionContext.getProfile() == null) return;
-//				Map collector = new HashMap();
-//				collector.put("objid", SessionContext.getProfile().getUserId());
-//				collector.put("name", SessionContext.getProfile().getFullName());
-
-				String mode = "";
-				Map mCollectionSheet;
-				Map params = new HashMap();
-				Map loanapp = new HashMap();
-				Map payment = new HashMap(); 
-				Map response = new HashMap();
-				Map borrower = new HashMap();
-				Map collector = new HashMap();
-				Map collectionSheet = new HashMap();
-				int networkStatus = 0;
-				LoanPostingService svc = new LoanPostingService();
 //				System.out.println("pass 3");
-				MapProxy proxy;
-				for (int i=0; i<list.size(); i++) { 
+				size = list.size();
+				for (int i=0; i<size; i++) { 
 //					System.out.println("loop PaymentService items");
 					proxy = new MapProxy((Map) list.get(i));
 					
 					mode = "ONLINE_WIFI";
-					networkStatus = ((ApplicationImpl) Platform.getApplication()).getNetworkStatus();
+					networkStatus = app.getNetworkStatus();
 					if (networkStatus == 1) {
 						mode = "ONLINE_MOBILE";
 					}
@@ -122,7 +128,7 @@ public class PaymentService
 					collector.put("name", proxy.getString("collectorname"));
 					
 //					System.out.println("loanappid -> "+map.containsKey("loanappid"));
-					mCollectionSheet = dbCs.findCollectionSheetByLoanappid(proxy.getString("loanappid"));//clfcdb.find(sql, new Object[]{proxy.getString("loanappid")});//dbCs.findCollectionSheetByLoanappid();
+					mCollectionSheet = collectionSheetSvc.findCollectionSheetByLoanappid(proxy.getString("loanappid"));//clfcdb.find(sql, new Object[]{proxy.getString("loanappid")});//dbCs.findCollectionSheetByLoanappid();
 					collectionSheet.clear();
 					collectionSheet.put("detailid", mCollectionSheet.get("detailid").toString());
 					
@@ -165,10 +171,10 @@ public class PaymentService
 						} catch (Throwable e) {;} 
 					}
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						dbPs.approvePaymentById(proxy.getString("objid"));
+						paymentSvc.approvePaymentById(proxy.getString("objid"));
 					}
 				}
 			}
 		}
-	}
+	};
 }

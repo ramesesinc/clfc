@@ -6,6 +6,7 @@ import java.util.Properties;
 import android.os.Environment;
 import android.os.Handler;
 
+import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.client.android.AbstractActivity;
 import com.rameses.client.android.AppSettings;
 import com.rameses.client.android.Logger;
@@ -25,6 +26,12 @@ public class ApplicationImpl extends UIApplication
 	private int networkStatus;
 	private AppSettingsImpl appSettings;
 
+	public VoidRequestService voidRequestSvc;
+	public PaymentService paymentSvc;
+	public RemarksService remarksSvc;
+	public RemarksRemovedService remarksRemovedSvc;
+	public BroadcastLocationService broadcastLocationSvc;
+	
 	public File getLogFile() {
 		// TODO Auto-generated method stub
 		File dir = Environment.getExternalStorageDirectory();
@@ -60,6 +67,12 @@ public class ApplicationImpl extends UIApplication
 		
 		AppServices services = new AppServices(this);
 		new Handler().postDelayed(services, 1);
+
+		voidRequestSvc = new VoidRequestService(this);
+		paymentSvc = new PaymentService(this);
+		remarksSvc = new RemarksService(this);
+		remarksRemovedSvc = new RemarksRemovedService(this);
+		broadcastLocationSvc = new BroadcastLocationService(this);
 
 //		AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
 //		boolean flag = false;

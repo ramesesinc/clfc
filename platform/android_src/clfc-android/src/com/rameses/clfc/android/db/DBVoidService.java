@@ -22,6 +22,18 @@ public class DBVoidService extends AbstractDBMapper
 		}
 	}
 	
+	public boolean hasPendingVoidRequest() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT objid FROM "+getTableName()+" WHERE state='PENDING' LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
 	public boolean hasPendingVoidRequestByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();
 		try {

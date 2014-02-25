@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -42,7 +42,8 @@ import com.rameses.client.android.UIDialog;
 import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
-public class CollectionSheetInfoActivity extends ControlActivity {
+public class CollectionSheetInfoActivity extends ControlActivity 
+{
 	private String loanappid = "";
 	private String detailid = "";
 	private String appno = "";
@@ -65,12 +66,48 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 	private LayoutInflater inflater;
 	private Map remarks;
 	private ProgressDialog progressDialog;
+	private RelativeLayout rl_container;
+	
+	private DBContext clfcdb = new DBContext("clfc.db");
+	private DBContext paymentdb = new DBContext("clfcpayment.db");
+	private DBContext remarksdb = new DBContext("clfcremarks.db");
+	private DBContext requestdb = new DBContext("clfcrequest.db");
+	private DBCollectionSheet dbCollectionSheet = new DBCollectionSheet();	
+	private DBPaymentService paymentSvc = new DBPaymentService();
+	private DBVoidService voidSvc = new DBVoidService();
+	private DBRemarksService remarksSvc = new DBRemarksService();
+
+	private Map collectionSheet = new HashMap();
+	private BigDecimal amountdue = new BigDecimal("0").setScale(2);
+	private BigDecimal loanamount = new BigDecimal("0").setScale(2);
+	private BigDecimal balance = new BigDecimal("0").setScale(2);
+	private BigDecimal interest = new BigDecimal("0").setScale(2);
+	private BigDecimal penalty = new BigDecimal("0").setScale(2);
+	private BigDecimal others = new BigDecimal("0").setScale(2);
+	private int term = 0;
+	private int size;
+	private String duedate = "";
+	private String homeaddress = "";
+	private String collectionaddress = "";
+	private List<Map> payments;
+	private LinearLayout ll_info_payments;
+
+	private String type = "";
+	private String voidType = "";
+	private RelativeLayout child = null;
+	private View overlay = null;
+	private BigDecimal amount;
+	private Map payment;
+	private Map voidRequest;
+	private RelativeLayout.LayoutParams layoutParams;
+	private RelativeLayout remarks_child;
+	private CharSequence[] remarks_items = {"Edit Remarks", "Remove Remarks"};
 
 	protected void onCreateProcess(Bundle savedInstanceState) {
 		setContentView(R.layout.template_footer);
 		setTitle("Collection Sheet Info");
 
-		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
+		rl_container = (RelativeLayout) findViewById(R.id.rl_container);
 		inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.activity_collectionsheetinfo, rl_container, true);
 
@@ -88,25 +125,14 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setCancelable(false);
+		
+		ll_info_payments = (LinearLayout) findViewById(R.id.ll_info_payments);
 	}
 
 	protected void onStartProcess() {
 		super.onStartProcess();
-		
-		DBContext clfcdb = new DBContext("clfc.db");
-		DBContext paymentdb = new DBContext("clfcpayment.db");
-		DBContext remarksdb = new DBContext("clfcremarks.db");
-		DBContext requestdb = new DBContext("clfcrequest.db");
 		try {
-//			clfcdb.beginTransaction();
-//			paymentdb.beginTransaction();
-//			remarksdb.beginTransaction();
-//			requestdb.beginTransaction();
-			onStartPocessImpl(clfcdb, paymentdb, remarksdb, requestdb);
-//			clfcdb.commit();
-//			paymentdb.commit();
-//			remarksdb.commit();
-//			requestdb.commit();
+			onStartPocessImpl();
 		}  catch (Throwable t) {
 			t.printStackTrace();
 			UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
@@ -118,23 +144,11 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		}
 	}
 
-	private void onStartPocessImpl(DBContext clfcdb, DBContext paymentdb, DBContext remarksdb, DBContext requestdb) throws Exception {
-		DBCollectionSheet dbCs = new DBCollectionSheet();
-		dbCs.setDBContext(clfcdb);
+	private void onStartPocessImpl() throws Exception {
+		dbCollectionSheet.setDBContext(clfcdb);
 		
-		Map collectionSheet = new HashMap();
-		collectionSheet = dbCs.findCollectionSheetByLoanappid(loanappid);
+		collectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(loanappid);
 		
-		BigDecimal amountdue = new BigDecimal("0").setScale(2);
-		BigDecimal loanamount = new BigDecimal("0").setScale(2);
-		BigDecimal balance = new BigDecimal("0").setScale(2);
-		BigDecimal interest = new BigDecimal("0").setScale(2);
-		BigDecimal penalty = new BigDecimal("0").setScale(2);
-		BigDecimal others = new BigDecimal("0").setScale(2);
-		int term = 0;
-		String duedate = "";
-		String homeaddress = "";
-		String collectionaddress = "";
 		
 		if (collectionSheet != null || !collectionSheet.isEmpty()) {
 			acctid = collectionSheet.get("acctid").toString();
@@ -177,29 +191,17 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		((TextView) findViewById(R.id.tv_info_others)).setText(formatValue(others));
 		((TextView) findViewById(R.id.tv_info_term)).setText(term+" days");
 		
-		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(paymentdb);
+		paymentSvc.setDBContext(paymentdb);
 		
-		ArrayList payments = new ArrayList();
-		try {
-			payments = (ArrayList) dbPs.getPaymentsByLoanappid(loanappid);
-		} catch (Exception e) {;}
+		payments = paymentSvc.getPaymentsByLoanappid(loanappid);
 
 		rl_payment.setVisibility(View.GONE);
 		if (payments != null && !payments.isEmpty()) {
 			rl_payment.setVisibility(View.VISIBLE);
-			LinearLayout ll_info_payments = (LinearLayout) findViewById(R.id.ll_info_payments);
 			ll_info_payments.removeAllViewsInLayout();
-			String type = "";
-			String voidType = "";
-			RelativeLayout child = null;
-			View overlay = null;
-			BigDecimal amount;
-			Map payment;
-			Map voidRequest;
-			DBVoidService dbVs = new DBVoidService();
-			dbVs.setDBContext(requestdb);
-			for (int i=0; i<payments.size(); i++) {
+			voidSvc.setDBContext(requestdb);
+			size = payments.size();
+			for (int i=0; i<size; i++) {
 				child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
 				payment = (Map) payments.get(i);
 
@@ -217,12 +219,12 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				amount = new BigDecimal(payment.get("paymentamount").toString()).setScale(2);
 				((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(amount));
 				child.setTag(R.id.paymentid, payment.get("objid").toString());
-				voidRequest = dbVs.findVoidRequestByPaymentid(payment.get("objid").toString());
+				voidRequest = voidSvc.findVoidRequestByPaymentid(payment.get("objid").toString());
 				if (voidRequest == null || voidRequest.isEmpty()) {
 					addPaymentProperties(child);
 				} else {
 					voidType = voidRequest.get("state").toString();
-					RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+					layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 					layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
 					overlay = inflater.inflate(R.layout.overlay_void_text, null);
 					if (voidType.equals("PENDING")) {
@@ -245,17 +247,16 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 			}
 		}
 		
-		DBRemarksService dbRs = new DBRemarksService();
-		dbRs.setDBContext(remarksdb);
+		remarksSvc.setDBContext(remarksdb);
 		
 		try {
-			remarks = dbRs.findRemarksByLoanappid(loanappid);
+			remarks = remarksSvc.findRemarksByLoanappid(loanappid);
 		} catch (Exception e) {;}
 		rl_remarks.setVisibility(View.GONE);
 		if (remarks != null && !remarks.isEmpty()) {
 			rl_remarks.setVisibility(View.VISIBLE);
 			((TextView) findViewById(R.id.tv_info_remarks)).setText(remarks.get("remarks").toString());
-			RelativeLayout remarks_child = (RelativeLayout) findViewById(R.id.rl_info_remarks);
+			remarks_child = (RelativeLayout) findViewById(R.id.rl_info_remarks);
 			remarks_child.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View view) {
 					// TODO Auto-generated method stub
@@ -267,7 +268,6 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				 public boolean onLongClick(View v) {
 				 // TODO Auto-generated method stub
 					 v.setBackgroundResource(android.R.drawable.list_selector_background);
-					 CharSequence[] items = {"Edit Remarks", "Remove Remarks"};
 					 UIDialog dialog = new UIDialog() {
 						 public void onSelectItem(int index) {
 							 SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
@@ -304,47 +304,12 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 							 }
 						 }
 					 };
-					 dialog.select(items);
+					 dialog.select(remarks_items);
 					 return false;
 				};
 			});
 		}
 		rl_notes.setVisibility(View.GONE);
-		
-		//
-		// rl_notes.setVisibility(View.GONE);
-		// LinearLayout ll_notes = (LinearLayout)
-		// findViewById(R.id.ll_info_notes);
-		// if (notes != null && notes.getCount() > 0) {
-		// rl_notes.setVisibility(View.VISIBLE);
-		// notes.moveToFirst();
-		// ll_notes.removeAllViewsInLayout();
-		// View child = null;
-		// Date date = null;
-		// String str = "";
-		// int idx = 0;
-		// do {
-		// child = ((LayoutInflater)
-		// getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_note,
-		// null);
-		// //addNoteProperties(child);
-		// str = "";
-		// date = parseDate(notes.getString(notes.getColumnIndex("fromdate")));
-		// if (date != null) str = df.format(date);
-		// ((TextView) child.findViewById(R.id.tv_info_refno)).setText(str);
-		// str = "";
-		// date = parseDate(notes.getString(notes.getColumnIndex("todate")));
-		// if (date != null) str = df.format(date);
-		// ((TextView) child.findViewById(R.id.tv_info_txndate)).setText(str);
-		// ((TextView)
-		// child.findViewById(R.id.tv_info_remarks)).setText(notes.getString(notes.getColumnIndex("remarks")));
-		// //child.setTag(R.id.noteid,
-		// notes.getString(notes.getColumnIndex("objid")));
-		// //child.setTag(R.id.idx, idx);
-		// idx++;
-		// ll_notes.addView(child);
-		// } while(notes.moveToNext());
-		// }
 	}
 
 	private void addPaymentProperties(View child) {
@@ -377,36 +342,6 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 			}
 		});
 	}
-
-	// private void addApprovedVoidPaymentProperies(View child) {
-	// child.setClickable(true);
-	// child.setOnClickListener(new View.OnClickListener() {
-	// @Override
-	// public void onClick(View v) {
-	// // TODO Auto-generated method stub
-	// v.setBackgroundResource(android.R.drawable.list_selector_background);
-	// }
-	// });
-	// child.setOnLongClickListener(new View.OnLongClickListener() {
-	// @Override
-	// public boolean onLongClick(View v) {
-	// // TODO Auto-generated method stub
-	// final View view = v;
-	// v.setBackgroundResource(android.R.drawable.list_selector_background);
-	// CharSequence[] items = {"Print"};
-	// DialogInterface.OnClickListener listener = new
-	// DialogInterface.OnClickListener() {
-	// @Override
-	// public void onClick(DialogInterface d, int which) {
-	// // TODO Auto-generated method stub
-	// //showVoidDialog(view);
-	// }
-	// };
-	// ApplicationUtil.showOptionDialog(context, items, listener);
-	// return false;
-	// }
-	// });
-	// }
 	
 	private void showVoidDialog() {
 		showVoidDialog(null);
@@ -474,76 +409,9 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				} catch (Throwable t) {
 					UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
 				}
-//				LoanPostingService svc = new LoanPostingService();
-//				try {
-//					
-//				} catch (Exception e) {
-//					throw e;
-//				}
-//				try { 
-//					postingProxy.invoke("voidPayment", new Object[]{params});
-//				} catch (Exception e) {}
-//				finally {
-//					params.put("state", "PENDING");
-//					getDbHelper().insertVoidPayment(db, params);
-//					View overlay = ((LayoutInflater)
-//					getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.overlay_void_text,
-//					null);
-//					RelativeLayout.LayoutParams layoutParams = new
-//					RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-//					RelativeLayout.LayoutParams.MATCH_PARENT);
-//					layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
-//					((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
-//					((TextView) overlay).setText("VOID REQUEST PENDING");
-//					overlay.setLayoutParams(layoutParams);
-//					((RelativeLayout) payment).addView(overlay);
-//					payment.setClickable(false);
-//					payment.setOnClickListener(null);
-//					payment.setOnLongClickListener(null);
-//					db.close();
-//				}
 			}
 		});
 	}
-	/*
-	 * private void addNoteProperties(View child) { child.setClickable(true);
-	 * child.setOnClickListener(new View.OnClickListener() {
-	 * 
-	 * @Override public void onClick(View v) { // TODO Auto-generated method
-	 * stub //RelativeLayout rl = (RelativeLayout) v;
-	 * v.setBackgroundResource(android.R.drawable.list_selector_background); }
-	 * }); child.setOnLongClickListener(new View.OnLongClickListener() {
-	 * 
-	 * @Override public boolean onLongClick(View v) { // TODO Auto-generated
-	 * method stub //showNotesDialog("edit", v); final View view = v;
-	 * v.setBackgroundResource(android.R.drawable.list_selector_background);
-	 * CharSequence[] items = {"Edit Note", "Remove Note"};
-	 * DialogInterface.OnClickListener listener = new
-	 * DialogInterface.OnClickListener() {
-	 * 
-	 * @Override public void onClick(DialogInterface d, int which) { // TODO
-	 * Auto-generated method stub if (which == 0) { showNotesDialog("edit",
-	 * view); } else if (which == 1) { DialogInterface.OnClickListener
-	 * positivelistener = new DialogInterface.OnClickListener() {
-	 * 
-	 * @Override public void onClick(DialogInterface di, int which) { // TODO
-	 * Auto-generated method stub
-	 * 
-	 * String noteid = view.getTag(R.id.noteid).toString(); int idx =
-	 * Integer.parseInt(view.getTag(R.id.idx).toString()); Map<String, Object>
-	 * params = new HashMap<String, Object>(); params.put("noteid", noteid);
-	 * ServiceProxy postingProxy = ApplicationUtil.getServiceProxy(context,
-	 * "DevicePostingServiec"); try { postingProxy.invoke("removeNote", new
-	 * Object[]{params}); } catch (Exception e) {} finally { SQLiteDatabase db =
-	 * getDbHelper().getReadableDatabase(); getDbHelper().removeNoteById(db,
-	 * noteid); db.close(); removeNoteAt(idx);
-	 * ApplicationUtil.showShortMsg(context, "Successfully removed note."); } }
-	 * }; ApplicationUtil.showConfirmationDialog(context,
-	 * "You are about to remove this note. Continue?", positivelistener, null);
-	 * } } }; ApplicationUtil.showOptionDialog(context, items, listener); return
-	 * false; } }); }
-	 */
-
 	private String formatValue(Object number) {
 		DecimalFormat df = new DecimalFormat("#,###,##0.00");
 		StringBuffer sb = new StringBuffer();
@@ -590,12 +458,10 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 	}
 	
 	private void addPaymentImpl(DBContext paymentdb, DBContext requestdb) throws Exception {
-		DBVoidService dbVs = new DBVoidService();
-		dbVs.setDBContext(requestdb);
+		voidSvc.setDBContext(requestdb);
 		
-		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(paymentdb);
-		if (dbVs.hasPendingVoidRequestByLoanappid(loanappid)) {
+		paymentSvc.setDBContext(paymentdb);
+		if (voidSvc.hasPendingVoidRequestByLoanappid(loanappid)) {
 			ApplicationUtil.showShortMsg("[ERROR] Cannot add payment. No confirmation for void requested at the moment.");
 			
 		} else {
@@ -613,8 +479,8 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 			intent.putExtra("borrowername", acctname);
 			intent.putExtra("sessionid", sessionid);
 			
-			if (dbPs.hasPaymentsByLoanappid(loanappid)) {
-				refno += (dbPs.noOfPaymentsByLoanappid(loanappid)+1);
+			if (paymentSvc.hasPaymentsByLoanappid(loanappid)) {
+				refno += (paymentSvc.noOfPaymentsByLoanappid(loanappid)+1);
 			}
 			intent.putExtra("refno", refno);
 			intent.putExtra("paymenttype", paymenttype);
@@ -647,7 +513,7 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 		 btn_positive.setOnClickListener(new RemarksValidationListener(dialog, mode));
 	 }
 	 
-	 class RemarksValidationListener implements View.OnClickListener 
+	 private class RemarksValidationListener implements View.OnClickListener 
 	 {
 		 private final Dialog dialog;
 		 private final String mode;
@@ -684,7 +550,6 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 				dbSys.setDBContext(clfcdb.getContext());
 				
 				Location location = NetworkLocationProvider.getLocation();
-				String collectorid = SessionContext.getProfile().getUserId();
 				 
 				Map params = new HashMap();				 
 				params.put("loanappid", loanappid);
@@ -706,9 +571,9 @@ public class CollectionSheetInfoActivity extends ControlActivity {
 					ApplicationUtil.showShortMsg("Successfully updated remark.");
 				}
 				
-				DBRemarksService dbRs = new DBRemarksService();
-				dbRs.setDBContext(remarksdb.getContext());
-				remarks = dbRs.findRemarksByLoanappid(loanappid);
+				DBRemarksService remarksSvc = new DBRemarksService();
+				remarksSvc.setDBContext(remarksdb.getContext());
+				remarks = remarksSvc.findRemarksByLoanappid(loanappid);
 				((TextView) findViewById(R.id.tv_info_remarks)).setText(mRemarks);
 				dialog.dismiss();
 		 }

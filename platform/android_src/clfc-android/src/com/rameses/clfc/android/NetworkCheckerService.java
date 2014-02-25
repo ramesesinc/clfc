@@ -25,8 +25,7 @@ class NetworkCheckerService
 			new RunnableImpl().run(); 
 		} 
 	}
-	
-	
+		
 	private class RunnableImpl implements Runnable 
 	{
 		NetworkCheckerService root = NetworkCheckerService.this;

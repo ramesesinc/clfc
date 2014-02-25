@@ -17,6 +17,22 @@ public class RemarksRemovedService
 {
 	private ApplicationImpl app;
 	private Handler handler;
+	private SQLTransaction remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
+	private DBContext clfcdb = new DBContext("clfc.db");
+	private DBContext remarksremoveddb2 = new DBContext("clfcremarksremoved.db");
+	private DBRemarksRemoved remarksRemoved = new DBRemarksRemoved();
+	private DBCollectionSheet dbCollectionSheet = new DBCollectionSheet();	
+	private LoanPostingService svc = new LoanPostingService();
+	private Map map = new HashMap();
+	private Map params = new HashMap();
+	private Map response = new HashMap();
+	private Map collectionSheet = new HashMap();
+	private List<Map> list;
+	private int delay;
+	private int size;
+	private boolean hasPendingRemarksRemoved = false;
+	
+	public static boolean serviceStarted = false;
 	
 	public RemarksRemovedService(ApplicationImpl app) {
 		this.app = app;
@@ -26,20 +42,21 @@ public class RemarksRemovedService
 		if (handler == null) { 
 			handler = new Handler();
 //			new RunnableImpl().run(); 
-			Platform.getTaskManager().schedule(new RunnableImpl(), 0);
+			if (serviceStarted == false) {
+				serviceStarted = true;
+				Platform.getTaskManager().schedule(runnableImpl, 0);
+			}
 		} 
 	}
-
-	private class RunnableImpl implements Runnable
+	
+	private Runnable runnableImpl = new Runnable() 
 	{
 		public void run() {
 //			System.out.println("PostPendingRemarksRemoved");
-			SQLTransaction remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
-			DBContext clfcdb = new DBContext("clfc.db");
 			try {
 				remarksremoveddb.beginTransaction();
 //				clfcdb.beginTransaction();
-				runImpl(remarksremoveddb, clfcdb);
+				runImpl();
 				remarksremoveddb.commit();
 //				clfcdb.commit();
 //				SQLTransaction txn = new SQLTransaction("clfc.db");
@@ -51,32 +68,33 @@ public class RemarksRemovedService
 				clfcdb.close();
 			}
 
-			int delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
-			Platform.getTaskManager().schedule(new RunnableImpl(), delay*1000);
+			try {
+				remarksRemoved.setDBContext(remarksremoveddb2);
+				hasPendingRemarksRemoved = remarksRemoved.hasPendingRemarksRemoved();
+			} catch (Exception e) {;}
+			
+			if (hasPendingRemarksRemoved == true) {
+				delay = ((AppSettingsImpl) Platform.getApplication().getAppSettings()).getUploadTimeout();
+				Platform.getTaskManager().schedule(runnableImpl, delay*1000);	
+			} else if (hasPendingRemarksRemoved == false) {
+				serviceStarted = false;
+			}
 		}
 		
-		private void runImpl(SQLTransaction remarksremoveddb, DBContext clfcdb) throws Exception {
-			DBRemarksRemoved dbRr = new DBRemarksRemoved();
-			dbRr.setDBContext(remarksremoveddb.getContext());
+		private void runImpl() throws Exception {
+			remarksRemoved.setDBContext(remarksremoveddb.getContext());
 			
-			List<Map> list = dbRr.getPendingRemarksRemoved();
-			
+			list = remarksRemoved.getPendingRemarksRemoved();			
 			if (!list.isEmpty()) {				
-				Map map;
-				Map params = new HashMap();
-				Map response = new HashMap();
-				LoanPostingService svc = new LoanPostingService();
+				dbCollectionSheet.setDBContext(clfcdb);
+				dbCollectionSheet.setCloseable(false);
 				
-				DBCollectionSheet dbCs = new DBCollectionSheet();
-				dbCs.setDBContext(clfcdb);
-				dbCs.setCloseable(false);
-				
-				Map collectionSheet = new HashMap();
-				for (int i=0; i<list.size(); i++) {
+				size = list.size();
+				for (int i=0; i<size; i++) {
 					map = (Map) list.get(i);
 
 					params.clear();
-					collectionSheet = dbCs.findCollectionSheetByLoanappid(map.get("loanappid").toString());
+					collectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(map.get("loanappid").toString());
 					if (collectionSheet != null && !collectionSheet.isEmpty()) {
 						params.put("detailid", collectionSheet.get("detailid").toString());
 					} 
@@ -94,5 +112,5 @@ public class RemarksRemovedService
 				}
 			}
 		}		
-	}
+	};
 }

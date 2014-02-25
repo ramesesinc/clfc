@@ -20,31 +20,43 @@ import com.rameses.db.android.SQLTransaction;
 class LocationTrackerService 
 {
 	private ApplicationImpl app;
+	private AppSettingsImpl appSettings;
 	private Handler handler;
+	private SQLTransaction trackerdb = new SQLTransaction("clfctracker.db");
+	private DBContext clfcdb = new DBContext("clfc.db");
+	private List tables;
+	private DBLocationTracker locationTracker = new DBLocationTracker();
+	private DBSystemService systemSvc = new DBSystemService();
+	private int count;
+	private int timeout;
+	private String trackerid;
+	private String collectorid;
+	private Location location;
+	private UserProfile profile;
+	private double lng;
+	private double lat;
+	private Map params = new HashMap();
 	
 	public LocationTrackerService(ApplicationImpl app) {
 		this.app = app;
+		appSettings = (AppSettingsImpl) app.getAppSettings();
 	}
 	
 	public void start() {
 		if (handler == null) { 
 			handler = new Handler();
 //			new RunnableImpl().run(); 
-			Platform.getTaskManager().schedule(new RunnableImpl(), 0);
+			Platform.getTaskManager().schedule(runnableImpl, 0);
 		} 
-	}
+	}	
 	
-	
-	private class RunnableImpl implements Runnable 
-	{
-		LocationTrackerService root = LocationTrackerService.this;
+	private Runnable runnableImpl = new Runnable() {
+//		LocationTrackerService root = LocationTrackerService.this;
 		
 		public void run() {
-			SQLTransaction trackerdb = new SQLTransaction("clfctracker.db");
-			DBContext clfcdb = new DBContext("clfc.db");
 			try {
 				trackerdb.beginTransaction();
-				runImpl(trackerdb, clfcdb);
+				runImpl();
 				trackerdb.commit();
 //				SQLTransaction txn = new SQLTransaction("clfctracker.db"); 
 //				txn.execute(new ExecutionHandlerImpl()); 
@@ -54,89 +66,48 @@ class LocationTrackerService
 				trackerdb.endTransaction();
 				clfcdb.close();
 			}
-
-			AppSettingsImpl sets = (AppSettingsImpl) Platform.getApplication().getAppSettings();
-			int timeout = 1;
+			
+			timeout = 1;
 			try { 
-				timeout = sets.getTrackerTimeout(); 
+				timeout = appSettings.getTrackerTimeout(); 
 			} catch(Throwable t) {;} 
 			
-			Platform.getTaskManager().schedule(new RunnableImpl(), timeout*1000);		
+			Platform.getTaskManager().schedule(runnableImpl, timeout*1000);		
 		}	
 		
-		private void runImpl(SQLTransaction trackerdb, DBContext clfcdb) throws Exception {
-			List tables = trackerdb.getList("SELECT * FROM sqlite_master WHERE type='table'");
+		private void runImpl() throws Exception {
+			tables = trackerdb.getList("SELECT * FROM sqlite_master WHERE type='table'");
 			
-			Location loc = NetworkLocationProvider.getLocation();
-			double lng = (loc == null? 0.0: loc.getLongitude());
-			double lat = (loc == null? 0.0: loc.getLatitude());
+			location = NetworkLocationProvider.getLocation();
+			lng = (location == null? 0.0: location.getLongitude());
+			lat = (location == null? 0.0: location.getLatitude());
 			if (lng > 0.0 && lat > 0.0) {				
-				UserProfile profile = SessionContext.getProfile();
-				String collectorid = (profile == null? null : profile.getUserId());
-				if (collectorid != null) {
-					DBLocationTracker dbloc = new DBLocationTracker();
-					dbloc.setDBContext(trackerdb.getContext());
-					int count = dbloc.getCountByCollectorid(collectorid);
+				profile = SessionContext.getProfile();
+				collectorid = (profile == null? null : profile.getUserId());
+				if (collectorid != null) {					
+					locationTracker.setDBContext(trackerdb.getContext());
+					count = locationTracker.getCountByCollectorid(collectorid);					
 					
-					DBSystemService dbSys = new DBSystemService();
-					dbSys.setDBContext(clfcdb);
-					dbSys.setCloseable(false);
+					systemSvc.setDBContext(clfcdb);
+					systemSvc.setCloseable(false);
 					
-					String trackerid = dbSys.getTrackerid();
+					trackerid = systemSvc.getTrackerid();
 					if (trackerid == null) return;
 																	
-					Map params = new HashMap();
+					params.clear();
 					params.put("objid", "TRCK"+UUID.randomUUID());
 					params.put("seqno",  count+1);
 					params.put("trackerid", trackerid);
 					params.put("collectorid", collectorid);
 					params.put("longitude", lng);
 					params.put("latitude", lat);
-					params.put("state", loc.getStatus());
+					params.put("state", location.getStatus());
 					
 					trackerdb.insert("location_tracker", params);
 				}
 			}	
 		}
-	}
-	
-	
-	/*
-	private Runnable locationTrackerBroadcastRunnable = new Runnable() {
-		@Override
-		public void run() {
-			SQLiteDatabase db = dbHelper.getReadableDatabase();
-			Cursor locationTracker = dbHelper.getLocationTrackerByCollectorid(db, SessionContext.getProfile().getUserId()+"");
-			db.close();
-			
-			if (locationTracker != null && locationTracker.getCount() > 0) {
-				locationTracker.moveToFirst();
-				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("objid", locationTracker.getString(locationTracker.getColumnIndex("objid")));
-				params.put("trackerid", locationTracker.getString(locationTracker.getColumnIndex("trackerid")));
-				params.put("longitude", locationTracker.getString(locationTracker.getColumnIndex("longitude")));
-				params.put("latitude", locationTracker.getString(locationTracker.getColumnIndex("latitude")));
-				
-				ServiceProxy proxy = ApplicationUtil.getServiceProxy(context, "DevicePostingService");
-				for (int i = 0; i < 10; i++) {
-					try {
-						Object response = proxy.invoke("postLocation", new Object[]{params});
-						Map<String, Object> result = (Map<String, Object>) response;
-						if (result.containsKey("response") && result.get("response").toString().toLowerCase().equals("success")) {
-							db = dbHelper.getReadableDatabase();
-							dbHelper.removeLocationTrackerById(db, params.get("objid").toString());
-							db.close();
-						}
-						break;
-					} catch (Exception e) { 
-						Log.w("locationTrackerBroadcastRunnable", ""); 
-						LogUtil.log("locationTrackerBroadcastRunnable");
-					}
-				}
-				locationTracker.close();
-			}
-		}
-	};*/
+	};
 	
 }
 

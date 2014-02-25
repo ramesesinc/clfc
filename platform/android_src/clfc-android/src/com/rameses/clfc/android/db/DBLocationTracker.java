@@ -32,4 +32,16 @@ public class DBLocationTracker extends AbstractDBMapper
 			if (isCloseable()) ctx.close();
 		}
 	}
+	
+	public boolean hasLocationTrackers() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT * FROM "+getTableName()+" LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
 }

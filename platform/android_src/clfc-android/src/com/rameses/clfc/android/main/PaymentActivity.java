@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.rameses.clfc.android.ApplicationImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
@@ -30,7 +31,9 @@ import com.rameses.client.android.UIAction;
 import com.rameses.client.android.UIDialog;
 import com.rameses.db.android.SQLTransaction;
 
-public class PaymentActivity extends ControlActivity {
+public class PaymentActivity extends ControlActivity 
+{
+	private ApplicationImpl app;
 	private String loanappid = "";
 	private String detailid = "";
 	private String refno = "";
@@ -48,11 +51,31 @@ public class PaymentActivity extends ControlActivity {
 	private BigDecimal defaultAmount = new BigDecimal("0").setScale(2);
 	private String objid = "";
 	
+	private RelativeLayout rl_overpayment;
+	private RelativeLayout rl_container;
+	private DecimalFormat decf = new DecimalFormat("#,##0.00");
+	private StringBuffer sb = new StringBuffer();
+	private FieldPosition fp = new FieldPosition(0);
+	private String txndate;
+	
+	private LayoutInflater inflater;
+	private SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+	private SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+	private DBSystemService systemSvc = new DBSystemService();
+	private Location location;
+	private Map params = new HashMap();
+	private String message;	
+
+	private boolean flag = true;
+	private BigDecimal amt = new BigDecimal("0").setScale(2);
+	private BigDecimal amt2 = new BigDecimal("0").setScale(2);
+	private int td;
+	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
 		setContentView(R.layout.template_footer);
-		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		rl_container = (RelativeLayout) findViewById(R.id.rl_container);
+		inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.activity_payment, rl_container, true);
 		
 		Intent intent = getIntent();		
@@ -73,6 +96,7 @@ public class PaymentActivity extends ControlActivity {
 		defaultAmount = new BigDecimal(amt).setScale(2);
 		
 		objid = "PT"+UUID.randomUUID().toString();
+		app = (ApplicationImpl) Platform.getApplication();
 	}
 	
 	@Override
@@ -92,7 +116,7 @@ public class PaymentActivity extends ControlActivity {
 //		txndate = sdf.format(c.getTime());
 //		String formattedDate = df.format(c.getTime());
 		
-		RelativeLayout rl_overpayment = (RelativeLayout) findViewById(R.id.rl_overpayment);
+		rl_overpayment = (RelativeLayout) findViewById(R.id.rl_overpayment);
 		rl_overpayment.setVisibility(View.GONE);
 		if (type.equals("over")) rl_overpayment.setVisibility(View.VISIBLE);
 		
@@ -100,14 +124,11 @@ public class PaymentActivity extends ControlActivity {
 		et_overpayment.setEnabled(false);
 		if (isfirstbill == 1) et_overpayment.setEnabled(true);
 		if (overpayment.compareTo(new BigDecimal("0").setScale(2)) > 0) {
-			DecimalFormat decf = new DecimalFormat("#,##0.00");
-			StringBuffer sb = new StringBuffer();
-			FieldPosition fp = new FieldPosition(0);
 			decf.format(overpayment, sb, fp);
 			et_overpayment.setText(sb.toString());
 		}
 		
-		String txndate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+		txndate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 		((TextView) findViewById(R.id.tv_payment_refno)).setText(refno);
 		((TextView) findViewById(R.id.tv_payment_txndate)).setText(txndate);
 		et_amount = (EditText) findViewById(R.id.et_payment_amount);
@@ -119,6 +140,7 @@ public class PaymentActivity extends ControlActivity {
 			protected void onClick() {
 				try {
 					doSavePayment();
+					app.paymentSvc.start();
 				} catch(Throwable t) {
 					UIDialog.showMessage("[ERROR] " + t.getMessage()); 
 				}
@@ -132,13 +154,13 @@ public class PaymentActivity extends ControlActivity {
 		if(amount == null || amount.equals("")) {
 			ApplicationUtil.showShortMsg("Amount is required.");
 		} else {
-			boolean flag = true;
-			BigDecimal amt = new BigDecimal(amount).setScale(2);
-			BigDecimal amt2 = new BigDecimal(0).setScale(2);
+			flag = true;
+			amt = new BigDecimal(amount).setScale(2);
+			amt2 = new BigDecimal(0).setScale(2);
 			if (type.equals("over")) {
 				amt2 = new BigDecimal(et_overpayment.getText().toString()).setScale(2);
 				if (isfirstbill == 1) {
-					int td = amt.divide(amt2, 2, BigDecimal.ROUND_HALF_UP).intValue();
+					td = amt.divide(amt2, 2, BigDecimal.ROUND_HALF_UP).intValue();
 					if (td < totaldays) {
 						//Toast.makeText(context, "Amount paid could not cover up to current date based on overpayment amount.", Toast.LENGTH_SHORT).show();
 						ApplicationUtil.showShortMsg("Amount paid could not cover up to current date based on overpayment amount.");
@@ -153,12 +175,10 @@ public class PaymentActivity extends ControlActivity {
 			if (flag == true) {
 				UIDialog dialog = new UIDialog(this) {
 					public void onApprove() {
-						SQLTransaction clfcdb = new SQLTransaction("clfc.db");
-						SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
 						try { 
 							clfcdb.beginTransaction();
 							paymentdb.beginTransaction();
-							onApproveImpl(clfcdb, paymentdb);
+							onApproveImpl();
 							clfcdb.commit();
 							paymentdb.commit();
 							finish();
@@ -172,7 +192,7 @@ public class PaymentActivity extends ControlActivity {
 						}
 					}
 				};
-				String message = "Amount Paid: "+amt.toString();
+				message = "Amount Paid: "+amt.toString();
 				if (type.equals("over") && isfirstbill == 1) message += "\nOverpayment: "+amt2.toString();
 				message += "\n\nEnsure that all information are correct. Continue?";
 				dialog.confirm(message);				
@@ -180,12 +200,12 @@ public class PaymentActivity extends ControlActivity {
 		}
 	}
 	
-	private void onApproveImpl(SQLTransaction clfcdb, SQLTransaction paymentdb) throws Exception {
-		DBSystemService dbSys = new DBSystemService();
-		dbSys.setDBContext(clfcdb.getContext());
-
-		Location location = NetworkLocationProvider.getLocation();
-		Map params = new HashMap();
+	private void onApproveImpl() throws Exception {
+		systemSvc.setDBContext(clfcdb.getContext());
+		
+		location = NetworkLocationProvider.getLocation();
+		
+		params.clear();
 		params.put("objid", objid);
 		params.put("state", "PENDING");
 		params.put("refno", getValueAsString(R.id.tv_payment_refno));
@@ -200,7 +220,7 @@ public class PaymentActivity extends ControlActivity {
 		params.put("isfirstbill", isfirstbill);
 		params.put("longitude", location.getLongitude());
 		params.put("latitude", location.getLatitude());
-		params.put("trackerid", dbSys.getTrackerid());
+		params.put("trackerid", systemSvc.getTrackerid());
 		params.put("collectorid", SessionContext.getProfile().getUserId());
 		params.put("collectorname", SessionContext.getProfile().getFullName());
 //		params.put("borrowerid", borrowerid);
