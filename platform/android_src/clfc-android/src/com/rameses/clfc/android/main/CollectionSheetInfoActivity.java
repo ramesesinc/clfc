@@ -300,6 +300,11 @@ public class CollectionSheetInfoActivity extends ControlActivity
 									remarks = null;
 									rl_remarks.setVisibility(View.GONE);
 									ApplicationUtil.showShortMsg("Successfully removed remarks.");
+									getHandler().post(new Runnable() {
+										public void run() {
+											getApp().remarksSvc.start();
+										}
+									});
 							 		break;
 							 }
 						 }
@@ -576,6 +581,12 @@ public class CollectionSheetInfoActivity extends ControlActivity
 				remarks = remarksSvc.findRemarksByLoanappid(loanappid);
 				((TextView) findViewById(R.id.tv_info_remarks)).setText(mRemarks);
 				dialog.dismiss();
+				
+				getHandler().post(new Runnable() {
+					public void run() {
+						getApp().remarksSvc.start();
+					}
+				});
 		 }
 	 }
 }

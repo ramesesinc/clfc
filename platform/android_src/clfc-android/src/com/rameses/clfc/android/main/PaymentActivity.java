@@ -228,5 +228,11 @@ public class PaymentActivity extends ControlActivity
 //		params.put("sessionid", sessionid);
 		
 		paymentdb.insert("payment", params);
+		
+		getHandler().post(new Runnable() {
+			public void run() {
+				app.paymentSvc.start();
+			}
+		});
 	}	
 }

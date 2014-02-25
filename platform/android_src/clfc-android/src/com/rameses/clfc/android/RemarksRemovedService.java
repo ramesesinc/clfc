@@ -41,12 +41,12 @@ public class RemarksRemovedService
 	public void start() {
 		if (handler == null) { 
 			handler = new Handler();
-//			new RunnableImpl().run(); 
-			if (serviceStarted == false) {
-				serviceStarted = true;
-				Platform.getTaskManager().schedule(runnableImpl, 0);
-			}
-		} 
+//			new RunnableImpl().run();
+		}  
+		if (serviceStarted == false) {
+			serviceStarted = true;
+			Platform.getTaskManager().schedule(runnableImpl, 0);
+		}
 	}
 	
 	private Runnable runnableImpl = new Runnable() 

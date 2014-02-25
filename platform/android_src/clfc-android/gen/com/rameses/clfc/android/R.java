@@ -208,6 +208,9 @@ public final class R {
         public static final int tv_unposted=0x7f080054;
         public static final int view1=0x7f08000b;
     }
+    public static final class integer {
+        public static final int google_play_services_version=0x7f090000;
+    }
     public static final class layout {
         public static final int activity_changepwd=0x7f030000;
         public static final int activity_changepwdonlogon=0x7f030001;
@@ -243,99 +246,99 @@ public final class R {
         public static final int template_footer=0x7f03001f;
     }
     public static final class menu {
-        public static final int empty=0x7f0b0000;
-        public static final int main=0x7f0b0001;
-        public static final int payment=0x7f0b0002;
-        public static final int specialcollection=0x7f0b0003;
+        public static final int empty=0x7f0c0000;
+        public static final int main=0x7f0c0001;
+        public static final int payment=0x7f0c0002;
+        public static final int specialcollection=0x7f0c0003;
     }
     public static final class string {
-        public static final int action_settings=0x7f090001;
-        public static final int app_name=0x7f090000;
-        public static final int btn_change_date=0x7f09003c;
-        public static final int btn_next=0x7f09000d;
-        public static final int btn_ok=0x7f090014;
-        public static final int btn_register=0x7f09000e;
-        public static final int btn_save=0x7f090053;
-        public static final int header_debug=0x7f09004e;
-        public static final int header_host=0x7f090049;
-        public static final int header_route=0x7f09003a;
-        public static final int header_timeout=0x7f09004d;
-        public static final int hello_world=0x7f090015;
-        public static final int img_check_ico=0x7f090027;
-        public static final int rbtn_next=0x7f09000c;
-        public static final int rbtn_recover_terminal=0x7f090005;
-        public static final int rbtn_register_terminal=0x7f090004;
-        public static final int semicolon=0x7f090026;
-        public static final int tag_recover=0x7f090007;
-        public static final int tag_register=0x7f090006;
-        public static final int txt_acctname=0x7f090017;
-        public static final int txt_address_collection=0x7f090035;
-        public static final int txt_address_home=0x7f090034;
-        public static final int txt_amount=0x7f090023;
-        public static final int txt_amountdue=0x7f09001b;
-        public static final int txt_appno=0x7f090016;
-        public static final int txt_balance=0x7f090019;
-        public static final int txt_borrowerimg=0x7f090045;
-        public static final int txt_btn_cancel=0x7f09002a;
-        public static final int txt_btn_login=0x7f09002b;
-        public static final int txt_btn_ok=0x7f09002f;
-        public static final int txt_changepassword_confirm=0x7f090013;
-        public static final int txt_changepassword_header=0x7f090010;
-        public static final int txt_changepassword_new=0x7f090012;
-        public static final int txt_changepassword_old=0x7f090011;
-        public static final int txt_debug_enabled=0x7f09004f;
-        public static final int txt_dtmatured=0x7f09001e;
-        public static final int txt_empty=0x7f09001f;
-        public static final int txt_fromdate=0x7f090040;
-        public static final int txt_hint_password=0x7f09002d;
-        public static final int txt_hint_search=0x7f09002e;
-        public static final int txt_hint_username=0x7f09002c;
-        public static final int txt_info_general=0x7f090024;
-        public static final int txt_info_notes=0x7f09003f;
-        public static final int txt_info_payment=0x7f090025;
-        public static final int txt_info_penalty=0x7f090037;
-        public static final int txt_info_remarks=0x7f09003b;
-        public static final int txt_interest=0x7f090036;
-        public static final int txt_ip_host=0x7f090028;
-        public static final int txt_ip_port=0x7f090029;
-        public static final int txt_loanamount=0x7f090018;
-        public static final int txt_login=0x7f09000f;
-        public static final int txt_mode=0x7f090054;
-        public static final int txt_notes_fromdate=0x7f09003d;
-        public static final int txt_notes_todate=0x7f09003e;
-        public static final int txt_offline=0x7f09004b;
-        public static final int txt_online=0x7f09004a;
-        public static final int txt_others=0x7f090038;
-        public static final int txt_overlay_void_approved=0x7f090044;
-        public static final int txt_overlay_void_pending=0x7f090043;
-        public static final int txt_overpayment=0x7f09001c;
-        public static final int txt_paidby=0x7f090047;
-        public static final int txt_payment_over=0x7f090031;
-        public static final int txt_payment_schedule=0x7f090030;
-        public static final int txt_penalty=0x7f09001d;
-        public static final int txt_port=0x7f09004c;
-        public static final int txt_posted=0x7f090055;
-        public static final int txt_refno=0x7f090020;
-        public static final int txt_registration_header=0x7f090002;
-        public static final int txt_registration_new_header=0x7f090008;
-        public static final int txt_registration_new_text=0x7f090009;
-        public static final int txt_registration_registeredby=0x7f09000b;
-        public static final int txt_registration_terminalkey=0x7f09000a;
-        public static final int txt_registration_text=0x7f090003;
-        public static final int txt_remarks=0x7f090042;
-        public static final int txt_schedofpayment=0x7f09001a;
-        public static final int txt_specialcollection_request=0x7f090046;
-        public static final int txt_term=0x7f090039;
-        public static final int txt_term_overpayment=0x7f090033;
-        public static final int txt_term_schedule=0x7f090032;
-        public static final int txt_timeout_session=0x7f090050;
-        public static final int txt_timeout_tracker=0x7f090052;
-        public static final int txt_timeout_upload=0x7f090051;
-        public static final int txt_todate=0x7f090041;
-        public static final int txt_txndate=0x7f090021;
-        public static final int txt_type=0x7f090022;
-        public static final int txt_unposted=0x7f090056;
-        public static final int txt_url=0x7f090048;
+        public static final int action_settings=0x7f0a0001;
+        public static final int app_name=0x7f0a0000;
+        public static final int btn_change_date=0x7f0a003c;
+        public static final int btn_next=0x7f0a000d;
+        public static final int btn_ok=0x7f0a0014;
+        public static final int btn_register=0x7f0a000e;
+        public static final int btn_save=0x7f0a0053;
+        public static final int header_debug=0x7f0a004e;
+        public static final int header_host=0x7f0a0049;
+        public static final int header_route=0x7f0a003a;
+        public static final int header_timeout=0x7f0a004d;
+        public static final int hello_world=0x7f0a0015;
+        public static final int img_check_ico=0x7f0a0027;
+        public static final int rbtn_next=0x7f0a000c;
+        public static final int rbtn_recover_terminal=0x7f0a0005;
+        public static final int rbtn_register_terminal=0x7f0a0004;
+        public static final int semicolon=0x7f0a0026;
+        public static final int tag_recover=0x7f0a0007;
+        public static final int tag_register=0x7f0a0006;
+        public static final int txt_acctname=0x7f0a0017;
+        public static final int txt_address_collection=0x7f0a0035;
+        public static final int txt_address_home=0x7f0a0034;
+        public static final int txt_amount=0x7f0a0023;
+        public static final int txt_amountdue=0x7f0a001b;
+        public static final int txt_appno=0x7f0a0016;
+        public static final int txt_balance=0x7f0a0019;
+        public static final int txt_borrowerimg=0x7f0a0045;
+        public static final int txt_btn_cancel=0x7f0a002a;
+        public static final int txt_btn_login=0x7f0a002b;
+        public static final int txt_btn_ok=0x7f0a002f;
+        public static final int txt_changepassword_confirm=0x7f0a0013;
+        public static final int txt_changepassword_header=0x7f0a0010;
+        public static final int txt_changepassword_new=0x7f0a0012;
+        public static final int txt_changepassword_old=0x7f0a0011;
+        public static final int txt_debug_enabled=0x7f0a004f;
+        public static final int txt_dtmatured=0x7f0a001e;
+        public static final int txt_empty=0x7f0a001f;
+        public static final int txt_fromdate=0x7f0a0040;
+        public static final int txt_hint_password=0x7f0a002d;
+        public static final int txt_hint_search=0x7f0a002e;
+        public static final int txt_hint_username=0x7f0a002c;
+        public static final int txt_info_general=0x7f0a0024;
+        public static final int txt_info_notes=0x7f0a003f;
+        public static final int txt_info_payment=0x7f0a0025;
+        public static final int txt_info_penalty=0x7f0a0037;
+        public static final int txt_info_remarks=0x7f0a003b;
+        public static final int txt_interest=0x7f0a0036;
+        public static final int txt_ip_host=0x7f0a0028;
+        public static final int txt_ip_port=0x7f0a0029;
+        public static final int txt_loanamount=0x7f0a0018;
+        public static final int txt_login=0x7f0a000f;
+        public static final int txt_mode=0x7f0a0054;
+        public static final int txt_notes_fromdate=0x7f0a003d;
+        public static final int txt_notes_todate=0x7f0a003e;
+        public static final int txt_offline=0x7f0a004b;
+        public static final int txt_online=0x7f0a004a;
+        public static final int txt_others=0x7f0a0038;
+        public static final int txt_overlay_void_approved=0x7f0a0044;
+        public static final int txt_overlay_void_pending=0x7f0a0043;
+        public static final int txt_overpayment=0x7f0a001c;
+        public static final int txt_paidby=0x7f0a0047;
+        public static final int txt_payment_over=0x7f0a0031;
+        public static final int txt_payment_schedule=0x7f0a0030;
+        public static final int txt_penalty=0x7f0a001d;
+        public static final int txt_port=0x7f0a004c;
+        public static final int txt_posted=0x7f0a0055;
+        public static final int txt_refno=0x7f0a0020;
+        public static final int txt_registration_header=0x7f0a0002;
+        public static final int txt_registration_new_header=0x7f0a0008;
+        public static final int txt_registration_new_text=0x7f0a0009;
+        public static final int txt_registration_registeredby=0x7f0a000b;
+        public static final int txt_registration_terminalkey=0x7f0a000a;
+        public static final int txt_registration_text=0x7f0a0003;
+        public static final int txt_remarks=0x7f0a0042;
+        public static final int txt_schedofpayment=0x7f0a001a;
+        public static final int txt_specialcollection_request=0x7f0a0046;
+        public static final int txt_term=0x7f0a0039;
+        public static final int txt_term_overpayment=0x7f0a0033;
+        public static final int txt_term_schedule=0x7f0a0032;
+        public static final int txt_timeout_session=0x7f0a0050;
+        public static final int txt_timeout_tracker=0x7f0a0052;
+        public static final int txt_timeout_upload=0x7f0a0051;
+        public static final int txt_todate=0x7f0a0041;
+        public static final int txt_txndate=0x7f0a0021;
+        public static final int txt_type=0x7f0a0022;
+        public static final int txt_unposted=0x7f0a0056;
+        public static final int txt_url=0x7f0a0048;
     }
     public static final class style {
         /** 
@@ -359,11 +362,11 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f0a0000;
+        public static final int AppBaseTheme=0x7f0b0000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f0a0001;
+        public static final int AppTheme=0x7f0b0001;
     }
     public static final class xml {
         public static final int clfcdb_create=0x7f040000;

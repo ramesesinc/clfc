@@ -54,11 +54,11 @@ public class PaymentService
 		if (handler == null) { 
 			handler = new Handler();
 //			new RunnableImpl().run(); 
-			if (serviceStarted == false) {
-				serviceStarted = true;
-				Platform.getTaskManager().schedule(runnableImpl, 0);
-			}
 		} 
+		if (serviceStarted == false) {
+			serviceStarted = true;
+			Platform.getTaskManager().schedule(runnableImpl, 0);
+		}
 	}
 	
 	private Runnable runnableImpl = new Runnable() {

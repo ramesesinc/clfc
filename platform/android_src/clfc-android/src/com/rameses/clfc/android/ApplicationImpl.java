@@ -48,6 +48,7 @@ public class ApplicationImpl extends UIApplication
 		
 //		Platform.setDebug(true);
 		NetworkLocationProvider.setEnabled(true);
+//		NetworkLocationProvider.setDebug(true);
 		try {
 //			System.out.println("passing 1");
 			maindb = new MainDB(this, "clfc.db", 1);
