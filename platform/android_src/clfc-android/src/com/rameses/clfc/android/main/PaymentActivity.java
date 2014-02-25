@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,6 @@ import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBSystemService;
-import com.rameses.client.android.Location;
 import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;

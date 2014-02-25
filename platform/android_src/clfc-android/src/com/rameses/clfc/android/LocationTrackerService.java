@@ -1,16 +1,15 @@
 package com.rameses.clfc.android;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.location.Location;
 import android.os.Handler;
 
 import com.rameses.clfc.android.db.DBLocationTracker;
 import com.rameses.clfc.android.db.DBPrevLocation;
 import com.rameses.clfc.android.db.DBSystemService;
-import com.rameses.client.android.Location;
 import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
@@ -88,7 +87,9 @@ class LocationTrackerService
 			lng = (location == null? 0.0: location.getLongitude());
 			lat = (location == null? 0.0: location.getLatitude());
 
-			prevlocation = prevLocation.getPrevLocation();
+			prevLocation.setDBContext(trackerdb.getContext());
+			prevLocation.setCloseable(false);			
+			prevlocation = prevLocation.getPrevLocation();			
 			if (prevlocation != null && !prevlocation.isEmpty()) {
 				prevlng = Double.parseDouble(prevlocation.get("longitude").toString());
 				prevlat = Double.parseDouble(prevlocation.get("latitude").toString());
@@ -113,13 +114,9 @@ class LocationTrackerService
 					params.put("collectorid", collectorid);
 					params.put("longitude", lng);
 					params.put("latitude", lat);
-					params.put("state", location.getStatus());
 					
 					trackerdb.insert("location_tracker", params);
 					
-					prevLocation.setDBContext(trackerdb.getContext());
-					prevLocation.setCloseable(false);
-
 					params.clear();
 					params.put("longitude", lng);
 					params.put("latitude", lng);

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.ProgressDialog;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,7 +13,6 @@ import android.os.Message;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.services.LoanBillingService;
-import com.rameses.client.android.Location;
 import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
