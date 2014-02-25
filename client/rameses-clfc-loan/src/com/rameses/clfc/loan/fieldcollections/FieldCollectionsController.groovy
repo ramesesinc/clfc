@@ -1,4 +1,4 @@
-package com.rameses.clfc.loan.collection;
+package com.rameses.clfc.loan.fieldcollections;
 
 import com.rameses.rcp.common.*;
 import com.rameses.rcp.annotations.*;
@@ -44,6 +44,9 @@ class CollectionController
         selectedCollectionSheet = [:];
         def params = [ routecode: route.code ];
         entity.collectionsheets = fieldColSvc.getCurrentLoans(params);
+        if (!entity.collectionsheets) {
+            throw new Exception("No collections to display.");
+        }
         collectionSheetsHandler.reload();
         return page;
     }

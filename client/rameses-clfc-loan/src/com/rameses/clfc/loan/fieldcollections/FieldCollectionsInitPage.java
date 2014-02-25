@@ -4,7 +4,7 @@
  * Created on February 17, 2014, 3:58 PM
  */
 
-package com.rameses.clfc.loan.collection;
+package com.rameses.clfc.loan.fieldcollections;
 
 import com.rameses.osiris2.themes.FormPage;
 import com.rameses.rcp.ui.annotations.Template;
@@ -14,10 +14,10 @@ import com.rameses.rcp.ui.annotations.Template;
  * @author  louie
  */
 @Template(FormPage.class)
-public class CollectionInitPage extends javax.swing.JPanel {
+public class FieldCollectionsInitPage extends javax.swing.JPanel {
     
     /** Creates new form PostPaymentInitPage */
-    public CollectionInitPage() {
+    public FieldCollectionsInitPage() {
         initComponents();
     }
     
