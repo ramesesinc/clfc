@@ -124,6 +124,8 @@ class MobileTrackerService
 
 	@ProxyMethod 
 	public List getList( params ) {
+		if (!params._ordermode) params._ordermode='';
+
 		return em.getList(params); 
-	}
+	} 
 }

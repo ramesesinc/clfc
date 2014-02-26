@@ -4,7 +4,7 @@ SELECT t.*,
 	u.firstname AS user_firstname, u.middlename AS user_middlename 
 FROM mobile_tracker t 
 	LEFT JOIN sys_user u ON t.userid=u.objid 
-ORDER BY dtstart 
+ORDER BY dtstart ${_ordermode}
 
 [getLogs]
 SELECT * FROM mobile_tracker_detail 
