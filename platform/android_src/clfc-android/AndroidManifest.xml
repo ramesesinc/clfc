@@ -31,7 +31,7 @@
 		    android:value="AIzaSyAuEe1GkGZUvKZPb5V1si6ltRc4amG1CJg"/>
 		<meta-data
 		    android:name="com.google.android.gms.version"
-		    android:value="4242000" />        
+		    android:value="@integer/google_play_services_version" />        
         
         <activity
             android:name="com.rameses.clfc.android.SplashActivity"

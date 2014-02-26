@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.rameses.clfc.android.ApplicationImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.services.LoanPostingService;
@@ -101,6 +102,11 @@ public class VoidRequestController
 				view.setOnClickListener(null);
 				view.setOnLongClickListener(null);
 				if (dialog.isShowing()) dialog.dismiss();
+				activity.getHandler().post(new Runnable() {
+					public void run() {
+						((ApplicationImpl) Platform.getApplication()).voidRequestSvc.start();						
+					}
+				});
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw e;

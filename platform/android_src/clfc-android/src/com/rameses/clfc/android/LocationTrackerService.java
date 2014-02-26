@@ -36,8 +36,8 @@ class LocationTrackerService
 	private UserProfile profile;
 	private double lng;
 	private double lat;
-	private double prevlng;
-	private double prevlat;
+	private double prevlng = 0.0;
+	private double prevlat = 0.0;
 	private Map params = new HashMap();
 	private Map prevlocation;
 	
@@ -87,14 +87,13 @@ class LocationTrackerService
 			lng = (location == null? 0.0: location.getLongitude());
 			lat = (location == null? 0.0: location.getLatitude());
 
-//			prevLocation.setDBContext(trackerdb.getContext());
-//			prevLocation.setCloseable(false);			
-//			prevlocation = prevLocation.getPrevLocation();			
-//			if (prevlocation != null && !prevlocation.isEmpty()) {
-//				prevlng = Double.parseDouble(prevlocation.get("longitude").toString());
-//				prevlat = Double.parseDouble(prevlocation.get("latitude").toString());
-//			}
-			System.out.println("location -> "+location);
+			prevLocation.setDBContext(trackerdb.getContext());
+			prevLocation.setCloseable(false);			
+			prevlocation = prevLocation.getPrevLocation();			
+			if (prevlocation != null && !prevlocation.isEmpty()) {
+				prevlng = Double.parseDouble(prevlocation.get("longitude").toString());
+				prevlat = Double.parseDouble(prevlocation.get("latitude").toString());
+			}
 			if (lng > 0.0 && lat > 0.0) {				
 				profile = SessionContext.getProfile();
 				collectorid = (profile == null? null : profile.getUserId());
@@ -116,7 +115,7 @@ class LocationTrackerService
 					params.put("longitude", lng);
 					params.put("latitude", lat);
 					
-					System.out.println("inserting paramas = "+params);
+//					System.out.println("inserting paramas = "+params);
 					trackerdb.insert("location_tracker", params);
 					
 					Platform.getMainActivity().getHandler().post(new Runnable() {
@@ -124,14 +123,15 @@ class LocationTrackerService
 							app.broadcastLocationSvc.start();
 						}
 					});
-//					params.clear();
-//					params.put("longitude", lng);
-//					params.put("latitude", lng);
-//					if (prevlocation == null || prevlocation.isEmpty()) {
-//						trackerdb.insert("prevlocation", params);
-//					} else if (prevlocation != null && !prevlocation.isEmpty()) {
-//						trackerdb.update("prev_location", null, params);
-//					}
+					
+					params.clear();
+					params.put("longitude", lng);
+					params.put("latitude", lng);
+					if (prevlocation == null || prevlocation.isEmpty()) {
+						trackerdb.insert("prevlocation", params);
+					} else if (prevlocation != null && !prevlocation.isEmpty()) {
+						trackerdb.update("prev_location", null, params);
+					}
 				}
 			}	
 		}
