@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rameses.paymentcollectionapp"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_app"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" android:name="ProjectApplication">
+        <receiver
+            android:name=".DeviceBroadcastReceiver"
+            android:exported="true"
+            android:enabled="true"
+            android:label="ShutdownBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWEROFF"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        
+        <activity
+            android:name="com.rameses.paymentcollectionapp.Splash"
+            android:label="@string/app_name" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.rameses.paymentcollectionapp.Route" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.CollectionSheet" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.CollectionSheetInfo" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.Payment" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.Settings" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.CollectionSheetRoute"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.SpecialCollection"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.RemitRouteCollection">
+        </activity>
+        <activity android:name="com.rameses.paymentcollectionapp.PostingCollectionSheet"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.Main"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.RegistrationOption"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.Registration"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.ChangePassword"></activity>
+        <activity android:name="com.rameses.paymentcollectionapp.Login"></activity>
+    </application>
+
+</manifest>
