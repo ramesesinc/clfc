@@ -20,3 +20,15 @@ platform/*/*/dist
 platform/*/*/build
 platform/*/*/build.xml
 platform/*/*/nbproject/private
+platform/android_src/*/.settings
+platform/android_src/*/assets
+platform/android_src/*/bin
+platform/android_src/*/assets
+platform/android/*/.settings
+platform/android/*/assets
+platform/android/*/bin
+platform/android/*/assets
+resource/android/*/.settings
+resource/android/*/assets
+resource/android/*/bin
+resource/android/*/assets
