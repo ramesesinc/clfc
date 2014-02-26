@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.testapp2"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="18" />
+    
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+	<!-- My Location -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" 
+        android:name="TrackerApplication">
+        
+		<meta-data android:name="com.google.android.maps.v2.API_KEY"
+		    android:value="AIzaSyAuEe1GkGZUvKZPb5V1si6ltRc4amG1CJg"/>
+		<meta-data
+		    android:name="com.google.android.gms.version"
+		    android:value="@integer/google_play_services_version" />        
+        
+        
+        <receiver 
+            android:name=".MobileBroadcastReceiver" 
+            android:exported="true" 
+            android:enabled="true">
+           		<intent-filter>
+           		    <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+			        <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+			        <action android:name="android.location.PROVIDER_CHANGED"/>
+           		</intent-filter>
+        </receiver>
+        <activity
+            android:name="com.example.testapp2.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service 
+            android:name="com.example.testapp2.TrackerService" 
+            android:isolatedProcess="true" 
+            android:enabled="true" 
+            android:stopWithTask="false" 
+            android:singleUser="false">
+        </service>
+    </application>
+
+</manifest>

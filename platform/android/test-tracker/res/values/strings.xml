@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tracker Test</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="tracker_test">Tracker Test</string>
+    <string name="tracker_test_service">Tracker Test Service</string>
+    <string name="txt_empty"></string>
+
+</resources>
