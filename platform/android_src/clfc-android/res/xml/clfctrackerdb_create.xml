@@ -13,6 +13,7 @@
     </sql>
     <sql>
 		CREATE TABLE prev_location ( 
+			objid text PRIMARY KEY,
 			longitude numeric,  
 			latitude numeric
 		)

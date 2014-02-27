@@ -79,13 +79,6 @@ public class SpecialCollectionRequestController
 			Message message = null;
 			Handler handler = null;
 			try {
-				progressDialog.setMessage("processing..");
-				activity.runOnUiThread(new Runnable() {
-					public void run() {
-						if (!progressDialog.isShowing()) progressDialog.show();
-					}
-				});
-				
 				Map params = getParameters();
 				LoanPostingService svc = new LoanPostingService();
 				Map response = svc.postSpecialCollectionRequest(params);

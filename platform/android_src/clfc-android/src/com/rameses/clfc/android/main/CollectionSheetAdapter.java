@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.clfc.android.db.DBVoidService;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -64,9 +65,9 @@ public class CollectionSheetAdapter extends BaseAdapter
 		tv_info_name.setText(item.get("acctname").toString());
 		
 		String loanappid = item.get("loanappid").toString();
-		SQLTransaction txn = new SQLTransaction("clfcpayment.db");
+		DBContext txn = new DBContext("clfcpayment.db");
 		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(txn.getContext());
+		dbPs.setDBContext(txn);
 		
 		int noOfPayments = 0;
 		try {
@@ -77,7 +78,7 @@ public class CollectionSheetAdapter extends BaseAdapter
 		}
 		
 		DBVoidService dbVs = new DBVoidService();
-		dbVs.setDBContext(txn.getContext());
+		dbVs.setDBContext(txn);
 		
 		int noOfVoids = 0;
 		try { 
@@ -87,8 +88,11 @@ public class CollectionSheetAdapter extends BaseAdapter
 		}
 
 		iv_info_paid.setVisibility(View.GONE);
-		System.out.println("no of voids -> "+noOfVoids+" no of payments -> "+noOfPayments);
+//		System.out.println("no of voids -> "+noOfVoids+" no of payments -> "+noOfPayments);
 		if (noOfPayments > 0 && noOfPayments > noOfVoids) {
+			if (MapProxy.getInteger(item, "isfirstbill") == 1) {
+				item.put("isfirstbill", 0);
+			}
 			iv_info_paid.setVisibility(View.VISIBLE);
 		}
 		return v;

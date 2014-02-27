@@ -31,6 +31,13 @@ class DownloadRoutesController
 	}
 	
 	void execute() throws Exception {
+		progressDialog.setMessage("processing...");
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				if (!progressDialog.isShowing()) progressDialog.show();
+			}
+		});
+		
 		Platform.runAsync(new ActionProcess());
 	}
 	
@@ -67,14 +74,7 @@ class DownloadRoutesController
 			Bundle data = new Bundle();			
 			Handler handler = null;
 			Message message = null;
-			try {
-				progressDialog.setMessage("processing...");
-				activity.runOnUiThread(new Runnable() {
-					public void run() {
-						if (!progressDialog.isShowing()) progressDialog.show();
-					}
-				});
-				
+			try {				
 				processDB();
 				//new RouteFetcher().run();
 

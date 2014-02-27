@@ -32,6 +32,13 @@ public class DownloadSpecialCollectionController
 	}
 	
 	void execute() throws Exception {
+		progressDialog.setMessage("Downloading special collection..");
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				if (!progressDialog.isShowing()) progressDialog.show();
+			}
+		});
+		
 		Platform.runAsync(new DownloadActionProcess());
 	}
 
@@ -69,13 +76,6 @@ public class DownloadSpecialCollectionController
 			Message message = null;
 			Handler handler = null;
 			try {
-				progressDialog.setMessage("Downloading special collection..");
-				activity.runOnUiThread(new Runnable() {
-					public void run() {
-						if (!progressDialog.isShowing()) progressDialog.show();
-					}
-				});
-				
 				LoanBillingService svc = new LoanBillingService();
 				Map response = svc.downloadSpecialCollection(params);
 				saveSpecialCollection(response);

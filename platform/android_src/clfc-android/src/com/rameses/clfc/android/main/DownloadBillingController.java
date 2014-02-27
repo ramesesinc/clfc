@@ -33,6 +33,13 @@ public class DownloadBillingController
 	}
 	
 	void execute() throws Exception {
+		progressDialog.setMessage("Downloading route "+route.get("description").toString()+" - "+route.get("area").toString());
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				if (!progressDialog.isShowing()) progressDialog.show();
+			}
+		});
+		
 		Platform.runAsync(new ActionProcess());
 	}
 	
@@ -67,12 +74,6 @@ public class DownloadBillingController
 			Handler handler = null;
 			Message message = null;
 			try {
-				progressDialog.setMessage("Downloading route "+route.get("description").toString()+" - "+route.get("area").toString());
-				activity.runOnUiThread(new Runnable() {
-					public void run() {
-						if (!progressDialog.isShowing()) progressDialog.show();
-					}
-				});
 				
 				Map params = new HashMap();
 				params.put("billingid", route.get("billingid").toString());

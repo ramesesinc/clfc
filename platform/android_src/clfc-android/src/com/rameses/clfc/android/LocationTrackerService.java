@@ -94,7 +94,8 @@ class LocationTrackerService
 				prevlng = Double.parseDouble(prevlocation.get("longitude").toString());
 				prevlat = Double.parseDouble(prevlocation.get("latitude").toString());
 			}
-			if (lng > 0.0 && lat > 0.0) {				
+			System.out.println("lng->"+lng+", lat->"+lat+", prevlng->"+prevlng+", prevlat->"+prevlat);
+			if (lng > 0.0 && lat > 0.0 && lng != prevlng && lat != prevlat) {				
 				profile = SessionContext.getProfile();
 				collectorid = (profile == null? null : profile.getUserId());
 				if (collectorid != null) {					
@@ -123,14 +124,15 @@ class LocationTrackerService
 							app.broadcastLocationSvc.start();
 						}
 					});
-					
+
 					params.clear();
 					params.put("longitude", lng);
 					params.put("latitude", lng);
 					if (prevlocation == null || prevlocation.isEmpty()) {
-						trackerdb.insert("prevlocation", params);
+						params.put("objid", "PL"+UUID.randomUUID().toString());
+						trackerdb.insert("prev_location", params);
 					} else if (prevlocation != null && !prevlocation.isEmpty()) {
-						trackerdb.update("prev_location", null, params);
+						trackerdb.update("prev_location", "objid='"+prevlocation.get("objid").toString()+"'", params);
 					}
 				}
 			}	

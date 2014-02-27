@@ -235,6 +235,14 @@ public class SpecialCollectionActivity extends ControlActivity
 				// TODO Auto-generated method stub
 				try {
 					String remarks = ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString();
+
+					progressDialog.setMessage("processing..");
+					getHandler().post(new Runnable() {
+						public void run() {
+							if (!progressDialog.isShowing()) progressDialog.show();
+						}
+					});
+					
 					new SpecialCollectionRequestController(SpecialCollectionActivity.this, progressDialog, remarks, dialog).execute();
 				} catch (Throwable t) {
 					ApplicationUtil.showShortMsg("[ERROR] "+t.getMessage());

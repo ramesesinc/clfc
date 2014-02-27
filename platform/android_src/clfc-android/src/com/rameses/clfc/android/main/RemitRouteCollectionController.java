@@ -33,6 +33,13 @@ public class RemitRouteCollectionController
 	}
 
 	void execute() throws Exception {
+		progressDialog.setMessage("Remitting collections for route: "+MapProxy.getString(route, "description")+" - "+MapProxy.getString(route, "area"));
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				if (!progressDialog.isShowing()) progressDialog.show();
+			}
+		});
+		
 		Platform.runAsync(new RemitCollectionActionProcess());
 	}
 	
@@ -71,13 +78,6 @@ public class RemitRouteCollectionController
 			Message message = null;
 			Handler handler = null; 
 			try {
-				progressDialog.setMessage("Remitting collections for route: "+MapProxy.getString(route, "description")+" - "+MapProxy.getString(route, "area"));
-				activity.runOnUiThread(new Runnable() {
-					public void run() {
-						if (!progressDialog.isShowing()) progressDialog.show();
-					}
-				});
-				
 				Map params = getParameters();
 				
 				LoanPostingService svc = new LoanPostingService();

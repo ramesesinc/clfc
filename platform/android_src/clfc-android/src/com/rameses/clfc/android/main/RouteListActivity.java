@@ -62,7 +62,7 @@ public class RouteListActivity extends ControlActivity
 	
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) throws Exception {
 		Map route = (Map) parent.getItemAtPosition(position);
-		System.out.println("route -> "+route);
+//		System.out.println("route -> "+route);
 		new DownloadBillingController(this, progressDialog, route).execute();
 	}
 	

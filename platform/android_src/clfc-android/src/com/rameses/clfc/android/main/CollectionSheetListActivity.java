@@ -26,7 +26,6 @@ import com.rameses.clfc.android.db.DBCollectionSheet;
 
 public class CollectionSheetListActivity extends ControlActivity 
 {
-	private Context context = this;
 	private ListView lv_collectionsheet;
 	private String routecode = "";
 	private String type = "";
@@ -90,6 +89,7 @@ public class CollectionSheetListActivity extends ControlActivity
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) {
 		item = (Map) parent.getItemAtPosition(position);
 		isfirstbill = Integer.parseInt(item.get("isfirstbill").toString());
+		System.out.println("cs-> "+item);
 		if (isfirstbill != 1) {
 			Intent intent = new Intent(this, CollectionSheetInfoActivity.class);
 			intent.putExtra("acctname", item.get("acctname").toString());
@@ -101,7 +101,7 @@ public class CollectionSheetListActivity extends ControlActivity
 			intent.putExtra("paymenttype", item.get("type").toString());
 			intent.putExtra("isfirstbill", Integer.parseInt(item.get("isfirstbill").toString()));
 			startActivity(intent);
-		} else if (isfirstbill == 0) {
+		} else if (isfirstbill == 1) {
 			showPaymentTypeDialog(item);
 		}
 	}
@@ -126,11 +126,11 @@ public class CollectionSheetListActivity extends ControlActivity
 	
 	private void showPaymentTypeDialog(final Map map) {
 		CharSequence[] items = {"Schedule", "Overpayment"};
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Payment Method");
 		builder.setPositiveButton("OK", null);
 		builder.setNegativeButton("Cancel", null);
-		builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+		builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
@@ -142,29 +142,20 @@ public class CollectionSheetListActivity extends ControlActivity
 		});
 		
 		final AlertDialog dialog = builder.create();
-		dialog.setOnShowListener(new DialogInterface.OnShowListener() {			
+		System.out.println("payment type dialog = "+dialog);
+		dialog.show();	
+		Button b = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		b.setOnClickListener(new View.OnClickListener() {					
 			@Override
-			public void onShow(DialogInterface arg0) {
-				// TODO Auto-generated method stub
-				Button b = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-				b.setOnClickListener(new View.OnClickListener() {					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						if (type.equals(null) || type.equals("")) Toast.makeText(context, "Please select payment method.", Toast.LENGTH_SHORT).show();
-						else {
-							dialog.dismiss();
-							showCollectionSheetInfo(map);
-						}
-					}
-				});
+			public void onClick(View v) {
+				dialog.dismiss();
+				showCollectionSheetInfo(map);
 			}
 		});
-		dialog.show();		
 	}
 	
 	private void showCollectionSheetInfo(Map map) {
-		Intent intent = new Intent(context, CollectionSheetInfoActivity.class);
+		Intent intent = new Intent(this, CollectionSheetInfoActivity.class);
 		intent.putExtra("acctname", map.get("acctname").toString());
 		intent.putExtra("loanappid", map.get("loanappid").toString());
 		intent.putExtra("detailid", map.get("detailid").toString());
