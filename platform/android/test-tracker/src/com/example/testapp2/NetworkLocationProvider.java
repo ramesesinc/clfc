@@ -16,6 +16,8 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
+import com.rameses.client.android.Platform;
+import com.rameses.client.android.UIActivity;
 
 /**
  *
@@ -34,8 +36,9 @@ public final class NetworkLocationProvider
         }
     }
     
-    private static Activity current;
-    static void setCurrentActivity(Activity activity) {
+    private static UIActivity current;
+    static void setCurrentActivity(UIActivity activity) {
+    	System.out.println("current -> "+activity);
     	current = activity;
     }
     
@@ -93,7 +96,8 @@ public final class NetworkLocationProvider
         
     private LocationManager getLocationManager() {
         if (locationMgr == null) {
-            Activity a = NetworkLocationProvider.current;
+        	UIActivity a = ((TrackerApplication) Platform.getApplication()).getCurrentActivity();//NetworkLocationProvider.current;
+        	System.out.println("activity = "+a);
             if (a == null) return null;
 
             locationMgr = (LocationManager) a.getSystemService(Context.LOCATION_SERVICE); 
@@ -149,6 +153,7 @@ public final class NetworkLocationProvider
         
         private void execute() throws Exception {
             LocationManager lm = root.getLocationManager();
+            dump("location manager is " + lm);
             if (lm == null) {
                 dump("LocationManager is not set");
                 return; 
@@ -156,14 +161,16 @@ public final class NetworkLocationProvider
              
             boolean netEnabled = isProviderEnabled(lm, LocationManager.NETWORK_PROVIDER); 
             boolean gpsEnabled = isProviderEnabled(lm, LocationManager.GPS_PROVIDER); 
-            
+            dump("netEnabled=" + netEnabled + ", gpsEnabled="+gpsEnabled);
             if (netEnabled) {
+            	dump("nethandler="+nethandler);
                 if (nethandler == null) {
                     nethandler = new NetworkHandler(); 
-                    try { 
+                    try {
+                    	dump("nethandler connecting...");
                         nethandler.connect(); 
                     } catch(Throwable t) {
-                        if (root.debug) t.printStackTrace();
+                        t.printStackTrace();
                         
                         nethandler = null;                    
                     }                     
@@ -172,6 +179,7 @@ public final class NetworkLocationProvider
                 return;
             } else if (nethandler != null) {
                 try { 
+                	dump("nethandler disconnect...");
                     nethandler.disconnect(); 
                 } catch(Throwable t) {;} 
                 
@@ -209,7 +217,7 @@ public final class NetworkLocationProvider
     }
     
     private static final LocationRequest REQUEST = LocationRequest.create()
-                    .setInterval(3500)         // 5 seconds
+                    .setInterval(3500)         // 5 seconds 
                     .setFastestInterval(16)    // 16ms = 60fps
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     
@@ -220,12 +228,14 @@ public final class NetworkLocationProvider
         
         void connect() {
             if (locationClient == null) {
-                Activity a = NetworkLocationProvider.current;
+                Activity a = ((TrackerApplication) Platform.getApplication()).getCurrentActivity();//NetworkLocationProvider.current;
+                dump("current activity=" + a);
                 locationClient = new LocationClient(a.getApplicationContext(), this, this);
             }
             if (!locationClient.isConnected()) {
                 locationClient.connect();
             }
+            dump("isconnected? " + locationClient.isConnected() + ", isconnecting? " + locationClient.isConnecting());
         }
         
         void disconnect() {

@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="18" />
     
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
@@ -59,7 +59,7 @@
             </intent-filter>
         </activity>
         <service 
-            android:name="com.example.testapp2.TrackerService" 
+            android:name="com.example.testapp2.xTrackerService" 
             android:isolatedProcess="true" 
             android:enabled="true" 
             android:stopWithTask="false" 
