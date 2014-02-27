@@ -1,7 +1,7 @@
 
 <script type="text/javascript">
 	var trackerid = ${PARAMS.trackerid? '"'+PARAMS.trackerid+'"': null}; 	
-	var trackerSvc = Service.lookup("TestMobileTrackerService02", "main"); 
+	var trackerSvc = Service.lookup("TestMobileTrackerService03", "main"); 
 	var workspace = {} 
 
 	function createMapObject(params) {
@@ -11,10 +11,10 @@
 			return;
 		}
 
-		if (!params) params = {};			
-		if (!params.zoom) params.zoom = 16;
-		if (!params.lng || params.lng == 0) params.lng = 123.87636423110962;
-		if (!params.lat || params.lat == 0) params.lat = 10.309926522447359;
+		if (!params) params = {};
+		if (!params.zoom) params.zoom = 14;
+		if (!params.lng || params.lng == 0) params.lng = 123.88664245605469;
+		if (!params.lat || params.lat == 0) params.lat =  10.308332621491582;
 
 		var mapOptions = { 
 			zoom: params.zoom,
@@ -139,6 +139,22 @@
 		});	
 	} 	
 
+	var showInMap = function(data) {		
+		try { 
+			google; 
+		} catch(e) {
+			return;
+		}
+
+		if (!data || !data.lat || !data.lng || data.lat==0 || data.lng==0) return;
+
+		var marker = new google.maps.Marker({ 
+			title: 'Location[date='+data.txndate+', lng='+data.lng+', lat='+data.lat+', accuracy='+data.accuracy+']', 
+			position: new google.maps.LatLng(data.lat, data.lng), 
+			map: workspace.map 
+		});	
+	}
+
 	var sortedLogs = [];
 	var sortedPaymentLogs = [];
 	var repaintHandler = function() {
@@ -182,7 +198,6 @@
 			var item = logs[i]; 
 			if (!item || !item.lat || !item.lng || item.lat==0 || item.lng==0) continue;
 
-			window.console.log('Location[lng='+item.lng+', lat='+item.lat+']');
 			var marker = new google.maps.Marker({ 
 				title: 'Location[lng='+item.lng+', lat='+item.lat+']', 				
 				position: new google.maps.LatLng(item.lat, item.lng), 
@@ -208,6 +223,8 @@
 	} 
 
 	function sortList( list ) { 
+		if (1==1) return list;
+		/*
 		if (!list) return [];
 
 		var newarray = [];
@@ -221,7 +238,7 @@
 			return a.indexno-b.indexno; 
 		}
 		newarray.sort(comparator); 
-		return newarray;
+		return newarray;*/
 	}
 
 	var socket = Socket.create('gmap');
@@ -266,15 +283,26 @@
 				alive = true; 
 			} catch(e) {;}
 
-			if (alive == true) { 				
-				var list = trackerSvc.getList({trackerid: trackerid});
-				for (var i=0; i<list.length; i++) {
-					var item = list[i];
-					item.indexno=i;
-					item.status='OK';
-					item.parentid=item.sessionid;
-					socket.handlers.handler1(item);
-				}
+			if (alive == true) { 	
+				var _page = 1;
+				var _limit = 25;			
+				while (true) {
+					var _start = (_page-1)*_limit;
+					var params = {trackerid: trackerid, _start:_start, _limit:_limit};
+					params.fromdate = ${PARAMS.fromdate? "'"+PARAMS.fromdate+"'": null};
+					params.todate   = ${PARAMS.todate? "'"+PARAMS.todate+"'": null};
+					var list = trackerSvc.getList(params); 
+					if (list.length == 0) break;
+
+					for (var i=0; i<list.length; i++) {
+						var item = list[i];
+						item.indexno=_start+i;
+						item.status='OK';
+						item.parentid=item.sessionid;
+						showInMap(item);
+					}
+					_page++;
+				} 
 			} else { 
 				setTimeout(refreshHandler, 1000);
 			}
