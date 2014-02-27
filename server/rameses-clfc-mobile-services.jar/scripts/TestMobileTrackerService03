@@ -2,9 +2,9 @@ import com.rameses.annotations.*;
 import com.rameses.http.*;
 import com.rameses.osiris3.server.*;
 
-class TestMobileTrackerService02  
+class TestMobileTrackerService03  
 {
-	@ActiveDB('test_mobile_tracker02')
+	@ActiveDB('test_mobile_tracker03')
 	def em; 
 
 	@Service('DateService')
@@ -22,6 +22,14 @@ class TestMobileTrackerService02
 
 	@ProxyMethod 	
 	public List getList(Map params) {
-		return em.getList([sessionid: params.trackerid]); 
-	} 
+		if (params.fromdate && params.todate) {
+			params.filter = " AND txndate BETWEEN '"+params.fromdate+"' AND '"+params.todate+"' ";
+		} else if (params.fromdate) {
+			params.filter = " AND txndate >= '"+params.fromdate+"' "; 
+		} else { 
+			params.filter = '';
+		}
+		params.sessionid = params.trackerid; 
+		return em.getList(params); 
+	}
 } 
