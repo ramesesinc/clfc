@@ -10,8 +10,8 @@ class MobilePostingService
 	@ActiveDB(value="loan_ledger_billing")
 	def ledger_billing;
 
-	@ActiveDB(value="void_payment")
-	def void_payment;
+	@ActiveDB(value="void_request")
+	def findVoidRequestByPaymentid;
 
 	@ActiveDB(value="special_collection")
 	def special_collection;
@@ -164,11 +164,11 @@ class MobilePostingService
 	}
 
 	@ProxyMethod
-	public boolean isVoidPaymentApproved( params ) {
-		def itm = void_payment.read([objid: params.voidid]);
+	public def checkVoidPaymentRequest( params ) {
+		def itm = void_request.read([objid: params.voidid]);
 		if (!itm) throw new Exception("Void payment record does not exist or has already been deleted.");
 
-		return (itm.state == 'APPROVED');
+		return itm;
 	}
 
 	@ProxyMethod
@@ -176,7 +176,7 @@ class MobilePostingService
 		if (!params.paymentid) throw new Exception("Please specify paymentid.");
 		if (!params.loanapp.objid) throw new Exception("Please specify loanappid.");
 
-		def itm = void_payment.read([objid: params.objid]);
+		def itm = void_request.read([objid: params.objid]);
 		if (!itm) {
 			itm = [
 				objid 		: params.objid,
@@ -191,7 +191,7 @@ class MobilePostingService
 				collector 	: params.collector,
 				reason 		: params.reason
 			]
-			void_payment.create(itm);
+			void_request.create(itm);
 		}
 		return [response: "success"];
 	}
