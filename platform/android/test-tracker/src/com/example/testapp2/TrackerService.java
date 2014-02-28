@@ -84,9 +84,10 @@ public class TrackerService
 			
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("objid", sessionid);
+			params.put("accuracy", loc.getAccuracy());			
 			params.put("lng", loc.getLongitude());
 			params.put("lat", loc.getLatitude());
-			params.put("accuracy", loc.getAccuracy());
+			params.put("time", loc.getTime());
 			
 			for (int i = 0; i < 10; i++) {
 				try {
