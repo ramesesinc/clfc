@@ -11,6 +11,7 @@ import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
+import com.rameses.util.MapProxy;
 
 public class VoidRequestService 
 {
@@ -22,10 +23,11 @@ public class VoidRequestService
 	private LoanPostingService svc = new LoanPostingService();
 	private Map map;
 	private Map params = new HashMap();
-	private boolean isApproved = false;
+	private Map response = new HashMap();
 	private List<Map> list;
 	private int size;
 	private boolean hasPendingRequest = false;
+	private String state = "";
 	
 	public static boolean serviceStarted = false;
 	
@@ -84,9 +86,14 @@ public class VoidRequestService
 					params.clear();
 					params.put("voidid", map.get("objid").toString());
 					
-					isApproved = svc.isVoidPaymentApproved(params);
-					if (isApproved) {
+					response = svc.checkVoidPaymentRequest(params);
+					if (response != null) {
+						state = MapProxy.getString(response, "state");
+					}
+					if ("APPROVED".equals(state)) {
 						voidService.approveVoidPaymentById(map.get("objid").toString());
+					} else if ("DISAPPROVED".equals(state)) {
+						voidService.disapproveVoidPaymentById(map.get("objid").toString());
 					}
 				}
 			}

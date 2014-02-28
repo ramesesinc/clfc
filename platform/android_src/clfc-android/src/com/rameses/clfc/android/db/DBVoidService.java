@@ -73,8 +73,20 @@ public class DBVoidService extends AbstractDBMapper
 	public void approveVoidPaymentById(String id) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = "UPDATE "+getTableName()+" SET state='APPROVED' WHERE objid='"+id+"'";
-			ctx.execute(sql);
+			String sql = "UPDATE "+getTableName()+" SET state='APPROVED' WHERE objid=?";
+			ctx.execute(sql, new Object[]{id});
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
+	public void disapproveVoidPaymentById(String id) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "UPDATE "+getTableName()+" SET state='DISAPPROVED' WHERE objid=?";
+			ctx.execute(sql, new Object[]{id});
 		} catch (Exception e) {
 			throw e;
 		} finally {

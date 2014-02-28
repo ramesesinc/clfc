@@ -27,8 +27,8 @@ public class LoanPostingService extends AbstractService
 		return (Map) invoke("removeRemarks", params);
 	}
 	
-	public boolean isVoidPaymentApproved(Map params) {
-		return (Boolean) invoke("isVoidPaymentApproved", params);
+	public Map checkVoidPaymentRequest(Map params) {
+		return (Map) invoke("checkVoidPaymentRequest", params);
 	}
 	
 	public Map postSpecialCollectionRequest(Map params) {
