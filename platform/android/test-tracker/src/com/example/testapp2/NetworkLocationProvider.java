@@ -176,7 +176,7 @@ public final class NetworkLocationProvider
                     }                     
                 } 
                 //do not process below
-                return;
+//                return;
             } else if (nethandler != null) {
                 try { 
                 	dump("nethandler disconnect...");

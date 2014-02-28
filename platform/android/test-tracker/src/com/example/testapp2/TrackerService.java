@@ -38,7 +38,8 @@ public class TrackerService
 		
 		Map<String, Object> config = new HashMap<String, Object>();
 		config.put("app.context", "clfc");
-		config.put("app.host", "192.168.0.178:8070");
+//		config.put("app.host", "192.168.0.178:8070");
+		config.put("app.host", "clfc.ramesesinc.com");
 		config.put("app.cluster", "osiris3");
 		config.put("readTimeout", "20000");
 		LogUtil.log("passing 5\n");
