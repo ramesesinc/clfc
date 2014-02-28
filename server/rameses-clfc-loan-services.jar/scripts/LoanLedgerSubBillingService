@@ -20,8 +20,8 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 	@ActiveDB(value="field_collection")
 	def field_collection;
 
-	@ActiveDB(value="void_payment")
-	def void_payment;
+	@ActiveDB(value="void_request")
+	def void_request;
 
 	@Service("DateService")
 	def dateSvc;
@@ -118,13 +118,13 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 
 					payments.each{
 						paymentid = "PT"+new UID();
-						voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
+						voidrequest = void_request.findVoidRequestByPaymentid([paymentid: it.objid]);
 						if (voidrequest) {
-							void_payment.changeStateVoided(voidrequest);
+							void_request.changeStateVoided(voidrequest);
 							voidrequest.objid = "VOID"+new UID();
 							voidrequest.paymentid = paymentid;
 							voidrequest.collectionid = params.objid;
-							void_payment.create(voidrequest);
+							void_request.create(voidrequest);
 						}
 						it.objid = paymentid;
 						it.parentid = itm.objid;

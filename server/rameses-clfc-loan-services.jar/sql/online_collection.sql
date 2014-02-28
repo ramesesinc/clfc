@@ -8,6 +8,12 @@ WHERE state='FOR_POSTING'
 	AND txndate=$P{txndate}
 	AND collector_objid=$P{collectorid}
 
+[findPaymentById]
+SELECT ocd.*, oc.txndate
+FROM online_collection_detail ocd
+INNER JOIN online_collection oc ON ocd.parentid=oc.objid
+WHERE ocd.objid=$P{objid}
+
 [getCollectionDateByCollector]
 SELECT txndate 
 FROM online_collection

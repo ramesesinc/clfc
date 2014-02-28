@@ -9,8 +9,8 @@ class LoanPaymentService
 	@ActiveDB(value="loanapp")
 	def loanapp;
 
-	@ActiveDB(value="void_payment")
-	def void_payment;
+	@ActiveDB(value="void_request")
+	def void_request;
 
 	@ActiveDB(value="batch_collectionsheet")
 	def batch_collectionsheet;
@@ -91,7 +91,7 @@ class LoanPaymentService
 				cs.total = 0;
 				cs.payments.each{ 
 					cs.total += it.payamount;
-					voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
+					voidrequest = void_request.findVoidRequestByPaymentid([paymentid: it.objid]);
 					it.isvoided = 0;
 					if (voidrequest) {
 						/*if (voidrequest.state == "PENDING") throw new Exception("There are still pending void requests for this billing.");*/

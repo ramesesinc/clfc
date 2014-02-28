@@ -16,8 +16,8 @@ class LoanOnlineCollectionService
 	@ActiveDB(value="loan_exemption")
 	def exemption;
 
-	@ActiveDB(value="void_payment")
-	def void_payment;
+	@ActiveDB(value="void_request")
+	def void_request;
 
 	@ActiveDB(value="loan_compromise")
 	def compromise;
@@ -247,8 +247,8 @@ class LoanOnlineCollectionService
 		data.payments.each{o->
 			o.voided = 0;
 			o.pending = 0;
-			def voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: o.objid]);
-			if (voidrequest) {
+			def voidrequest = void_request.findVoidRequestByPaymentid([paymentid: o.objid]);
+			if (voidrequest && voidrequest != 'DISAPPROVED') {
 				o.voidid = voidrequest.objid;
 				if (voidrequest.state == 'APPROVED') {
 					o.voided = 1;

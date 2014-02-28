@@ -54,9 +54,9 @@ WHERE bcdp.parentid=$P{parentid}
 
 [getPaymentsAndVoidrequestByDetailid]
 SELECT bcdp.*,
-	CASE WHEN vp.objid IS NULL THEN FALSE ELSE TRUE END AS isvoided
+	CASE WHEN vr.objid IS NULL THEN FALSE ELSE TRUE END AS isvoided
 FROM batch_collectionsheet_detail_payment bcdp
-LEFT JOIN void_payment vp ON bcdp.objid=vp.paymentid
+LEFT JOIN void_request vr ON bcdp.objid=vr.paymentid
 WHERE bcdp.parentid=$P{parentid}
 
 [getNotesByDetailid]

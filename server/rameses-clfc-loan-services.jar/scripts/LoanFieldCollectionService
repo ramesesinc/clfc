@@ -10,8 +10,8 @@ class LoanFieldCollectionService
 	@ActiveDB(value="field_collection")
 	def collection;
 
-	@ActiveDB(value="void_payment")
-	def void_payment;
+	@ActiveDB(value="void_request")
+	def void_request;
 
 	@ActiveDB(value="loan_ledger_billing")
 	def ledger_billing;
@@ -59,7 +59,7 @@ class LoanFieldCollectionService
 				it.pending = 0;
 				cs.total += it.payamount;
 
-				def voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
+				def voidrequest = void_request.findVoidRequestByPaymentid([paymentid: it.objid]);
 				if (voidrequest) {
 					it.voidid = voidrequest.objid;
 					if (voidrequest.state == 'APPROVED') {
@@ -89,8 +89,8 @@ class LoanFieldCollectionService
 				it.pending = 0;
 				cs.total += it.payamount;
 
-				def voidrequest = void_payment.findVoidPaymentByPaymentid([paymentid: it.objid]);
-				if (voidrequest) {
+				def voidrequest = void_request.findVoidRequestByPaymentid([paymentid: it.objid]);
+				if (voidrequest && voidrequest.state != 'DISAPPROVED') {
 					it.voidid = voidrequest.objid;
 					if (voidrequest.state == 'APPROVED') {
 						it.voided = 1;

@@ -48,6 +48,12 @@ ORDER BY fcl.borrower_name
 UPDATE field_collection SET state=$P{state}
 WHERE objid=$P{objid}
 
+[findPaymentById]
+SELECT fcp.*, fc.billdate
+FROM field_collection_payment fcp
+INNER JOIN field_collection fc ON fcp.fieldcollectionid=fc.objid
+WHERE fcp.objid=$P{objid}
+
 [findRouteByFieldcollectionidAndRoutecode]
 SELECT * FROM field_collection_route
 WHERE fieldcollectionid=$P{fieldcollectionid}
@@ -55,9 +61,9 @@ WHERE fieldcollectionid=$P{fieldcollectionid}
 
 [findPendingVoidRequestByFieldcollectionid]
 SELECT fcp.objid FROM field_collection_payment fcp
-INNER JOIN void_payment vp ON fcp.objid=vp.paymentid
+INNER JOIN void_request vr ON fcp.objid=vr.paymentid
 WHERE fcp.fieldcollectionid=$P{fieldcollectionid}
-	AND vp.state='PENDING'
+	AND vr.state='PENDING'
 
 [findFieldCollectionByRouteAndId]
 SELECT fc.* FROM field_collection fc
@@ -103,7 +109,7 @@ DELETE FROM field_collection_route
 WHERE fieldcollectionid=$P{fieldcollectionid}
 
 [removeVoidRequestsByFieldcolletionid]
-DELETE FROM void_payment
+DELETE FROM void_request
 WHERE collectionid=$P{fieldcollectionid}
 
 [removePaymentsByFieldcollectionid]

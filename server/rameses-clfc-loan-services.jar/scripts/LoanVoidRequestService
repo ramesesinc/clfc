@@ -1,0 +1,148 @@
+import com.rameses.common.*;
+import com.rameses.annotations.*;
+import com.rameses.services.extended.*;
+
+class LoanVoidRequestService extends ActiveListService
+{
+	@Env
+	def env;
+
+	@ActiveDB(value="void_request")
+	def em;
+
+	@ActiveDB(value="void_payment")
+	def void_payment;
+
+	@ActiveDB(value="field_collection")
+	def field_collection;
+
+	@ActiveDB(value="online_collection")
+	def online_collection;
+
+	@Service("CustomerService")
+	def customerSvc;
+
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def getNodes( params ) {
+		return [
+			[caption: 'PENDING', state: 'PENDING', name: 'pending', filetype: 'voidrequest'],
+			[caption: 'APPROVED', state: 'APPROVED', name: 'approved', filetype: 'voidrequest'],
+			[caption: 'DISAPPROVED', state: 'DISAPPROVED', name: 'disapproved', filetype: 'voidrequest']
+		];
+	}
+
+	@ProxyMethod
+	public def getColumns( params ) {
+		return [
+			[name: 'state', caption: 'State'],
+			[name: 'txncode', caption: 'Txncode'],
+			[name: 'route.area', caption: 'Route Area'],
+			[name: 'loanapp.appno', caption: 'App. No.'],
+			[name: 'borrower.name', caption: 'Borrower'],
+			[name: 'collector.name', caption: 'Requested By'],
+			[name: 'reason', caption: 'Reason']
+		]
+	}
+
+	void beforeList( Object data ) {
+		data.state = (data.state? data.state : '%');
+	}
+
+	@ProxyMethod
+	public def create( params ) {
+		params.state = 'PENDING';
+		params.dtfiled = dateSvc.serverDate;
+		params.filedby = (env.NAME? env.NAME : 'NOT IDENTIFIED');
+		em.create(params);
+		return open(params)
+	}
+
+	@ProxyMethod
+	public def approve( params ) {
+		params.dtapproved = dateSvc.serverDate;
+		params.approvedby = (env.NAME? env.NAME : 'NOT IDENTIFIED');
+		params.approvedremarks = params.remarks;
+		//println 'params-> '+params;
+		//throw new Exception('stop');
+		em.update(params, "approve");
+		params.state = "APPROVED";
+		em.changeState(params);
+
+		def itm = [
+			objid 		: params.objid,
+			dtfiled 	: dateSvc.serverDate,
+			filedby 	: (env.NAME? env.NAME : 'NOT IDENTIFIED'),
+			collector 	: params.collector,
+			borrower 	: params.borrower,
+			routecode 	: params.route.code,
+			paymentid 	: params.paymentid
+			/*refno 		:
+			type 		:
+			amount 		:
+			dtpaid 		:
+			paidby 		:*/
+		];
+		def payment;
+		if (params.txncode == 'FIELD') {
+			payment = field_collection.findPaymentById([objid: params.paymentid]);
+			println 'payment = '+payment;
+			itm.type = payment.paytype;
+			itm.amount = payment.payamount;
+			itm.dtpaid = payment.billdate;
+		} else if (params.txncode == 'ONLINE') {
+			payment = online_collection.findPaymentById([objid: params.paymentid]);
+			itm.type = payment.type;
+			itm.amount = payment.amount;
+			itm.dtpaid = payment.dtpaid;
+		}
+		itm.refno = payment.refno;
+		itm.paidby = payment.paidby;
+		void_payment.create(itm);
+		//em.changeStateApproved(params);
+		return params;
+	}
+
+	@ProxyMethod
+	public def disapprove( params ) {
+		params.dtdisapproved = dateSvc.serverDate;
+		params.disapprovedby = (env.NAME? env.NAME : 'NOT IDENTIFIED');
+		params.disapprovedremarks = params.remarks;
+		em.update(params, "disapprove");
+		params.state = "DISAPPROVED";
+		em.changeState(params);
+		return params;
+	}
+
+	@ProxyMethod
+	public def open( params ) {
+		if (!params.txncode) throw new Exception("Please specify txncode.");
+
+		//println 'params -> ' + params;
+		def itm;
+		if (params.txncode == 'FIELD') {
+			itm = em.findFieldVoidRequestById(params);
+		} else if (params.txncode == 'ONLINE') {
+			itm = em.findOnlineVoidRequestById(params);
+		}
+
+		//println 'itm -> '+itm
+		if (itm.state == 'APPROVED') {
+			//println 'pass 1'
+			itm.remarks = itm.approvedremarks;
+		} else if (itm.state == 'DISAPPROVED') {
+			//println 'pass 2'
+			itm.remarks = itm.disapprovedremarks;
+		}
+
+		return itm;
+	}
+
+	@ProxyMethod
+	public def openCustomer( params ) {
+		def customer = customerSvc.open(params);
+		return [address: customer.address, objid: customer.objid, name: customer.name];
+	}
+}
