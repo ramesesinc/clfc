@@ -60,7 +60,7 @@ public class LoanLedgerBillingPage extends javax.swing.JPanel {
         xDateField1.setCaption("Billing Date");
         xDateField1.setCaptionWidth(100);
         xDateField1.setName("entity.billdate");
-        xDateField1.setOutputFormat("MMM-dd-yyyyy");
+        xDateField1.setOutputFormat("MMM-dd-yyyy");
         xDateField1.setRequired(true);
         xFormPanel2.add(xDateField1);
 

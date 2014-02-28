@@ -42,13 +42,18 @@ class OnlineCollectionController
         },
         onOpenItem: {itm, colName->
             def params = [
-                txncode             : 'ONLINE',
-                afterSaveHandler    : {o->
+                txncode                 : 'ONLINE',
+                collectionid            : itm.parentid,
+                afterSaveHandler        : {o->
                     selectedPayment.voidid = o.objid;
                     selectedPayment.pending = 1;
                 },
-                afterApproveHandler : {o->
+                afterApproveHandler     : {o->
                     selectedPayment.voided = 1;
+                    selectedPayment.pending = 0;
+                    binding.refresh('totalcollection');
+                },
+                afterDisapproveHandler  : {o->
                     selectedPayment.pending = 0;
                     binding.refresh('totalcollection');
                 }
@@ -76,7 +81,7 @@ class OnlineCollectionController
     ] as BasicListModel;
 
     public def getTotalcollection() {
-        if (!entity.payments) return 0;
+        if (!entity.payments || !entity.payments.findAll{ it.voided == 0 }) return 0;
         return entity.payments.findAll{ it.voided == 0 }.amount.sum();
     }
 

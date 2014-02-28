@@ -11,7 +11,7 @@
         
         class VoidRequestInboxController extends InboxController
         {
-            String serviceName = "LoanVoidPaymentService";
+            String serviceName = "LoanVoidRequestService";
             String defaultFileType = "voidrequest";
             
             boolean allowCreate = false;

@@ -105,7 +105,7 @@ public class PaymentVoidRequestPage extends javax.swing.JPanel {
 
         jScrollPane2.setPreferredSize(new java.awt.Dimension(0, 60));
         xTextArea2.setCaption("Remarks");
-        xTextArea2.setName("entity.approvedremarks");
+        xTextArea2.setName("entity.remarks");
         xTextArea2.setRequired(true);
         jScrollPane2.setViewportView(xTextArea2);
 

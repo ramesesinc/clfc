@@ -92,7 +92,7 @@
                 <Property name="caption" type="java.lang.String" value="Billing Date"/>
                 <Property name="captionWidth" type="int" value="100"/>
                 <Property name="name" type="java.lang.String" value="entity.billdate"/>
-                <Property name="outputFormat" type="java.lang.String" value="MMM-dd-yyyyy"/>
+                <Property name="outputFormat" type="java.lang.String" value="MMM-dd-yyyy"/>
                 <Property name="required" type="boolean" value="true"/>
               </Properties>
             </Component>

@@ -5,6 +5,8 @@
         
         <invoker type="formActions" action="approve" mnemonic="v" visibleWhen="#{mode == 'read' &amp;&amp; entity.state == 'PENDING'}" 
             role="APPROVER" tooltip="Approve"/>
+        <invoker type="formActions" action="disapprove" caption="Disapprove" mnemonic="d" visibleWhen="#{mode == 'read' &amp;&amp; entity.state == 'PENDING'}" 
+            role="APPROVER" tooltip="Disapprove"/>
     </invokers>
     
     <code>
@@ -17,10 +19,10 @@
         
         class PaymentVoidRequestController extends CRUDController
         {
-            @Service("LoanVoidPaymentService")
+            @Service("LoanVoidRequestService")
             def svc;
             
-            String serviceName = 'LoanVoidPaymentService';
+            String serviceName = 'LoanVoidRequestService';
             String entityName = 'voidrequest';
             
             boolean allowCreate = false;
@@ -31,8 +33,10 @@
             def collectionsheet;
             def payment;
             def collector;
+            def collectionid;
             def txncode;
             def afterApproveHandler;
+            def afterDisapproveHandler;
             def afterSaveHandler;
             
             Map createEntity() {
@@ -45,7 +49,8 @@
                     loanapp     : collectionsheet.loanapp,
                     borrower    : svc.openCustomer(collectionsheet.borrower),
                     collector   : collector,
-                    txncode     : txncode
+                    txncode     : txncode,
+                    collectionid: collectionid
                 ];
             }
             
@@ -74,9 +79,18 @@
                 }
             }
             
-            boolean getIsAllowApprove() {
-                if (!ClientContext.currentContext.headers.ROLES.containsKey("LOAN.APPROVER")) return false;
-                return true;
+            def disapprove() {
+                entity = svc.disapprove(entity);
+                if (entity.state == 'DISAPPROVED') {
+                    if (afterDisapproveHandler) afterDisapproveHandler(entity);
+                }
+            }
+            
+            public boolean getIsAllowApprove() {
+                def flag = true;
+                if (!ClientContext.currentContext.headers.ROLES.containsKey("LOAN.APPROVER") || mode == 'create') flag = false;
+                println 'isAllowApprove -> ' + flag;
+                return flag;
             }
          }
     </code>

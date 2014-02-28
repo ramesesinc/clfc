@@ -50,13 +50,14 @@
                     },
                     onOpenItem: {itm, colName->
                         def params = [
-                            txncode             : 'FIELD',
-                            afterSaveHandler    : {o->
+                            txncode                 : 'FIELD',
+                            collectionid            : itm.parentid,
+                            afterSaveHandler        : {o->
                                 selectedPayment.voidid = o.objid;
                                 selectedPayment.pending = 1;
                                 paymentsHandler.reload();
                             },
-                            afterApproveHandler : {o->
+                            afterApproveHandler     : {o->
                                 println 'calling after approve handler';
                                 selectedPayment.voided = 1;
                                 selectedPayment.pending = 0;
@@ -66,6 +67,10 @@
                                 collectionSheetsHandler.reload();
                                 paymentsHandler.reload();
                                 binding.refresh('totalcollection');
+                            },
+                            afterDisapproveHandler  : {o->
+                                selectedPayment.pending = 0;
+                                paymentsHandler.reload();
                             }
                         ]
                         if (itm.voidid) {

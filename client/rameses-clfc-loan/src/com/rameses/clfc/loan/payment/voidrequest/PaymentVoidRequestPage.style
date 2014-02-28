@@ -6,10 +6,10 @@
     enabled: false;
 }
 
-"entity.approvedremarks" [entity.state == 'PENDING'] {
+"entity.remarks" [entity.state == 'PENDING'] {
     enabled: true;
 }
 
-"entity.approvedremarks" [entity.state != 'PENDING' || !isAllowApprove] {
+"entity.remarks" [entity.state != 'PENDING' || !isAllowApprove] {
     enabled: false;
 }
