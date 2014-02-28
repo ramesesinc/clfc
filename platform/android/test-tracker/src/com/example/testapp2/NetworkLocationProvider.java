@@ -64,6 +64,7 @@ public final class NetworkLocationProvider
         instance.debug = debug; 
     }
 
+    private final float MAX_ACCEPTABLE_ACCURACY = 20f;
     private Timer timer;
     private Location location;     
     private LocationManager locationMgr;
@@ -107,7 +108,6 @@ public final class NetworkLocationProvider
         
     private void setLocation(Location location) {
         synchronized (LOCKED) { 
-            //dump("[NetworkLocationProvider] location-> " + location); 
             this.location = location; 
             System.out.println("[NetworkLocationProvider] location-> " + this.location); 
         } 
@@ -175,8 +175,6 @@ public final class NetworkLocationProvider
                         nethandler = null;                    
                     }                     
                 } 
-                //do not process below
-//                return;
             } else if (nethandler != null) {
                 try { 
                 	dump("nethandler disconnect...");
@@ -255,7 +253,21 @@ public final class NetworkLocationProvider
         }
 
         public void onLocationChanged(Location newloc) {
-            root.setLocation(newloc); 
+        	if (newloc == null) return;
+        	
+        	Location oldloc = root.location;
+        	if (oldloc == null) {
+        		root.setLocation(newloc); 	
+        	} else if (newloc.getTime() > oldloc.getTime()) { 
+        		long timediff = newloc.getTime()-oldloc.getTime();
+        		if (timediff < 60000) { 
+	        		if (oldloc.distanceTo(newloc) < 2*MAX_ACCEPTABLE_ACCURACY) { 
+	        			root.setLocation(newloc); 
+	        		} 
+        		} else {
+        			root.setLocation(newloc);
+        		}
+        	} 
         }
     }
     
@@ -291,8 +303,22 @@ public final class NetworkLocationProvider
             } catch(Throwable t) {;} 
         } 
 
-        public void onLocationChanged(Location newloc) {            
-            root.setLocation(newloc);
+        public void onLocationChanged(Location newloc) {    
+        	if (newloc == null) return;
+        	
+        	Location oldloc = root.location;
+        	if (oldloc == null) {
+        		root.setLocation(newloc); 	
+        	} else if (newloc.getTime() > oldloc.getTime()) { 
+        		long timediff = newloc.getTime()-oldloc.getTime();
+        		if (timediff < 60000) { 
+	        		if (oldloc.distanceTo(newloc) < 2*MAX_ACCEPTABLE_ACCURACY) { 
+	        			root.setLocation(newloc); 
+	        		} 
+        		} else {
+        			root.setLocation(newloc);
+        		}
+        	}         	
         }
 
         public void onStatusChanged(String string, int i, Bundle bundle) {}
