@@ -11,7 +11,7 @@ class MobilePostingService
 	def ledger_billing;
 
 	@ActiveDB(value="void_request")
-	def findVoidRequestByPaymentid;
+	def void_request;
 
 	@ActiveDB(value="special_collection")
 	def special_collection;
