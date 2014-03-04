@@ -9,9 +9,11 @@ public class TrackerDB extends AbstractDB
 {	
 	public TrackerDB(Context ctx, String dbname, int dbversion) {
 		super(ctx, dbname, dbversion); 
+		System.out.println("instantiate TrackerDB");
 	}
 
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
+		System.out.println("clfctracker oncreateprocess");
 		try { 
 			loadDBResource(sqldb, "clfctrackerdb_create"); 
 			System.out.println("clfctracker created");
@@ -23,6 +25,7 @@ public class TrackerDB extends AbstractDB
 	}
 
 	protected void onUpgradeProcess(SQLiteDatabase sqldb, int arg1, int arg2) {
+		System.out.println("clfctracker onUpgradeProcess");
 		try { 
 			loadDBResource(sqldb, "clfctrackerdb_upgrade");
 			onCreate(sqldb); 

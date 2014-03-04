@@ -12,6 +12,7 @@ public class VoidRequestDB extends AbstractDB
 	}
 
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
+		System.out.println("clfcrequestdb oncreateprocess");
 		try { 
 			loadDBResource(sqldb, "clfcrequestdb_create");
 			System.out.println("clfcrequestdb created");
@@ -23,6 +24,7 @@ public class VoidRequestDB extends AbstractDB
 	}
 
 	protected void onUpgradeProcess(SQLiteDatabase sqldb, int arg1, int arg2) {
+		System.out.println("clfcrequestdb onUpgradeProcess");
 		try { 
 			loadDBResource(sqldb, "clfcrequestdb_upgrade");
 			onCreate(sqldb); 

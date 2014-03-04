@@ -230,6 +230,7 @@ public final class NetworkLocationProvider
                 dump("current activity=" + a);
                 locationClient = new LocationClient(a.getApplicationContext(), this, this);
             }
+            System.out.println("location client is connected-> " + locationClient.isConnected());
             if (!locationClient.isConnected()) {
                 locationClient.connect();
             }

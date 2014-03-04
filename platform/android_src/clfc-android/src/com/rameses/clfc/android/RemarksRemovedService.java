@@ -52,6 +52,8 @@ public class RemarksRemovedService
 	private Runnable runnableImpl = new Runnable() 
 	{
 		public void run() {
+			remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
+			clfcdb = new DBContext("clfc.db");
 //			System.out.println("PostPendingRemarksRemoved");
 			try {
 				remarksremoveddb.beginTransaction();
@@ -68,6 +70,7 @@ public class RemarksRemovedService
 				clfcdb.close();
 			}
 
+			remarksremoveddb2 = new DBContext("clfcremarksremoved.db");
 			try {
 				remarksRemoved.setDBContext(remarksremoveddb2);
 				hasPendingRemarksRemoved = remarksRemoved.hasPendingRemarksRemoved();

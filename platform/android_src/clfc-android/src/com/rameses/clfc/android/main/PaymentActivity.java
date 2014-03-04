@@ -59,11 +59,11 @@ public class PaymentActivity extends ControlActivity
 	private String txndate;
 	
 	private LayoutInflater inflater;
-	private SQLTransaction clfcdb = new SQLTransaction("clfc.db");
-	private SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+	private SQLTransaction clfcdb;
+	private SQLTransaction paymentdb;
 	private DBSystemService systemSvc = new DBSystemService();
 	private Location location;
-	private Map params = new HashMap();
+	private Map params;
 	private String message;	
 
 	private boolean flag = true;
@@ -140,7 +140,6 @@ public class PaymentActivity extends ControlActivity
 			protected void onClick() {
 				try {
 					doSavePayment();
-					app.paymentSvc.start();
 				} catch(Throwable t) {
 					UIDialog.showMessage("[ERROR] " + t.getMessage()); 
 				}
@@ -156,7 +155,7 @@ public class PaymentActivity extends ControlActivity
 		} else {
 			flag = true;
 			amt = new BigDecimal(amount).setScale(2);
-			amt2 = new BigDecimal(0).setScale(2);
+			amt2 = new BigDecimal("0").setScale(2);
 			if (type.equals("over")) {
 				amt2 = new BigDecimal(et_overpayment.getText().toString()).setScale(2);
 				if (isfirstbill == 1) {
@@ -175,21 +174,7 @@ public class PaymentActivity extends ControlActivity
 			if (flag == true) {
 				UIDialog dialog = new UIDialog(this) {
 					public void onApprove() {
-						try { 
-							clfcdb.beginTransaction();
-							paymentdb.beginTransaction();
-							onApproveImpl();
-							clfcdb.commit();
-							paymentdb.commit();
-							finish();
-						} catch (Throwable t) {
-							t.printStackTrace();
-							Platform.getLogger().log(t);
-							UIDialog.showMessage(t, PaymentActivity.this); 
-						} finally {
-							clfcdb.endTransaction();
-							paymentdb.endTransaction();
-						}
+						onApproveImpl();
 					}
 				};
 				message = "Amount Paid: "+amt.toString();
@@ -200,38 +185,60 @@ public class PaymentActivity extends ControlActivity
 		}
 	}
 	
-	private void onApproveImpl() throws Exception {
-		systemSvc.setDBContext(clfcdb.getContext());
-		
-		location = NetworkLocationProvider.getLocation();
-		
-		params.clear();
-		params.put("objid", objid);
-		params.put("state", "PENDING");
-		params.put("refno", getValueAsString(R.id.tv_payment_refno));
-		params.put("txndate", Platform.getApplication().getServerDate().toString());
-		params.put("paymenttype", type);
-		params.put("paymentamount", Double.parseDouble(et_amount.getText().toString()));
-		params.put("paidby", getValueAsString(R.id.et_payment_paidby));
-		params.put("loanappid", loanappid);
-//		params.put("appno", appno);
-		params.put("detailid", detailid);
-		params.put("routecode", routecode);
-		params.put("isfirstbill", isfirstbill);
-		params.put("longitude", location.getLongitude());
-		params.put("latitude", location.getLatitude());
-		params.put("trackerid", systemSvc.getTrackerid());
-		params.put("collectorid", SessionContext.getProfile().getUserId());
-		params.put("collectorname", SessionContext.getProfile().getFullName());
-//		params.put("borrowerid", borrowerid);
-//		params.put("borrowername", borrowername);
-//		params.put("sessionid", sessionid);
-		
-		paymentdb.insert("payment", params);
-		
+	private void onApproveImpl() {
 		getHandler().post(new Runnable() {
 			public void run() {
-				app.paymentSvc.start();
+				System.out.println("onApproveImpl");
+				clfcdb = new SQLTransaction("clfc.db");
+				paymentdb = new SQLTransaction("clfcpayment.db");
+				try { 
+					clfcdb.beginTransaction();
+					paymentdb.beginTransaction();
+					runImpl(clfcdb, paymentdb);
+					clfcdb.commit();
+					paymentdb.commit();
+					app.paymentSvc.start();
+					finish();
+				} catch (Throwable t) {
+					t.printStackTrace();
+					Platform.getLogger().log(t);
+					UIDialog.showMessage(t, PaymentActivity.this); 
+				} finally {
+					clfcdb.endTransaction();
+					paymentdb.endTransaction();
+				}
+			}
+			
+			private void runImpl(SQLTransaction clfcdb, SQLTransaction paymentdb) throws Exception {
+				systemSvc.setDBContext(clfcdb.getContext());
+				
+				location = NetworkLocationProvider.getLocation();				
+				params = new HashMap();
+				params.put("objid", objid);
+				params.put("state", "PENDING");
+				params.put("refno", getValueAsString(R.id.tv_payment_refno));
+				params.put("txndate", Platform.getApplication().getServerDate().toString());
+				params.put("paymenttype", type);
+				params.put("paymentamount", Double.parseDouble(et_amount.getText().toString()));
+				params.put("paidby", getValueAsString(R.id.et_payment_paidby));
+				params.put("loanappid", loanappid);
+//				params.put("appno", appno);
+				params.put("detailid", detailid);
+				params.put("routecode", routecode);
+				params.put("isfirstbill", isfirstbill);
+				params.put("longitude", location.getLongitude());
+				params.put("latitude", location.getLatitude());
+				params.put("trackerid", systemSvc.getTrackerid());
+				params.put("collectorid", SessionContext.getProfile().getUserId());
+				params.put("collectorname", SessionContext.getProfile().getFullName());
+//				params.put("borrowerid", borrowerid);
+//				params.put("borrowername", borrowername);
+//				params.put("sessionid", sessionid);
+				
+				System.out.println("params-> "+params);
+				paymentdb.insert("payment", params);
+				System.out.println("done insert");
+//				app.paymentSvc.start();
 			}
 		});
 	}	

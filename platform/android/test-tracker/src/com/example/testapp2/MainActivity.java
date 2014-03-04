@@ -1,6 +1,7 @@
 package com.example.testapp2;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,16 @@ public class MainActivity extends UIActivity
 //		NetworkLocationProvider.setHandler(handler);  
 //		NetworkLocationProvider.setEnabled(true); 
 //		LogUtil.log("network location provider started");
+		
+		Location loc1 = new Location("network");
+		loc1.setLatitude(10.31262340000000);
+		loc1.setLongitude(123.87910760000000);
+		
+		Location loc2 = new Location("network");
+		loc2.setLatitude(10.31134200000000);
+		loc2.setLongitude(123.87702270000000);
+		
+		System.out.println("distance-> "+loc1.distanceTo(loc2));
 	}
 	
 	public void onBackPressedProcess() {

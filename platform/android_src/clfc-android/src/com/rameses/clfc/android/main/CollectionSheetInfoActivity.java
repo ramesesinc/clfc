@@ -68,10 +68,10 @@ public class CollectionSheetInfoActivity extends ControlActivity
 	private ProgressDialog progressDialog;
 	private RelativeLayout rl_container;
 	
-	private DBContext clfcdb = new DBContext("clfc.db");
-	private DBContext paymentdb = new DBContext("clfcpayment.db");
-	private DBContext remarksdb = new DBContext("clfcremarks.db");
-	private DBContext requestdb = new DBContext("clfcrequest.db");
+	private DBContext clfcdb;
+	private DBContext paymentdb;
+	private DBContext remarksdb;
+	private DBContext requestdb;
 	private DBCollectionSheet dbCollectionSheet = new DBCollectionSheet();	
 	private DBPaymentService paymentSvc = new DBPaymentService();
 	private DBVoidService voidSvc = new DBVoidService();
@@ -131,190 +131,242 @@ public class CollectionSheetInfoActivity extends ControlActivity
 
 	protected void onStartProcess() {
 		super.onStartProcess();
-		try {
-			onStartPocessImpl();
-		}  catch (Throwable t) {
-			t.printStackTrace();
-			UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-		} finally {
-			clfcdb.close();
-			paymentdb.close();
-			remarksdb.close();
-			requestdb.close();
-		}
+		onStartPocessImpl();
+//		try {
+//			
+//		}  catch (Throwable t) {
+//			t.printStackTrace();
+//			UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+//		} finally {
+//			clfcdb.close();
+//			paymentdb.close();
+//			remarksdb.close();
+//			requestdb.close();
+//		}
 	}
 
-	private void onStartPocessImpl() throws Exception {
-		dbCollectionSheet.setDBContext(clfcdb);
-		
-		collectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(loanappid);
-		
-		
-		if (collectionSheet != null || !collectionSheet.isEmpty()) {
-			acctid = collectionSheet.get("acctid").toString();
-			sessionid = collectionSheet.get("sessionid").toString();
-			acctname = collectionSheet.get("acctname").toString();
-			appno = collectionSheet.get("appno").toString();
-			amountdue = new BigDecimal(collectionSheet.get("amountdue").toString());
-			loanamount = new BigDecimal(collectionSheet.get("loanamount").toString());
-			balance = new BigDecimal(collectionSheet.get("balance").toString());
-			dailydue = new BigDecimal(collectionSheet.get("dailydue").toString());
-			overpayment = new BigDecimal(collectionSheet.get("overpaymentamount").toString());
-			interest = new BigDecimal(collectionSheet.get("interest").toString());
-			penalty = new BigDecimal(collectionSheet.get("penalty").toString());
-			others = new BigDecimal(collectionSheet.get("others").toString());
-			term = Integer.parseInt(collectionSheet.get("term").toString());
-			refno = collectionSheet.get("refno").toString();
-			homeaddress = collectionSheet.get("homeaddress").toString();
-			collectionaddress = collectionSheet.get("collectionaddress").toString();
-			try {
-				duedate = df.format(new SimpleDateFormat("yyyy-MM-dd").parse(collectionSheet.get("duedate").toString()));	
-			} catch (Exception e) {;}
-			totaldays = amountdue.divide(dailydue, 2, BigDecimal.ROUND_HALF_UP).intValue();
-			if (paymenttype == null || paymenttype.equals("")) {
-				paymenttype = collectionSheet.get("paymentmethod").toString();
+	private void onStartPocessImpl() {
+		getHandler().post(new Runnable() {
+			public void run() {
+				clfcdb = new DBContext("clfc.db");
+				try {
+					runImpl(clfcdb);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+				} finally {
+					clfcdb.close();
+				}				
 			}
-		}
-		
-		((TextView) findViewById(R.id.tv_info_acctname)).setText(acctname);
-		((TextView) findViewById(R.id.tv_info_appno)).setText(appno);
-		((TextView) findViewById(R.id.tv_info_loanamount)).setText(formatValue(loanamount));
-		((TextView) findViewById(R.id.tv_info_balance)).setText(formatValue(balance));
-		((TextView) findViewById(R.id.tv_info_dailydue)).setText(formatValue(dailydue));
-		((TextView) findViewById(R.id.tv_info_amountdue)).setText(formatValue(amountdue));
-		((TextView) findViewById(R.id.tv_info_overpayment)).setText(formatValue(overpayment));
-		((TextView) findViewById(R.id.tv_info_duedate)).setText(duedate);
-		((TextView) findViewById(R.id.tv_info_homeaddress)).setText(homeaddress);
-		((TextView) findViewById(R.id.tv_info_collectionaddress)).setText(collectionaddress);
-		((TextView) findViewById(R.id.tv_info_interest)).setText(formatValue(interest));
-		((TextView) findViewById(R.id.tv_info_penalty)).setText(formatValue(penalty));
-		((TextView) findViewById(R.id.tv_info_others)).setText(formatValue(others));
-		((TextView) findViewById(R.id.tv_info_term)).setText(term+" days");
-		
-		paymentSvc.setDBContext(paymentdb);
-		
-		payments = paymentSvc.getPaymentsByLoanappid(loanappid);
-
-		rl_payment.setVisibility(View.GONE);
-		if (payments != null && !payments.isEmpty()) {
-			rl_payment.setVisibility(View.VISIBLE);
-			ll_info_payments.removeAllViewsInLayout();
-			voidSvc.setDBContext(requestdb);
-			size = payments.size();
-			for (int i=0; i<size; i++) {
-				child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
-				payment = (Map) payments.get(i);
-
-				((TextView) child.findViewById(R.id.tv_info_refno)).setText(payment.get("refno").toString());
-				((TextView) child.findViewById(R.id.tv_info_txndate)).setText(payment.get("txndate").toString());
-				((TextView) child.findViewById(R.id.tv_info_paidby)).setText(payment.get("paidby").toString());
+			
+			private void runImpl(DBContext clfcdb) throws Exception {
+				dbCollectionSheet.setDBContext(clfcdb);
 				
-				if (payment.get("paymenttype").toString().equals("schedule")) {
-					type = "Schedule/Advance";
-				} else if (payment.get("paymenttype").toString().equals("over")) {
-					type = "Overpayment";
-				}
-				((TextView) child.findViewById(R.id.tv_info_paymenttype)).setText(type);
+				System.out.println("loanappid-> "+loanappid);
+				System.out.println("clfcdb -> "+clfcdb);
+				collectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(loanappid);	
 				
-				amount = new BigDecimal(payment.get("paymentamount").toString()).setScale(2);
-				((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(amount));
-				child.setTag(R.id.paymentid, payment.get("objid").toString());
-				voidRequest = voidSvc.findVoidRequestByPaymentid(payment.get("objid").toString());
-				if (voidRequest == null || voidRequest.isEmpty()) {
-					addPaymentProperties(child);
-				} else {
-					voidType = voidRequest.get("state").toString();
-					layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-					layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
-					overlay = inflater.inflate(R.layout.overlay_void_text, null);
-					if (voidType.equals("PENDING")) {
-						child.setOnClickListener(null);
-						child.setOnLongClickListener(null);
-						child.setClickable(false);
-						((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
-						((TextView) overlay).setText("VOID REQUEST PENDING");
-						overlay.setLayoutParams(layoutParams);
-						child.addView(overlay); 
-					} else if (voidType.equals("APPROVED")) {
-						((TextView) overlay).setTextColor(getResources().getColor(R.color.green));
-						((TextView) overlay).setText("VOID APPROVED");
-						overlay.setLayoutParams(layoutParams);
-						((RelativeLayout) child).addView(overlay);
-						//addApprovedVoidPaymentProperies(child);
+				if (collectionSheet != null || !collectionSheet.isEmpty()) {
+					acctid = collectionSheet.get("acctid").toString();
+					sessionid = collectionSheet.get("sessionid").toString();
+					acctname = collectionSheet.get("acctname").toString();
+					appno = collectionSheet.get("appno").toString();
+					amountdue = new BigDecimal(collectionSheet.get("amountdue").toString());
+					loanamount = new BigDecimal(collectionSheet.get("loanamount").toString());
+					balance = new BigDecimal(collectionSheet.get("balance").toString());
+					dailydue = new BigDecimal(collectionSheet.get("dailydue").toString());
+					overpayment = new BigDecimal(collectionSheet.get("overpaymentamount").toString());
+					interest = new BigDecimal(collectionSheet.get("interest").toString());
+					penalty = new BigDecimal(collectionSheet.get("penalty").toString());
+					others = new BigDecimal(collectionSheet.get("others").toString());
+					term = Integer.parseInt(collectionSheet.get("term").toString());
+					refno = collectionSheet.get("refno").toString();
+					homeaddress = collectionSheet.get("homeaddress").toString();
+					collectionaddress = collectionSheet.get("collectionaddress").toString();
+					try {
+						duedate = df.format(new SimpleDateFormat("yyyy-MM-dd").parse(collectionSheet.get("duedate").toString()));	
+					} catch (Exception e) {;}
+					totaldays = amountdue.divide(dailydue, 2, BigDecimal.ROUND_HALF_UP).intValue();
+					if (paymenttype == null || paymenttype.equals("")) {
+						paymenttype = collectionSheet.get("paymentmethod").toString();
 					}
 				}
-				ll_info_payments.addView(child);
+				
+				((TextView) findViewById(R.id.tv_info_acctname)).setText(acctname);
+				((TextView) findViewById(R.id.tv_info_appno)).setText(appno);
+				((TextView) findViewById(R.id.tv_info_loanamount)).setText(formatValue(loanamount));
+				((TextView) findViewById(R.id.tv_info_balance)).setText(formatValue(balance));
+				((TextView) findViewById(R.id.tv_info_dailydue)).setText(formatValue(dailydue));
+				((TextView) findViewById(R.id.tv_info_amountdue)).setText(formatValue(amountdue));
+				((TextView) findViewById(R.id.tv_info_overpayment)).setText(formatValue(overpayment));
+				((TextView) findViewById(R.id.tv_info_duedate)).setText(duedate);
+				((TextView) findViewById(R.id.tv_info_homeaddress)).setText(homeaddress);
+				((TextView) findViewById(R.id.tv_info_collectionaddress)).setText(collectionaddress);
+				((TextView) findViewById(R.id.tv_info_interest)).setText(formatValue(interest));
+				((TextView) findViewById(R.id.tv_info_penalty)).setText(formatValue(penalty));
+				((TextView) findViewById(R.id.tv_info_others)).setText(formatValue(others));
+				((TextView) findViewById(R.id.tv_info_term)).setText(term+" days");
 			}
-		}
+		});
 		
-		remarksSvc.setDBContext(remarksdb);
-		
-		try {
-			remarks = remarksSvc.findRemarksByLoanappid(loanappid);
-		} catch (Exception e) {;}
-		rl_remarks.setVisibility(View.GONE);
-		if (remarks != null && !remarks.isEmpty()) {
-			rl_remarks.setVisibility(View.VISIBLE);
-			((TextView) findViewById(R.id.tv_info_remarks)).setText(remarks.get("remarks").toString());
-			remarks_child = (RelativeLayout) findViewById(R.id.rl_info_remarks);
-			remarks_child.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View view) {
-					// TODO Auto-generated method stub
-					view.setBackgroundResource(android.R.drawable.list_selector_background);
+		getHandler().post(new Runnable() {
+			public void run() {
+				paymentdb = new DBContext("clfcpayment.db");
+				requestdb = new DBContext("clfcrequest.db");
+				try {
+					runImpl(paymentdb, requestdb);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+				} finally {
+					paymentdb.close();
+					requestdb.close();
+				}	
+			}
+			
+			private void runImpl(DBContext paymentdb, DBContext requestdb) throws Exception {
+				paymentSvc.setDBContext(paymentdb);
+				
+				payments = paymentSvc.getPaymentsByLoanappid(loanappid);
+
+				rl_payment.setVisibility(View.GONE);
+				if (payments != null && !payments.isEmpty()) {
+					rl_payment.setVisibility(View.VISIBLE);
+					ll_info_payments.removeAllViewsInLayout();
+					voidSvc.setDBContext(requestdb);
+					size = payments.size();
+					for (int i=0; i<size; i++) {
+						child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
+						payment = (Map) payments.get(i);
+
+						((TextView) child.findViewById(R.id.tv_info_refno)).setText(payment.get("refno").toString());
+						((TextView) child.findViewById(R.id.tv_info_txndate)).setText(payment.get("txndate").toString());
+						((TextView) child.findViewById(R.id.tv_info_paidby)).setText(payment.get("paidby").toString());
+						
+						if (payment.get("paymenttype").toString().equals("schedule")) {
+							type = "Schedule/Advance";
+						} else if (payment.get("paymenttype").toString().equals("over")) {
+							type = "Overpayment";
+						}
+						((TextView) child.findViewById(R.id.tv_info_paymenttype)).setText(type);
+						
+						amount = new BigDecimal(payment.get("paymentamount").toString()).setScale(2);
+						((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(amount));
+						child.setTag(R.id.paymentid, payment.get("objid").toString());
+						voidRequest = voidSvc.findVoidRequestByPaymentid(payment.get("objid").toString());
+						if (voidRequest == null || voidRequest.isEmpty()) {
+							addPaymentProperties(child);
+						} else {
+							voidType = voidRequest.get("state").toString();
+							layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+							layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
+							overlay = inflater.inflate(R.layout.overlay_void_text, null);
+							if (voidType.equals("PENDING")) {
+								child.setOnClickListener(null);
+								child.setOnLongClickListener(null);
+								child.setClickable(false);
+								((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
+								((TextView) overlay).setText("VOID REQUEST PENDING");
+								overlay.setLayoutParams(layoutParams);
+								child.addView(overlay); 
+							} else if (voidType.equals("APPROVED")) {
+								((TextView) overlay).setTextColor(getResources().getColor(R.color.green));
+								((TextView) overlay).setText("VOID APPROVED");
+								overlay.setLayoutParams(layoutParams);
+								((RelativeLayout) child).addView(overlay);
+								//addApprovedVoidPaymentProperies(child);
+							}
+						}
+						ll_info_payments.addView(child);
+					}
 				}
-			});
-			remarks_child.setOnLongClickListener(new View.OnLongClickListener() {
-				 @Override
-				 public boolean onLongClick(View v) {
-				 // TODO Auto-generated method stub
-					 v.setBackgroundResource(android.R.drawable.list_selector_background);
-					 UIDialog dialog = new UIDialog() {
-						 public void onSelectItem(int index) {
-							 SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
-							 SQLTransaction remarkremoveddb = new SQLTransaction("clfcremarksremoved.db");
-							 try {
-								 remarksdb.beginTransaction();
-								 remarkremoveddb.beginTransaction();
-								 onSelectedItemImpl(remarksdb, remarkremoveddb, index);
-								 remarksdb.commit();
-								 remarkremoveddb.commit();
-							 } catch (Throwable t) {
-								 UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
-							 } finally {
-								 remarksdb.endTransaction();
-								 remarkremoveddb.endTransaction();
-							 }
-						 }
-						 
-						 private void onSelectedItemImpl(SQLTransaction remarksdb, SQLTransaction remarksremoveddb, int index) {
-							 switch(index) {
-							 	case 0:
-							 		showRemarksDialog("edit");
-							 		break;
-							 	case 1:
-							 		remarksdb.delete("remarks", "loanappid='"+loanappid+"'");
-							 		Map params = new HashMap();
-							 		params.put("loanappid", loanappid);
-							 		params.put("state", "PENDING");
-							 		remarksremoveddb.insert("remarks_removed", params);
-									remarks = null;
-									rl_remarks.setVisibility(View.GONE);
-									ApplicationUtil.showShortMsg("Successfully removed remarks.");
-									getHandler().post(new Runnable() {
-										public void run() {
-											getApp().remarksSvc.start();
-										}
-									});
-							 		break;
-							 }
-						 }
-					 };
-					 dialog.select(remarks_items);
-					 return false;
-				};
-			});
-		}
-		rl_notes.setVisibility(View.GONE);
+			}
+		});
+		
+		getHandler().post(new Runnable() {
+			public void run() {
+				remarksdb = new DBContext("clfcremarks.db");
+				try {
+					runImpl(remarksdb);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+				} finally {
+					remarksdb.close();
+				}
+			}
+			
+			private void runImpl(DBContext remarksdb) throws Exception {
+				remarksSvc.setDBContext(remarksdb);
+				
+				try {
+					remarks = remarksSvc.findRemarksByLoanappid(loanappid);
+				} catch (Exception e) {;}
+				rl_remarks.setVisibility(View.GONE);
+				if (remarks != null && !remarks.isEmpty()) {
+					rl_remarks.setVisibility(View.VISIBLE);
+					((TextView) findViewById(R.id.tv_info_remarks)).setText(remarks.get("remarks").toString());
+					remarks_child = (RelativeLayout) findViewById(R.id.rl_info_remarks);
+					remarks_child.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View view) {
+							// TODO Auto-generated method stub
+							view.setBackgroundResource(android.R.drawable.list_selector_background);
+						}
+					});
+					remarks_child.setOnLongClickListener(new View.OnLongClickListener() {
+						 @Override
+						 public boolean onLongClick(View v) {
+						 // TODO Auto-generated method stub
+							 v.setBackgroundResource(android.R.drawable.list_selector_background);
+							 UIDialog dialog = new UIDialog() {
+								 public void onSelectItem(int index) {
+									 SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+									 SQLTransaction remarkremoveddb = new SQLTransaction("clfcremarksremoved.db");
+									 try {
+										 remarksdb.beginTransaction();
+										 remarkremoveddb.beginTransaction();
+										 onSelectedItemImpl(remarksdb, remarkremoveddb, index);
+										 remarksdb.commit();
+										 remarkremoveddb.commit();
+									 } catch (Throwable t) {
+										 UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
+									 } finally {
+										 remarksdb.endTransaction();
+										 remarkremoveddb.endTransaction();
+									 }
+								 }
+								 
+								 private void onSelectedItemImpl(SQLTransaction remarksdb, SQLTransaction remarksremoveddb, int index) {
+									 switch(index) {
+									 	case 0:
+									 		showRemarksDialog("edit");
+									 		break;
+									 	case 1:
+									 		remarksdb.delete("remarks", "loanappid='"+loanappid+"'");
+									 		Map params = new HashMap();
+									 		params.put("loanappid", loanappid);
+									 		params.put("state", "PENDING");
+									 		remarksremoveddb.insert("remarks_removed", params);
+											remarks = null;
+											rl_remarks.setVisibility(View.GONE);
+											ApplicationUtil.showShortMsg("Successfully removed remarks.");
+											getHandler().post(new Runnable() {
+												public void run() {
+													getApp().remarksSvc.start();
+												}
+											});
+									 		break;
+									 }
+								 }
+							 };
+							 dialog.select(remarks_items);
+							 return false;
+						};
+					});
+				}
+				rl_notes.setVisibility(View.GONE);
+			}
+		});
 	}
 
 	private void addPaymentProperties(View child) {
@@ -441,6 +493,7 @@ public class CollectionSheetInfoActivity extends ControlActivity
 			case R.id.payment_addpayment:
 				DBContext paymentdb = new DBContext("clfcpayment.db");
 				DBContext requestdb = new DBContext("clfcrequest.db");
+				System.out.println("requestdb -> "+requestdb);
 				try { 
 //					paymentdb.beginTransaction();
 //					requestdb.beginTransaction();

@@ -25,6 +25,8 @@ public class CollectionSheetAdapter extends BaseAdapter
 {
 	private Activity activity;
 	private List<Map> list;
+	private DBPaymentService paymentSvc = new DBPaymentService();
+	private DBVoidService voidSvc = new DBVoidService();
 	
 	public CollectionSheetAdapter(Activity activity, List<Map> list) {
 		this.activity = activity;
@@ -65,30 +67,33 @@ public class CollectionSheetAdapter extends BaseAdapter
 		tv_info_name.setText(item.get("acctname").toString());
 		
 		String loanappid = item.get("loanappid").toString();
-		DBContext txn = new DBContext("clfcpayment.db");
-		DBPaymentService dbPs = new DBPaymentService();
-		dbPs.setDBContext(txn);
+		DBContext paymentdb = new DBContext("clfcpayment.db");
+		DBContext requestdb = new DBContext("clfcrequest.db");
+		paymentSvc.setDBContext(paymentdb);
 		
 		int noOfPayments = 0;
 		try {
-			noOfPayments = dbPs.noOfPaymentsByLoanappid(loanappid);
+			noOfPayments = paymentSvc.noOfPaymentsByLoanappid(loanappid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			noOfPayments = 0;
 		}
 		
-		DBVoidService dbVs = new DBVoidService();
-		dbVs.setDBContext(txn);
+		voidSvc.setDBContext(requestdb);
 		
 		int noOfVoids = 0;
 		try { 
-			noOfVoids = dbVs.noOfVoidPaymentsByLoanappid(loanappid);
+			noOfVoids = voidSvc.noOfVoidPaymentsByLoanappid(loanappid);
 		} catch (Exception e) {
+			e.printStackTrace();
 			noOfVoids = 0;
 		}
 
 		iv_info_paid.setVisibility(View.GONE);
-//		System.out.println("no of voids -> "+noOfVoids+" no of payments -> "+noOfPayments);
+//		if (item.get("acctname").toString().equals("ARNADO, MARICRIS")) {
+//			System.out.println("acctname-> "+item.get("acctname").toString());
+//			System.out.println("no of voids -> "+noOfVoids+" no of payments -> "+noOfPayments);
+//		}
 		if (noOfPayments > 0 && noOfPayments > noOfVoids) {
 			if (MapProxy.getInteger(item, "isfirstbill") == 1) {
 				item.put("isfirstbill", 0);

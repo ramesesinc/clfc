@@ -62,6 +62,8 @@ public class DownloadBillingController
 	private Handler successhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
+			route.put("downloaded", 1);
+			((RouteListActivity) activity).loadRoutes();
 			if (progressDialog.isShowing()) progressDialog.dismiss();
 			ApplicationUtil.showShortMsg("Successfully downloaded billing!", activity);
 		}

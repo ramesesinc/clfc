@@ -64,6 +64,8 @@ public class RemarksService
 	private Runnable runnableImpl = new Runnable() 
 	{
 		public void run() {
+			remarksdb = new SQLTransaction("clfcremarks.db");
+			clfcdb = new DBContext("clfc.db");
 //			System.out.println("PostPendingRemarks");
 			try {
 				remarksdb.beginTransaction();
@@ -80,7 +82,8 @@ public class RemarksService
 				remarksdb.endTransaction();
 				clfcdb.close();
 			}
-			
+
+			remarksdb2 = new DBContext("clfcremarks.db");
 			try {
 				remarksSvc.setDBContext(remarksdb2);
 				hasUnpostedRemarks = remarksSvc.hasUnpostedRemarks();

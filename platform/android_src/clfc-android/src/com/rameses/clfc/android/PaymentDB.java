@@ -12,6 +12,7 @@ public class PaymentDB extends AbstractDB
 	}
 
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
+		System.out.println("clfcpaymentdb oncreateprocess");
 		try { 
 			loadDBResource(sqldb, "clfcpaymentdb_create");
 			System.out.println("clfcpaymentdb created");
@@ -23,6 +24,7 @@ public class PaymentDB extends AbstractDB
 	}
 
 	protected void onUpgradeProcess(SQLiteDatabase sqldb, int arg1, int arg2) {
+		System.out.println("clfcpaymentdb onUpgradeProcess");
 		try { 
 			loadDBResource(sqldb, "clfcpaymentdb_upgrade");
 			onCreate(sqldb); 

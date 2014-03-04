@@ -21,6 +21,8 @@ public class RouteListActivity extends ControlActivity
 {
 	private ProgressDialog progressDialog;
 	private List<Map> routes;
+	private ListView lv_route;
+	private Map route;
 	
 	protected void onCreateProcess(Bundle savedInstanceState) {
 		super.onCreateProcess(savedInstanceState);
@@ -35,13 +37,13 @@ public class RouteListActivity extends ControlActivity
 		Bundle bundle = intent.getExtras();
 		routes = (List<Map>) bundle.getSerializable("routes");
 		progressDialog = new ProgressDialog(this);
+		
+		lv_route = (ListView) findViewById(R.id.lv_route);
 	}
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
-		
-		ListView lv_route = (ListView) findViewById(R.id.lv_route);
-		lv_route.setAdapter(new RouteAdapter(this, routes));
+		loadRoutes();
 		lv_route.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -60,10 +62,24 @@ public class RouteListActivity extends ControlActivity
 		});
 	}
 	
+	public void loadRoutes() {
+		getHandler().post(new Runnable() {
+			public void run() {
+				try {
+					lv_route.setAdapter(new RouteAdapter(RouteListActivity.this, routes));
+				} catch (Throwable t) {
+					UIDialog.showMessage(t, RouteListActivity.this);
+				}
+			}
+		});
+	}
+	
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) throws Exception {
-		Map route = (Map) parent.getItemAtPosition(position);
+		route = (Map) parent.getItemAtPosition(position);
 //		System.out.println("route -> "+route);
-		new DownloadBillingController(this, progressDialog, route).execute();
+		if (!"1".equals(route.get("downloaded").toString())) {
+			new DownloadBillingController(this, progressDialog, route).execute();
+		}
 	}
 	
 }

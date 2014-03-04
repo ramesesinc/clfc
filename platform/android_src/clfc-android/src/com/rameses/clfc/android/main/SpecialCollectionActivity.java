@@ -30,6 +30,11 @@ public class SpecialCollectionActivity extends ControlActivity
 {
 	private ProgressDialog progressDialog;
 	private LayoutInflater inflater;
+	private SQLTransaction txn;
+	private DBSpecialCollection specialCollection = new DBSpecialCollection();
+	private Map item;
+	private List<Map> list;
+	private ListView lv_specialcollection;
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -42,35 +47,13 @@ public class SpecialCollectionActivity extends ControlActivity
 		
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setCancelable(false);
+		lv_specialcollection = (ListView) findViewById(R.id.lv_specialcollection);
 	}
 	
 	@Override
 	protected void onStartProcess() {
 		super.onStartProcess();
 		loadRequests();
-	}
-	
-	public void loadRequests() {
-		SQLTransaction txn = new SQLTransaction("clfc.db");
-		try {
-			txn.beginTransaction();
-			loanRequestsImpl(txn);
-			txn.commit();
-		} catch (Throwable t) {
-			UIDialog.showMessage(t, SpecialCollectionActivity.this);
-		} finally {
-			txn.endTransaction();
-		}
-	}
-	
-	private void loanRequestsImpl(SQLTransaction txn) throws Exception {
-		DBSpecialCollection dbSc = new DBSpecialCollection();
-		dbSc.setDBContext(txn.getContext());
-		
-		List<Map> list = dbSc.getSpecialCollectionRequestsByCollectorid(SessionContext.getProfile().getUserId());
-		
-		ListView lv_specialcollection = (ListView) findViewById(R.id.lv_specialcollection);
-		lv_specialcollection.setAdapter(new SpecialCollectionAdapter(this, list));
 		lv_specialcollection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,40 +69,66 @@ public class SpecialCollectionActivity extends ControlActivity
 //				Executors.newSingleThreadExecutor().submit(new SpecialCollectionRunnable(scp));
 			}
 		});
-//		SQLiteDatabase db = getDbHelper().getReadableDatabase();
-//		Cursor result = getDbHelper().getSpecialCollections(db);
-//		db.close();
-//		ListView lv_specialcollection = (ListView) findViewById(R.id.lv_specialcollection);
-//
-//		ArrayList<SpecialCollectionParcelable> list = new ArrayList<SpecialCollectionParcelable>();
-//		if (result != null && result.getCount() > 0) {
-//			result.moveToFirst();
-//			SpecialCollectionParcelable scp = null;
-//			do {
-//				scp = new SpecialCollectionParcelable();
-//				scp.setObjid(result.getString(result.getColumnIndex("objid")));
-//				scp.setState(result.getString(result.getColumnIndex("state")));
-//				scp.setRemarks(result.getString(result.getColumnIndex("remarks")));
-//				list.add(scp);
-//			} while(result.moveToNext());
-//			result.close();
-//		}
-//		
-//		lv_specialcollection.setAdapter(new SpecialCollectionAdapter(context, list));
-//		lv_specialcollection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//				// TODO Auto-generated method stub
-//				SpecialCollectionParcelable scp = (SpecialCollectionParcelable) parent.getItemAtPosition(position);
-//				progressDialog.setMessage("Downloading collection sheet(s) requested.");
-//				if (!progressDialog.isShowing()) progressDialog.show();
-//				Executors.newSingleThreadExecutor().submit(new SpecialCollectionRunnable(scp));
-//			}
-//		});
+	}
+	
+	public void loadRequests() {
+		getHandler().post(new Runnable() {
+			public void run() {
+				txn = new SQLTransaction("clfc.db");
+				try {
+					txn.beginTransaction();
+					runImpl(txn);
+					txn.commit();
+				} catch (Throwable t) {
+					UIDialog.showMessage(t, SpecialCollectionActivity.this);
+				} finally {
+					txn.endTransaction();
+				}
+			}
+			
+			private void runImpl(SQLTransaction txn) throws Exception {
+				specialCollection.setDBContext(txn.getContext());
+				
+				list = specialCollection.getSpecialCollectionRequestsByCollectorid(SessionContext.getProfile().getUserId());
+				
+				lv_specialcollection.setAdapter(new SpecialCollectionAdapter(SpecialCollectionActivity.this, list));
+				
+//				SQLiteDatabase db = getDbHelper().getReadableDatabase();
+//				Cursor result = getDbHelper().getSpecialCollections(db);
+//				db.close();
+//				ListView lv_specialcollection = (ListView) findViewById(R.id.lv_specialcollection);
+		//
+//				ArrayList<SpecialCollectionParcelable> list = new ArrayList<SpecialCollectionParcelable>();
+//				if (result != null && result.getCount() > 0) {
+//					result.moveToFirst();
+//					SpecialCollectionParcelable scp = null;
+//					do {
+//						scp = new SpecialCollectionParcelable();
+//						scp.setObjid(result.getString(result.getColumnIndex("objid")));
+//						scp.setState(result.getString(result.getColumnIndex("state")));
+//						scp.setRemarks(result.getString(result.getColumnIndex("remarks")));
+//						list.add(scp);
+//					} while(result.moveToNext());
+//					result.close();
+//				}
+//				
+//				lv_specialcollection.setAdapter(new SpecialCollectionAdapter(context, list));
+//				lv_specialcollection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//					@Override
+//					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//						// TODO Auto-generated method stub
+//						SpecialCollectionParcelable scp = (SpecialCollectionParcelable) parent.getItemAtPosition(position);
+//						progressDialog.setMessage("Downloading collection sheet(s) requested.");
+//						if (!progressDialog.isShowing()) progressDialog.show();
+//						Executors.newSingleThreadExecutor().submit(new SpecialCollectionRunnable(scp));
+//					}
+//				});
+			}
+		});
 	}
 	
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) throws Exception {
-		Map item = (Map) parent.getItemAtPosition(position);
+		item = (Map) parent.getItemAtPosition(position);
 		if (!item.get("state").toString().equals("DOWNLOADED")) {
 			new DownloadSpecialCollectionController(this, progressDialog, item).execute();
 		}
@@ -215,7 +224,9 @@ public class SpecialCollectionActivity extends ControlActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch(menuItem.getItemId()) {
-			case R.id.specialcollection_new: showSpecialCollectionDialog();
+			case R.id.specialcollection_new: 
+					showSpecialCollectionDialog();
+					break;
 		}
 		return true;
 	}

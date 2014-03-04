@@ -51,10 +51,17 @@ public class RouteAdapter extends BaseAdapter
 		}
 		
 		MapProxy item = new MapProxy(list.get(position));
-		System.out.println("description -> "+item.getString("description")+" state -> "+item.getString("state"));
+//		System.out.println("description -> "+item.getString("description")+" state -> "+item.getString("state"));
 		if ("REMITTED".equals(item.getString("state"))) {
 			((TextView) overlay).setTextColor(activity.getResources().getColor(R.color.green));
 			((TextView) overlay).setText("REMITTED");
+			RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+			layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
+			overlay.setLayoutParams(layoutParams);
+			vw.setClickable(false);
+		} else if ("1".equals(item.getString("downloaded"))) {
+			((TextView) overlay).setTextColor(activity.getResources().getColor(R.color.red));
+			((TextView) overlay).setText("DOWNLOADED");
 			RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 			layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
 			overlay.setLayoutParams(layoutParams);

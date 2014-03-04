@@ -49,6 +49,7 @@ public class VoidRequestService
 	private Runnable runnableImpl = new Runnable()
 	{
 		public void run() {
+			txn = new SQLTransaction("clfcrequest.db");
 //			System.out.println("ApprovePendingVoidRequest");
 			try {
 				txn.beginTransaction();
@@ -61,7 +62,8 @@ public class VoidRequestService
 			} finally {
 				txn.endTransaction();
 			}
-			
+
+			requestdb = new DBContext("clfcrequest.db");
 			try {
 				voidService.setDBContext(requestdb);
 				hasPendingRequest = voidService.hasPendingVoidRequest();

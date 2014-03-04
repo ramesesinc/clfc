@@ -19,9 +19,9 @@ public class PaymentService
 {
 	private ApplicationImpl app;
 	private Handler handler;
-	private SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
-	private DBContext clfcdb = new DBContext("clfc.db");
-	private DBContext paymentdb2 = new DBContext("clfcpayment.db");
+	private SQLTransaction paymentdb;
+	private DBContext clfcdb;
+	private DBContext paymentdb2;
 	private DBPaymentService paymentSvc = new DBPaymentService();
 	private DBCollectionSheet collectionSheetSvc = new DBCollectionSheet();
 	private DBSystemService systemSvc = new DBSystemService();
@@ -63,6 +63,8 @@ public class PaymentService
 	
 	private Runnable runnableImpl = new Runnable() {
 		public void run() {
+			paymentdb = new SQLTransaction("clfcpayment.db");
+			clfcdb = new DBContext("clfc.db");
 //			System.out.println("PostPendingPayments");
 //			paymentdb = new SQLTransaction("clfcpayment.db");
 //			clfcdb = new DBContext("clfc.db"); 
@@ -82,7 +84,8 @@ public class PaymentService
 				paymentdb.endTransaction();
 				clfcdb.close();
 			}
-			
+
+			paymentdb2 = new DBContext("clfcpayment.db");
 			try {
 				paymentSvc.setDBContext(paymentdb2);
 				hasUnpostedPayments = paymentSvc.hasUnpostedPayments();

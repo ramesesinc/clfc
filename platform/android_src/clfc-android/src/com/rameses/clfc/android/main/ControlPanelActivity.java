@@ -25,11 +25,19 @@ import com.rameses.clfc.android.system.ChangePasswordActivity;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIDialog;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 public class ControlPanelActivity extends ControlActivity 
 {
 	private ProgressDialog progressDialog;
+	private ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+	private GridView gv_menu;
+	private String txndate;
+	private DBRouteService routeSvc = new DBRouteService();
+	private DBSystemService systemSvc = new DBSystemService();
+	private Map<String, Object> item;
+	private String itemId; 
 	
 	public boolean isCloseable() { return false; }	
 		
@@ -43,26 +51,26 @@ public class ControlPanelActivity extends ControlActivity
 		
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setCancelable(false);
+
+		gv_menu = (GridView) findViewById(R.id.gv_menu);	
 	} 
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
 		//System.out.println("serverDate -> " + Platform.getApplication().getServerDate().toString());
+		DBContext clfcdb = new DBContext("clfc.db");
+		routeSvc.setDBContext(clfcdb);
 		
-		SQLTransaction txn = new SQLTransaction("clfc.db");
-		DBRouteService dbRs = new DBRouteService();
-		dbRs.setDBContext(txn.getContext());
-		
-		String txndate = null;
+		txndate = null;
 		try {
-			if (dbRs.hasRoutesByCollectorid(SessionContext.getProfile().getUserId())) {
+			if (routeSvc.hasRoutesByCollectorid(SessionContext.getProfile().getUserId())) {
 				txndate = ApplicationUtil.formatDate(Platform.getApplication().getServerDate(), "MMM dd, yyyy");//new java.text.SimpleDateFormat("MMM dd, yyyy").format(Platform.getApplication().getServerDate());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list.clear();
 		list.add(ApplicationUtil.createMenuItem("download", "Download", null, R.drawable.download));
 		list.add(ApplicationUtil.createMenuItem("payment", "Payment(s)", txndate, R.drawable.payment));
 		list.add(ApplicationUtil.createMenuItem("posting", "Posting", null, R.drawable.posting));
@@ -70,8 +78,7 @@ public class ControlPanelActivity extends ControlActivity
 		list.add(ApplicationUtil.createMenuItem("remit", "Remit", null, R.drawable.remit));
 		list.add(ApplicationUtil.createMenuItem("changepassword", "Change Password", null, R.drawable.change_password));
 		list.add(ApplicationUtil.createMenuItem("logout", "Logout", null, R.drawable.logout));
-		
-		GridView gv_menu = (GridView) findViewById(R.id.gv_menu);		
+			
 		gv_menu.setAdapter(new MenuAdapter(this, list));
 		gv_menu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -96,8 +103,8 @@ public class ControlPanelActivity extends ControlActivity
 	}
 	
 	private void selectionChanged(AdapterView<?> parent, View view, int position, long id) throws Exception {
-		Map<String, Object> item = (Map<String, Object>) parent.getItemAtPosition(position);
-		String itemId = item.get("id").toString();
+		item = (Map<String, Object>) parent.getItemAtPosition(position);
+		itemId = item.get("id").toString();
 		if (itemId.equals("logout")) {
 			new LogoutController(this, progressDialog).execute(); 
 			
@@ -117,11 +124,10 @@ public class ControlPanelActivity extends ControlActivity
 			startActivity(intent);
 			
 		} else if (itemId.equals("request")) {
-			SQLTransaction txn = new SQLTransaction("clfc.db");
-			DBSystemService dbSys = new DBSystemService();
-			dbSys.setDBContext(txn.getContext());
+			DBContext clfcdb = new DBContext("clfc.db");
+			systemSvc.setDBContext(clfcdb);
 			
-			if (dbSys.hasBilling()) {
+			if (systemSvc.hasBilling()) {
 				Intent intent = new Intent(this, SpecialCollectionActivity.class);
 				startActivity(intent);
 			} else {
@@ -132,23 +138,5 @@ public class ControlPanelActivity extends ControlActivity
 			startActivity(intent);
 			
 		} 	
-	} 
-	
-	protected void onDestroyProcess() {
-//		if (getApp().getIsWaiterRunning()) {
-//			getApp().stopWaiter();
-//		}
-	}
-	
-	private Handler routesHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-//			Bundle bundle = msg.getData();
-//			Intent intent = new Intent(context, Route.class);
-//			intent.putExtra("bundle", bundle);
-//			intent.putExtra("networkStatus", getApp().getNetworkStatus());
-//			if (progressDialog.isShowing()) progressDialog.dismiss();
-//			startActivity(intent);
-		}
-	};	
+	} 	
 }

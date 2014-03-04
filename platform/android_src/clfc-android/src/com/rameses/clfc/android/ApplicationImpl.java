@@ -3,10 +3,10 @@ package com.rameses.clfc.android;
 import java.io.File;
 import java.util.Properties;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.os.Handler;
 
-import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.client.android.AbstractActivity;
 import com.rameses.client.android.AppSettings;
 import com.rameses.client.android.Logger;
@@ -52,16 +52,22 @@ public class ApplicationImpl extends UIApplication
 		try {
 //			System.out.println("passing 1");
 			maindb = new MainDB(this, "clfc.db", 1);
+			maindb.load();
 //			System.out.println("passing 2");
 			trackerdb = new TrackerDB(this, "clfctracker.db", 1);
+			trackerdb.load();
 //			System.out.println("passing 3");
 			paymentdb = new PaymentDB(this, "clfcpayment.db", 1);
+			paymentdb.load();
 //			System.out.println("passing 4");
 			requestdb = new VoidRequestDB(this, "clfcrequest.db", 1);
+			requestdb.load();
 //			System.out.println("passing 5");
 			remarksdb = new RemarksDB(this, "clfcremarks.db", 1);
+			remarksdb.load();
 //			System.out.println("passing 6");
 			remarksremoveddb = new RemarksRemovedDB(this, "clfcremarksremoved.db", 1);
+			remarksremoveddb.load();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

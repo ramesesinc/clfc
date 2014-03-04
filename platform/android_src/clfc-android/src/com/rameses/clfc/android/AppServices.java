@@ -4,7 +4,7 @@ class AppServices implements Runnable
 {
 	private ApplicationImpl app;
 	private NetworkCheckerService networkChecker;
-	private LocationTrackerService locationTracker;
+	private LocationTrackerService locationTracker;  
 	
 	AppServices(ApplicationImpl app) {
 		networkChecker = new NetworkCheckerService(app);

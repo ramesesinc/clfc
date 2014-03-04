@@ -12,6 +12,7 @@ public class RemarksDB extends AbstractDB
 	}
 
 	protected void onCreateProcess(SQLiteDatabase sqldb) { 
+		System.out.println("clfcremarksdb oncreateprocess");
 		try { 
 			loadDBResource(sqldb, "clfcremarksdb_create");
 			System.out.println("clfcremarksdb created");
@@ -23,6 +24,7 @@ public class RemarksDB extends AbstractDB
 	}
 
 	protected void onUpgradeProcess(SQLiteDatabase sqldb, int arg1, int arg2) {
+		System.out.println("clfcremarksdb onUpgradeProcess");
 		try { 
 			loadDBResource(sqldb, "clfcremarksdb_upgrade");
 			onCreate(sqldb); 
