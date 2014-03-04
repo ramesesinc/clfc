@@ -55,7 +55,7 @@ class DesktopBasicUserService
 
 		//initiate lock
 		def newlockid = 'LOCK'+new java.rmi.server.UID();
-		em.sqlContext.createNamedExecutor('sysuser:updateLock').setParameters([
+		em.sqlContext.createNamedExecutor('sysuser:lock').setParameters([
 			username: 	params.username, 
 			lockid: newlockid 
 		]).execute(); 
@@ -81,7 +81,7 @@ class DesktopBasicUserService
 		info.pwdlogincount = 0;
 		info.pwd = params.newpassword; 
 		info.usedpwds = pwds.join(','); 
-		em.update('sysuser:changePassword', info); 
+		em.update('sysuser:password', info); 
 	} 	
 
 	@ProxyMethod
@@ -91,16 +91,16 @@ class DesktopBasicUserService
 		if (!params.userid) throw new Exception('Please specify userid');
 		if (!params.password) throw new Exception('Please specify password');
 
-		def info = em.read('sysuser:changePassword', [objid: params.userid]); 
+		def info = em.read('sysuser:password', [objid: params.userid]); 
 		if (!info) throw new Exception("'"+params.userid+"' user record does not exist"); 
 
 		//initiate lock
 		def newlockid = 'LOCK'+new java.rmi.server.UID();
-		em.update('sysuser:updateLock', [objid: params.userid, lockid: newlockid]);
+		em.update('sysuser:lock', [objid: params.userid, lockid: newlockid]);
 
 		info.pwd = params.password;
 		info.pwdexpirydate = null;
-		em.update('sysuser:changePassword', info); 
+		em.update('sysuser:password', info); 
 	} 
 
  	@ProxyMethod 
