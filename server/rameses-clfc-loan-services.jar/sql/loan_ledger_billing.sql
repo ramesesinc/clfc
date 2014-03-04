@@ -14,7 +14,8 @@ WHERE createdby LIKE $P{searchtext}
 ORDER BY billdate
 
 [getRoutesByBillingid]
-SELECT lr.* FROM loan_ledger_billing_route llbr
+SELECT lr.*, llbr.downloaded 
+FROM loan_ledger_billing_route llbr
 INNER JOIN loan_route lr ON llbr.routecode=lr.code
 WHERE llbr.billingid=$P{billingid}
 

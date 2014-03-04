@@ -39,7 +39,7 @@ class LoanFieldCollectionService
 
 		def entity = collection.findFieldCollection(params);
 		if (entity) {
-			entity.routes = collection.getForPostingRoutesByFieldcollectionid([fielcollectionid: entity.objid]);
+			entity.routes = collection.getForPostingRoutesByFieldcollectionid([fieldcollectionid: entity.objid]);
 			entity.cashbreakdown = getCashBreakdown(entity);
 		}
 

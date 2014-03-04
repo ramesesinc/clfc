@@ -10,8 +10,10 @@ FROM field_collection_route fcr
 INNER JOIN loan_route lr ON fcr.routecode=lr.code
 INNER JOIN field_collection_loan fcl ON fcr.routecode=fcl.routecode
 INNER JOIN field_collection_payment fcp ON fcl.objid=fcp.parentid
-WHERE fcr.fieldcollectionid=$P{fielcollectionid}
-	AND fcl.parentid=$P{fielcollectionid}
+LEFT JOIN void_payment vp ON fcp.objid=vp.paymentid
+WHERE fcr.fieldcollectionid=$P{fieldcollectionid}
+	AND fcl.parentid=$P{fieldcollectionid}
+	AND vp.objid IS NULL
 GROUP BY lr.code
 
 [getCashBreakdownByFieldcollectionid]
