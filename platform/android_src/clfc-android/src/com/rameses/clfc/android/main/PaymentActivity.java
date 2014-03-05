@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.rameses.clfc.android.ApplicationImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
+import com.rameses.clfc.android.MainDB;
+import com.rameses.clfc.android.PaymentDB;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.client.android.NetworkLocationProvider;
@@ -29,6 +31,7 @@ import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIAction;
 import com.rameses.client.android.UIDialog;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 public class PaymentActivity extends ControlActivity 
@@ -42,6 +45,7 @@ public class PaymentActivity extends ControlActivity
 	private String borrowername = "";
 	private String appno = "";
 	private String sessionid = "";
+	private String cstype = "";
 	private EditText et_amount;
 	private EditText et_overpayment;
 	private String routecode = "";
@@ -59,7 +63,7 @@ public class PaymentActivity extends ControlActivity
 	private String txndate;
 	
 	private LayoutInflater inflater;
-	private SQLTransaction clfcdb;
+	private DBContext clfcdb;
 	private SQLTransaction paymentdb;
 	private DBSystemService systemSvc = new DBSystemService();
 	private Location location;
@@ -86,6 +90,7 @@ public class PaymentActivity extends ControlActivity
 		borrowerid = intent.getStringExtra("borrowerid");
 		borrowername = intent.getStringExtra("borrowername");
 		sessionid = intent.getStringExtra("sessionid");
+		cstype = intent.getStringExtra("cstype");
 		routecode = intent.getStringExtra("routecode");
 		type = intent.getStringExtra("paymenttype");
 		isfirstbill = intent.getIntExtra("isfirstbill", 0);
@@ -188,29 +193,37 @@ public class PaymentActivity extends ControlActivity
 	private void onApproveImpl() {
 		getHandler().post(new Runnable() {
 			public void run() {
-				System.out.println("onApproveImpl");
-				clfcdb = new SQLTransaction("clfc.db");
-				paymentdb = new SQLTransaction("clfcpayment.db");
-				try { 
-					clfcdb.beginTransaction();
-					paymentdb.beginTransaction();
-					runImpl(clfcdb, paymentdb);
-					clfcdb.commit();
-					paymentdb.commit();
-					app.paymentSvc.start();
-					finish();
-				} catch (Throwable t) {
-					t.printStackTrace();
-					Platform.getLogger().log(t);
-					UIDialog.showMessage(t, PaymentActivity.this); 
-				} finally {
-					clfcdb.endTransaction();
-					paymentdb.endTransaction();
+				String trackerid = null;
+				synchronized (MainDB.LOCK) {
+					clfcdb = new DBContext("clfc.db");
+					systemSvc.setDBContext(clfcdb);
+					
+					try {
+						trackerid = systemSvc.getTrackerid();
+					} catch (Throwable t) {
+						t.printStackTrace();
+						UIDialog.showMessage(t, PaymentActivity.this); 
+					}
+				}
+				
+				synchronized (PaymentDB.LOCK) {
+					paymentdb = new SQLTransaction("clfcpayment.db");
+					try {
+						paymentdb.beginTransaction();
+						execPayment(paymentdb, trackerid);
+						paymentdb.commit();
+						app.paymentSvc.start();
+						finish();
+					} catch (Throwable t) {
+						t.printStackTrace();
+						UIDialog.showMessage(t, PaymentActivity.this); 
+					} finally {
+						paymentdb.endTransaction();
+					}
 				}
 			}
 			
-			private void runImpl(SQLTransaction clfcdb, SQLTransaction paymentdb) throws Exception {
-				systemSvc.setDBContext(clfcdb.getContext());
+			private void execPayment(SQLTransaction paymentdb, String trackerid) throws Exception {
 				
 				location = NetworkLocationProvider.getLocation();				
 				params = new HashMap();
@@ -222,24 +235,24 @@ public class PaymentActivity extends ControlActivity
 				params.put("paymentamount", Double.parseDouble(et_amount.getText().toString()));
 				params.put("paidby", getValueAsString(R.id.et_payment_paidby));
 				params.put("loanappid", loanappid);
-//				params.put("appno", appno);
+				params.put("appno", appno);
 				params.put("detailid", detailid);
 				params.put("routecode", routecode);
 				params.put("isfirstbill", isfirstbill);
 				params.put("longitude", location.getLongitude());
 				params.put("latitude", location.getLatitude());
-				params.put("trackerid", systemSvc.getTrackerid());
+				params.put("trackerid", trackerid);
 				params.put("collectorid", SessionContext.getProfile().getUserId());
 				params.put("collectorname", SessionContext.getProfile().getFullName());
-//				params.put("borrowerid", borrowerid);
-//				params.put("borrowername", borrowername);
-//				params.put("sessionid", sessionid);
+				params.put("borrowerid", borrowerid);
+				params.put("borrowername", borrowername);
+				params.put("sessionid", sessionid);
 				
-				System.out.println("params-> "+params);
+//				System.out.println("params-> "+params);
 				paymentdb.insert("payment", params);
-				System.out.println("done insert");
-//				app.paymentSvc.start();
+//				System.out.println("done insert");
 			}
+			
 		});
 	}	
 }

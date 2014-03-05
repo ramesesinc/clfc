@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
+import com.rameses.clfc.android.MainDB;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBSpecialCollection;
 import com.rameses.client.android.SessionContext;
@@ -74,15 +75,17 @@ public class SpecialCollectionActivity extends ControlActivity
 	public void loadRequests() {
 		getHandler().post(new Runnable() {
 			public void run() {
-				txn = new SQLTransaction("clfc.db");
-				try {
-					txn.beginTransaction();
-					runImpl(txn);
-					txn.commit();
-				} catch (Throwable t) {
-					UIDialog.showMessage(t, SpecialCollectionActivity.this);
-				} finally {
-					txn.endTransaction();
+				synchronized (MainDB.LOCK) {
+					txn = new SQLTransaction("clfc.db");
+					try {
+						txn.beginTransaction();
+						runImpl(txn);
+						txn.commit();
+					} catch (Throwable t) {
+						UIDialog.showMessage(t, SpecialCollectionActivity.this);
+					} finally {
+						txn.endTransaction();
+					}
 				}
 			}
 			

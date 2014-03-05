@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,12 @@ import android.widget.TextView;
 
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
+import com.rameses.clfc.android.MainDB;
+import com.rameses.clfc.android.PaymentDB;
 import com.rameses.clfc.android.R;
+import com.rameses.clfc.android.RemarksDB;
+import com.rameses.clfc.android.RemarksRemovedDB;
+import com.rameses.clfc.android.VoidRequestDB;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.clfc.android.db.DBRemarksService;
@@ -41,6 +47,7 @@ import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIDialog;
 import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
+import com.rameses.util.MapProxy;
 
 public class CollectionSheetInfoActivity extends ControlActivity 
 {
@@ -50,6 +57,7 @@ public class CollectionSheetInfoActivity extends ControlActivity
 	private String acctid = "";
 	private String acctname = "";
 	private String sessionid = "";
+	private String cstype = "";
 	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
 	private BigDecimal dailydue = new BigDecimal("0").setScale(2);
 	private String routecode = "";
@@ -68,10 +76,6 @@ public class CollectionSheetInfoActivity extends ControlActivity
 	private ProgressDialog progressDialog;
 	private RelativeLayout rl_container;
 	
-	private DBContext clfcdb;
-	private DBContext paymentdb;
-	private DBContext remarksdb;
-	private DBContext requestdb;
 	private DBCollectionSheet dbCollectionSheet = new DBCollectionSheet();	
 	private DBPaymentService paymentSvc = new DBPaymentService();
 	private DBVoidService voidSvc = new DBVoidService();
@@ -148,22 +152,24 @@ public class CollectionSheetInfoActivity extends ControlActivity
 	private void onStartPocessImpl() {
 		getHandler().post(new Runnable() {
 			public void run() {
-				clfcdb = new DBContext("clfc.db");
-				try {
-					runImpl(clfcdb);
-				} catch (Throwable t) {
-					t.printStackTrace();
-					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-				} finally {
-					clfcdb.close();
-				}				
+				synchronized (MainDB.LOCK) {
+					DBContext clfcdb = new DBContext("clfc.db");
+					try {
+						runImpl(clfcdb);
+					} catch (Throwable t) {
+						t.printStackTrace();
+						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+					} finally {
+						clfcdb.close();
+					}
+				}		
 			}
 			
 			private void runImpl(DBContext clfcdb) throws Exception {
 				dbCollectionSheet.setDBContext(clfcdb);
 				
-				System.out.println("loanappid-> "+loanappid);
-				System.out.println("clfcdb -> "+clfcdb);
+//				System.out.println("loanappid-> "+loanappid);
+//				System.out.println("clfcdb -> "+clfcdb);
 				collectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(loanappid);	
 				
 				if (collectionSheet != null || !collectionSheet.isEmpty()) {
@@ -171,6 +177,7 @@ public class CollectionSheetInfoActivity extends ControlActivity
 					sessionid = collectionSheet.get("sessionid").toString();
 					acctname = collectionSheet.get("acctname").toString();
 					appno = collectionSheet.get("appno").toString();
+					cstype = collectionSheet.get("type").toString();
 					amountdue = new BigDecimal(collectionSheet.get("amountdue").toString());
 					loanamount = new BigDecimal(collectionSheet.get("loanamount").toString());
 					balance = new BigDecimal(collectionSheet.get("balance").toString());
@@ -211,88 +218,105 @@ public class CollectionSheetInfoActivity extends ControlActivity
 		
 		getHandler().post(new Runnable() {
 			public void run() {
-				paymentdb = new DBContext("clfcpayment.db");
-				requestdb = new DBContext("clfcrequest.db");
-				try {
-					runImpl(paymentdb, requestdb);
-				} catch (Throwable t) {
-					t.printStackTrace();
-					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-				} finally {
-					paymentdb.close();
-					requestdb.close();
-				}	
-			}
-			
-			private void runImpl(DBContext paymentdb, DBContext requestdb) throws Exception {
-				paymentSvc.setDBContext(paymentdb);
-				
-				payments = paymentSvc.getPaymentsByLoanappid(loanappid);
+				payments = new ArrayList<Map>();
+				synchronized (PaymentDB.LOCK) {
+					DBContext paymentdb = new DBContext("clfcpayment.db");
+					try {
+						payments = paymentSvc.getPaymentsByLoanappid(loanappid);
+					} catch (Throwable t) {
+						t.printStackTrace();
+						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+					} finally {
+						paymentdb.close();
+					}	
+				}
 
-				rl_payment.setVisibility(View.GONE);
-				if (payments != null && !payments.isEmpty()) {
-					rl_payment.setVisibility(View.VISIBLE);
-					ll_info_payments.removeAllViewsInLayout();
+				size = payments.size();
+				synchronized (VoidRequestDB.LOCK) { 
+					DBContext requestdb = new DBContext("clfcrequest.db");
 					voidSvc.setDBContext(requestdb);
-					size = payments.size();
-					for (int i=0; i<size; i++) {
-						child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
-						payment = (Map) payments.get(i);
-
-						((TextView) child.findViewById(R.id.tv_info_refno)).setText(payment.get("refno").toString());
-						((TextView) child.findViewById(R.id.tv_info_txndate)).setText(payment.get("txndate").toString());
-						((TextView) child.findViewById(R.id.tv_info_paidby)).setText(payment.get("paidby").toString());
-						
-						if (payment.get("paymenttype").toString().equals("schedule")) {
-							type = "Schedule/Advance";
-						} else if (payment.get("paymenttype").toString().equals("over")) {
-							type = "Overpayment";
-						}
-						((TextView) child.findViewById(R.id.tv_info_paymenttype)).setText(type);
-						
-						amount = new BigDecimal(payment.get("paymentamount").toString()).setScale(2);
-						((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(amount));
-						child.setTag(R.id.paymentid, payment.get("objid").toString());
-						voidRequest = voidSvc.findVoidRequestByPaymentid(payment.get("objid").toString());
-						if (voidRequest == null || voidRequest.isEmpty()) {
-							addPaymentProperties(child);
-						} else {
-							voidType = voidRequest.get("state").toString();
-							layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-							layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
-							overlay = inflater.inflate(R.layout.overlay_void_text, null);
-							if (voidType.equals("PENDING")) {
-								child.setOnClickListener(null);
-								child.setOnLongClickListener(null);
-								child.setClickable(false);
-								((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
-								((TextView) overlay).setText("VOID REQUEST PENDING");
-								overlay.setLayoutParams(layoutParams);
-								child.addView(overlay); 
-							} else if (voidType.equals("APPROVED")) {
-								((TextView) overlay).setTextColor(getResources().getColor(R.color.green));
-								((TextView) overlay).setText("VOID APPROVED");
-								overlay.setLayoutParams(layoutParams);
-								((RelativeLayout) child).addView(overlay);
-								//addApprovedVoidPaymentProperies(child);
+					voidSvc.setCloseable(false);
+					try {
+						for (int i=0; i<size; i++) {
+							payment = (Map) payments.get(i);
+							payment.put("hasrequest", false);
+							
+							voidRequest = voidSvc.findVoidRequestByPaymentid(MapProxy.getString(payment, "objid"));
+							if (voidRequest != null || !voidRequest.isEmpty()) {
+								payment.put("hasrequest", true);
+								payment.put("requeststate", MapProxy.getString(voidRequest, "state"));
 							}
 						}
-						ll_info_payments.addView(child);
+					} catch (Throwable t) {
+						t.printStackTrace();
+						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+					} finally {
+						requestdb.close();
+					}	
+				}
+				
+				boolean hasrequest = false;
+				for (int i=0; i<size; i++) {
+					child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
+					payment = (Map) payments.get(i);
+
+					((TextView) child.findViewById(R.id.tv_info_refno)).setText(payment.get("refno").toString());
+					((TextView) child.findViewById(R.id.tv_info_txndate)).setText(payment.get("txndate").toString());
+					((TextView) child.findViewById(R.id.tv_info_paidby)).setText(payment.get("paidby").toString());
+					
+					if (payment.get("paymenttype").toString().equals("schedule")) {
+						type = "Schedule/Advance";
+					} else if (payment.get("paymenttype").toString().equals("over")) {
+						type = "Overpayment";
 					}
+					((TextView) child.findViewById(R.id.tv_info_paymenttype)).setText(type);
+					
+					amount = new BigDecimal(payment.get("paymentamount").toString()).setScale(2);
+					((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(amount));
+					child.setTag(R.id.paymentid, payment.get("objid").toString());
+					
+					hasrequest = MapProxy.getBoolean(payment, "hasrequest");
+//					voidRequest = voidSvc.findVoidRequestByPaymentid(payment.get("objid").toString());
+					if (hasrequest == false) {
+						addPaymentProperties(child);
+					} else if (hasrequest == true) {
+						voidType = MapProxy.getString(payment, "requeststate");
+						layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+						layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
+						overlay = inflater.inflate(R.layout.overlay_void_text, null);
+						if (voidType.equals("PENDING")) {
+							child.setOnClickListener(null);
+							child.setOnLongClickListener(null);
+							child.setClickable(false);
+							((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
+							((TextView) overlay).setText("VOID REQUEST PENDING");
+							overlay.setLayoutParams(layoutParams);
+							child.addView(overlay); 
+						} else if (voidType.equals("APPROVED")) {
+							((TextView) overlay).setTextColor(getResources().getColor(R.color.green));
+							((TextView) overlay).setText("VOID APPROVED");
+							overlay.setLayoutParams(layoutParams);
+							((RelativeLayout) child).addView(overlay);
+							//addApprovedVoidPaymentProperies(child);
+						}
+					}
+					ll_info_payments.addView(child);
 				}
 			}
 		});
 		
 		getHandler().post(new Runnable() {
 			public void run() {
-				remarksdb = new DBContext("clfcremarks.db");
-				try {
-					runImpl(remarksdb);
-				} catch (Throwable t) {
-					t.printStackTrace();
-					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-				} finally {
-					remarksdb.close();
+				synchronized (RemarksDB.LOCK) {
+					DBContext remarksdb = new DBContext("clfcremarks.db");
+					try {
+						runImpl(remarksdb);
+					} catch (Throwable t) {
+						t.printStackTrace();
+						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+					} finally {
+						remarksdb.close();
+					}
 				}
 			}
 			
@@ -302,6 +326,7 @@ public class CollectionSheetInfoActivity extends ControlActivity
 				try {
 					remarks = remarksSvc.findRemarksByLoanappid(loanappid);
 				} catch (Exception e) {;}
+				
 				rl_remarks.setVisibility(View.GONE);
 				if (remarks != null && !remarks.isEmpty()) {
 					rl_remarks.setVisibility(View.VISIBLE);
@@ -320,44 +345,40 @@ public class CollectionSheetInfoActivity extends ControlActivity
 							 v.setBackgroundResource(android.R.drawable.list_selector_background);
 							 UIDialog dialog = new UIDialog() {
 								 public void onSelectItem(int index) {
-									 SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
-									 SQLTransaction remarkremoveddb = new SQLTransaction("clfcremarksremoved.db");
-									 try {
-										 remarksdb.beginTransaction();
-										 remarkremoveddb.beginTransaction();
-										 onSelectedItemImpl(remarksdb, remarkremoveddb, index);
-										 remarksdb.commit();
-										 remarkremoveddb.commit();
-									 } catch (Throwable t) {
-										 UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
-									 } finally {
-										 remarksdb.endTransaction();
-										 remarkremoveddb.endTransaction();
-									 }
-								 }
-								 
-								 private void onSelectedItemImpl(SQLTransaction remarksdb, SQLTransaction remarksremoveddb, int index) {
 									 switch(index) {
 									 	case 0:
 									 		showRemarksDialog("edit");
 									 		break;
 									 	case 1:
-									 		remarksdb.delete("remarks", "loanappid='"+loanappid+"'");
-									 		Map params = new HashMap();
-									 		params.put("loanappid", loanappid);
-									 		params.put("state", "PENDING");
-									 		remarksremoveddb.insert("remarks_removed", params);
-											remarks = null;
-											rl_remarks.setVisibility(View.GONE);
-											ApplicationUtil.showShortMsg("Successfully removed remarks.");
-											getHandler().post(new Runnable() {
-												public void run() {
-													getApp().remarksSvc.start();
-												}
-											});
+									 		removeRemarks();									 		
 									 		break;
 									 }
+//									 SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+//									 SQLTransaction remarkremoveddb = new SQLTransaction("clfcremarksremoved.db");
+//									 try {
+//										 remarksdb.beginTransaction();
+//										 remarkremoveddb.beginTransaction();
+//										 onSelectedItemImpl(remarksdb, remarkremoveddb, index);
+//										 remarksdb.commit();
+//										 remarkremoveddb.commit();
+//									 } catch (Throwable t) {
+//										 UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
+//									 } finally {
+//										 remarksdb.endTransaction();
+//										 remarkremoveddb.endTransaction();
+//									 }
 								 }
+								 
+//								 private void onSelectedItemImpl(SQLTransaction remarksdb, SQLTransaction remarksremoveddb, int index) {
+//									 switch(index) {
+//									 	case 0:
+//									 		showRemarksDialog("edit");
+//									 		break;
+//									 	case 1:
+//									 		removeRemarks();									 		
+//									 		break;
+//									 }
+//								 }
 							 };
 							 dialog.select(remarks_items);
 							 return false;
@@ -365,6 +386,50 @@ public class CollectionSheetInfoActivity extends ControlActivity
 					});
 				}
 				rl_notes.setVisibility(View.GONE);
+			}
+		});
+	}
+	
+	private void removeRemarks() {
+		synchronized (RemarksDB.LOCK) {
+			SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");			
+			try {
+				remarksdb.beginTransaction();
+				remarksdb.delete("remarks", "loanappid=?", new Object[]{loanappid});
+				remarksdb.commit();
+			} catch (Throwable t) {
+				 UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
+				
+			} finally {
+				remarksdb.endTransaction();
+			}
+		}
+		
+		synchronized (RemarksRemovedDB.LOCK) {
+			SQLTransaction remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
+			try {
+				remarksremoveddb.beginTransaction();
+
+		 		Map params = new HashMap();
+		 		params.put("loanappid", loanappid);
+		 		params.put("state", "PENDING");
+		 		params.put("detaillid", detailid);
+		 		remarksremoveddb.insert("remarks_removed", params);
+		 		
+				remarksremoveddb.commit();
+			} catch (Throwable t) {
+				 UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
+				
+			} finally {
+				remarksremoveddb.endTransaction();
+			}
+		}
+		remarks = null;
+		rl_remarks.setVisibility(View.GONE);
+		ApplicationUtil.showShortMsg("Successfully removed remarks.");
+		getHandler().post(new Runnable() {
+			public void run() {
+				getApp().remarksRemovedSvc.start();
 			}
 		});
 	}
@@ -536,6 +601,7 @@ public class CollectionSheetInfoActivity extends ControlActivity
 			intent.putExtra("borrowerid", acctid);
 			intent.putExtra("borrowername", acctname);
 			intent.putExtra("sessionid", sessionid);
+			intent.putExtra("cstype", cstype);
 			
 			if (paymentSvc.hasPaymentsByLoanappid(loanappid)) {
 				refno += (paymentSvc.noOfPaymentsByLoanappid(loanappid)+1);
@@ -575,71 +641,92 @@ public class CollectionSheetInfoActivity extends ControlActivity
 	 {
 		 private final Dialog dialog;
 		 private final String mode;
+		 private Location location;
+		 private Map params = new HashMap();
+		 private String mRemarks = null;
+		 
 		 public RemarksValidationListener(Dialog dialog, String mode) {
 			 this.dialog = dialog;
 			 this.mode = mode;
 		 }
-		 @Override
+
 		 public void onClick(View v) {
 			 // TODO Auto-generated method stub 
-			 	SQLTransaction clfcdb = new SQLTransaction("clfc.db");
-			 	SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
-			 	try {
-			 		clfcdb.beginTransaction();
-			 		remarksdb.beginTransaction();
-			 		onClickImpl(clfcdb, remarksdb, mode);
-			 		clfcdb.commit();
-			 		remarksdb.commit();
-			 	} catch (Throwable t) {
-					UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 			 		
-			 	} finally {
-			 		clfcdb.endTransaction();
-			 		remarksdb.endTransaction();
+			 	mRemarks = ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString();
+			 	if (mRemarks.trim().equals("")) {
+					 ApplicationUtil.showShortMsg("Remarks is required.");
+					 return;
 			 	}
-			 }
+			 	
+			 	String trackerid = null;
+			 	DBSystemService systemSvc = new DBSystemService();
+			 	synchronized (MainDB.LOCK) {
+				 	DBContext clfcdb = new DBContext("clfc.db");
+			 		systemSvc.setDBContext(clfcdb);
+			 		
+			 		try {
+			 			trackerid = systemSvc.getTrackerid();
+			 		} catch (Throwable t) {
+						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+						
+			 		}			 			
+			 	}
+			 	
+			 	synchronized (RemarksDB.LOCK) {
+			 		SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+			 		try {
+			 			remarksdb.beginTransaction();
+			 			execRemarks(remarksdb, mode, trackerid);
+			 			remarksdb.commit();
+			 			getHandler().post(new Runnable() {
+							public void run() {
+								getApp().remarksSvc.start();
+							}
+						});
+			 		} catch (Throwable t) {
+						UIDialog.showMessage(t, CollectionSheetInfoActivity.this);
+			 			
+			 		} finally {
+			 			remarksdb.endTransaction();
+			 		}
+			 	}
 		 }
 		 
-		 private void onClickImpl(SQLTransaction clfcdb, SQLTransaction remarksdb, String mode) throws Exception {
-			 String mRemarks = ((EditText) dialog.findViewById(R.id.remarks_text)).getText().toString();
-			 if (mRemarks.trim().equals("")) {
-				 ApplicationUtil.showShortMsg("Remarks is required.");
-			 } else {
-				DBSystemService dbSys = new DBSystemService();
-				dbSys.setDBContext(clfcdb.getContext());
+		private void execRemarks(SQLTransaction remarksdb, String mode, String trackerid) throws Exception {
+			location = NetworkLocationProvider.getLocation();
+					 
+			Map params = new HashMap();				 
+			params.put("loanappid", loanappid);
+			params.put("state", "PENDING");
+			params.put("remarks", mRemarks);
+			params.put("longitude", location.getLongitude());
+			params.put("latitude", location.getLatitude());
+			params.put("trackerid", trackerid);
+			params.put("detailid", detailid);
+			params.put("appno", appno);
+			params.put("borrowerid", acctid);
+			params.put("borrowername", acctname);
+			params.put("sessionid", sessionid);
+			params.put("routecode", routecode);
+			params.put("collectorid", SessionContext.getProfile().getUserId());
+			params.put("collectorname", SessionContext.getProfile().getFullName());
+			params.put("txndate", Platform.getApplication().getServerDate().toString());
+			    			 
+			if (mode.equals("create")) {
+				remarksdb.insert("remarks", params);
+				rl_remarks.setVisibility(View.VISIBLE);
+				ApplicationUtil.showShortMsg("Successfully added remark.");
+			} else if (!mode.equals("create")) {
+				remarksdb.update("remarks", "loanappid=?", new Object[]{loanappid});
+//				remarksdb.update("remarks", "loanappid='"+loanappid+"'", params);
+				ApplicationUtil.showShortMsg("Successfully updated remark.");
+			}
 				
-				Location location = NetworkLocationProvider.getLocation();
-				 
-				Map params = new HashMap();				 
-				params.put("loanappid", loanappid);
-				params.put("state", "PENDING");
-				params.put("remarks", mRemarks);
-				params.put("longitude", location.getLongitude());
-				params.put("latitude", location.getLatitude());
-				params.put("trackerid", dbSys.getTrackerid());
-				params.put("collectorid", SessionContext.getProfile().getUserId());
-				params.put("collectorname", SessionContext.getProfile().getFullName());
-				params.put("txndate", Platform.getApplication().getServerDate().toString());
-				 
-				if (mode.equals("create")) {
-					remarksdb.insert("remarks", params);
-					rl_remarks.setVisibility(View.VISIBLE);
-					ApplicationUtil.showShortMsg("Successfully added remark.");
-				} else if (!mode.equals("create")) {
-					remarksdb.update("remarks", "loanappid='"+loanappid+"'", params);
-					ApplicationUtil.showShortMsg("Successfully updated remark.");
-				}
-				
-				DBRemarksService remarksSvc = new DBRemarksService();
-				remarksSvc.setDBContext(remarksdb.getContext());
-				remarks = remarksSvc.findRemarksByLoanappid(loanappid);
-				((TextView) findViewById(R.id.tv_info_remarks)).setText(mRemarks);
-				dialog.dismiss();
-				
-				getHandler().post(new Runnable() {
-					public void run() {
-						getApp().remarksSvc.start();
-					}
-				});
+			DBRemarksService remarksSvc = new DBRemarksService();
+			remarksSvc.setDBContext(remarksdb.getContext());
+			remarks = remarksSvc.findRemarksByLoanappid(loanappid);
+			((TextView) findViewById(R.id.tv_info_remarks)).setText(mRemarks);
+			dialog.dismiss();
 		 }
 	 }
 }

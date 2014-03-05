@@ -8,6 +8,12 @@
 			longitude text,  
 			latitude text,  
 			trackerid text,  
+			detailid text,
+			appno text,
+			borrowerid text,
+			borrowername text,
+			sessionid text,
+			routecode text,
 			collectorid text,  
 			collectorname text,
 			txndate text  

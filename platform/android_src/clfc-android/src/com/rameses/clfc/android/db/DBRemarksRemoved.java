@@ -9,20 +9,21 @@ public class DBRemarksRemoved extends AbstractDBMapper
 {
 	public String getTableName() { return "remarks_removed"; }
 	
-	public List<Map> getPendingRemarksRemoved() throws Exception {
+	public List<Map> getPendingRemarksRemoved(int limit) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-//			String sql = " SELECT rr.*, cs.detailid " +
-//						 " FROM "+getTableName()+" rr " +
-//						 "    INNER JOIN collectionsheet cs ON rr.loanappid=cs.loanappid " +
-//						 " WHERE rr.state='PENDING'";
-			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING'";
+			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING' ";
+			if (limit > 0) sql += "LIMIT "+limit;
 			return ctx.getList(sql, new Object[]{});
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			if (isCloseable()) ctx.close();
 		}
+	}
+	
+	public List<Map> getPendingRemarksRemoved() throws Exception {
+		return getPendingRemarksRemoved(0);
 	}
 	
 	public boolean hasPendingRemarksRemoved() throws Exception {

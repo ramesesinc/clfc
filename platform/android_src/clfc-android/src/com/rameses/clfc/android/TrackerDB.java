@@ -7,6 +7,7 @@ import com.rameses.db.android.AbstractDB;
 
 public class TrackerDB extends AbstractDB
 {	
+	public final static Object LOCK = new Object();
 	public TrackerDB(Context ctx, String dbname, int dbversion) {
 		super(ctx, dbname, dbversion); 
 		System.out.println("instantiate TrackerDB");

@@ -21,7 +21,6 @@ public class BroadcastLocationService
 	private DBContext clfcdb;
 	private DBContext trackerdb2 = new DBContext("clfctracker.db");
 	private DBLocationTracker locationTracker = new DBLocationTracker();
-	private DBSystemService systemSvc = new DBSystemService();
 	private String trackerid;
 	private Map map;
 	private Map params = new HashMap();
@@ -52,26 +51,22 @@ public class BroadcastLocationService
 	{
 		public void run() {
 //			System.out.println("PostLocationTracker");
-			trackerdb = new SQLTransaction("clfctracker.db");
-			clfcdb = new DBContext("clfc.db");
-			try {
-				trackerdb.beginTransaction();
-//				clfcdb.beginTransaction();
-				runImpl(trackerdb, clfcdb);
-				trackerdb.commit();
-//				clfcdb.commit();
-			} catch (Throwable t) {
-				t.printStackTrace();
-				System.out.println("[BroadcastLocation.RunnableImpl] error caused by " + t.getClass().getName() + ": " + t.getMessage());
-			} finally {
-				trackerdb.endTransaction();
-				clfcdb.close();
+			synchronized (TrackerDB.LOCK) {
+				trackerdb = new SQLTransaction("clfctracker.db");
+				try {
+					trackerdb.beginTransaction();
+					execTracker(trackerdb);
+					
+					locationTracker.setDBContext(trackerdb.getContext());
+					hasLocationTrackers = locationTracker.hasLocationTrackers();
+					
+					trackerdb.commit();
+				} catch (Throwable t) {
+					t.printStackTrace();
+				} finally { 
+					trackerdb.endTransaction();
+				}
 			}
-			
-			try {
-				locationTracker.setDBContext(trackerdb2);
-				hasLocationTrackers = locationTracker.hasLocationTrackers();
-			} catch (Exception e) {;}
 			
 			if (hasLocationTrackers) {
 				Platform.getTaskManager().schedule(runnableImpl, 5000);
@@ -80,22 +75,18 @@ public class BroadcastLocationService
 			}
 		}
 		
-		private void runImpl(SQLTransaction trackerdb, DBContext clfcdb) throws Exception {
+		private void execTracker(SQLTransaction trackerdb) throws Exception {
 			locationTracker.setDBContext(trackerdb.getContext());
 			
-			list = locationTracker.getLocationTrackers();
+			list = locationTracker.getLocationTrackers(5);
 			if (!list.isEmpty()) {
-				systemSvc.setDBContext(clfcdb);
-				systemSvc.setCloseable(false);
-				
-				trackerid = systemSvc.getTrackerid();
 				listSize = list.size();
 				for (int i=0; i<listSize; i++) {
 					map = (Map) list.get(i);
 					
 					params.clear();
 					params.put("objid", map.get("objid").toString());
-					params.put("trackerid", trackerid);
+					params.put("trackerid", map.get("trackeridb").toString());
 					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
 					params.put("latitude", Double.parseDouble(map.get("latitude").toString()));
 					params.put("state", 1);

@@ -1,5 +1,6 @@
 package com.rameses.clfc.android.db;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,16 +22,21 @@ public class DBCollectionSheet extends AbstractDBMapper
 		}
 	}
 	
-	public List<Map> getCollectionSheetsByRoutecodeAndSearchtext(Map params) throws Exception {
+	public List<Map> getCollectionSheetsByRoutecodeAndSearchtext(Map params, int limit) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = "SELECT * FROM collectionsheet WHERE acctname LIKE $P{searchtext} AND routecode=$P{routecode}";
+			String sql = "SELECT * FROM collectionsheet WHERE acctname LIKE $P{searchtext} AND routecode=$P{routecode} ";
+			if (limit > 0) sql += "LIMIT "+limit;
 			return ctx.getList(sql, params);
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			if (isCloseable()) ctx.close();
 		}
+	}
+	
+	public List<Map> getCollectionSheetsByRoutecodeAndSearchtext(Map params) throws Exception {
+		return getCollectionSheetsByRoutecodeAndSearchtext(params, 0);
 	}
 	
 	public List<Map> getCollectionSheetsByRoutecode(String routecode) throws Exception {
@@ -61,10 +67,10 @@ public class DBCollectionSheet extends AbstractDBMapper
 	
 	public Map findCollectionSheetByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();
-		System.out.println("DBContext -> "+ctx);
+//		System.out.println("DBContext -> "+ctx);
 		try {
 			String sql = "SELECT * FROM "+getTableName()+ " WHERE loanappid=?";
-			System.out.println("loanappid -> "+loanappid);
+//			System.out.println("loanappid -> "+loanappid);
 			return ctx.find(sql, new Object[]{loanappid});
 		} catch (Exception e) {
 			throw e;
@@ -73,18 +79,26 @@ public class DBCollectionSheet extends AbstractDBMapper
 		}
 	}
 	
-	public List<Map> getCollectionSheetsByCollectorid(String collectorid) throws Exception {
+	public List<Map> getCollectionSheetsByCollectorid(String collectorid, String searchtext) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
 			String sql = " SELECT cs.* FROM "+getTableName()+" cs " +
 						 " INNER JOIN route r ON cs.routecode=r.routecode " +
-						 " WHERE r.collectorid=?";
-			return ctx.getList(sql, new Object[]{collectorid});
+						 " WHERE cs.acctname LIKE $P{searchtext}" +
+						 " 		AND r.collectorid=$P{collectorid}";
+			Map params = new HashMap();
+			params.put("collectorid", collectorid);
+			params.put("searchtext", searchtext);
+			return ctx.getList(sql, params);
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			if (isCloseable()) ctx.close();
 		}
+	}
+	
+	public List<Map> getCollectionSheetsByCollectorid(String collectorid) throws Exception {
+		return getCollectionSheetsByCollectorid(collectorid, "%");
 	}
 	
 //	public List<Map> getPostedCollectionSheets(Map params) throws Exception {

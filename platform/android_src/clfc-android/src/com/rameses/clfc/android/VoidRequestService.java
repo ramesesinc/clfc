@@ -9,7 +9,6 @@ import android.os.Handler;
 import com.rameses.clfc.android.db.DBVoidService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
-import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -17,8 +16,7 @@ public class VoidRequestService
 {
 	private ApplicationImpl app;
 	private Handler handler;
-	private SQLTransaction txn = new SQLTransaction("clfcrequest.db");
-	private DBContext requestdb = new DBContext("clfcrequest.db");
+	private SQLTransaction requestdb = new SQLTransaction("clfcrequest.db");
 	private DBVoidService voidService = new DBVoidService();
 	private LoanPostingService svc = new LoanPostingService();
 	private Map map;
@@ -49,25 +47,26 @@ public class VoidRequestService
 	private Runnable runnableImpl = new Runnable()
 	{
 		public void run() {
-			txn = new SQLTransaction("clfcrequest.db");
-//			System.out.println("ApprovePendingVoidRequest");
-			try {
-				txn.beginTransaction();
-				runImpl(txn);
-				txn.commit();
-//				SQLTransaction txn = new SQLTransaction("clfc.db");
-//				txn.execute(this);
-			} catch (Throwable t) {
-				System.out.println("[ApprovePendingVoidRequest] error caused by " + t.getClass().getName() + ": " + t.getMessage()); 
-			} finally {
-				txn.endTransaction();
+			synchronized (VoidRequestDB.LOCK) {
+				requestdb = new SQLTransaction("clfcrequest.db");
+//				System.out.println("ApprovePendingVoidRequest");
+				try {
+					requestdb.beginTransaction();
+					runImpl(requestdb);
+					
+					voidService.setDBContext(requestdb.getContext());
+					hasPendingRequest = voidService.hasPendingVoidRequest();
+					
+					requestdb.commit();
+//					SQLTransaction txn = new SQLTransaction("clfc.db");
+//					txn.execute(this);
+				} catch (Throwable t) {
+					System.out.println("[ApprovePendingVoidRequest] error caused by " + t.getClass().getName() + ": " + t.getMessage()); 
+				} finally {
+					requestdb.endTransaction();
+				}
+				
 			}
-
-			requestdb = new DBContext("clfcrequest.db");
-			try {
-				voidService.setDBContext(requestdb);
-				hasPendingRequest = voidService.hasPendingVoidRequest();
-			} catch (Exception e) {;}
 			
 			if (hasPendingRequest == true) {
 				Platform.getTaskManager().schedule(runnableImpl, 2000);
@@ -76,10 +75,10 @@ public class VoidRequestService
 			}
 		}
 		
-		private void runImpl(SQLTransaction txn) throws Exception {
-			voidService.setDBContext(txn.getContext());
+		private void runImpl(SQLTransaction requestdb) throws Exception {
+			voidService.setDBContext(requestdb.getContext());
 			
-			list = voidService.getPendingVoidRequests();
+			list = voidService.getPendingVoidRequests(5);
 			if (!list.isEmpty()) {
 				size = list.size();
 				for (int i=0; i<size; i++) {

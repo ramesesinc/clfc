@@ -19,25 +19,22 @@
         android:paddingTop="10dp" >
 
         <TextView
-            android:id="@+id/tv_specialcollection_remarks"
+            android:id="@+id/tv_item_collectionsheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/iv_specialcollection_approved"
-            android:padding="2dp"
+            android:layout_toLeftOf="@+id/iv_item_collectionsheet"
             android:text="@string/txt_empty"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ImageView
-            android:id="@+id/iv_specialcollection_approved"
+            android:id="@+id/iv_item_collectionsheet"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
-            android:contentDescription="@string/img_check_ico"
-            android:scaleType="centerInside"
             android:src="@drawable/btn_check_on" />
 
     </RelativeLayout>

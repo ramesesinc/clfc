@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
+import com.rameses.clfc.android.MainDB;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBRouteService;
 import com.rameses.client.android.Platform;
@@ -59,13 +60,15 @@ public class CollectionRouteListActivity extends ControlActivity
 		
 		getHandler().post(new Runnable() {
 			public void run() {
-				clfcdb = new DBContext("clfc.db"); 
-				try {
-					runImpl(clfcdb);
-//					onStartImpl();
-				} catch(Throwable e) {
-					Platform.getLogger().log(e);
-					System.out.println("[CollectionRouteListActivity] error caused by "+e.getClass().getName() + ": " + e.getMessage()); 
+				synchronized (MainDB.LOCK) {
+					clfcdb = new DBContext("clfc.db"); 
+					try {
+						runImpl(clfcdb);
+//						onStartImpl();
+					} catch(Throwable e) {
+						Platform.getLogger().log(e);
+						System.out.println("[CollectionRouteListActivity] error caused by "+e.getClass().getName() + ": " + e.getMessage()); 
+					}
 				}
 			}
 			

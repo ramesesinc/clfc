@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.rameses.clfc.android.ControlActivity;
+import com.rameses.clfc.android.MainDB;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.db.DBRouteService;
 import com.rameses.client.android.SessionContext;
@@ -81,16 +82,18 @@ public class RemitRouteCollectionActivity extends ControlActivity
 	public void loadRoutes() {
 		getHandler().post(new Runnable() {
 			public void run() {
-				txn = new SQLTransaction("clfc.db");
-				try {
-					txn.beginTransaction();
-					runImpl(txn);
-					txn.commit();
-				} catch (Throwable t) {
-					t.printStackTrace();
-					UIDialog.showMessage(t, RemitRouteCollectionActivity.this);
-				} finally {
-					txn.endTransaction();
+				synchronized (MainDB.LOCK) {
+					txn = new SQLTransaction("clfc.db");
+					try {
+						txn.beginTransaction();
+						runImpl(txn);
+						txn.commit();
+					} catch (Throwable t) {
+						t.printStackTrace();
+						UIDialog.showMessage(t, RemitRouteCollectionActivity.this);
+					} finally {
+						txn.endTransaction();
+					}
 				}
 			}
 			

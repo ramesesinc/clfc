@@ -83,16 +83,21 @@ public class DBPaymentService extends AbstractDBMapper
 		}
 	}
 	
-	public List<Map> getPendingPayments() throws Exception {
+	public List<Map> getPendingPayments(int limit) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING'";
+			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING' ";
+			if (limit > 0) sql += "LIMIT "+limit;
 			return ctx.getList(sql, new Object[]{});
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			if (isCloseable()) ctx.close();
 		}
+	}
+ 	
+	public List<Map> getPendingPayments() throws Exception {
+		return getPendingPayments(0);
 	}
 	
 	public void approvePaymentById(String id) throws Exception {

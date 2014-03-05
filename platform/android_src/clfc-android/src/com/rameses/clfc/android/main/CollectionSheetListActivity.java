@@ -16,13 +16,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.rameses.clfc.android.ControlActivity;
+import com.rameses.clfc.android.MainDB;
+import com.rameses.clfc.android.PaymentDB;
 import com.rameses.clfc.android.R;
+import com.rameses.clfc.android.VoidRequestDB;
 import com.rameses.clfc.android.db.DBCollectionSheet;
+import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.db.DBVoidService;
+import com.rameses.db.android.DBContext;
+import com.rameses.util.MapProxy;
 
 public class CollectionSheetListActivity extends ControlActivity 
 {
@@ -31,6 +39,12 @@ public class CollectionSheetListActivity extends ControlActivity
 	private String type = "";
 	private Map item;
 	private int isfirstbill;
+	private DBCollectionSheet collectionSheet = new DBCollectionSheet();
+	private DBPaymentService paymentSvc = new DBPaymentService();
+	private DBVoidService voidSvc = new DBVoidService();
+	private LayoutInflater inflater;
+	private int size = 11;
+	private MapProxy proxy;
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -38,7 +52,7 @@ public class CollectionSheetListActivity extends ControlActivity
 		setTitle("Collection Sheet");
 		
 		RelativeLayout rl_container = (RelativeLayout) findViewById(R.id.rl_container);
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.activity_collectionsheet, rl_container, true);
 		
 		Intent intent = getIntent();
@@ -89,20 +103,25 @@ public class CollectionSheetListActivity extends ControlActivity
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) {
 		item = (Map) parent.getItemAtPosition(position);
 		isfirstbill = Integer.parseInt(item.get("isfirstbill").toString());
-		System.out.println("cs-> "+item);
-		if (isfirstbill != 1) {
-			Intent intent = new Intent(this, CollectionSheetInfoActivity.class);
-			intent.putExtra("acctname", item.get("acctname").toString());
-			intent.putExtra("loanappid", item.get("loanappid").toString());
-			intent.putExtra("detailid", item.get("detailid").toString());
-			intent.putExtra("appno", item.get("appno").toString());
-			intent.putExtra("amountdue", Double.parseDouble(item.get("amountdue").toString()));
-			intent.putExtra("routecode", item.get("routecode").toString());
-			intent.putExtra("paymenttype", item.get("type").toString());
-			intent.putExtra("isfirstbill", Integer.parseInt(item.get("isfirstbill").toString()));
-			startActivity(intent);
-		} else if (isfirstbill == 1) {
-			showPaymentTypeDialog(item);
+//		System.out.println("cs-> "+item);
+		boolean hasnext = MapProxy.getBoolean(item, "hasnext");
+		if (hasnext == false) {
+			if (isfirstbill != 1) {
+				Intent intent = new Intent(this, CollectionSheetInfoActivity.class);
+				intent.putExtra("acctname", item.get("acctname").toString());
+				intent.putExtra("loanappid", item.get("loanappid").toString());
+				intent.putExtra("detailid", item.get("detailid").toString());
+				intent.putExtra("appno", item.get("appno").toString());
+				intent.putExtra("amountdue", Double.parseDouble(item.get("amountdue").toString()));
+				intent.putExtra("routecode", item.get("routecode").toString());
+				intent.putExtra("paymenttype", item.get("type").toString());
+				intent.putExtra("isfirstbill", Integer.parseInt(item.get("isfirstbill").toString()));
+				startActivity(intent);
+			} else if (isfirstbill == 1) {
+				showPaymentTypeDialog(item);
+			}
+		} else if (hasnext == true) {
+			
 		}
 	}
 	
@@ -111,18 +130,122 @@ public class CollectionSheetListActivity extends ControlActivity
 	}
 	
 	private void loadCollectionSheets(String searchtext) {
-		DBCollectionSheet dbCs = new DBCollectionSheet();		
-		try {
-			Map params = new HashMap();
-			params.put("routecode", routecode);
-			searchtext = (!searchtext.equals("")? searchtext+"%" : "%");
-			params.put("searchtext", searchtext);
-			List<Map> list = dbCs.getCollectionSheetsByRoutecodeAndSearchtext(params);//txn.getList(, params);
-			lv_collectionsheet.setAdapter(new CollectionSheetAdapter(this, list));
-		} catch (Exception e) {
-			e.printStackTrace();
+		Map params = new HashMap();
+		params.put("routecode", routecode);
+		searchtext = (!searchtext.equals("")? searchtext+"%" : "%");
+		params.put("searchtext", searchtext);
+		
+		synchronized (MainDB.LOCK) {
+			DBContext clfcdb = new DBContext("clfc.db");
+			collectionSheet.setDBContext(clfcdb);
+			try {
+				List<Map> list = collectionSheet.getCollectionSheetsByRoutecodeAndSearchtext(params, size);
+//				loadCollectionSheetsImpl(list);
+				lv_collectionsheet.setAdapter(new CollectionSheetAdapter(this, list));
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
 		}
+//		DBCollectionSheet dbCs = new DBCollectionSheet();		
+//		try {
+//			List<Map> list = dbCs.getCollectionSheetsByRoutecodeAndSearchtext(params);//txn.getList(, params);
+//			lv_collectionsheet.setAdapter(new CollectionSheetAdapter(this, list));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}	
+//	
+	private void loadCollectionSheetsImpl(List<Map> list) throws Exception {
+		int listSize = list.size();
+		
+		System.out.println("list size-> "+list.size());
+		Map map;
+		String loanappid;
+		synchronized (PaymentDB.LOCK) {
+			DBContext paymentdb = new DBContext("clfcpayment.db");
+			paymentSvc.setDBContext(paymentdb);
+			paymentSvc.setCloseable(false);
+			try {
+				for (int i=0; i<listSize; i++) {
+					map = (Map) list.get(i);
+					
+					loanappid = map.get("loanappid").toString();
+					map.put("noOfPayments", paymentSvc.noOfPaymentsByLoanappid(loanappid));
+				}
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		}
+		
+		synchronized (VoidRequestDB.LOCK) {
+			DBContext requestdb = new DBContext("clfcrequest.db");
+			voidSvc.setDBContext(requestdb);
+			voidSvc.setCloseable(false);
+			try {
+				for (int i=0; i<listSize; i++) {
+					map = (Map) list.get(i);
+					
+					loanappid = map.get("loanappid").toString();
+					map.put("noOfVoids", voidSvc.noOfVoidPaymentsByLoanappid(loanappid));
+				}
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		}
+		
+		int total = 0;
+		synchronized (MainDB.LOCK) {
+			DBContext clfcdb = new DBContext("clfc.db");
+			collectionSheet.setDBContext(clfcdb);
+			try {
+				total = collectionSheet.getCountByRoutecode(routecode);
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		}
+
+		boolean eof = true;
+		if (list.size() < total) {
+			listSize = list.size()-1;
+			eof = false;
+		}
+		
+//		lv_collectionsheet.removeAllViews();
+		lv_collectionsheet.removeAllViewsInLayout();	
+
+		View view = inflater.inflate(R.layout.item_collectionsheet, null);
+		TextView tv_info_name;
+		ImageView iv_info_paid;
+		int noOfPayments = 0;
+		int noOfVoids = 0;
+		for (int i=0; i<listSize; i++) {
+			tv_info_name = (TextView) view.findViewById(R.id.tv_item_collectionsheet);
+			iv_info_paid = (ImageView) view.findViewById(R.id.iv_item_collectionsheet);
+			
+			proxy = new MapProxy((Map) list.get(i));
+			tv_info_name.setText(proxy.getString("acctname"));
+			
+
+			iv_info_paid.setVisibility(View.GONE);
+//			if (item.get("acctname").toString().equals("ARNADO, MARICRIS")) {
+//				System.out.println("acctname-> "+item.get("acctname").toString());
+//				System.out.println("no of voids -> "+noOfVoids+" no of payments -> "+noOfPayments);
+//			}
+			noOfPayments = proxy.getInteger("noOfPayments");
+			noOfVoids = proxy.getInteger("noOfVoids");
+			if (noOfPayments > 0 && noOfPayments > noOfVoids) {
+				if (MapProxy.getInteger(item, "isfirstbill") == 1) {
+					item.put("isfirstbill", 0);
+				}
+				iv_info_paid.setVisibility(View.VISIBLE);
+			}
+			
+			lv_collectionsheet.addView(view);
+		}
+		if (eof == false) {
+			proxy = new MapProxy((Map) list.get(list.size()-1));
+		}
+	}
 	
 	private void showPaymentTypeDialog(final Map map) {
 		CharSequence[] items = {"Schedule", "Overpayment"};

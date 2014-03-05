@@ -7,6 +7,7 @@ import com.rameses.db.android.AbstractDB;
 
 public class RemarksDB extends AbstractDB 
 {
+	public final static Object LOCK = new Object();
 	public RemarksDB(Context ctx, String dbname, int dbversion) {
 		super(ctx, dbname, dbversion); 
 	}

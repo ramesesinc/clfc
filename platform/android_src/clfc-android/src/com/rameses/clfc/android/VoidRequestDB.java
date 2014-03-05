@@ -7,6 +7,7 @@ import com.rameses.db.android.AbstractDB;
 
 public class VoidRequestDB extends AbstractDB 
 {
+	public final static Object LOCK = new Object();
 	public VoidRequestDB(Context ctx, String dbname, int dbversion) {
 		super(ctx, dbname, dbversion); 
 	}

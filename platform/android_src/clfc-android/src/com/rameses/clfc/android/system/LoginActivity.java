@@ -12,7 +12,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
-import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.R;
 import com.rameses.clfc.android.SettingsMenuActivity;
@@ -64,8 +63,8 @@ public class LoginActivity extends SettingsMenuActivity
 //	     File dir = Environment.getExternalStorageDirectory();
 //	     File file = new File(dir, "clfclog.txt");
 //	     new UIDialog().showMessage("clfclog.txt file is exist -> "+file.exists());
-//		setValue(R.id.login_username, "quesa");
-//		setValue(R.id.login_password, "amor1");
+		setValue(R.id.login_username, "quesa");
+		setValue(R.id.login_password, "quesaamor");
 		requestFocus(R.id.login_username);		
 		new UIAction(this, R.id.btn_login) {
 			protected void onClick() {

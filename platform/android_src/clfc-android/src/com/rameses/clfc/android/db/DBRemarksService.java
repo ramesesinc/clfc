@@ -57,16 +57,21 @@ public class DBRemarksService extends AbstractDBMapper
 		}
 	}
 	
-	public List<Map> getPendingRemarks() throws Exception {
+	public List<Map> getPendingRemarks(int limit) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
-			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING'";
+			String sql = "SELECT * FROM "+getTableName()+" WHERE state='PENDING' ";
+			if (limit > 0) sql += "LIMIT "+limit;
 			return ctx.getList(sql, new Object[]{});
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			if (isCloseable()) ctx.close();
-		}
+		}		
+	}
+	
+	public List<Map> getPendingRemarks() throws Exception {
+		return getPendingRemarks(0);
 	} 
 	
 	public void approveRemarksByLoanappid(String loanappid) throws Exception {

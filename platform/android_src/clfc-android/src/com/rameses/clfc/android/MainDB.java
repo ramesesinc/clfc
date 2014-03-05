@@ -7,6 +7,7 @@ import com.rameses.db.android.AbstractDB;
 
 public class MainDB extends AbstractDB 
 {
+	public final static Object LOCK = new Object();
 	private static MainDB instance;	
 	public static MainDB getInstance() {
 		return instance; 

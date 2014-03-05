@@ -28,7 +28,7 @@ class LocationTrackerService
 	private DBLocationTracker locationTracker = new DBLocationTracker();
 	private DBSystemService systemSvc = new DBSystemService();
 	private DBPrevLocation prevLocation = new DBPrevLocation();
-	private int count;
+	private int seqno;
 	private int timeout;
 	private String trackerid;
 	private String collectorid;
@@ -57,19 +57,32 @@ class LocationTrackerService
 	private Runnable runnableImpl = new Runnable() {
 //		LocationTrackerService root = LocationTrackerService.this;		
 		public void run() {
-			trackerdb = new SQLTransaction("clfctracker.db");
-			clfcdb = new DBContext("clfc.db");
-			try {
-				trackerdb.beginTransaction();
-				runImpl(trackerdb, clfcdb);
-				trackerdb.commit();
-//				SQLTransaction txn = new SQLTransaction("clfctracker.db"); 
-//				txn.execute(new ExecutionHandlerImpl()); 
-			} catch(Throwable t) {
-				t.printStackTrace();
-			} finally {
-				trackerdb.endTransaction();
-				clfcdb.close();
+			String trackerid = null;
+			synchronized (MainDB.LOCK) {
+				clfcdb = new DBContext("clfc.db");
+				systemSvc.setDBContext(clfcdb);
+				
+				try {
+					trackerid = systemSvc.getTrackerid();
+					
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			
+			if (trackerid == null) return;
+			
+			synchronized (TrackerDB.LOCK) {
+				trackerdb = new SQLTransaction("clfctracker.db");
+				try {
+					trackerdb.beginTransaction();
+					execTracker(trackerdb, trackerid);
+					trackerdb.commit();
+				} catch (Throwable t) {
+					t.printStackTrace();
+				} finally {
+					trackerdb.endTransaction();
+				}
 			}
 			
 			timeout = 1;
@@ -80,9 +93,8 @@ class LocationTrackerService
 			Platform.getTaskManager().schedule(runnableImpl, timeout*1000);		
 		}	
 		
-		private void runImpl(SQLTransaction trackerdb, DBContext clfcdb) throws Exception {
-//			tables = trackerdb.getList("SELECT * FROM sqlite_master WHERE type='table'");
-			
+		private void execTracker(SQLTransaction trackerdb, String trackerid) throws Exception {
+
 			location = NetworkLocationProvider.getLocation();
 			lng = (location == null? 0.0: location.getLongitude());
 			lat = (location == null? 0.0: location.getLatitude());
@@ -94,23 +106,17 @@ class LocationTrackerService
 				prevlng = Double.parseDouble(prevlocation.get("longitude").toString());
 				prevlat = Double.parseDouble(prevlocation.get("latitude").toString());
 			}
-			System.out.println("lng->"+lng+", lat->"+lat+", prevlng->"+prevlng+", prevlat->"+prevlat);
+//			System.out.println("lng->"+lng+", lat->"+lat+", prevlng->"+prevlng+", prevlat->"+prevlat);
 			if (lng > 0.0 && lat > 0.0 && lng != prevlng && lat != prevlat) {				
 				profile = SessionContext.getProfile();
 				collectorid = (profile == null? null : profile.getUserId());
 				if (collectorid != null) {					
 					locationTracker.setDBContext(trackerdb.getContext());
-					count = locationTracker.getCountByCollectorid(collectorid);					
-					
-					systemSvc.setDBContext(clfcdb);
-					systemSvc.setCloseable(false);
-					
-					trackerid = systemSvc.getTrackerid();
-					if (trackerid == null) return;
+					seqno = locationTracker.getLastSeqnoByCollectorid(collectorid);	
 																	
 					params.clear();
 					params.put("objid", "TRCK"+UUID.randomUUID());
-					params.put("seqno",  count+1);
+					params.put("seqno",  seqno+1);
 					params.put("trackerid", trackerid);
 					params.put("collectorid", collectorid);
 					params.put("longitude", lng);
@@ -118,12 +124,6 @@ class LocationTrackerService
 					
 //					System.out.println("inserting paramas = "+params);
 					trackerdb.insert("location_tracker", params);
-					
-					Platform.getMainActivity().getHandler().post(new Runnable() {
-						public void run() {
-							app.broadcastLocationSvc.start();
-						}
-					});
 
 					params.clear();
 					params.put("longitude", lng);
@@ -134,6 +134,12 @@ class LocationTrackerService
 					} else if (prevlocation != null && !prevlocation.isEmpty()) {
 						trackerdb.update("prev_location", "objid='"+prevlocation.get("objid").toString()+"'", params);
 					}
+					
+					Platform.getMainActivity().getHandler().post(new Runnable() {
+						public void run() {
+							app.broadcastLocationSvc.start();
+						}
+					});
 				}
 			}	
 		}

@@ -6,12 +6,9 @@ import java.util.Map;
 
 import android.os.Handler;
 
-import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBRemarksService;
-import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
-import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -21,16 +18,10 @@ public class RemarksService
 	private AppSettingsImpl appSettings;
 	private Handler handler;
 	private SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
-	private DBContext clfcdb = new DBContext("clfc.db");
-	private DBContext remarksdb2 = new DBContext("clfcremarks.db");
 	private DBRemarksService remarksSvc = new DBRemarksService();
-	private DBCollectionSheet dbCollectionSheet = new DBCollectionSheet();
-	private DBSystemService systemSvc = new DBSystemService();
 	private List<Map> list;
 	private String mode = "";
-	private String trackerid;
-	private Map map = new HashMap();
-	private Map mCollectionSheet = new HashMap();
+	private MapProxy proxy;
 	private Map params = new HashMap();
 	private Map loanapp = new HashMap();
 	private Map borrower = new HashMap();
@@ -64,31 +55,23 @@ public class RemarksService
 	private Runnable runnableImpl = new Runnable() 
 	{
 		public void run() {
-			remarksdb = new SQLTransaction("clfcremarks.db");
-			clfcdb = new DBContext("clfc.db");
-//			System.out.println("PostPendingRemarks");
-			try {
-				remarksdb.beginTransaction();
-//				clfcdb.beginTransaction();
-				runImpl();
-				remarksdb.commit();
-//				clfcdb.commit();
-//				SQLTransaction txn = new SQLTransaction("clfc.db");
-//				txn.execute(this);
-			} catch (Throwable t) {
-				t.printStackTrace();
-				System.out.println("[RemarksService.RunnableImpl] error caused by " + t.getClass().getName() + ": " + t.getMessage());
-			} finally {
-				remarksdb.endTransaction();
-				clfcdb.close();
+			synchronized (RemarksDB.LOCK) {
+				remarksdb = new SQLTransaction("clfcremarks.db");
+				try {
+					remarksdb.beginTransaction();
+					execRemarks(remarksdb);
+					
+					remarksSvc.setDBContext(remarksdb.getContext());
+					hasUnpostedRemarks = remarksSvc.hasUnpostedRemarks();
+					
+					remarksdb.commit();
+				} catch (Throwable t) {
+					t.printStackTrace();
+				} finally {
+					remarksdb.endTransaction();
+				}
 			}
 
-			remarksdb2 = new DBContext("clfcremarks.db");
-			try {
-				remarksSvc.setDBContext(remarksdb2);
-				hasUnpostedRemarks = remarksSvc.hasUnpostedRemarks();
-			} catch (Exception e) {;}
-			
 			if (hasUnpostedRemarks == true) {
 				delay = appSettings.getUploadTimeout();
 				Platform.getTaskManager().schedule(runnableImpl, delay*1000);				
@@ -97,22 +80,15 @@ public class RemarksService
 			}
 		}
 		
-		private void runImpl() throws Exception {
+		private void execRemarks(SQLTransaction remarksdb) throws Exception {
 			remarksSvc.setDBContext(remarksdb.getContext());
 			
-			list = remarksSvc.getPendingRemarks();
-//			System.out.println("list -> "+list);
+			list = remarksSvc.getPendingRemarks(5);
 			if (!list.isEmpty()) {
-				dbCollectionSheet.setDBContext(clfcdb);	
-				dbCollectionSheet.setCloseable(false);
-				
-				systemSvc.setDBContext(clfcdb);
-				systemSvc.setCloseable(false);
-				
-				trackerid = systemSvc.getTrackerid();
 				size = list.size();
-				for (int i=0; i<list.size(); i++) {
-					map = (Map) list.get(i);
+				String loanappid = "";
+				for (int i=0; i<size; i++) {
+					proxy = new MapProxy((Map) list.get(i));
 					
 					mode = "ONLINE_WIFI";
 					networkStatus = app.getNetworkStatus();
@@ -120,33 +96,39 @@ public class RemarksService
 						mode = "ONLINE_MOBILE";
 					}
 					
-					collector.put("objid", map.get("collectorid").toString());
-					collector.put("name", map.get("collectorname").toString());
+					collector.put("objid", proxy.getString("collectorid"));
+					collector.put("name", proxy.getString("collectorname"));
 					
-					mCollectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(map.get("loanappid").toString());
+//					mCollectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(map.get("loanappid").toString());
 					collectionSheet.clear();
-					collectionSheet.put("detailid", mCollectionSheet.get("detailid").toString());
+//					collectionSheet.put("detailid", mCollectionSheet.get("detailid").toString());
+					collectionSheet.put("detailid", proxy.getString("detailid"));
 					
 					loanapp.clear();
-					loanapp.put("objid", mCollectionSheet.get("loanappid").toString());
-					loanapp.put("appno", mCollectionSheet.get("appno").toString());
+					loanappid = proxy.getString("loanappid");
+//					loanapp.put("objid", mCollectionSheet.get("loanappid").toString());
+//					loanapp.put("appno", mCollectionSheet.get("appno").toString());
+					loanapp.put("objid", loanappid);
+					loanapp.put("appno", proxy.getString("appno"));
 					collectionSheet.put("loanapp", loanapp);
 					
 					borrower.clear();
-					borrower.put("objid", mCollectionSheet.get("acctid").toString());
-					borrower.put("name", mCollectionSheet.get("acctname").toString());
+//					borrower.put("objid", mCollectionSheet.get("acctid").toString());
+//					borrower.put("name", mCollectionSheet.get("acctname").toString());
+					borrower.put("objid", proxy.getString("borrowerid"));
+					borrower.put("name", proxy.getString("borrowername"));
 					collectionSheet.put("borrower", borrower);
 					
 					params.clear();
-					params.put("sessionid", mCollectionSheet.get("sessionid").toString());
-					params.put("routecode", mCollectionSheet.get("routecode").toString());
+					params.put("sessionid", proxy.getString("sessionid"));
+					params.put("routecode", proxy.getString("routecode"));
 					params.put("mode", mode);
-					params.put("trackerid", trackerid);
-					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
-					params.put("latitiude", Double.parseDouble(map.get("latitude").toString()));
+					params.put("trackerid", proxy.getString("trackerid"));
+					params.put("longitude", proxy.getDouble("longitude"));
+					params.put("latitiude", proxy.getDouble("latitude"));
 					params.put("collector", collector);
 					params.put("collectionsheet", collectionSheet);
-					params.put("remarks", map.get("remarks").toString());
+					params.put("remarks", proxy.getString("remarks"));
 					
 					response.clear();
 					for (int j=0; j<10; j++) {
@@ -156,7 +138,7 @@ public class RemarksService
 						} catch (Throwable e) {;}
 					}
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						remarksSvc.approveRemarksByLoanappid(map.get("loanappid").toString());
+						remarksSvc.approveRemarksByLoanappid(loanappid);
 					}
 				}
 			}

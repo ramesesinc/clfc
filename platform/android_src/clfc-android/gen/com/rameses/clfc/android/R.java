@@ -64,7 +64,7 @@ public final class R {
         public static final int splash=0x7f020010;
     }
     public static final class id {
-        public static final int LinearLayout=0x7f080076;
+        public static final int LinearLayout=0x7f080074;
         public static final int LinearLayout1=0x7f080009;
         public static final int RelativeLayout1=0x7f080069;
         public static final int ScrollView=0x7f08000f;
@@ -113,9 +113,9 @@ public final class R {
         public static final int ib_refresh=0x7f080052;
         public static final int idle_text=0x7f080073;
         public static final int idx=0x7f080001;
-        public static final int imageView1=0x7f08006b;
         public static final int iv_icon=0x7f080011;
-        public static final int iv_specialcollection_approved=0x7f080075;
+        public static final int iv_item_collectionsheet=0x7f08006b;
+        public static final int iv_specialcollection_approved=0x7f080084;
         public static final int layout_info_general=0x7f080010;
         public static final int layout_info_notes=0x7f080043;
         public static final int layout_info_payment=0x7f08003c;
@@ -152,15 +152,14 @@ public final class R {
         public static final int settings=0x7f08008b;
         public static final int specialcollection_new=0x7f08008e;
         public static final int spinner_debug_enabled=0x7f080066;
-        public static final int textView1=0x7f080065;
         public static final int textView10=0x7f080013;
         public static final int textView11=0x7f080016;
         public static final int textView12=0x7f08003a;
         public static final int textView13=0x7f08002e;
-        public static final int textView14=0x7f080079;
-        public static final int textView15=0x7f08007b;
-        public static final int textView16=0x7f08007e;
-        public static final int textView17=0x7f080081;
+        public static final int textView14=0x7f080077;
+        public static final int textView15=0x7f080079;
+        public static final int textView16=0x7f08007c;
+        public static final int textView17=0x7f08007f;
         public static final int textView18=0x7f08001e;
         public static final int textView19=0x7f080004;
         public static final int textView2=0x7f08004b;
@@ -169,8 +168,8 @@ public final class R {
         public static final int textView5=0x7f080039;
         public static final int textView6=0x7f08004e;
         public static final int textView7=0x7f080067;
-        public static final int textView8=0x7f08007d;
-        public static final int textView9=0x7f080080;
+        public static final int textView8=0x7f08007b;
+        public static final int textView9=0x7f08007e;
         public static final int textview=0x7f080086;
         public static final int tv_billdate=0x7f08000d;
         public static final int tv_info_acctname=0x7f080017;
@@ -186,13 +185,14 @@ public final class R {
         public static final int tv_info_others=0x7f080038;
         public static final int tv_info_overpayment=0x7f08002f;
         public static final int tv_info_paidby=0x7f08002d;
-        public static final int tv_info_paymentamount=0x7f080082;
-        public static final int tv_info_paymenttype=0x7f08007f;
+        public static final int tv_info_paymentamount=0x7f080080;
+        public static final int tv_info_paymenttype=0x7f08007d;
         public static final int tv_info_penalty=0x7f080034;
-        public static final int tv_info_refno=0x7f08007a;
+        public static final int tv_info_refno=0x7f080078;
         public static final int tv_info_remarks=0x7f080042;
         public static final int tv_info_term=0x7f080023;
-        public static final int tv_info_txndate=0x7f08007c;
+        public static final int tv_info_txndate=0x7f08007a;
+        public static final int tv_item_collectionsheet=0x7f080065;
         public static final int tv_item_str=0x7f080085;
         public static final int tv_mode=0x7f08008a;
         public static final int tv_overlay=0x7f08006d;
@@ -200,11 +200,11 @@ public final class R {
         public static final int tv_payment_txndate=0x7f08004c;
         public static final int tv_payments=0x7f08003d;
         public static final int tv_posted=0x7f080053;
-        public static final int tv_route_area=0x7f080084;
-        public static final int tv_route_description=0x7f080083;
-        public static final int tv_specialcollection_remarks=0x7f080074;
-        public static final int tv_subtext=0x7f080078;
-        public static final int tv_text=0x7f080077;
+        public static final int tv_route_area=0x7f080082;
+        public static final int tv_route_description=0x7f080081;
+        public static final int tv_specialcollection_remarks=0x7f080083;
+        public static final int tv_subtext=0x7f080076;
+        public static final int tv_text=0x7f080075;
         public static final int tv_unposted=0x7f080054;
         public static final int view1=0x7f08000b;
     }

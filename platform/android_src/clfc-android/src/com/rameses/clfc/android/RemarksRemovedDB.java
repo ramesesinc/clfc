@@ -7,6 +7,7 @@ import com.rameses.db.android.AbstractDB;
 
 public class RemarksRemovedDB extends AbstractDB 
 {
+	public final static Object LOCK = new Object();
 	public RemarksRemovedDB(Context ctx, String dbname, int dbversion) {
 		super(ctx, dbname, dbversion); 
 	}
