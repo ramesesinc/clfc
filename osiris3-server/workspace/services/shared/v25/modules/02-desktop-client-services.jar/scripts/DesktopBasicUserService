@@ -55,7 +55,7 @@ class DesktopBasicUserService
 
 		//initiate lock
 		def newlockid = 'LOCK'+new java.rmi.server.UID();
-		em.sqlContext.createNamedExecutor('sysuser:lock').setParameters([
+		em.sqlContext.createNamedExecutor('sysuser:updateLock').setParameters([
 			username: 	params.username, 
 			lockid: newlockid 
 		]).execute(); 
