@@ -106,7 +106,7 @@ class LocationTrackerService
 				prevlng = Double.parseDouble(prevlocation.get("longitude").toString());
 				prevlat = Double.parseDouble(prevlocation.get("latitude").toString());
 			}
-//			System.out.println("lng->"+lng+", lat->"+lat+", prevlng->"+prevlng+", prevlat->"+prevlat);
+			System.out.println("lng->"+lng+", lat->"+lat+", prevlng->"+prevlng+", prevlat->"+prevlat);
 			if (lng > 0.0 && lat > 0.0 && lng != prevlng && lat != prevlat) {				
 				profile = SessionContext.getProfile();
 				collectorid = (profile == null? null : profile.getUserId());
@@ -133,7 +133,7 @@ class LocationTrackerService
 						trackerdb.insert("prev_location", params);
 					} else if (prevlocation != null && !prevlocation.isEmpty()) {
 						trackerdb.update("prev_location", "objid='"+prevlocation.get("objid").toString()+"'", params);
-					}
+					} 
 					
 					Platform.getMainActivity().getHandler().post(new Runnable() {
 						public void run() {

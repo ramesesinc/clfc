@@ -172,7 +172,7 @@ public class CollectionSheetInfoActivity extends ControlActivity
 //				System.out.println("clfcdb -> "+clfcdb);
 				collectionSheet = dbCollectionSheet.findCollectionSheetByLoanappid(loanappid);	
 				
-				if (collectionSheet != null || !collectionSheet.isEmpty()) {
+				if (collectionSheet != null && !collectionSheet.isEmpty()) {
 					acctid = collectionSheet.get("acctid").toString();
 					sessionid = collectionSheet.get("sessionid").toString();
 					acctname = collectionSheet.get("acctname").toString();
@@ -221,86 +221,91 @@ public class CollectionSheetInfoActivity extends ControlActivity
 				payments = new ArrayList<Map>();
 				synchronized (PaymentDB.LOCK) {
 					DBContext paymentdb = new DBContext("clfcpayment.db");
+					paymentSvc.setDBContext(paymentdb);
 					try {
 						payments = paymentSvc.getPaymentsByLoanappid(loanappid);
 					} catch (Throwable t) {
 						t.printStackTrace();
 						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-					} finally {
-						paymentdb.close();
 					}	
 				}
 
-				size = payments.size();
-				synchronized (VoidRequestDB.LOCK) { 
-					DBContext requestdb = new DBContext("clfcrequest.db");
-					voidSvc.setDBContext(requestdb);
-					voidSvc.setCloseable(false);
-					try {
-						for (int i=0; i<size; i++) {
-							payment = (Map) payments.get(i);
-							payment.put("hasrequest", false);
-							
-							voidRequest = voidSvc.findVoidRequestByPaymentid(MapProxy.getString(payment, "objid"));
-							if (voidRequest != null || !voidRequest.isEmpty()) {
-								payment.put("hasrequest", true);
-								payment.put("requeststate", MapProxy.getString(voidRequest, "state"));
+				rl_notes.setVisibility(View.GONE);
+				rl_payment.setVisibility(View.GONE);				
+				if (payments != null && !payments.isEmpty()) {
+					rl_payment.setVisibility(View.VISIBLE);
+
+					size = payments.size();
+					synchronized (VoidRequestDB.LOCK) { 
+						DBContext requestdb = new DBContext("clfcrequest.db");
+						voidSvc.setDBContext(requestdb);
+						voidSvc.setCloseable(false);
+						try {
+							for (int i=0; i<size; i++) {
+								payment = (Map) payments.get(i);
+								payment.put("hasrequest", false);
+								
+								voidRequest = voidSvc.findVoidRequestByPaymentid(MapProxy.getString(payment, "objid"));
+								if (voidRequest != null && !voidRequest.isEmpty()) {
+									payment.put("hasrequest", true);
+									payment.put("requeststate", MapProxy.getString(voidRequest, "state"));
+								}
+							}
+						} catch (Throwable t) {
+							t.printStackTrace();
+							UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+						} finally {
+							requestdb.close();
+						}	
+					}
+					
+					boolean hasrequest = false;
+					for (int i=0; i<size; i++) {
+						child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
+						payment = (Map) payments.get(i);
+
+						((TextView) child.findViewById(R.id.tv_info_refno)).setText(payment.get("refno").toString());
+						((TextView) child.findViewById(R.id.tv_info_txndate)).setText(payment.get("txndate").toString());
+						((TextView) child.findViewById(R.id.tv_info_paidby)).setText(payment.get("paidby").toString());
+						 
+						if (payment.get("paymenttype").toString().equals("schedule")) {
+							type = "Schedule/Advance";
+						} else if (payment.get("paymenttype").toString().equals("over")) {
+							type = "Overpayment";
+						}
+						((TextView) child.findViewById(R.id.tv_info_paymenttype)).setText(type);
+						
+						amount = new BigDecimal(payment.get("paymentamount").toString()).setScale(2);
+						((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(amount));
+						child.setTag(R.id.paymentid, payment.get("objid").toString());
+						
+						hasrequest = MapProxy.getBoolean(payment, "hasrequest");
+//						voidRequest = voidSvc.findVoidRequestByPaymentid(payment.get("objid").toString());
+						if (hasrequest == false) {
+							addPaymentProperties(child);
+						} else if (hasrequest == true) {
+							voidType = MapProxy.getString(payment, "requeststate");
+							layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+							layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
+							overlay = inflater.inflate(R.layout.overlay_void_text, null);
+							if (voidType.equals("PENDING")) {
+								child.setOnClickListener(null);
+								child.setOnLongClickListener(null);
+								child.setClickable(false);
+								((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
+								((TextView) overlay).setText("VOID REQUEST PENDING");
+								overlay.setLayoutParams(layoutParams);
+								child.addView(overlay); 
+							} else if (voidType.equals("APPROVED")) {
+								((TextView) overlay).setTextColor(getResources().getColor(R.color.green));
+								((TextView) overlay).setText("VOID APPROVED");
+								overlay.setLayoutParams(layoutParams);
+								((RelativeLayout) child).addView(overlay);
+								//addApprovedVoidPaymentProperies(child);
 							}
 						}
-					} catch (Throwable t) {
-						t.printStackTrace();
-						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-					} finally {
-						requestdb.close();
-					}	
-				}
-				
-				boolean hasrequest = false;
-				for (int i=0; i<size; i++) {
-					child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);
-					payment = (Map) payments.get(i);
-
-					((TextView) child.findViewById(R.id.tv_info_refno)).setText(payment.get("refno").toString());
-					((TextView) child.findViewById(R.id.tv_info_txndate)).setText(payment.get("txndate").toString());
-					((TextView) child.findViewById(R.id.tv_info_paidby)).setText(payment.get("paidby").toString());
-					
-					if (payment.get("paymenttype").toString().equals("schedule")) {
-						type = "Schedule/Advance";
-					} else if (payment.get("paymenttype").toString().equals("over")) {
-						type = "Overpayment";
+						ll_info_payments.addView(child);
 					}
-					((TextView) child.findViewById(R.id.tv_info_paymenttype)).setText(type);
-					
-					amount = new BigDecimal(payment.get("paymentamount").toString()).setScale(2);
-					((TextView) child.findViewById(R.id.tv_info_paymentamount)).setText(formatValue(amount));
-					child.setTag(R.id.paymentid, payment.get("objid").toString());
-					
-					hasrequest = MapProxy.getBoolean(payment, "hasrequest");
-//					voidRequest = voidSvc.findVoidRequestByPaymentid(payment.get("objid").toString());
-					if (hasrequest == false) {
-						addPaymentProperties(child);
-					} else if (hasrequest == true) {
-						voidType = MapProxy.getString(payment, "requeststate");
-						layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-						layoutParams.addRule(RelativeLayout.CENTER_VERTICAL, 1);
-						overlay = inflater.inflate(R.layout.overlay_void_text, null);
-						if (voidType.equals("PENDING")) {
-							child.setOnClickListener(null);
-							child.setOnLongClickListener(null);
-							child.setClickable(false);
-							((TextView) overlay).setTextColor(getResources().getColor(R.color.red));
-							((TextView) overlay).setText("VOID REQUEST PENDING");
-							overlay.setLayoutParams(layoutParams);
-							child.addView(overlay); 
-						} else if (voidType.equals("APPROVED")) {
-							((TextView) overlay).setTextColor(getResources().getColor(R.color.green));
-							((TextView) overlay).setText("VOID APPROVED");
-							overlay.setLayoutParams(layoutParams);
-							((RelativeLayout) child).addView(overlay);
-							//addApprovedVoidPaymentProperies(child);
-						}
-					}
-					ll_info_payments.addView(child);
 				}
 			}
 		});
@@ -314,8 +319,6 @@ public class CollectionSheetInfoActivity extends ControlActivity
 					} catch (Throwable t) {
 						t.printStackTrace();
 						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-					} finally {
-						remarksdb.close();
 					}
 				}
 			}
@@ -385,7 +388,6 @@ public class CollectionSheetInfoActivity extends ControlActivity
 						};
 					});
 				}
-				rl_notes.setVisibility(View.GONE);
 			}
 		});
 	}

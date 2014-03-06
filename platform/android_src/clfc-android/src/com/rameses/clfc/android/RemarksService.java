@@ -1,5 +1,6 @@
 package com.rameses.clfc.android;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import android.os.Handler;
 import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -17,9 +19,8 @@ public class RemarksService
 	private ApplicationImpl app;
 	private AppSettingsImpl appSettings;
 	private Handler handler;
-	private SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+	private SQLTransaction remarksdb;
 	private DBRemarksService remarksSvc = new DBRemarksService();
-	private List<Map> list;
 	private String mode = "";
 	private MapProxy proxy;
 	private Map params = new HashMap();
@@ -55,20 +56,31 @@ public class RemarksService
 	private Runnable runnableImpl = new Runnable() 
 	{
 		public void run() {
+			List<Map> list = new ArrayList<Map>();
 			synchronized (RemarksDB.LOCK) {
 				remarksdb = new SQLTransaction("clfcremarks.db");
+				remarksSvc.setDBContext(remarksdb.getContext());
 				try {
 					remarksdb.beginTransaction();
-					execRemarks(remarksdb);
-					
-					remarksSvc.setDBContext(remarksdb.getContext());
-					hasUnpostedRemarks = remarksSvc.hasUnpostedRemarks();
-					
+					list = remarksSvc.getPendingRemarks(5);					
 					remarksdb.commit();
 				} catch (Throwable t) {
 					t.printStackTrace();
 				} finally {
 					remarksdb.endTransaction();
+				}
+			}
+			
+			execRemarks(list);
+
+			synchronized (RemarksDB.LOCK) {
+				DBContext ctx = new DBContext("clfcremarks.db");
+				remarksSvc.setDBContext(ctx);
+				try {
+					hasUnpostedRemarks = remarksSvc.hasUnpostedRemarks();
+					
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 			}
 
@@ -80,10 +92,7 @@ public class RemarksService
 			}
 		}
 		
-		private void execRemarks(SQLTransaction remarksdb) throws Exception {
-			remarksSvc.setDBContext(remarksdb.getContext());
-			
-			list = remarksSvc.getPendingRemarks(5);
+		private void execRemarks(List<Map> list) {
 			if (!list.isEmpty()) {
 				size = list.size();
 				String loanappid = "";
@@ -138,7 +147,19 @@ public class RemarksService
 						} catch (Throwable e) {;}
 					}
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						remarksSvc.approveRemarksByLoanappid(loanappid);
+						synchronized (RemarksDB.LOCK) {
+							remarksdb = new SQLTransaction("clfcremarks.db");
+							remarksSvc.setDBContext(remarksdb.getContext());
+							try {
+								remarksdb.beginTransaction();
+								remarksSvc.approveRemarksByLoanappid(loanappid);
+								remarksdb.commit();
+							} catch (Throwable t) {
+								t.printStackTrace();
+							} finally {
+								remarksdb.endTransaction();
+							}
+						}
 					}
 				}
 			}

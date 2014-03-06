@@ -45,6 +45,7 @@ public class CollectionSheetListActivity extends ControlActivity
 	private LayoutInflater inflater;
 	private int size = 11;
 	private MapProxy proxy;
+	private EditText et_search;
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -57,28 +58,17 @@ public class CollectionSheetListActivity extends ControlActivity
 		
 		Intent intent = getIntent();
 		routecode = intent.getStringExtra("routecode");
+		et_search = (EditText) findViewById(R.id.et_search);
+		lv_collectionsheet = (ListView) findViewById(R.id.lv_collectionsheet);
 	}
 	
 	@Override
 	protected void onStartProcess() {
 		super.onStartProcess();
 
-		lv_collectionsheet = (ListView) findViewById(R.id.lv_collectionsheet);
-		loadCollectionSheets();
-		lv_collectionsheet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
-				selectedItem(parent, view, position, id);
-//				CollectionSheetParcelable cs = (CollectionSheetParcelable) parent.getItemAtPosition(position);
-//				
-//				if (cs.getIsfirstbill() == 1) showDialog(cs);
-//				else showCollectionSheetInfo(cs);
-				//System.out.println(cs.getAcctname());
-			}
-		});
 		
-		EditText et_search = (EditText) findViewById(R.id.et_search);
+		et_search.setSelection(0, et_search.getText().toString().length());
+		et_search.requestFocus();
 		et_search.addTextChangedListener(new TextWatcher(){
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -98,14 +88,28 @@ public class CollectionSheetListActivity extends ControlActivity
 				
 			}
 		});
+		
+		loadCollectionSheets(et_search.getText().toString());
+		lv_collectionsheet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				selectedItem(parent, view, position, id);
+//				CollectionSheetParcelable cs = (CollectionSheetParcelable) parent.getItemAtPosition(position);
+//				
+//				if (cs.getIsfirstbill() == 1) showDialog(cs);
+//				else showCollectionSheetInfo(cs);
+				//System.out.println(cs.getAcctname());
+			}
+		});
 	}
 	
 	private void selectedItem(AdapterView<?> parent, View view, int position, long id) {
 		item = (Map) parent.getItemAtPosition(position);
 		isfirstbill = Integer.parseInt(item.get("isfirstbill").toString());
 //		System.out.println("cs-> "+item);
-		boolean hasnext = MapProxy.getBoolean(item, "hasnext");
-		if (hasnext == false) {
+//		boolean hasnext = MapProxy.getBoolean(item, "hasnext");
+//		if (hasnext == false) {
 			if (isfirstbill != 1) {
 				Intent intent = new Intent(this, CollectionSheetInfoActivity.class);
 				intent.putExtra("acctname", item.get("acctname").toString());
@@ -120,9 +124,9 @@ public class CollectionSheetListActivity extends ControlActivity
 			} else if (isfirstbill == 1) {
 				showPaymentTypeDialog(item);
 			}
-		} else if (hasnext == true) {
-			
-		}
+//		} else if (hasnext == true) {
+//			
+//		}
 	}
 	
 	private void loadCollectionSheets() {
@@ -139,7 +143,7 @@ public class CollectionSheetListActivity extends ControlActivity
 			DBContext clfcdb = new DBContext("clfc.db");
 			collectionSheet.setDBContext(clfcdb);
 			try {
-				List<Map> list = collectionSheet.getCollectionSheetsByRoutecodeAndSearchtext(params, size);
+				List<Map> list = collectionSheet.getCollectionSheetsByRoutecodeAndSearchtext(params);
 //				loadCollectionSheetsImpl(list);
 				lv_collectionsheet.setAdapter(new CollectionSheetAdapter(this, list));
 			} catch (Throwable t) {
