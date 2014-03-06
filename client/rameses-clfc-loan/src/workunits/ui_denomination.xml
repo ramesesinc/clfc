@@ -24,9 +24,12 @@
                 void init() {
                     if (entries.size() == 0) {
                         LoanUtil.denominations.each{
-                            entries << it;
+                            def map = [:];
+                            map.putAll(it);
+                            entries << map;
                         }
                     }
+                    denominationHandler.reload();
                 }
                 
                 def denominationHandler = [
