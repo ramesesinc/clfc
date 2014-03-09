@@ -39,7 +39,7 @@ public class DBCollectionSheet extends AbstractDBMapper
 		DBContext ctx = createDBContext();
 		try {
 			System.out.println("create index");
-			String sql = "CREATE INDEX IF NOT EXISTS idx_collectionsheet ON collectionsheet(acctname)";
+			String sql = "CREATE INDEX IF NOT EXISTS idx_collectionsheet ON collectionsheet(acctname, routecode)";
 			ctx.execute(sql);
 		} catch (Exception e) {
 			throw e;

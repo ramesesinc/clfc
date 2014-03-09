@@ -244,6 +244,7 @@ public final class R {
         public static final int section_posted=0x7f03001d;
         public static final int section_unposted=0x7f03001e;
         public static final int template_footer=0x7f03001f;
+        public static final int xactivity_collectionsheet=0x7f030020;
     }
     public static final class menu {
         public static final int empty=0x7f0c0000;

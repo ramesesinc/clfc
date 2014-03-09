@@ -57,7 +57,7 @@ public class ControlPanelActivity extends ControlActivity
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
-		//System.out.println("serverDate -> " + Platform.getApplication().getServerDate().toString());
+		System.out.println("serverDate -> " + Platform.getApplication().getServerDate().toString());
 		DBContext clfcdb = new DBContext("clfc.db");
 		routeSvc.setDBContext(clfcdb);
 		
