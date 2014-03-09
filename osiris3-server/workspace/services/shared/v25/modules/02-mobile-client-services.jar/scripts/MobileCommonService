@@ -10,4 +10,9 @@ class MobileCommonService
 	public long getServerTime() { 
 		return dateSvc.serverDate.time; 
 	} 
+
+	@ProxyMethod 
+	public String getServerDateAsString() { 
+		return dateSvc.serverDate.toString(); 
+	} 
 }
