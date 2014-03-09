@@ -1,5 +1,6 @@
 package com.rameses.clfc.android;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,6 @@ import java.util.Map;
 import android.os.Handler;
 
 import com.rameses.clfc.android.db.DBLocationTracker;
-import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.services.LoanLocationService;
 import com.rameses.client.android.Platform;
 import com.rameses.db.android.DBContext;
@@ -18,16 +18,12 @@ public class BroadcastLocationService
 	private ApplicationImpl app;
 	private Handler handler;
 	private SQLTransaction trackerdb;
-	private DBContext clfcdb;
-	private DBContext trackerdb2 = new DBContext("clfctracker.db");
 	private DBLocationTracker locationTracker = new DBLocationTracker();
-	private String trackerid;
 	private Map map;
 	private Map params = new HashMap();
 	private Map response = new HashMap();
 	private int listSize;
 	private LoanLocationService svc = new LoanLocationService();
-	private List<Map> list; 
 	private boolean hasLocationTrackers = false;
 	
 	public boolean serviceStarted = false;
@@ -51,15 +47,13 @@ public class BroadcastLocationService
 	{
 		public void run() {
 //			System.out.println("PostLocationTracker");
+			List<Map> list = new ArrayList<Map>();
 			synchronized (TrackerDB.LOCK) {
 				trackerdb = new SQLTransaction("clfctracker.db");
+				locationTracker.setDBContext(trackerdb.getContext());
 				try {
 					trackerdb.beginTransaction();
-					execTracker(trackerdb);
-					
-					locationTracker.setDBContext(trackerdb.getContext());
-					hasLocationTrackers = locationTracker.hasLocationTrackers();
-					
+					list = locationTracker.getLocationTrackers(5);					
 					trackerdb.commit();
 				} catch (Throwable t) {
 					t.printStackTrace();
@@ -68,17 +62,27 @@ public class BroadcastLocationService
 				}
 			}
 			
-			if (hasLocationTrackers) {
+			execTracker(list);
+			
+			synchronized (TrackerDB.LOCK) {
+				DBContext ctx = new DBContext("clfctracker.db");
+				locationTracker.setDBContext(ctx);
+				try {
+					hasLocationTrackers = locationTracker.hasLocationTrackers();
+					
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+
+			if (hasLocationTrackers == true) {
 				Platform.getTaskManager().schedule(runnableImpl, 5000);
-			} else {
+			} else if (hasLocationTrackers == false) {
 				serviceStarted = false;
 			}
 		}
 		
-		private void execTracker(SQLTransaction trackerdb) throws Exception {
-			locationTracker.setDBContext(trackerdb.getContext());
-			
-			list = locationTracker.getLocationTrackers(5);
+		private void execTracker(List<Map> list) {			
 			if (!list.isEmpty()) {
 				listSize = list.size();
 				for (int i=0; i<listSize; i++) {
@@ -86,7 +90,7 @@ public class BroadcastLocationService
 					
 					params.clear();
 					params.put("objid", map.get("objid").toString());
-					params.put("trackerid", map.get("trackeridb").toString());
+					params.put("trackerid", map.get("trackerid").toString());
 					params.put("longitude", Double.parseDouble(map.get("longitude").toString()));
 					params.put("latitude", Double.parseDouble(map.get("latitude").toString()));
 					params.put("state", 1);
@@ -100,7 +104,19 @@ public class BroadcastLocationService
 					}
 					
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						trackerdb.delete("location_tracker", "objid=?", new Object[]{map.get("objid").toString()});
+						synchronized (TrackerDB.LOCK) {
+							trackerdb = new SQLTransaction("clfctracker.db");
+							locationTracker.setDBContext(trackerdb.getContext());
+							try {
+								trackerdb.beginTransaction();
+								trackerdb.delete("location_tracker", "objid=?", new Object[]{map.get("objid").toString()});
+								trackerdb.commit();
+							} catch (Throwable t) {
+								t.printStackTrace();
+							} finally {
+								trackerdb.endTransaction();
+							}
+						}
 					}
 				}
 			}

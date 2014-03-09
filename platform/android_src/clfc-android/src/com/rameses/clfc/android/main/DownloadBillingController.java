@@ -164,6 +164,7 @@ public class DownloadBillingController
 			ArrayList billings = (ArrayList) map.get("billings");
 			ArrayList list;
 			String loanappid;
+			dbCs.dropIndex();
 			for (int i=0; i<billings.size(); i++) {
 				params = (Map) billings.get(i);
 				
@@ -244,6 +245,7 @@ public class DownloadBillingController
 					remarksdb.insert("remarks", map);
 				}
 			}
+			dbCs.addIndex();
 		}
 	}
 }

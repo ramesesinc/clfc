@@ -1,12 +1,12 @@
 package com.rameses.clfc.android;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.os.Handler;
 
-import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBRemarksRemoved;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
@@ -24,7 +24,6 @@ public class RemarksRemovedService
 	private MapProxy proxy;
 	private Map params = new HashMap();
 	private Map response = new HashMap();
-	private List<Map> list;
 	private int delay;
 	private int size;
 	private boolean hasPendingRemarksRemoved = false;
@@ -49,20 +48,30 @@ public class RemarksRemovedService
 	private Runnable runnableImpl = new Runnable() 
 	{
 		public void run() {
+			List<Map> list = new ArrayList<Map>();
 			synchronized (RemarksRemovedDB.LOCK) {
 				remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
+				remarksRemoved.setDBContext(remarksremoveddb.getContext());
 				try {
 					remarksremoveddb.beginTransaction();
-					execRemarksRemoved(remarksremoveddb);
-					
-					remarksRemoved.setDBContext(remarksremoveddb.getContext());
-					hasPendingRemarksRemoved = remarksRemoved.hasPendingRemarksRemoved();
-
+					list = remarksRemoved.getPendingRemarksRemoved(5);
 					remarksremoveddb.commit();
 				} catch (Throwable t) {
 					t.printStackTrace();
 				} finally {
 					remarksremoveddb.endTransaction();
+				}
+			}
+			
+			execRemarksRemoved(list);
+			
+			synchronized (RemarksRemovedDB.LOCK) {
+				DBContext ctx = new DBContext("clfcremarksremoved.db");
+				remarksRemoved.setDBContext(ctx);
+				try {
+					hasPendingRemarksRemoved = remarksRemoved.hasPendingRemarksRemoved();
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 			}
 
@@ -74,12 +83,9 @@ public class RemarksRemovedService
 			}
 		}
 		
-		private void execRemarksRemoved(SQLTransaction remarksremoveddb) throws Exception {
-			remarksRemoved.setDBContext(remarksremoveddb.getContext());
-			
-			list = remarksRemoved.getPendingRemarksRemoved(5);			
-			if (!list.isEmpty()) {				
+		private void execRemarksRemoved(List<Map> list) {
 				
+			if (!list.isEmpty()) {
 				size = list.size();
 				for (int i=0; i<size; i++) {
 					proxy = new MapProxy((Map) list.get(i));
@@ -96,7 +102,19 @@ public class RemarksRemovedService
 					}
 					
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						remarksremoveddb.delete("remarks_removed", "loanappid=?", new Object[]{proxy.getString("loanappid")});
+						synchronized (RemarksRemovedDB.LOCK) {
+							remarksremoveddb = new SQLTransaction("clfcremarksremoved.db");
+							remarksRemoved.setDBContext(remarksremoveddb.getContext());
+							try {
+								remarksremoveddb.beginTransaction();
+								remarksremoveddb.delete("remarks_removed", "loanappid=?", new Object[]{proxy.getString("loanappid")});
+								remarksremoveddb.commit();
+							} catch (Throwable t) {
+								t.printStackTrace();
+							} finally {
+								remarksremoveddb.endTransaction();
+							}
+						}
 					}
 				}
 			}

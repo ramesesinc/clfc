@@ -66,33 +66,33 @@ public class CollectionSheetAdapter extends BaseAdapter
 		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		MapProxy item = new MapProxy(list.get(position));	
-		int total = 0;
-		synchronized (MainDB.LOCK) {
-			DBContext clfcdb = new DBContext("clfc.db");
-			collectionSheet.setDBContext(clfcdb);
-			try {
-				total = collectionSheet.getCountByRoutecode(item.getString("routecode"));
-			} catch (Throwable t) {
-				t.printStackTrace();
-			}
-		}
+//		int total = 0;
+//		synchronized (MainDB.LOCK) {
+//			DBContext clfcdb = new DBContext("clfc.db");
+//			collectionSheet.setDBContext(clfcdb);
+//			try {
+//				total = collectionSheet.getCountByRoutecode(item.getString("routecode"));
+//			} catch (Throwable t) {
+//				t.printStackTrace();
+//			}
+//		}
 
 		View v = view;
-		item.put("hasnext", false);
-		System.out.println("total-> "+total+" list size-> "+list.size()+" position-> "+position);
-		if (list.size() < total && position == list.size()-1) {
-			v = inflater.inflate(R.layout.item_string, null);
-			item.put("hasnext", true);
-			((TextView) v.findViewById(R.id.tv_item_str)).setText("View More..");
-			return v;
-		}
+//		item.put("hasnext", false);
+//		System.out.println("total-> "+total+" list size-> "+list.size()+" position-> "+position);
+//		if (list.size() < total && position == list.size()-1) {
+//			v = inflater.inflate(R.layout.item_string, null);
+//			item.put("hasnext", true);
+//			((TextView) v.findViewById(R.id.tv_item_str)).setText("View More..");
+//			return v;
+//		}
 		
 		if(v == null) {
 			v = inflater.inflate(R.layout.item_collectionsheet, null);
 		}
 		//CheckedTextView ctv_name = (CheckedTextView) v.findViewById(R.id.ctv_info_name);
-		TextView tv_info_name = (TextView) v.findViewById(R.id.tv_specialcollection_remarks);
-		ImageView iv_info_paid = (ImageView) v.findViewById(R.id.iv_specialcollection_approved);
+		TextView tv_info_name = (TextView) v.findViewById(R.id.tv_item_collectionsheet);
+		ImageView iv_info_paid = (ImageView) v.findViewById(R.id.iv_item_collectionsheet);
 			
 		tv_info_name.setText(item.get("acctname").toString());
 		

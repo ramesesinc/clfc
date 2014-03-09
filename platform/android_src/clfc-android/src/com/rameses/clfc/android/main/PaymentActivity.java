@@ -54,6 +54,8 @@ public class PaymentActivity extends ControlActivity
 	private BigDecimal overpayment = new BigDecimal("0").setScale(2);
 	private BigDecimal defaultAmount = new BigDecimal("0").setScale(2);
 	private String objid = "";
+	private double lng = 0.0;
+	private double lat = 0.0;
 	
 	private RelativeLayout rl_overpayment;
 	private RelativeLayout rl_container;
@@ -206,6 +208,7 @@ public class PaymentActivity extends ControlActivity
 					}
 				}
 				
+				System.out.println("trackerid-> "+trackerid);
 				synchronized (PaymentDB.LOCK) {
 					paymentdb = new SQLTransaction("clfcpayment.db");
 					try {
@@ -225,7 +228,10 @@ public class PaymentActivity extends ControlActivity
 			
 			private void execPayment(SQLTransaction paymentdb, String trackerid) throws Exception {
 				
-				location = NetworkLocationProvider.getLocation();				
+				location = NetworkLocationProvider.getLocation();
+				lng = (location == null? 0.0 : location.getLongitude());
+				lat = (location == null? 0.0 : location.getLatitude());
+//				System.out.println("location-> "+location);
 				params = new HashMap();
 				params.put("objid", objid);
 				params.put("state", "PENDING");
@@ -239,8 +245,10 @@ public class PaymentActivity extends ControlActivity
 				params.put("detailid", detailid);
 				params.put("routecode", routecode);
 				params.put("isfirstbill", isfirstbill);
-				params.put("longitude", location.getLongitude());
-				params.put("latitude", location.getLatitude());
+//				System.out.println("longitude-> "+location.getLongitude());
+				params.put("longitude", lng);
+//				System.out.println("latitude-> "+location.getLatitude());
+				params.put("latitude", lat);
 				params.put("trackerid", trackerid);
 				params.put("collectorid", SessionContext.getProfile().getUserId());
 				params.put("collectorname", SessionContext.getProfile().getFullName());
@@ -256,3 +264,4 @@ public class PaymentActivity extends ControlActivity
 		});
 	}	
 }
+;

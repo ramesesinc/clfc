@@ -13,7 +13,7 @@ class AppServices implements Runnable
 	
 	public void run() { 
 		networkChecker.start();
-		locationTracker.start();
+		locationTracker.start(); 
 //		voidRequest.start();
 //		payment.start();
 //		remarks.start();

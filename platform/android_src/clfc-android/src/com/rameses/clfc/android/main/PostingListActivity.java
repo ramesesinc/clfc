@@ -195,13 +195,13 @@ public class PostingListActivity extends ControlActivity
 				}
 				
 				child = inflater.inflate(R.layout.item_string, null);
-				((TextView) child.findViewById(R.id.tv_item_str)).setText(map.get("acctname").toString());
+				((TextView) child.findViewById(R.id.tv_item_str)).setText(proxy.getString("acctname"));
 				if (posted == true) {
-					System.out.println("Posted = "+noOfPosted);
+//					System.out.println("Posted = "+noOfPosted);
 					noOfPosted++;
 					ll_posted.addView(child);
 				} else {
-					System.out.println("Unposted = "+noOfUnposted);
+//					System.out.println("Unposted = "+noOfUnposted);
 					noOfUnposted++;
 					ll_unposted.addView(child);
 				}

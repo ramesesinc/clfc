@@ -48,6 +48,7 @@ public class ApplicationImpl extends UIApplication
 		
 //		Platform.setDebug(true);
 		NetworkLocationProvider.setEnabled(true);
+		System.out.println("NetworkLocationProvider enabled");
 //		NetworkLocationProvider.setDebug(true);
 		try {
 //			System.out.println("passing 1");

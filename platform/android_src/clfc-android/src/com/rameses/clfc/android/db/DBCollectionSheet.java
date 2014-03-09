@@ -22,6 +22,32 @@ public class DBCollectionSheet extends AbstractDBMapper
 		}
 	}
 	
+	public void dropIndex() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			System.out.println("drop index");
+			String sql = "DROP INDEX IF EXISTS idx_collectionsheet";
+			ctx.execute(sql);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
+	public void addIndex() throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			System.out.println("create index");
+			String sql = "CREATE INDEX IF NOT EXISTS idx_collectionsheet ON collectionsheet(acctname)";
+			ctx.execute(sql);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
 	public List<Map> getCollectionSheetsByRoutecodeAndSearchtext(Map params, int limit) throws Exception {
 		DBContext ctx = createDBContext();
 		try {

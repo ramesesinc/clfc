@@ -1,14 +1,13 @@
 package com.rameses.clfc.android;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.os.Handler;
 
-import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
-import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.db.android.DBContext;
@@ -20,12 +19,9 @@ public class PaymentService
 	private ApplicationImpl app;
 	private Handler handler;
 	private SQLTransaction paymentdb;
-	private DBContext clfcdb;
-	private DBContext paymentdb2;
 	private DBPaymentService paymentSvc = new DBPaymentService();
 	
 	private String mode = "";
-	private String trackerid;
 	private Map params = new HashMap();
 	private Map loanapp = new HashMap();
 	private Map payment = new HashMap(); 
@@ -37,7 +33,6 @@ public class PaymentService
 	private MapProxy proxy;
 	private int size;
 	private int delay;
-	private List<Map> list;
 	private LoanPostingService svc = new LoanPostingService();
 	private boolean hasUnpostedPayments = false;
 
@@ -60,21 +55,30 @@ public class PaymentService
 	
 	private Runnable runnableImpl = new Runnable() {
 		public void run() {
-			
+			List<Map> list = new ArrayList<Map>();
 			synchronized (PaymentDB.LOCK) {
 				paymentdb = new SQLTransaction("clfcpayment.db");
+				paymentSvc.setDBContext(paymentdb.getContext());
 				try {
 					paymentdb.beginTransaction();
-					execPayment(paymentdb);
-
-					paymentSvc.setDBContext(paymentdb.getContext());
-					hasUnpostedPayments = paymentSvc.hasUnpostedPayments();
-
+					list = paymentSvc.getPendingPayments(5);
 					paymentdb.commit();
 				} catch (Throwable t) {
 					t.printStackTrace();
 				} finally {
 					paymentdb.endTransaction();
+				}
+			}
+
+			execPayment(list);
+
+			synchronized (PaymentDB.LOCK) {
+				DBContext ctx = new DBContext("clfcpayment.db");
+				paymentSvc.setDBContext(ctx);
+				try {
+					hasUnpostedPayments = paymentSvc.hasUnpostedPayments();
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 			}
 //			paymentdb = new SQLTransaction("clfcpayment.db");
@@ -113,10 +117,8 @@ public class PaymentService
 			}
 		}
 		
-		private void execPayment(SQLTransaction paymentdb) throws Exception {
-			paymentSvc.setDBContext(paymentdb.getContext());
+		private void execPayment(List<Map> list) {
 			
-			list = paymentSvc.getPendingPayments(5);
 			if (!list.isEmpty()) {
 				size = list.size();
 				for(int i=0; i<size; i++) {
@@ -160,7 +162,7 @@ public class PaymentService
 					params.put("sessionid", proxy.getString("sessionid"));
 					params.put("routecode", proxy.getString("routecode"));
 					params.put("mode", mode);
-					params.put("trackerid", trackerid);
+					params.put("trackerid", proxy.getString("trackerid"));
 					params.put("longitude", proxy.getDouble("longitude"));
 					params.put("latitude", proxy.getDouble("latitude"));
 					params.put("collector", collector);
@@ -175,7 +177,19 @@ public class PaymentService
 						} catch (Throwable e) {;} 
 					}
 					if (response.containsKey("response") && response.get("response").toString().toLowerCase().equals("success")) {
-						paymentSvc.approvePaymentById(proxy.getString("objid"));
+						synchronized (PaymentDB.LOCK) {
+							paymentdb = new SQLTransaction("clfcpayment.db");
+							paymentSvc.setDBContext(paymentdb.getContext());
+							try {
+								paymentdb.beginTransaction();
+								paymentSvc.approvePaymentById(proxy.getString("objid"));
+								paymentdb.commit();
+							} catch (Throwable t) {
+								t.printStackTrace();
+							} finally {
+								paymentdb.endTransaction();
+							}
+						}
 					}
 				}
 			}
