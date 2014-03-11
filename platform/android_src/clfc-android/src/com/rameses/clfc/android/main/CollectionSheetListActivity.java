@@ -46,6 +46,7 @@ public class CollectionSheetListActivity extends ControlActivity
 	private int size = 11;
 	private MapProxy proxy;
 	private EditText et_search;
+//	private LinearLayout ll_collectionsheet;
 	
 	@Override
 	protected void onCreateProcess(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class CollectionSheetListActivity extends ControlActivity
 		routecode = intent.getStringExtra("routecode");
 		et_search = (EditText) findViewById(R.id.et_search);
 		lv_collectionsheet = (ListView) findViewById(R.id.lv_collectionsheet);
+//		ll_collectionsheet = (LinearLayout) findViewById(R.id.ll_collectionsheet);
 	}
 	
 	@Override
@@ -73,6 +75,7 @@ public class CollectionSheetListActivity extends ControlActivity
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// TODO Auto-generated method stub
+//				size = 11;
 				loadCollectionSheets(s+"");
 			}
 
@@ -208,21 +211,25 @@ public class CollectionSheetListActivity extends ControlActivity
 			}
 		}
 
-		boolean eof = true;
-		if (list.size() < total) {
-			listSize = list.size()-1;
-			eof = false;
-		}
+		listSize = list.size();
+//		boolean eof = true;
+//		if (list.size() < total) {
+//			listSize = list.size()-1;
+//			eof = false;
+//		}
 		
 //		lv_collectionsheet.removeAllViews();
-		lv_collectionsheet.removeAllViewsInLayout();	
+//		lv_collectionsheet.removeAllViewsInLayout();
+//		ll_collectionsheet.removeAllViews();
+//		ll_collectionsheet.removeAllViewsInLayout();
 
-		View view = inflater.inflate(R.layout.item_collectionsheet, null);
+		View view;
 		TextView tv_info_name;
 		ImageView iv_info_paid;
 		int noOfPayments = 0;
 		int noOfVoids = 0;
 		for (int i=0; i<listSize; i++) {
+			view = inflater.inflate(R.layout.item_collectionsheet, null);
 			tv_info_name = (TextView) view.findViewById(R.id.tv_item_collectionsheet);
 			iv_info_paid = (ImageView) view.findViewById(R.id.iv_item_collectionsheet);
 			
@@ -244,12 +251,32 @@ public class CollectionSheetListActivity extends ControlActivity
 				iv_info_paid.setVisibility(View.VISIBLE);
 			}
 			
-			lv_collectionsheet.addView(view);
+//			addViewProperties(view);
+//			ll_collectionsheet.addView(view);
 		}
-		if (eof == false) {
-			proxy = new MapProxy((Map) list.get(list.size()-1));
-		}
+//		if (eof == false) {
+//			proxy = new MapProxy((Map) list.get(list.size()-1));
+//		}
 	}
+	
+//	private void addViewProperties(View view) {
+//		view.setClickable(true);
+//		view.setOnLongClickListener(new View.OnLongClickListener() {
+//			@Override
+//			public boolean onLongClick(View v) {
+//				// TODO Auto-generated method stub
+//				v.setBackgroundResource(android.R.drawable.list_selector_background);
+//				return false;
+//			}
+//		});
+//		view.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				v.setBackgroundResource(android.R.drawable.list_selector_background);
+//			}
+//		});
+//	}
 	
 	private void showPaymentTypeDialog(final Map map) {
 		CharSequence[] items = {"Schedule", "Overpayment"};

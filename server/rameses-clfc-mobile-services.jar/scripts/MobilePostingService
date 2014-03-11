@@ -59,11 +59,12 @@ class MobilePostingService
 				reftype		: 'PAYMENT',
 				lng 		: params.longitude,
 				lat 		: params.latitude,
-				remarks 	: 'RECEIVED PAYMENT FROM '+params.collectionsheet.borrower.name
+				remarks 	: 'RECEIVED PAYMENT FROM '+params.collectionsheet.borrower.name,
+				state 		: 1
 			];
 			trackerSvc.log(tracker);
 		}
-		println "post payment";
+		//println "post payment";
 		return [response: "success"];
 	}
 
