@@ -20,7 +20,7 @@ public class CommonService extends AbstractService
     public String getServiceName() { return "MobileCommonService"; }
 
     public Date getServerDate() { 
-        Object result = invoke("getServerDate", null);
+        Object result = invoke("getServerDateAsString", null);
         try {
             return java.sql.Timestamp.valueOf(result.toString()); 
         } catch(Throwable t) {
