@@ -10,6 +10,7 @@
 package com.rameses.client.android;
 
 import android.content.SharedPreferences;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -68,29 +69,47 @@ public abstract class AppSettings
         return getPrefs().getBoolean(name, defaultValue);
     } 
     
+    protected void beforeClear() {}
+    protected void afterClear() {}
+    
     public void clear() {
+        beforeClear();
         SharedPreferences.Editor editor = getPrefs().edit();
         editor.clear().commit();
+        afterClear();
     }
+    
+    protected void beforeRemove(String name) {}
+    protected void afterRemove(String name) {}
     
     public void remove(String name) {
         if (name == null) return;
-        
+    
+        beforeRemove(name);
         SharedPreferences.Editor editor = getPrefs().edit();
         editor.remove(name).commit();
+        afterRemove(name);
     }
+    
+    protected void beforeSave(Map data) {} 
+    protected void afterSave(Map data) {} 
     
     public void put(String name, Object value) { 
         if (name == null) return;
-                
+        
+        Map data = new HashMap();
+        data.put(name, value);
+        beforeSave(data);
         SharedPreferences.Editor editor = getPrefs().edit();
         put(editor, name, value); 
         editor.commit(); 
+        afterSave(data);
     } 
     
     public void putAll(Map<String,Object> map) {
         if (map == null) return;
         
+        beforeSave(map);
         SharedPreferences.Editor editor = getPrefs().edit(); 
         Iterator<String> itr = map.keySet().iterator(); 
         while (itr.hasNext()) { 
@@ -99,7 +118,8 @@ public abstract class AppSettings
             put(editor, key, val);
         }
         editor.commit(); 
-    }
+        afterSave(map); 
+    } 
     
     public Map<String,?> getAll() {
         return getPrefs().getAll();
