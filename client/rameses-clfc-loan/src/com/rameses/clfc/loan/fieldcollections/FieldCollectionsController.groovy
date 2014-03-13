@@ -6,7 +6,7 @@ import com.rameses.rcp.framework.*;
 import com.rameses.osiris2.client.*;
 import com.rameses.osiris2.common.*;
 
-class CollectionController 
+class FieldCollectionsController 
 {
     @Service("LoanFieldCollectionService")
     def fieldColSvc;
@@ -18,7 +18,7 @@ class CollectionController
     def routeList;
     def selectedCollectionSheet = [:];
     
-    CollectionController() {
+    FieldCollectionsController() {
         try {
             routeSvc = InvokerProxy.instance.create("LoanRouteService");
             routeList = routeSvc.getList([:]);

@@ -2,6 +2,7 @@
     <invokers>
         <invoker folderid="/menu/txn/collection" action="init" caption="Add Payment" role="CASHIER" index="3"/>
         <invoker type="quick_launcher" code="PMT" action="init" caption="Add Payment" role="CASHIER"/> 
+        <invoker type="home.action" action="init" caption="Add Payment" role="CASHIER"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W"
             visibleWhen="#{mode == 'init'}" immediate="true"/>

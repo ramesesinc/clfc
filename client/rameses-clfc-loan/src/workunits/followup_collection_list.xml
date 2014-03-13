@@ -1,0 +1,34 @@
+<workunit extends="wtemplates/ListController.xml">
+    <invokers>
+        <invoker folderid="/explorer/txn/loan" caption="Follow-up Collections" role="ACCT_OFFICER" />
+        
+    </invokers>
+    
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+        
+        class FollowupCollectionListController extends ListController
+        {
+            String serviceName = "LoanSpecialCollectionService";
+            String entityName = "followupcollection";
+            
+            def svc;
+            
+            FollowupCollectionListController() {
+                try {
+                    svc = InvokerProxy.instance.create("LoanSpecialCollectionService");
+                } catch(ConnectException ce) {
+                    ce.printStackTrace();
+                    throw ce;
+                }   
+            }
+            
+            public List fetchList( Map params ) {
+                return svc.getFollowupCollectionList(params);
+            }
+        }
+    </code>
+</workunit>

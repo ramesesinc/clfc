@@ -2,6 +2,7 @@
     <invokers>
         <invoker folderid="/menu/txn/collection" action="init" caption="Online Collection" role="CASHIER" index="4"/>
         <invoker type="quick_launcher" code="OCOL" action="init" caption="Online Collection" role="CASHIER"/> 
+        <invoker type="home.action" action="init" caption="Online Collection" role="CASHIER"/>
         
         <invoker type="formActions" action="close" caption="Close" mnemonic="c" shortcut="ctrl W"
             visibleWhen="#{mode == 'init'}" immediate="true"/>
