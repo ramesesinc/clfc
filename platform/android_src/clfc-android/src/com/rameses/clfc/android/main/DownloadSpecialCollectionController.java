@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.rameses.clfc.android.ApplicationUtil;
+import com.rameses.clfc.android.MainDB;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBSpecialCollection;
 import com.rameses.clfc.android.db.DBSystemService;
@@ -117,8 +118,19 @@ public class DownloadSpecialCollectionController
 			
 			DBCollectionSheet dbCs = new DBCollectionSheet();
 			dbCs.setDBContext(txn.getContext());
+
+			String billingid = "";
+			synchronized (MainDB.LOCK) {
+				billingid = dbSys.getBillingid();			
+				if (billingid == null || "".equals(billingid)) {
+					billingid = map.get("billingid").toString();
+					Map mParams = new HashMap();
+					mParams.put("name", "billingid");
+					mParams.put("value", billingid);
+					txn.insert("sys_var", mParams);
+				}
+			}
 			
-			String billingid = dbSys.getBillingid();
 			String collectorid = SessionContext.getProfile().getUserId();
 			
 			Map params = new HashMap();
@@ -127,8 +139,10 @@ public class DownloadSpecialCollectionController
 			params.clear();
 			params.put("objid", item.get("objid").toString());
 			params.put("state", item.get("state").toString());
-			System.out.println("params -> "+params);
-			dbSc.changeStateById(params);
+//			System.out.println("params -> "+params);
+			synchronized (MainDB.LOCK) {
+				dbSc.changeStateById(params);
+			}
 			
 			List<Map> list = (List<Map>) map.get("routes");
 
@@ -144,7 +158,9 @@ public class DownloadSpecialCollectionController
 					params.put("state", "ACTIVE");
 					params.put("sessionid", billingid);
 					params.put("collectorid", collectorid);
-					txn.insert("route", params);
+					synchronized (MainDB.LOCK) {
+						txn.insert("route", params);	
+					}
 				}
 			}
 			
@@ -155,10 +171,9 @@ public class DownloadSpecialCollectionController
 				for (int i=0; i<list.size(); i++) {
 					m = (Map) list.get(i);
 										
-					params.clear();
+					params = new HashMap();
 					params.put("loanappid", m.get("loanappid").toString());
 					params.put("detailid", m.get("objid").toString());
-					params.put("seqno", dbCs.getCountByRoutecode(m.get("routecode").toString()));
 					params.put("appno", m.get("appno").toString());
 					params.put("acctid", m.get("acctid").toString());
 					params.put("acctname", m.get("acctname").toString());
@@ -180,7 +195,10 @@ public class DownloadSpecialCollectionController
 					params.put("collectionaddress", m.get("collectionaddress").toString());
 					params.put("sessionid", m.get("sessionid").toString());
 					params.put("type", "");
-					txn.insert("collectionsheet", params);
+					synchronized (MainDB.LOCK) {
+						params.put("seqno", dbCs.getCountByRoutecode(m.get("routecode").toString()));
+						txn.insert("collectionsheet", params);
+					}
 				}
 			}
 		}

@@ -3,7 +3,6 @@ package com.rameses.clfc.android;
 import java.io.File;
 import java.util.Properties;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.os.Handler;
 
@@ -31,6 +30,8 @@ public class ApplicationImpl extends UIApplication
 	public RemarksService remarksSvc;
 	public RemarksRemovedService remarksRemovedSvc;
 	public BroadcastLocationService broadcastLocationSvc;
+	public LocationTrackerService locationTrackerSvc;
+	private NetworkCheckerService networkCheckerSvc;
 	
 	public File getLogFile() {
 		// TODO Auto-generated method stub
@@ -73,8 +74,15 @@ public class ApplicationImpl extends UIApplication
 			e.printStackTrace();
 		}
 		
-		AppServices services = new AppServices(this);
-		new Handler().postDelayed(services, 1);
+		
+		networkCheckerSvc = new NetworkCheckerService(this);
+		locationTrackerSvc = new LocationTrackerService(this);
+		new Handler().postDelayed(new Runnable() {
+			public void run() {
+				networkCheckerSvc.start();
+				locationTrackerSvc.start();
+			}
+		}, 1);
 
 		voidRequestSvc = new VoidRequestService(this);
 		paymentSvc = new PaymentService(this);

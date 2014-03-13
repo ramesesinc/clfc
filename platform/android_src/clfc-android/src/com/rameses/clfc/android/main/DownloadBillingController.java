@@ -165,7 +165,8 @@ public class DownloadBillingController
 			ArrayList list;
 			String loanappid;
 			dbCs.dropIndex();
-			for (int i=0; i<billings.size(); i++) {
+			int size = billings.size();
+			for (int i=0; i<size; i++) {
 				params = (Map) billings.get(i);
 				
 				System.out.println("loanappid -> "+params.get("loanappid").toString());

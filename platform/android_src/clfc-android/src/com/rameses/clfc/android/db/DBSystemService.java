@@ -23,7 +23,7 @@ public class DBSystemService extends AbstractDBMapper
 		}	
 	}
 	
-	public boolean hasBilling() throws Exception {
+	public boolean hasBillingid() throws Exception {
 		DBContext ctx = createDBContext();
 		try {
 			String sql = "SELECT name FROM "+getTableName()+" WHERE name='billingid' LIMIT 1";

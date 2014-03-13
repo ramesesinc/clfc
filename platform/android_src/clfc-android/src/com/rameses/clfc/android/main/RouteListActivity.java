@@ -15,7 +15,11 @@ import android.widget.RelativeLayout;
 
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
+import com.rameses.clfc.android.db.DBPaymentService;
+import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.client.android.UIDialog;
+import com.rameses.db.android.DBContext;
+import com.rameses.db.android.SQLTransaction;
 
 public class RouteListActivity extends ControlActivity 
 {
@@ -78,8 +82,75 @@ public class RouteListActivity extends ControlActivity
 		route = (Map) parent.getItemAtPosition(position);
 //		System.out.println("route -> "+route);
 		if (!"1".equals(route.get("downloaded").toString())) {
-			new DownloadBillingController(this, progressDialog, route).execute();
+			boolean flag = hasUnremittedCollections(route); 
+			if (flag == true) {
+				UIDialog dialog = new UIDialog() {
+
+					public void onApprove() {
+						SQLTransaction clfcdb = new SQLTransaction("clfc.db");
+						SQLTransaction paymentdb = new SQLTransaction("clfcpayment.db");
+						SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");
+						try {
+							clfcdb.beginTransaction();
+							paymentdb.beginTransaction();
+							remarksdb.beginTransaction();
+							
+							String whereClause = "routecode=?";
+							Object[] params = new Object[]{route.get("code").toString()};
+							clfcdb.delete("route", whereClause, params);
+							clfcdb.delete("collectionsheet", whereClause, params);
+							paymentdb.delete("payment", whereClause, params);
+							remarksdb.delete("remarks", whereClause, params);
+							
+							clfcdb.commit();
+							paymentdb.commit();
+							remarksdb.commit();
+							downloadBilling();
+						} catch (Throwable t) {
+							UIDialog.showMessage(t, RouteListActivity.this);
+						} finally {
+							clfcdb.endTransaction();
+							paymentdb.endTransaction();
+							remarksdb.endTransaction();
+						}
+					}
+				};
+				dialog.confirm("There are still unremitted collections for this route. Downloading new billing will remove all current collections. Do you still want to continue downloading new billing?");
+			} else if (flag == false) {
+				downloadBilling();
+			}
 		}
+	}
+	
+	private void downloadBilling() throws Exception {
+		new DownloadBillingController(this, progressDialog, route).execute();
+	}
+	
+	private boolean hasUnremittedCollections(Map route) {
+		boolean flag = false;
+		String routecode = route.get("code").toString();
+		DBContext ctx = new DBContext("clfcpayment.db");
+		DBPaymentService paymentSvc = new DBPaymentService();
+		paymentSvc.setDBContext(ctx);
+		
+		try {
+			flag = paymentSvc.hasPaymentsByRoutecode(routecode);
+		} catch (Throwable t) {
+			UIDialog.showMessage(t, RouteListActivity.this);
+		}
+		if (flag == true) return true;
+		
+		ctx = new DBContext("clfcremarks.db");
+		DBRemarksService remarksSvc = new DBRemarksService();
+		remarksSvc.setDBContext(ctx);
+		
+		try {
+			flag = remarksSvc.hasRemarksByRoutecode(routecode);
+		} catch (Throwable t) {
+			UIDialog.showMessage(t, RouteListActivity.this);
+		}
+		if (flag == true) return true;
+		return false;
 	}
 	
 }

@@ -1,6 +1,8 @@
 package com.rameses.clfc.android;
 
-class AppServices implements Runnable
+import com.rameses.client.android.Task;
+
+class AppServices extends Task
 {
 	private ApplicationImpl app;
 	private NetworkCheckerService networkChecker;

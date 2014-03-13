@@ -7,8 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +16,6 @@ import android.widget.RelativeLayout;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.R;
-import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.clfc.android.db.DBRouteService;
 import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.system.ChangePasswordActivity;
@@ -26,7 +23,6 @@ import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.UIDialog;
 import com.rameses.db.android.DBContext;
-import com.rameses.db.android.SQLTransaction;
 
 public class ControlPanelActivity extends ControlActivity 
 {
@@ -57,6 +53,8 @@ public class ControlPanelActivity extends ControlActivity
 	
 	protected void onStartProcess() {
 		super.onStartProcess();
+//		System.out.println("roles-> "+SessionContext.getProfile().getRoles());
+		
 		System.out.println("serverDate -> " + Platform.getApplication().getServerDate().toString());
 		DBContext clfcdb = new DBContext("clfc.db");
 		routeSvc.setDBContext(clfcdb);
@@ -124,14 +122,22 @@ public class ControlPanelActivity extends ControlActivity
 			startActivity(intent);
 			
 		} else if (itemId.equals("request")) {
-			DBContext clfcdb = new DBContext("clfc.db");
-			systemSvc.setDBContext(clfcdb);
+			Map roles = SessionContext.getProfile().getRoles();
 			
-			if (systemSvc.hasBilling()) {
-				Intent intent = new Intent(this, SpecialCollectionActivity.class);
-				startActivity(intent);
+			if (roles == null) return;
+
+			Intent intent = new Intent(this, SpecialCollectionActivity.class);
+			if (roles.containsKey("LOAN.FIELD_COLLECTOR")) {
+				DBContext clfcdb = new DBContext("clfc.db");
+				systemSvc.setDBContext(clfcdb);
+				
+				if (systemSvc.hasBillingid()) {
+					startActivity(intent);
+				} else {
+					ApplicationUtil.showShortMsg("You have no billing downloaded. Download billing first before you can request for special collection.");
+				}
 			} else {
-				ApplicationUtil.showShortMsg("You have no billing downloaded. Download billing first before you can request for special collection.");
+				startActivity(intent);
 			}
 		} else if (itemId.equals("remit")) {
 			Intent intent = new Intent(this, RemitRouteCollectionActivity.class);

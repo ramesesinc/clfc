@@ -83,6 +83,18 @@ public class DBPaymentService extends AbstractDBMapper
 		}
 	}
 	
+	public boolean hasPaymentsByRoutecode(String routecode) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT objid FROM "+getTableName()+" WHERE routecode=? LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{routecode}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
 	public List<Map> getPendingPayments(int limit) throws Exception {
 		DBContext ctx = createDBContext();
 		try {

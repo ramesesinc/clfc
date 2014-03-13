@@ -1,11 +1,26 @@
 package com.rameses.clfc.android;
 
+import java.util.Map;
+
 import com.rameses.client.android.AppSettings;
+import com.rameses.client.android.Platform;
 
 public class AppSettingsImpl extends AppSettings 
 {
 	AppSettingsImpl() {
 		
+	}
+	
+	protected void afterSave(Map data) {
+		ApplicationImpl app = (ApplicationImpl) Platform.getApplication();
+		if (app != null) {
+			app.locationTrackerSvc.restart();
+			app.paymentSvc.restart();
+			app.broadcastLocationSvc.restart();
+			app.remarksRemovedSvc.restart();
+			app.remarksSvc.restart();
+			app.voidRequestSvc.restart();
+		}
 	}
 	
 	public String getAppHost(int networkStatus) {

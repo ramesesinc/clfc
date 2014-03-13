@@ -10,12 +10,14 @@ import android.os.Handler;
 import com.rameses.clfc.android.db.DBVoidService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
-import com.rameses.db.android.DBContext;
+import com.rameses.client.android.Task;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
 public class VoidRequestService 
 {
+	private final int SIZE = 6;
+	
 	private ApplicationImpl app;
 	private Handler handler;
 	private SQLTransaction requestdb = new SQLTransaction("clfcrequest.db");
@@ -27,6 +29,7 @@ public class VoidRequestService
 	private int size;
 	private boolean hasPendingRequest = false;
 	private String state = "";
+	private Task actionTask;
 	
 	public static boolean serviceStarted = false;
 	
@@ -41,84 +44,87 @@ public class VoidRequestService
 		} 
 		if (serviceStarted == false) {
 			serviceStarted = true;
-			Platform.getTaskManager().schedule(runnableImpl, 0);
+			createTask();
+			Platform.getTaskManager().schedule(actionTask, 1000, 5000);
 		}
 	}
 	
-	private Runnable runnableImpl = new Runnable()
-	{
-		public void run() {
-			List<Map> list = new ArrayList<Map>();
-			synchronized (VoidRequestDB.LOCK) {
-				requestdb = new SQLTransaction("clfcrequest.db");
-				voidService.setDBContext(requestdb.getContext());
-//				System.out.println("ApprovePendingVoidRequest");
-				try {
-					requestdb.beginTransaction();
-					list = voidService.getPendingVoidRequests(5); 
-					requestdb.commit();
-				} catch (Throwable t) {
-					System.out.println("[ApprovePendingVoidRequest] error caused by " + t.getClass().getName() + ": " + t.getMessage()); 
-				} finally {
-					requestdb.endTransaction();
+	public void restart() {
+		if (serviceStarted == true) {
+			actionTask.cancel();
+			actionTask = null;
+			serviceStarted = false;
+		}
+		start();
+	}
+	
+	private void createTask() {
+		actionTask = new Task() {
+			public void run() {
+				List<Map> list = new ArrayList<Map>();
+				synchronized (VoidRequestDB.LOCK) {
+					requestdb = new SQLTransaction("clfcrequest.db");
+					voidService.setDBContext(requestdb.getContext());
+//					System.out.println("ApprovePendingVoidRequest");
+					try {
+						requestdb.beginTransaction();
+						list = voidService.getPendingVoidRequests(SIZE); 
+						requestdb.commit();
+					} catch (Throwable t) {
+						System.out.println("[ApprovePendingVoidRequest] error caused by " + t.getClass().getName() + ": " + t.getMessage()); 
+					} finally {
+						requestdb.endTransaction();
+					}
 				}
 				
-			}
-			
-			execRequests(list);
-			
-			synchronized (VoidRequestDB.LOCK) {
-				DBContext ctx = new DBContext("clfcrequest.db");
-				voidService.setDBContext(ctx);
-				try {
-					hasPendingRequest = voidService.hasPendingVoidRequest();
-					
-				} catch (Throwable t) {
-					t.printStackTrace();
+				execRequests(list);
+				
+				hasPendingRequest = false;
+				if (list.size() == SIZE) {
+					hasPendingRequest = true;
+				}
+				
+				if (hasPendingRequest == false) {
+					serviceStarted = false;
+					this.cancel();
 				}
 			}
-
-			if (hasPendingRequest == true) {
-				Platform.getTaskManager().schedule(runnableImpl, 2000);
-			} else if (hasPendingRequest == false) {
-				serviceStarted = false;
-			}
-		}
-		
-		private void execRequests(List<Map> list) {
-			if (!list.isEmpty()) {
-				size = list.size();
-				for (int i=0; i<size; i++) {
-					map = (Map) list.get(i);
-					
-					params.clear();
-					params.put("voidid", map.get("objid").toString());
-					
-					response = svc.checkVoidPaymentRequest(params);
-					if (response != null) {
-						state = MapProxy.getString(response, "state");
-					}
-					
-					synchronized (VoidRequestDB.LOCK) {
-						String objid = map.get("objid").toString();
-						requestdb = new SQLTransaction("clfcrequest.db");
-						voidService.setDBContext(requestdb.getContext());
-						try {
-							requestdb.beginTransaction();
-							if ("APPROVED".equals(state)) {
-								voidService.approveVoidPaymentById(objid);
-							} else if ("DISAPPROVED".equals(state)) {
-								voidService.disapproveVoidPaymentById(objid);
+			
+			private void execRequests(List<Map> list) {
+				if (!list.isEmpty()) {
+					size = (list.size() < SIZE-1? list.size() : SIZE-1);
+					for (int i=0; i<size; i++) {
+						map = (Map) list.get(i);
+						
+						params.clear();
+						params.put("voidid", map.get("objid").toString());
+						
+						response = svc.checkVoidPaymentRequest(params);
+						if (response != null) {
+							state = MapProxy.getString(response, "state");
+						}
+						
+						synchronized (VoidRequestDB.LOCK) {
+							String objid = map.get("objid").toString();
+							requestdb = new SQLTransaction("clfcrequest.db");
+							voidService.setDBContext(requestdb.getContext());
+							try {
+								requestdb.beginTransaction();
+								if ("APPROVED".equals(state)) {
+									voidService.approveVoidPaymentById(objid);
+								} else if ("DISAPPROVED".equals(state)) {
+									voidService.disapproveVoidPaymentById(objid);
+								}
+								requestdb.commit();
+							} catch (Throwable t) {
+								t.printStackTrace();
+							} finally {
+								requestdb.endTransaction();
 							}
-							requestdb.commit();
-						} catch (Throwable t) {
-							t.printStackTrace();
-						} finally {
-							requestdb.endTransaction();
 						}
 					}
 				}
 			}
-		}
-	};
+		};
+	}
 }

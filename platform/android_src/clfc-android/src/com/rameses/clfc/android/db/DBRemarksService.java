@@ -45,6 +45,18 @@ public class DBRemarksService extends AbstractDBMapper
 		}
 	}
 	
+	public boolean hasRemarksByRoutecode(String routecode) throws Exception {
+		DBContext ctx = createDBContext();
+		try {
+			String sql = "SELECT loanappid FROM "+getTableName()+" WHERE routecode=? LIMIT 1";
+			return (ctx.getCount(sql, new Object[]{routecode}) > 0);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (isCloseable()) ctx.close();
+		}
+	}
+	
 	public Map findRemarksByLoanappid(String loanappid) throws Exception {
 		DBContext ctx = createDBContext();
 		try {
