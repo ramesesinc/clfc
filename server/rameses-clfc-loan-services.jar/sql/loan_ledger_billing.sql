@@ -13,6 +13,11 @@ SELECT * FROM loan_ledger_billing
 WHERE createdby LIKE $P{searchtext}
 ORDER BY billdate
 
+[findBillingByCollectoridAndBilldate]
+SELECT * FROM loan_ledger_billing
+WHERE collector_objid=$P{collectorid}
+	AND billdate=$P{billdate}
+
 [getRoutesByBillingid]
 SELECT lr.*, llbr.downloaded 
 FROM loan_ledger_billing_route llbr

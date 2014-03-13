@@ -4,11 +4,12 @@
 		<field name="objid" primary="true"/>
 		<field name="state" required="true"/>
 		<field name="billingid" required="true"/>
+		<field name="type" required="true"/>
 		<field name="dtrequested" required="true"/>
 		<field name="requestedby" required="true"/>
 		<field name="collector_objid" required="true"/>
 		<field name="collector_name" required="true"/>
-		<field name="remarks" required="true"/>
+		<field name="remarks"/>
 		<field name="downloaded" required="true"/>
 	</element>
 

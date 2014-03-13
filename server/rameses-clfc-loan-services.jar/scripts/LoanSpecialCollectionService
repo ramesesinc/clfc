@@ -44,10 +44,18 @@ class LoanSpecialCollectionService extends ActiveListService
 			[name: 'remarks', caption: 'Reason']
 		]
 	}
-
 	@ProxyMethod
 	public def create( params ) {
 		if (!params.ledgers) throw new Exception("At least one ledger is required.");
+
+		def data = em.read(params);
+		if (!data) {
+			params.type = 'ONLINE';
+			params.dtrequested = dateSvc.serverDate;
+			params.requestedby = (env.NAME? env.NAME : 'NOT IDENTIFIED');
+			params.downloaded = 0;
+			em.create(params);
+		}
 
 		updateRoute(params);
 		updateBilling(params);
@@ -80,6 +88,7 @@ class LoanSpecialCollectionService extends ActiveListService
 
 		def route;
 		params.routes.each{
+			println 'route -> '+it;
 			route = [
 				specialcollectionid 	: params.objid,
 				routecode 				: it.code,
@@ -234,5 +243,18 @@ class LoanSpecialCollectionService extends ActiveListService
 		data.routes = [];
 		data.routes.addAll(data.ledgers.unique{ it.route.code }.route);
 		return data;
+	}
+
+	@ProxyMethod
+	public def getFollowupCollectionList( params ) {
+		return em.getFollowupCollectionList(params);
+	}
+
+	@ProxyMethod
+	public def getCurrentCollectorBilling( params ) {
+		if (!params.collectorid) throw new Exception ("Please specify collectorid.");
+
+		params.billdate = dateSvc.serverDate.toString().split(' ')[0];
+		return ledger_billing.findBillingByCollectoridAndBilldate(params);
 	}
 }

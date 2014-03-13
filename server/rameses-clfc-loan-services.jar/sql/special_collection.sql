@@ -1,5 +1,11 @@
 [getList]
 SELECT * FROM special_collection
+WHERE type='FIELD'
+ORDER BY dtrequested
+
+[getFollowupCollectionList]
+SELECT * FROM special_collection
+WHERE type='ONLINE'
 ORDER BY dtrequested
 
 [getLedgersByBillingid]
