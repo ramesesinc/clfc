@@ -4,6 +4,9 @@ import com.rameses.services.extended.*;
 
 class MobilePostingService
 {
+	@Env
+	def env;
+
 	@ActiveDB(value="field_collection")
 	def field_collection;
 
@@ -201,10 +204,31 @@ class MobilePostingService
 	public def postSpecialCollectionRequest( params ) {
 		if (!params.collector) throw new Exception("Please specify collector.");
 
+		if (!params.billingid) {
+			def date = dateSvc.serverDate;
+			def map = [
+				objid 			: 'DLB'+new java.rmi.server.UID(),
+				state 			: 'DRAFT',
+				dtcreated 		: date,
+				createdby 		: params.collector.name,
+				dtmodified 		: date,
+				modifiedby 		: params.collector.name,
+				collector 		: params.collector,
+				billdate 		: dateSvc.serverDate,
+				branchid 		: (env.ORGID? env.ORGID : 'NOT IDENTIFIED'),
+				totalfordownload: 0,
+				totaldownloaded : 0,
+				totalunposted 	: 0,
+				totalposted 	: 0
+			];
+			ledger_billing.create(map);
+			params.billingid = map.objid;
+		}
+		params.type = 'FIELD';
 		params.dtrequested = dateSvc.serverDate;
 		params.requestedby = params.collector.name;
 		params.downloaded = 0;
-		special_collection.create(params);
+		special_collection.create(params);	
 		return [ response: "success" ];
 	}
 
