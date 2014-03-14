@@ -19,7 +19,7 @@ class MobileBillingService
 	def trackerSvc;
 
 	@ProxyMethod
-	public def getRoutes(params) {
+	public def getForDownloadBilling(params) {
 		if (!params.collectorid) throw new Exception("Please specify collectorid");
 		def date = dateSvc.parseCurrentDate();
 		def d = date.year+'-'+date.month+'-'+date.day;
@@ -29,6 +29,7 @@ class MobileBillingService
 
 		billing.addAll(subbilling);
 
+		def followupcollections = [];
 		def routes = [];
 		def list;
 		billing.each{bill->
@@ -37,8 +38,19 @@ class MobileBillingService
 				it.billingid = bill.objid;
 				routes.add(it);
 			}
+			list = special_collection.getFollowupCollectionsByBillingid([billingid: bill.objid]);
+			list.each{
+				def r = special_collection.getRoutesBySpecialcollectionid([specialcollectionid: it.objid]);
+				def name = "";
+				r.each{ 
+					if (name) name += "-";
+					name += it.route.description;
+				}
+				it.name = name;
+				followupcollections.add(it);
+			}
 		}
-		return routes;
+		return [routes: routes, followupcollections: followupcollections];
 	}
 
 	@ProxyMethod
@@ -117,7 +129,7 @@ class MobileBillingService
 		bill.totaldownloaded++;
 		ledger_billing.update(bill, "totaldownloaded");
 		//ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
-		def session = trackerSvc.open([trackerid: params.trackerid]);
+		def session = trackerSvc.open([objid: params.trackerid]);
 		if (!session) {
 			params.trackerid = trackerSvc.start([lng: params.longitude, lat: params.latitude, terminalid: params.terminalid, userid: params.userid]).objid;
 		}
@@ -126,9 +138,23 @@ class MobileBillingService
 
 	@ProxyMethod
 	public def downloadSpecialCollection( params ) {
+		def mParams = [
+			trackerid	: params.trackerid,
+			lng 		: params.longitude,
+			lat 		: params.latitude,
+			terminalid 	: params.terminalid,
+			userid 		: params.userid
+		];
+
 		params = special_collection.read(params);
 		if (!params) throw new Exception("Special collection request does now exist or has already been deleted.");
 		if (params.state == 'PENDING') throw new Exception("Request is still pending.");
+
+
+		def session = trackerSvc.open([objid: mParams.trackerid]);
+		if (!session) {
+			mParams.trackerid = trackerSvc.start([lng: mParams.lng, lat: mParams.lat, terminalid: mParams.terminalid, userid: mParams.userid]).objid;
+		}
 
 		def routes = [];
 		def mRoutes = special_collection.getRoutesBySpecialcollectionid([specialcollectionid: params.objid]);
@@ -154,6 +180,6 @@ class MobileBillingService
 		params.state = 'DOWNLOADED';
 		params.downloaded = 1;
 		special_collection.update(params);
-		return [routes: routes, list: loans, request: params];
+		return [routes: routes, list: loans, request: params, trackerid: mParams.trackerid];
 	}
 }
