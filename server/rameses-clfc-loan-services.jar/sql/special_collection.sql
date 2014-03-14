@@ -8,6 +8,11 @@ SELECT * FROM special_collection
 WHERE type='ONLINE'
 ORDER BY dtrequested
 
+[getFollowupCollectionsByBillingid]
+SELECT * FROM special_collection
+WHERE type='ONLINE'
+	AND billingid=$P{billingid}
+
 [getLedgersByBillingid]
 SELECT ll.*, lr.code AS route_code, lr.area AS route_area,
 	lr.description AS route_description

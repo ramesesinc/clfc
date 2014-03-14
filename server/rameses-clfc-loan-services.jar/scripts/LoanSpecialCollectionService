@@ -20,6 +20,9 @@ class LoanSpecialCollectionService extends ActiveListService
 	@ActiveDB(value="loan_exemption")
 	def exemption;
 
+	@ActiveDB(value="loan_product_type")
+	def product_type;
+
 	@Service("DateService")
 	def dateSvc;
 
@@ -88,7 +91,7 @@ class LoanSpecialCollectionService extends ActiveListService
 
 		def route;
 		params.routes.each{
-			println 'route -> '+it;
+			//println 'route -> '+it;
 			route = [
 				specialcollectionid 	: params.objid,
 				routecode 				: it.code,
