@@ -143,5 +143,6 @@ public class SessionContext
         public String getFullName() { return null; }
         public String getName() { return null; }
         public String getJobTitle() { return null; }
+        public Map getRoles() { return null; }
     } 
 }

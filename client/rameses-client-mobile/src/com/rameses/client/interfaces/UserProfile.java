@@ -9,6 +9,8 @@
 
 package com.rameses.client.interfaces;
 
+import java.util.Map;
+
 /**
  *
  * @author wflores
@@ -20,4 +22,5 @@ public interface UserProfile
     String getFullName();
     String getName();
     String getJobTitle();
+    Map getRoles();
 } 

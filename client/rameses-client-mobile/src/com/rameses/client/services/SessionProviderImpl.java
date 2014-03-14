@@ -87,6 +87,10 @@ public class SessionProviderImpl extends SessionProvider
         public String getJobTitle() {
             return root.getString(root.env, "JOBTITLE");
         }
+        
+        public Map getRoles() {
+            return (Map) root.getEnv().get("ROLES");
+        }
     }
     
     private class UserSettingImpl implements UserSetting

@@ -54,7 +54,7 @@ public final class NetworkLocationProvider
     public static synchronized void setDebug(boolean debug) {
         instance.debug = debug; 
     }
-
+    
     private Timer timer;
     private Location location;     
     private LocationManager locationMgr;
@@ -94,7 +94,7 @@ public final class NetworkLocationProvider
         } 
         return locationMgr; 
     }
-        
+    
     private void setLocation(Location location) {
         synchronized (LOCKED) { 
             //dump("[NetworkLocationProvider] location-> " + location); 
