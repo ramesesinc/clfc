@@ -2,7 +2,6 @@ package com.rameses.clfc.android.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.app.ProgressDialog;
@@ -63,7 +62,8 @@ class DownloadRoutesController
 			Bundle data = msg.getData();
 			if (progressDialog.isShowing()) progressDialog.dismiss();
 			Intent intent = new Intent(activity, RouteListActivity.class);
-			intent.putExtra("routes", data.getSerializable("response"));
+			intent.putExtra("routes", data.getSerializable("routes"));
+			intent.putExtra("followupcollections", data.getSerializable("followupcollections"));
 			activity.startActivity(intent);
 		}
 	};	
@@ -82,9 +82,11 @@ class DownloadRoutesController
 				Map params = new HashMap();
 				params.put("collectorid", userid);
 				LoanBillingService svc = new LoanBillingService();
-				ArrayList routes = (ArrayList) svc.getRoutes(params);
+//				ArrayList routes = (ArrayList) svc.getRoutes(params);
+				Map result = svc.getForDownloadBilling(params);
 
-				data.putSerializable("response", routes);
+				data.putSerializable("routes", ((ArrayList) result.get("routes")));
+				data.putSerializable("followupcollections",((ArrayList) result.get("followupcollections")));
 				handler = successhandler;
 				message = handler.obtainMessage();
 				

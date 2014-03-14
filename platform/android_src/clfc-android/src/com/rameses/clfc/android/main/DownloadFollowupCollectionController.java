@@ -13,7 +13,6 @@ import android.os.Message;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.MainDB;
 import com.rameses.clfc.android.db.DBCollectionSheet;
-import com.rameses.clfc.android.db.DBSpecialCollection;
 import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.services.LoanBillingService;
 import com.rameses.client.android.NetworkLocationProvider;
@@ -24,20 +23,20 @@ import com.rameses.client.android.UIActivity;
 import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
-public class DownloadSpecialCollectionController 
+public class DownloadFollowupCollectionController 
 {
 	private UIActivity activity;
 	private ProgressDialog progressDialog;
-	private Map specialcollection;
-
-	DownloadSpecialCollectionController(UIActivity activity, ProgressDialog progressDialog, Map specialcollection) {
+	private Map followupcollection;
+	
+	DownloadFollowupCollectionController(UIActivity activity, ProgressDialog progressDialog, Map followupcollection) {
 		this.activity = activity;
 		this.progressDialog = progressDialog;
-		this.specialcollection = specialcollection;
+		this.followupcollection = followupcollection;
 	}
-	
+
 	void execute() throws Exception {
-		progressDialog.setMessage("Downloading special collection..");
+		progressDialog.setMessage("processing...");
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				if (!progressDialog.isShowing()) progressDialog.show();
@@ -46,7 +45,7 @@ public class DownloadSpecialCollectionController
 		
 		Platform.runAsync(new DownloadActionProcess());
 	}
-
+	
 	private Handler errorhandler = new Handler() {  
 		@Override
 		public void handleMessage(Message msg) {
@@ -66,15 +65,17 @@ public class DownloadSpecialCollectionController
 	private Handler successhandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
+			followupcollection.put("downloaded", 1);
 			activity.getHandler().post(new Runnable() {
 				public void run() {
-					((SpecialCollectionActivity) activity).loadRequests();
+					((RouteListActivity) activity).loadFollowupCollections();
 				}
 			});
 			if (progressDialog.isShowing()) progressDialog.dismiss();
-			ApplicationUtil.showShortMsg("Successfully downloaded billing!", activity);
+			ApplicationUtil.showShortMsg("Successfully downloaded follow-up collection!", activity);
 		}
 	};	
+	
 	private class DownloadActionProcess implements Runnable {
 		public void run() {
 			Bundle data = new Bundle();
@@ -84,7 +85,7 @@ public class DownloadSpecialCollectionController
 				Location location = NetworkLocationProvider.getLocation();
 				double lng = (location == null? 0.0 : location.getLongitude());
 				double lat = (location == null? 0.0 : location.getLatitude());
-
+				
 				String trackerid = "";
 				synchronized (MainDB.LOCK) {
 					DBContext ctx = new DBContext("clfc.db");
@@ -98,8 +99,8 @@ public class DownloadSpecialCollectionController
 				}
 				 
 				Map params = new HashMap();
-				params.put("objid", specialcollection.get("objid").toString());
 				params.put("trackerid", trackerid);
+				params.put("objid", followupcollection.get("objid").toString());
 				params.put("terminalid", TerminalManager.getTerminalId());
 				params.put("longitude", lng);
 				params.put("latitude", lat);
@@ -123,7 +124,6 @@ public class DownloadSpecialCollectionController
 			message.setData(data);
 			handler.sendMessage(message);
 		}
-
 		private void saveSpecialCollection(Map map) throws Exception {
 			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
@@ -138,18 +138,19 @@ public class DownloadSpecialCollectionController
 		}
 		
 		private void saveSpecialCollectionImpl(SQLTransaction txn, Map map) throws Exception {
-			DBSpecialCollection specialCollection = new DBSpecialCollection();
-			specialCollection.setDBContext(txn.getContext());
-			
 			DBSystemService systemSvc = new DBSystemService();
 			systemSvc.setDBContext(txn.getContext());
+			systemSvc.setCloseable(false);
 			
 			DBCollectionSheet collectionSheet = new DBCollectionSheet();
 			collectionSheet.setDBContext(txn.getContext());
+			collectionSheet.setCloseable(false);
+
+			Map request = (Map) map.get("request");
 			
 			synchronized (MainDB.LOCK) {
 				String trackerid = systemSvc.getTrackerid();
-				System.out.println("[DownloadSpecialCollectionController.saveSpecialCollectionImpl] trackerid -> "+trackerid);
+				System.out.println("[DownloadFollowupCollectionController.saveSpecialCollectionImpl] trackerid -> "+trackerid);
 				if (trackerid == null || "".equals(trackerid)) {
 					Map mParams = new HashMap();
 					mParams.put("name", "trackerid");
@@ -158,7 +159,6 @@ public class DownloadSpecialCollectionController
 				}
 			}
 			
-			Map request = (Map) map.get("request");
 			
 			String billingid = "";
 			synchronized (MainDB.LOCK) {
@@ -171,24 +171,16 @@ public class DownloadSpecialCollectionController
 					txn.insert("sys_var", mParams);
 				}
 			}
-
-			Map params = new HashMap();
-			params.put("objid", request.get("objid").toString());
-			params.put("state", request.get("state").toString());
-//			System.out.println("params -> "+params);
-			synchronized (MainDB.LOCK) {
-				specialCollection.changeStateById(params);
-			}
 			
-			String collectorid = SessionContext.getProfile().getUserId();
-						
+			String collectorid = SessionContext.getProfile().getUserId();			
+			
+			Map params = new HashMap();
 			List<Map> list = (List<Map>) map.get("routes");
 
 			if (!list.isEmpty()) {
 				Map m;
-				int size = list.size();
 				boolean flag;
-				for (int i=0; i<size; i++) {
+				for (int i=0; i<list.size(); i++) {
 					m = (Map) list.get(i);
 					
 					flag = true;
@@ -205,7 +197,7 @@ public class DownloadSpecialCollectionController
 						params.put("state", "ACTIVE");
 						params.put("sessionid", billingid);
 						params.put("collectorid", collectorid);
-						synchronized (MainDB.LOCK) {						
+						synchronized (MainDB.LOCK) {
 							txn.insert("route", params);	
 						}
 					}
@@ -216,8 +208,7 @@ public class DownloadSpecialCollectionController
 			
 			if (!list.isEmpty()) {				
 				Map m;
-				int size = list.size();
-				for (int i=0; i<size; i++) {
+				for (int i=0; i<list.size(); i++) {
 					m = (Map) list.get(i);
 										
 					params = new HashMap();

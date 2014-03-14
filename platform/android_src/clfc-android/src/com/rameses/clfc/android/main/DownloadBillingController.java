@@ -63,7 +63,11 @@ public class DownloadBillingController
 		@Override
 		public void handleMessage(Message msg) {
 			route.put("downloaded", 1);
-			((RouteListActivity) activity).loadRoutes();
+			activity.getHandler().post(new Runnable() {
+				public void run() {
+					((RouteListActivity) activity).loadRoutes();
+				}
+			});
 			if (progressDialog.isShowing()) progressDialog.dismiss();
 			ApplicationUtil.showShortMsg("Successfully downloaded billing!", activity);
 		}
