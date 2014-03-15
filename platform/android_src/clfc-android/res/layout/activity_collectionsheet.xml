@@ -27,11 +27,17 @@
         android:layout_marginTop="18dp"
         android:background="@color/divider_color" />
 
-    <ListView
-        android:id="@+id/lv_collectionsheet"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null" >
-    </ListView>
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ll_collectionsheet"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
