@@ -1,0 +1,19 @@
+USE clfc2;
+
+ALTER TABLE sys_user
+ADD COLUMN `txncode` VARCHAR(10);
+
+CREATE TABLE IF NOT EXISTS `controlseries` (
+`objid` VARCHAR(50) NOT NULL,
+`state` VARCHAR(25) DEFAULT NULL,
+`dtfiled` DATETIME DEFAULT NULL,
+`filedby` VARCHAR(50) DEFAULT NULL,
+`user_objid` VARCHAR(50) DEFAULT NULL,
+`user_name` VARCHAR(160) DEFAULT NULL,
+`user_txncode` VARCHAR(10) DEFAULT NULL,
+`prefix` VARCHAR(4) DEFAULT NULL,
+`startseries` INT(11) DEFAULT '1',
+`endseries` INT(11) DEFAULT '999999',
+`nextseries` INT(11) DEFAULT '1',
+PRIMARY KEY (`objid`)
+) ENGINE=INNODB DEFAULT CHARSET=latin1
