@@ -20,6 +20,14 @@
             def getOpenerParams() {
                 return [entity: selectedEntity];
             }
+            
+            List fetchList(Map params) {
+                def list = super.fetchList(params);
+                list.each{
+                    println it
+                }
+                return list;
+            }
         }
     </code>
 </workunit>

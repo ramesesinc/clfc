@@ -101,6 +101,7 @@ class OnlineCollectionController
     def next() {
         mode = 'read';
         entity = service.getCollectionForPosting([collector: collector, txndate: txndate]);
+        entity.collectorid = collector.objid;
         paymentsHandler.reload();
         if (!entity.cashbreakdown) {
             mode = 'create';

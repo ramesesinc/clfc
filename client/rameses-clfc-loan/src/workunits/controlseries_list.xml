@@ -1,0 +1,36 @@
+<workunit extends="wtemplates/ListController.xml">
+    <invokers>
+        <invoker folderid="/explorer/txn/loan" caption="Control Series" role="ACCT_ASSISTANT"/>
+        
+        <invoker type="formActions" action="mapPaymentSeries" caption="Map Previous Payment Series"/>
+    </invokers>
+    
+    <code>
+        import com.rameses.rcp.common.*;
+        import com.rameses.rcp.annotations.*;
+        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.common.*;
+        
+        class ControlSeriesListController extends ListController
+        {
+            String serviceName = "ControlSeriesService";
+            String entityName = "controlseries";
+         
+            def service;
+            ControlSeriesListController() {
+                try {
+                    service = InvokerProxy.instance.create('ControlSeriesService');
+                } catch (ConnectException ce) {
+                    ce.printStackTrace();
+                    throw ce;
+                }
+            }
+            
+            boolean allowOpen = false;
+            
+            void mapPaymentSeries() {
+                service.mapPreviousPaymentSeries();
+            }
+        }
+    </code>
+</workunit>
