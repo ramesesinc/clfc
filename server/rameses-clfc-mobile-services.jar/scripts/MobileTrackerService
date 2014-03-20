@@ -16,8 +16,8 @@ class MobileTrackerService
 	@Service
     def selfSvc;
 	
-	@ProxyMethod
-	public Map start(Map params) {
+    @ProxyMethod
+    public Map create(Map params) {
 		def entity = [
 			objid 		: 'TRKR' + new java.rmi.server.UID(), 
 			state		: 'OPEN', 
@@ -28,26 +28,42 @@ class MobileTrackerService
 			startlat	: params.lat 
 		];
 		em.create(entity); 
+		return entity;
+    }
 
-		def item = [
-			objid 		: "TRKRI" + new java.rmi.server.UID(), 
-			parentid 	: entity.objid, 
-			txndate 	: entity.dtstart, 
-			txntype 	: 'NORMAL', 
-			refid 		: 'RID' + new java.rmi.server.UID(), 
-			reftype		: 'TRACK', 
-			lng 		: entity.startlng,  
-			lat 		: entity.startlat,
-			remarks 	: 'BEGIN MOBILE TRACKING'   
-		]; 
-		em.create(item, 'detail'); 
+    @ProxyMethod
+    public void removeTracker(Map params) {
+    	em.delete([objid: params.trackerid]);
+    }
+
+	@ProxyMethod
+	public Map start(Map params) {
+		def mParams = [ objid: params.trackerid ];
+		def entity = em.findByPrimary(mParams); 
+		if (!entity) throw new Exception("'"+params.trackerid+"' trackerid not found"); 
+
+		def isStarted = em.findIsStartedByPrimary(mParams);
+		if (!isStarted) {
+			def item = [
+				objid 		: "TRKRI" + new java.rmi.server.UID(), 
+				parentid 	: entity.objid, 
+				txndate 	: entity.dtstart, 
+				txntype 	: 'NORMAL', 
+				refid 		: 'RID' + new java.rmi.server.UID(), 
+				reftype		: 'TRACK', 
+				lng 		: entity.startlng,  
+				lat 		: entity.startlat,
+				remarks 	: 'BEGIN MOBILE TRACKING'   
+			]; 
+			em.create(item, 'detail'); 
+		}
 		return entity; 
 	}
 
 	@ProxyMethod
 	public Map stop(Map params) {
 		def entity = em.findByPrimary([objid: params.trackerid]); 
-		if (!entity) throw new Exception("'"+params.objid+"' trackerid not found"); 
+		if (!entity) throw new Exception("'"+params.trackerid+"' trackerid not found"); 
 		if (entity.state == 'CLOSED') throw new Exception('This session has already been closed'); 
 
 		entity.dtclosed 	= dateSvc.serverDate;

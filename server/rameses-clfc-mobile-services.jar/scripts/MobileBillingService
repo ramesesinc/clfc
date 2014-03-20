@@ -122,7 +122,33 @@ class MobileBillingService
 			if (map && map.remarks) itm.remarks = map.remarks;
 			else itm.remove("remarks");
 		}
-		ledger_billing.routeDownloaded([billingid: params.billingid, routecode: params.route_code]);
+		/*ledger_billing.routeDownloaded([billingid: params.billingid, routecode: params.route_code]);
+		def bill = ledger_billing.read([objid: params.billingid]);
+		bill.totalfordownload--;
+		ledger_billing.update(bill, "totalfordownload");
+		bill.totaldownloaded++;
+		ledger_billing.update(bill, "totaldownloaded");
+		//ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
+		*/
+		def session = trackerSvc.open([objid: params.trackerid]);
+		if (!session) {
+			params.trackerid = trackerSvc.create([lng: params.longitude, lat: params.latitude, terminalid: params.terminalid, userid: params.userid]).objid;
+		}
+		return [billings: list, trackerid: params.trackerid];
+	}	
+
+	@ProxyMethod
+	public void removeTracker( params ) {
+		trackerSvc.removeTracker(params);
+	}
+
+	@ProxyMethod
+	public void notifyBillingDownloaded( params )	 {
+		if (!params.billingid) throw new Exception("Please specify billingid.");
+		if (!params.trackerid) throw new Exception("Please specify trackerid.");
+		if (!params.routecode) throw new Exception("Please specify routecode");
+
+		ledger_billing.routeDownloaded([billingid: params.billingid, routecode: params.routecode]);
 		def bill = ledger_billing.read([objid: params.billingid]);
 		bill.totalfordownload--;
 		ledger_billing.update(bill, "totalfordownload");
@@ -130,11 +156,10 @@ class MobileBillingService
 		ledger_billing.update(bill, "totaldownloaded");
 		//ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
 		def session = trackerSvc.open([objid: params.trackerid]);
-		if (!session) {
-			params.trackerid = trackerSvc.start([lng: params.longitude, lat: params.latitude, terminalid: params.terminalid, userid: params.userid]).objid;
+		if (session) {
+			trackerSvc.start(params);
 		}
-		return [billings: list, trackerid: params.trackerid];
-	}		
+	}
 
 	@ProxyMethod
 	public def downloadSpecialCollection( params ) {
@@ -153,7 +178,7 @@ class MobileBillingService
 
 		def session = trackerSvc.open([objid: mParams.trackerid]);
 		if (!session) {
-			mParams.trackerid = trackerSvc.start([lng: mParams.lng, lat: mParams.lat, terminalid: mParams.terminalid, userid: mParams.userid]).objid;
+			mParams.trackerid = trackerSvc.create([lng: mParams.lng, lat: mParams.lat, terminalid: mParams.terminalid, userid: mParams.userid]).objid;
 		}
 
 		def routes = [];
@@ -177,9 +202,25 @@ class MobileBillingService
 			loans.add(it);
 		}
 
+		/*params.state = 'DOWNLOADED';
+		params.downloaded = 1;
+		special_collection.update(params);*/
+		return [routes: routes, list: loans, request: params, trackerid: mParams.trackerid];
+	}
+
+	@ProxyMethod
+	public void notifySpecialCollectionDownloaded( params ) {
+		if (!params.objid) throw new Exception("Please specify objid.");
+		if (!params.trackerid) throw new Exception("Please specify trackerid.");
+
+		def entity = special_collection.read(params);
 		params.state = 'DOWNLOADED';
 		params.downloaded = 1;
 		special_collection.update(params);
-		return [routes: routes, list: loans, request: params, trackerid: mParams.trackerid];
+
+		def session = trackerSvc.open([objid: params.trackerid]);
+		if (session) {
+			trackerSvc.start(params);
+		}
 	}
 }
