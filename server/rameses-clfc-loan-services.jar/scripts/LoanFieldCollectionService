@@ -149,6 +149,7 @@ class LoanFieldCollectionService
 			collectionSheets.each{cs->
 				cs.payments.each{
 					if (it.voided == 0) {
+						it.collectorid = billing.collector.objid;
 						it.appid = cs.loanapp.objid;
 						it.borrowername = cs.borrower.name;
 						it.entity = [

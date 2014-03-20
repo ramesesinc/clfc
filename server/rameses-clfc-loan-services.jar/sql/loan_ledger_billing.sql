@@ -48,7 +48,7 @@ WHERE llb.collector_objid=$P{collectorid}
 	AND lls.subcollector_objid IS NULL
 	AND llb.billdate=$P{billdate}
 	AND llsc.objid IS NULL
-	AND llb.state='DRAFT'
+	AND llb.state='FOR_DOWNLOAD'
 
 [getBillingBySubCollectorid]
 SELECT llb.* 
@@ -58,7 +58,7 @@ LEFT JOIN loan_ledger_specialcollection llsc ON llb.objid=llsc.billingid
 WHERE lls.subcollector_objid=$P{subcollectorid}
 	AND llb.billdate=$P{billdate}
 	AND llsc.objid IS NULL
-	AND llb.state='DRAFT'
+	AND llb.state='FOR_DOWNLOAD'
 
 [getRoutesByCollectorid]
 SELECT lr.* 
@@ -115,23 +115,23 @@ WHERE objid=$P{objid}
 UPDATE loan_ledger_billing SET state="DRAFT"
 WHERE objid=$P{objid}
 
-[getPastDraftBillingsNotCollected]
+[getPastBillingsNotCollected]
 SELECT llb.*
 FROM loan_ledger_billing llb
 LEFT JOIN field_collection fc ON llb.objid=fc.objid
-WHERE llb.state='DRAFT'
+WHERE llb.state IN ('DRAFT', 'FOR_DOWNLOAD')
 	AND llb.billdate < $P{date}
 	AND fc.objid IS NULL
 
-[getPastDraftBillingsCollected]
+[getPastBillingsCollected]
 SELECT * FROM loan_ledger_billing
 WHERE totalunposted > 0
-	AND state='DRAFT'
+	AND state IN ('DRAFT', 'FOR_DOWNLOAD')
 	AND billdate < $P{date}
 
-[getPastDraftBillingsNotRemitted]
+[getPastBillingsNotRemitted]
 SELECT * FROM loan_ledger_billing
-WHERE state='DRAFT'
+WHERE state IN ('DRAFT', 'FOR_DOWNLOAD')
 	AND billdate < $P{date}
 	AND objid IN (SELECT DISTINCT(fieldcollectionid) FROM field_collection_route
 			WHERE fieldcollectionid=loan_ledger_billing.objid AND totalcount=0)

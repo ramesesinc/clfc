@@ -27,6 +27,9 @@ class LoanPaymentService
 	@ActiveDB(value="loan_payment")
 	def loan_payment;
 
+	@ActiveDB(value="controlseries")
+	def controlseries;
+
 	@Resource("RuleService")
 	def ruleSvc;
 
@@ -39,7 +42,7 @@ class LoanPaymentService
 	@Service("LoanLedgerService")
 	def ledgerSvc;
 
-	@ProxyMethod
+	/*@ProxyMethod
 	public def getCashBreakdown( params ) {
 		if (!params.objid) throw new Exception('Please specify objid.');
 		def list = batch_collectionsheet.getCashBreakdown([parentid: params.objid]);
@@ -73,7 +76,7 @@ class LoanPaymentService
 			batch_collectionsheet.update(it, 'cashbreakdown'); 
 		}
 		return params;
-	}
+	}*/
 
 	@ProxyMethod
 	public def getUnpostedCollectionSheets( params ) {
@@ -112,14 +115,20 @@ class LoanPaymentService
 	private void createPayment( params ) {
 		createPaymentHeader(params);
 		def o = loan_payment.read(params.entity);
-		if(o) {
+		if (o) {
+			def series = controlseries.findOpenControlSeriesByUserid([userid: params.collectorid]);
 			def itm = [
 				objid		: 'LPDTL'+new UID(),
 				parentid 	: o.objid,
 				refno 		: params.refno,
 				appid 		: params.appid,
 				paytype 	: params.paytype,
-				payamount 	: params.payamount
+				payamount 	: params.payamount,
+				control 	: [
+					objid	: series.objid,
+					series 	: series.user.txncode + series.prefix + series.nextseries.toString().padLeft(6, "0"),
+					seriesno: series.nextseries
+				]
 			]
 			loan_payment.create(itm, "detail");
 		}

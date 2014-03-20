@@ -14,5 +14,8 @@
 		<field name="appid" required="true"/>
 		<field name="paytype" required="true"/>
 		<field name="payamount" required="true"/>
+		<field name="control_objid" required="true"/>
+		<field name="control_series" required="true"/>
+		<field name="control_seriesno" required="true"/>
 	</element>
 </schema>

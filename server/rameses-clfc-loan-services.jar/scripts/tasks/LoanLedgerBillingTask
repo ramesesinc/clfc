@@ -7,16 +7,19 @@ class LoanLedgerBillingTask
 	def ledger_billing;
 
 	@ActiveDB(value="special_collection")
-	def special_collection
+	def special_collection;
+
+	@ActiveDB(value="billing_process")
+	def process;
 
 	@Service("DateService")
 	def dateSvc;
 
 	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
-	public void changeStateCancelledPastDraftBillingsNotCollected( task ) {
+	public void changeStateCancelledPastBillingsNotCollected( task ) {
 		def date = dateSvc.serverDate;
-		def list = ledger_billing.getPastDraftBillingsNotCollected([date: date.toString().split(' ')[0]]);
-		println 'cancel past billing'
+		def list = ledger_billing.getPastBillingsNotCollected([date: date.toString().split(' ')[0]]);
+		//println 'cancel past billing'
 		list.each{
 			it.dtcancelled = date;
 			it.cancelledby = 'SYSTEM';
@@ -27,9 +30,9 @@ class LoanLedgerBillingTask
 	}
 
 	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
-	public void changeStateUnpostedPastDraftBillingsCollected( task ) {
-		def list = ledger_billing.getPastDraftBillingsCollected([date: dateSvc.serverDate.toString().split(' ')[0]]);
-		println 'unposted past billing'
+	public void changeStateUnpostedPastBillingsCollected( task ) {
+		def list = ledger_billing.getPastBillingsCollected([date: dateSvc.serverDate.toString().split(' ')[0]]);
+		//println 'unposted past billing'
 		list.each{
 			it.state = "UNPOSTED";
 			ledger_billing.update(it, "state");
@@ -37,9 +40,9 @@ class LoanLedgerBillingTask
 	}
 
 	@Schedule(interval=1, timeUnit="DAYS", immediate=true)
-	public void changeStateUnremittedPastDraftBillingsCollected( task ) {
-		def list = ledger_billing.getPastDraftBillingsNotRemitted([date: dateSvc.serverDate.toString().split(' ')[0]]);
-		println 'unremitted past billing'
+	public void changeStateUnremittedPastBillingsCollected( task ) {
+		def list = ledger_billing.getPastBillingsNotRemitted([date: dateSvc.serverDate.toString().split(' ')[0]]);
+		//println 'unremitted past billing'
 		list.each{
 			it.state = "UNREMITTED";
 			ledger_billing.update(it, "state");
@@ -52,6 +55,20 @@ class LoanLedgerBillingTask
 		list.each{
 			it.state = 'CANCELLED';
 			special_collection.changeState(it);
+		}
+	}
+
+	@Schedule(interval=2, immediate=true)
+	public void checkForDownloadBilling( task ) {
+		def list = process.getList();
+		list.each{
+			def details = process.getDetailsByParentid([parentid: it.objid]);
+			if (!details) {
+				it.state = "FOR_DOWNLOAD";
+				//println 'it-> '+it;
+				ledger_billing.changeState(it);
+				process.delete(it);
+			}
 		}
 	}
 }

@@ -314,6 +314,7 @@ class LoanOnlineCollectionService
 
 		payments.each{
 			if (it.voided == 0) {
+				it.collectorid = params.collectorid;
 				it.appid = it.loanapp.objid;
 				it.borrowername = it.borrower.name;
 				it.paytype = it.type;
