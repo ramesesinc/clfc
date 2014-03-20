@@ -22,4 +22,16 @@ public class LoanBillingService extends AbstractService
 	public Map downloadSpecialCollection(Map params) {
 		return (Map) invoke("downloadSpecialCollection", params);
 	}
+	
+	public void removeTracker(Map params) {
+		invoke("removeTracker", params);
+	}
+	
+	public void notifyBillingDownloaded(Map params) {
+		invoke("notifyBillingDownloaded", params);
+	}
+	
+	public void notifySpecialCollectionDownloaded(Map params) {
+		invoke("notifySpecialCollectionDownloaded", params);
+	}
 }

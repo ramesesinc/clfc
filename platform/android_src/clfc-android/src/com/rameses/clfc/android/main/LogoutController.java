@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
@@ -25,10 +26,12 @@ class LogoutController
 {
 	private UIActivity activity;
 	private ProgressDialog progressDialog;
+	private AppSettingsImpl settings;
 	
 	LogoutController(UIActivity activity, ProgressDialog progressDialog) {
 		this.activity = activity;
 		this.progressDialog = progressDialog;
+		this.settings =(AppSettingsImpl) Platform.getApplication().getAppSettings();
 	}
 	
 	void execute() throws Exception {
@@ -187,7 +190,8 @@ class LogoutController
 				clfcdb.delete("route", "routecode=?", new Object[]{routecode});
 			}
 
-			clfcdb.delete("sys_var", "name IN ('trackerid','billingid')");
+			settings.remove("trackerid");
+			clfcdb.delete("sys_var", null);
 			trackerdb.delete("location_tracker", "collectorid=?", new Object[]{collectorid});			
 			try { 
 				new LogoutService().logout(); 

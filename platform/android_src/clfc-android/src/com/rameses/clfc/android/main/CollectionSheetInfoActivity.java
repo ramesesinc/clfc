@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
 import com.rameses.clfc.android.MainDB;
@@ -39,7 +40,6 @@ import com.rameses.clfc.android.VoidRequestDB;
 import com.rameses.clfc.android.db.DBCollectionSheet;
 import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.clfc.android.db.DBRemarksService;
-import com.rameses.clfc.android.db.DBSystemService;
 import com.rameses.clfc.android.db.DBVoidService;
 import com.rameses.client.android.NetworkLocationProvider;
 import com.rameses.client.android.Platform;
@@ -51,6 +51,7 @@ import com.rameses.util.MapProxy;
 
 public class CollectionSheetInfoActivity extends ControlActivity 
 {
+	private AppSettingsImpl settings;
 	private String loanappid = "";
 	private String detailid = "";
 	private String appno = "";
@@ -130,6 +131,7 @@ public class CollectionSheetInfoActivity extends ControlActivity
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setCancelable(false);
 		
+		settings = (AppSettingsImpl) Platform.getApplication().getAppSettings();
 		ll_info_payments = (LinearLayout) findViewById(R.id.ll_info_payments);
 	}
 
@@ -660,19 +662,19 @@ public class CollectionSheetInfoActivity extends ControlActivity
 					 return;
 			 	}
 			 	
-			 	String trackerid = null;
-			 	DBSystemService systemSvc = new DBSystemService();
-			 	synchronized (MainDB.LOCK) {
-				 	DBContext clfcdb = new DBContext("clfc.db");
-			 		systemSvc.setDBContext(clfcdb);
-			 		
-			 		try {
-			 			trackerid = systemSvc.getTrackerid();
-			 		} catch (Throwable t) {
-						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
-						
-			 		}			 			
-			 	}
+			 	String trackerid = settings.getTrackerid();
+//			 	DBSystemService systemSvc = new DBSystemService();
+//			 	synchronized (MainDB.LOCK) {
+//				 	DBContext clfcdb = new DBContext("clfc.db");
+//			 		systemSvc.setDBContext(clfcdb);
+//			 		
+//			 		try {
+//			 			trackerid = systemSvc.getTrackerid();
+//			 		} catch (Throwable t) {
+//						UIDialog.showMessage(t, CollectionSheetInfoActivity.this); 
+//						
+//			 		}			 			
+//			 	}
 			 	
 			 	synchronized (RemarksDB.LOCK) {
 			 		SQLTransaction remarksdb = new SQLTransaction("clfcremarks.db");

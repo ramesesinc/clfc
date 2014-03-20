@@ -61,4 +61,8 @@ public class AppSettingsImpl extends AppSettings
 	public String getDebugEnabled() {
 		return getString("debug_enabled", "false");
 	}
+	
+	public String getTrackerid() {
+		return getString("trackerid", null);
+	}
 }

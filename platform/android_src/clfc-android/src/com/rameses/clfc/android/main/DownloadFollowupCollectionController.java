@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.MainDB;
 import com.rameses.clfc.android.db.DBCollectionSheet;
@@ -20,7 +21,6 @@ import com.rameses.client.android.Platform;
 import com.rameses.client.android.SessionContext;
 import com.rameses.client.android.TerminalManager;
 import com.rameses.client.android.UIActivity;
-import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 
 public class DownloadFollowupCollectionController 
@@ -28,11 +28,13 @@ public class DownloadFollowupCollectionController
 	private UIActivity activity;
 	private ProgressDialog progressDialog;
 	private Map followupcollection;
+	private AppSettingsImpl settings;
 	
 	DownloadFollowupCollectionController(UIActivity activity, ProgressDialog progressDialog, Map followupcollection) {
 		this.activity = activity;
 		this.progressDialog = progressDialog;
 		this.followupcollection = followupcollection;
+		this.settings = (AppSettingsImpl) Platform.getApplication().getAppSettings();
 	}
 
 	void execute() throws Exception {
@@ -86,21 +88,23 @@ public class DownloadFollowupCollectionController
 				double lng = (location == null? 0.0 : location.getLongitude());
 				double lat = (location == null? 0.0 : location.getLatitude());
 				
-				String trackerid = "";
-				synchronized (MainDB.LOCK) {
-					DBContext ctx = new DBContext("clfc.db");
-					DBSystemService systemSvc = new DBSystemService();
-					systemSvc.setDBContext(ctx);
-					try {
-						trackerid = systemSvc.getTrackerid();
-					} catch (Throwable t) {
-						throw t;
-					}
-				}
+				String trackerid = settings.getTrackerid();
+//				synchronized (MainDB.LOCK) {
+//					DBContext ctx = new DBContext("clfc.db");
+//					DBSystemService systemSvc = new DBSystemService();
+//					systemSvc.setDBContext(ctx);
+//					try {
+//						trackerid = systemSvc.getTrackerid();
+//					} catch (Throwable t) {
+//						throw t;
+//					}
+//				}
 				 
+				String followupcollectionid = followupcollection.get("objid").toString();
+				
 				Map params = new HashMap();
 				params.put("trackerid", trackerid);
-				params.put("objid", followupcollection.get("objid").toString());
+				params.put("objid", followupcollectionid);
 				params.put("terminalid", TerminalManager.getTerminalId());
 				params.put("longitude", lng);
 				params.put("latitude", lat);
@@ -108,7 +112,38 @@ public class DownloadFollowupCollectionController
 				
 				LoanBillingService svc = new LoanBillingService();
 				Map response = svc.downloadSpecialCollection(params);
+				
+				String mTrackerid = response.get("trackerid").toString();
+				
+				if (trackerid == null || "".equals(trackerid)) {
+					settings.put("trackerid", response.get("trackerid"));
+					trackerid = settings.getTrackerid();
+					
+				} else if (!trackerid.equals(mTrackerid)) {
+					params = new HashMap();
+					params.put("trackerid", mTrackerid);
+					for (int i=0; i<10; i++) {
+						try {
+							svc.removeTracker(params);
+							break;
+						} catch (Exception ex) {
+							throw ex;
+						}
+					}
+				}
 				saveSpecialCollection(response);
+
+				params = new HashMap();
+				params.put("objid", followupcollectionid);
+				params.put("trackerid", trackerid);
+				for (int i=0; i<10; i++) {
+					try {
+						svc.notifySpecialCollectionDownloaded(params);
+						break;
+					} catch (Exception ex) {
+						throw ex;
+					}
+				}
 				
 				data.putString("response", "success");
 				message = successhandler.obtainMessage();
@@ -124,6 +159,7 @@ public class DownloadFollowupCollectionController
 			message.setData(data);
 			handler.sendMessage(message);
 		}
+		
 		private void saveSpecialCollection(Map map) throws Exception {
 			SQLTransaction txn = new SQLTransaction("clfc.db");
 			try {
@@ -148,16 +184,16 @@ public class DownloadFollowupCollectionController
 
 			Map request = (Map) map.get("request");
 			
-			synchronized (MainDB.LOCK) {
-				String trackerid = systemSvc.getTrackerid();
-				System.out.println("[DownloadFollowupCollectionController.saveSpecialCollectionImpl] trackerid -> "+trackerid);
-				if (trackerid == null || "".equals(trackerid)) {
-					Map mParams = new HashMap();
-					mParams.put("name", "trackerid");
-					mParams.put("value", map.get("trackerid").toString());
-					txn.insert("sys_var", mParams);
-				}
-			}
+//			synchronized (MainDB.LOCK) {
+//				String trackerid = systemSvc.getTrackerid();
+//				System.out.println("[DownloadFollowupCollectionController.saveSpecialCollectionImpl] trackerid -> "+trackerid);
+//				if (trackerid == null || "".equals(trackerid)) {
+//					Map mParams = new HashMap();
+//					mParams.put("name", "trackerid");
+//					mParams.put("value", map.get("trackerid").toString());
+//					txn.insert("sys_var", mParams);
+//				}
+//			}
 			
 			
 			String billingid = "";

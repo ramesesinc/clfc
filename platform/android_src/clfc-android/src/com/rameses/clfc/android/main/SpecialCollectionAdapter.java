@@ -54,6 +54,7 @@ public class SpecialCollectionAdapter extends BaseAdapter
 		Map item = (Map) list.get(position);
 		((TextView) v.findViewById(R.id.tv_specialcollection_remarks)).setText(item.get("remarks").toString());
 
+		System.out.println("state -> "+item.get("state").toString());
 		if (item.get("state").toString().equals("DOWNLOADED")) {
 			v.setClickable(false);
 			((ImageView) v.findViewById(R.id.iv_specialcollection_approved)).setImageResource(R.drawable.btn_check_on);

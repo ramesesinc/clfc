@@ -294,7 +294,7 @@ public class CollectionSheetListActivity extends ControlActivity
 
 //			addViewProperties(view);
 			ll_collectionsheet.addView(child);
-		}
+		} 
 		
 		if (eof == false) {
 			child = inflater.inflate(R.layout.item_string, null);
@@ -303,7 +303,9 @@ public class CollectionSheetListActivity extends ControlActivity
 			child.setOnClickListener(viewMoreOnClickListener);
 			child.setOnLongClickListener(collectionSheetOnLongClickListener);
 			
-			((TextView) child.findViewById(R.id.tv_item_str)).setText("View more..");
+			TextView tv_str = (TextView) child.findViewById(R.id.tv_item_str);
+			tv_str.setText("View more..");
+			tv_str.setTextColor(getResources().getColor(R.color.blue));
 			ll_collectionsheet.addView(child);
 		}
 	}
