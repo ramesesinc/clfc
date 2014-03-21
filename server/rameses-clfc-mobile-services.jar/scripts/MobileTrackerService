@@ -114,6 +114,15 @@ class MobileTrackerService
 	} 
 	
 	@ProxyMethod 	
+	public List getLogs(Map params) {
+		def info = em.findByPrimary([objid: params.trackerid]); 
+		if (!info) return []; 
+
+		params.parentid = info.objid;
+		return em.getLogs(params); 
+	} 
+
+	@ProxyMethod 	
 	public void refresh(Map params) {
 		def info = em.findByPrimary([objid: params.trackerid]); 
 		if (!info) return; 

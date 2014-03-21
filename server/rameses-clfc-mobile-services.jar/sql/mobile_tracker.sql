@@ -7,10 +7,11 @@ FROM mobile_tracker t
 ORDER BY dtstart ${_ordermode}
 
 [getLogs]
-SELECT * FROM mobile_tracker_detail 
-WHERE parentid=$P{parentid} 
-	AND state=1
-ORDER BY txndate 
+SELECT d.*, m.state AS trackerstate
+FROM mobile_tracker_detail d 
+	INNER JOIN mobile_tracker m ON d.parentid=m.objid 
+WHERE d.parentid=$P{parentid} AND d.state=1 
+ORDER BY d.txndate 
 
 [findByPrimary]
 SELECT t.*, t.userid AS user_objid, 
