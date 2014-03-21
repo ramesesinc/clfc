@@ -12,6 +12,7 @@ class LoanRouteService extends ActiveCrudListService
 	public def getColumns( params ) {
 		return [
 			[name:'code', caption:'Code', maxWidth:150, width:150],
+			[name:'dayperiod', caption: 'Day Period', maxWidth:100, width:100],
 			[name:'description', caption:'Description', maxWidth:200, width:200],
 			[name:'area', caption:'Area']
 		]
