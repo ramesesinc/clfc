@@ -1,6 +1,6 @@
 <workunit>
     <invokers>
-        <invoker type="home.action" action="init" caption="Follow-up Collection" target="window"/>
+        <invoker type="home.action" action="init" caption="Follow-up Collection" target="window" role="ACCT_OFFICER"/>
         <invoker type="followupcollection:create" action="init" caption="Follow-up Collection" target="window"/>
         <invoker type="followupcollection:open" action="open" caption="Follow-up Collection" target="window"/>
         
