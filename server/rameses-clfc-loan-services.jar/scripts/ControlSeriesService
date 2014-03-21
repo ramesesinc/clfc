@@ -67,7 +67,7 @@ class ControlSeriesService extends ActiveCrudListService
 			series = em.findSeriesByPrefixAndUserid([prefix: '0001', userid: payment.collector.objid]);
 			if (!series) throw new Exception("No control series assigned to collector "+payment.collector.name);
 
-			details = loan_payment.getDetailsByParentid([parentid: payment.objid]);
+			details = loan_payment.getDetailsWithNoControlByParentid([parentid: payment.objid]);
 			details.each{pdetail->
 				//println 'pass 1'
 				pdetail.control = [

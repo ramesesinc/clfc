@@ -10,6 +10,7 @@
 	<element name="detail" tablename="loan_payment_detail">
 		<field name="objid" primary="true"/>
 		<field name="parentid" required="true"/>
+		<field name="routecode" required="true"/>
 		<field name="refno" required="true"/>
 		<field name="appid" required="true"/>
 		<field name="paytype" required="true"/>
