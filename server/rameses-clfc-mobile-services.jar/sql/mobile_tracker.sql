@@ -28,3 +28,8 @@ SELECT * FROM mobile_tracker_detail WHERE objid=$P{objid}
 SELECT objid FROM mobile_tracker
 WHERE objid=$P{objid}
 	AND dtstart IS NOT NULL
+
+[findDetailByParentidAndRefid]
+SELECT objid FROM mobile_tracker_detail
+WHERE parentid=$P{parentid}
+	AND refid=$P{refid}

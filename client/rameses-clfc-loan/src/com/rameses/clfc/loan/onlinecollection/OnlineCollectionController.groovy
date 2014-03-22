@@ -101,7 +101,8 @@ class OnlineCollectionController
     def next() {
         mode = 'read';
         entity = service.getCollectionForPosting([collector: collector, txndate: txndate]);
-        entity.collectorid = collector.objid;
+        entity.collector = collector;
+        
         paymentsHandler.reload();
         if (!entity.cashbreakdown) {
             mode = 'create';
@@ -159,7 +160,6 @@ class OnlineCollectionController
 
     def edit() {
         mode = 'edit';
-        println 'mode = '+mode;
         prevcashbreakdown.clear();
         def map;
         entity.cashbreakdown.each{

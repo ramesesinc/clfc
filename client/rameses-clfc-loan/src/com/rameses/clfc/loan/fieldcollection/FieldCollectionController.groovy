@@ -44,6 +44,7 @@ class FieldCollectionController
 
         entity = service.getFieldCollection([collectorid: collector.objid]);
         if (!entity) throw new Exception("No unposted collection for this collector.");
+        
         routesHandler.reload();
         if (!entity.cashbreakdown) {
             mode = 'create';

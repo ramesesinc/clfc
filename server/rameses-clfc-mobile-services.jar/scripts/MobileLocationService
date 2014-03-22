@@ -3,6 +3,9 @@ import com.rameses.annotations.*;
 
 class MobileLocationService
 {
+	@ActiveDB(value="mobile_tracker")
+	def tracker;
+
 	@Service("MobileTrackerService")
 	def trackerSvc;
 
@@ -13,17 +16,20 @@ class MobileLocationService
 	public def postLocation( params ) {
 		def response = "fail";
 		if (params.trackerid) {
-			println 'params -> '+params;
-			def map = [
-				trackerid	: params.trackerid,
-				txntype		: 'NORMAL',
-				refid		: params.objid,
-				reftype		: 'TRACK',
-				lng 		: params.longitude,
-				lat 		: params.latitude,
-				state		: params.state
-			];
-			trackerSvc.log(map);
+			//println 'params -> '+params;
+			def detail = tracker.findDetailByParentidAndRefid([parentid: params.trackerid, refid: params.objid]);
+			if (!detail) {
+				def map = [
+					trackerid	: params.trackerid,
+					txntype		: 'NORMAL',
+					refid		: params.objid,
+					reftype		: 'TRACK',
+					lng 		: params.longitude,
+					lat 		: params.latitude,
+					state		: params.state
+				];
+				trackerSvc.log(map);
+			}
 			response = "success";
 		}
 		return [response: response];

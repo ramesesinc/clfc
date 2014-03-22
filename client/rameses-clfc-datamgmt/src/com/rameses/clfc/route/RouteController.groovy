@@ -20,6 +20,11 @@ class RouteController extends CRUDController
     Map deletePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.delete']; 
     Map approvePermission = [domain:'DATAMGMT', role:'DATAMGMT_AUTHOR', permission:'route.approve']; 
     
+    def dayPeriodList = [
+        [value: 'AM'], 
+        [value: 'PM']
+    ];
+    
     Map createEntity() {
         def sid = new java.rmi.server.UID().toString();
         return [ code: 'R'+sid.hashCode() ]; 

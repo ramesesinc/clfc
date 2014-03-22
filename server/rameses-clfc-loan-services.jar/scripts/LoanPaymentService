@@ -116,10 +116,13 @@ class LoanPaymentService
 		createPaymentHeader(params);
 		def o = loan_payment.read(params.entity);
 		if (o) {
-			def series = controlseries.findOpenControlSeriesByUserid([userid: params.collectorid]);
+			def series = controlseries.findOpenControlSeriesByUserid([userid: params.collector.objid]);
+			if (!series) throw new Exception("No control series assigned to collector "+params.collector.name);
+
 			def itm = [
 				objid		: 'LPDTL'+new UID(),
 				parentid 	: o.objid,
+				routecode 	: ,
 				refno 		: params.refno,
 				appid 		: params.appid,
 				paytype 	: params.paytype,
@@ -132,6 +135,8 @@ class LoanPaymentService
 			]
 			loan_payment.create(itm, "detail");
 		}
+		//println "params -> "+params;
+		//throw new Exception("stop")
 	}
 	
 	private void createPaymentHeader(params) {

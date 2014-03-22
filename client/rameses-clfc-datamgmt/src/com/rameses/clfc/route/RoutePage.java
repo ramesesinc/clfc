@@ -33,6 +33,7 @@ public class RoutePage extends javax.swing.JPanel
         xLabel1 = new com.rameses.rcp.control.XLabel();
         xTextField2 = new com.rameses.rcp.control.XTextField();
         xTextField3 = new com.rameses.rcp.control.XTextField();
+        xComboBox1 = new com.rameses.rcp.control.XComboBox();
 
         com.rameses.rcp.control.border.XTitledBorder xTitledBorder1 = new com.rameses.rcp.control.border.XTitledBorder();
         xTitledBorder1.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -62,6 +63,15 @@ public class RoutePage extends javax.swing.JPanel
         xTextField3.setRequired(true);
         xFormPanel1.add(xTextField3);
 
+        xComboBox1.setCaption("Day Period");
+        xComboBox1.setExpression("#{item.value}");
+        xComboBox1.setItemKey("value");
+        xComboBox1.setItems("dayPeriodList");
+        xComboBox1.setName("entity.dayperiod");
+        xComboBox1.setPreferredSize(new java.awt.Dimension(100, 20));
+        xComboBox1.setRequired(true);
+        xFormPanel1.add(xComboBox1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,6 +92,7 @@ public class RoutePage extends javax.swing.JPanel
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.rameses.rcp.control.XComboBox xComboBox1;
     private com.rameses.rcp.control.XFormPanel xFormPanel1;
     private com.rameses.rcp.control.XLabel xLabel1;
     private com.rameses.rcp.control.XTextField xTextField2;
