@@ -6,8 +6,8 @@ import com.rameses.io.*;
 import com.rameses.services.extended.*;
 
 
-class UsergroupService extends ActiveCrudListService 
-{
+class UsergroupService extends ActiveCrudListService {
+
 	@ActiveDB(value="usergroup", em="admin")
 	def	em; 
 
@@ -26,12 +26,10 @@ class UsergroupService extends ActiveCrudListService
 		if (o.usergroupid) o.domain = o.usergroupid;
 
 		def list;
-		if (o.root) { 
-			list = em.getRootNodes(o); 
-		} else { 
-			list = em.getChildNodes(o); 
-		} 
-
+		if( o.root )
+			list = em.getRootNodes(o);
+		else
+			list = em.getChildNodes(o);
 		list.each { 
 			if (o.root) it.folder = true;
 			if (it.filetype == 'usergroup-folder') {
@@ -53,15 +51,14 @@ class UsergroupService extends ActiveCrudListService
 			[name:'user.lastname', caption:'Last Name' ],
 			[name:'user.firstname', caption:'First Name' ],
 			[name:'org.name', caption:'Org' ],
-			[name:'securitygroup', caption:'Security Group' ],
-			[name:'role', caption:'Role' ]			
+			[name:'securitygroup.name', caption:'Security Group' ],
 		];
 	}
 	
 	public void beforeList( def o ) {	
 		o.userid = env.USERID;
 		o.usergroupfilter = "";
-		if (o.usergroupid) o.usergroupfilter = ' AND ugm.usergroupid=$P{usergroupid} ';
+		if (o.usergroupid) o.usergroupfilter = ' AND ugm.usergroup_objid=$P{usergroupid} ';
 	}
 	
 	@ProxyMethod 
@@ -77,6 +74,12 @@ class UsergroupService extends ActiveCrudListService
 
 
 	public void approve ( data ) {} 	
+
+	@ProxyMethod
+	public def getPermissions(o) {
+		return em.getPermissions(o);
+	}
+
 }
 
 

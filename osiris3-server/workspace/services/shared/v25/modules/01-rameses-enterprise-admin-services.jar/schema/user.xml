@@ -12,6 +12,7 @@
 		<field name="middlename" />
 		<field name="jobtitle" />
 		<field name="name" />
+		<field name="txncode" />
 	</element>
 	
 </schema>

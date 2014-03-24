@@ -2,15 +2,19 @@
 
 	<element name="org" tablename="sys_org">
 		<field name="objid" primary="true"/>
+		<field name="code" />
 		<field name="name" />
 		<field name="orgclass" />
-		<field name="parentid" />
-		<field name="parentclass" />
+		<field name="parent_objid" />
+		<field name="parent_orgclass" />
+		<field name="root" />
 	</element>
 	
-	<element name="orgtype" tablename="sys_orgtype">
+	<element name="orgclass" tablename="sys_orgclass">
 		<field name="name" primary="true"/>
 		<field name="title" />
+		<field name="parentclass" />
+		<field name="handler" />
 	</element>
 
 </schema>
