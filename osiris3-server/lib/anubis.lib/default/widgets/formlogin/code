@@ -1,5 +1,4 @@
 
-
 <%if( !SESSION.sessionid ) { %>
 <form id="login-form" method="post" action="/actions/login">
 	<input type="hidden" name="target" value="${PARAMS.target}"/>
