@@ -96,4 +96,9 @@ class TerminalService
 	public def findTerminal( params ) {
 		return em.findTerminal (params); 
 	}
+
+	@ProxyMethod 
+	public def findMacAddress( params ) { 
+		return em.findMacAddress(params); 
+	} 	
 }
