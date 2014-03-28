@@ -67,7 +67,7 @@ class FollowupCollectionController extends CRUDController
     ] as EditorListModel;
 
     void beforeSave( data ) {
-        println 'data-> '+data;
+        //println 'data-> '+data;
         if (listHandler.hasUncommittedData())
             throw new Exception("Please commit table data before saving.");
     }

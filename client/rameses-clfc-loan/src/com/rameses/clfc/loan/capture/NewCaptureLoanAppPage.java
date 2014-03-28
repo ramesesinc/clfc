@@ -217,7 +217,7 @@ public class NewCaptureLoanAppPage extends javax.swing.JPanel {
         xFormPanel5.setCellspacing(1);
         xFormPanel5.setPadding(new java.awt.Insets(5, 5, 0, 10));
         xComboBox2.setCaption("Product Type");
-        xComboBox2.setCaptionWidth(100);
+        xComboBox2.setCaptionWidth(110);
         xComboBox2.setExpression("#{item.name}");
         xComboBox2.setFontStyle("font-size:12");
         xComboBox2.setItems("productTypes");
@@ -227,7 +227,7 @@ public class NewCaptureLoanAppPage extends javax.swing.JPanel {
         xFormPanel5.add(xComboBox2);
 
         xNumberField1.setCaption("Term");
-        xNumberField1.setCaptionWidth(100);
+        xNumberField1.setCaptionWidth(110);
         xNumberField1.setDepends(new String[] {"entity.producttype"});
         xNumberField1.setFieldType(Integer.class);
         xNumberField1.setFontStyle("font-size:12");
@@ -237,8 +237,8 @@ public class NewCaptureLoanAppPage extends javax.swing.JPanel {
         xNumberField1.setReadonly(true);
         xFormPanel5.add(xNumberField1);
 
-        xDecimalField1.setCaption("Amount Applied");
-        xDecimalField1.setCaptionWidth(100);
+        xDecimalField1.setCaption("Amount Released");
+        xDecimalField1.setCaptionWidth(110);
         xDecimalField1.setFontStyle("font-size:14");
         xDecimalField1.setName("entity.loanamount");
         xDecimalField1.setPreferredSize(new java.awt.Dimension(0, 20));
@@ -246,7 +246,7 @@ public class NewCaptureLoanAppPage extends javax.swing.JPanel {
         xFormPanel5.add(xDecimalField1);
 
         xDateField1.setCaption("Date Released");
-        xDateField1.setCaptionWidth(100);
+        xDateField1.setCaptionWidth(110);
         xDateField1.setFontStyle("font-size:12");
         xDateField1.setName("entity.dtreleased");
         xDateField1.setPreferredSize(new java.awt.Dimension(0, 20));
@@ -254,7 +254,7 @@ public class NewCaptureLoanAppPage extends javax.swing.JPanel {
         xFormPanel5.add(xDateField1);
 
         xLookupField2.setCaption("Route");
-        xLookupField2.setCaptionWidth(100);
+        xLookupField2.setCaptionWidth(110);
         xLookupField2.setExpression("#{item.description} - #{item.area}");
         xLookupField2.setHandler("routeLookupHandler");
         xLookupField2.setName("entity.route");

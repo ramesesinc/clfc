@@ -2,13 +2,15 @@
     <invokers>
         <invoker folderid="/explorer/txn/loan" caption="Control Series" role="ACCT_ASSISTANT"/>
         
+        <!--
         <invoker type="formActions" action="mapPaymentSeries" caption="Map Previous Payment Series"/>
+        -->
     </invokers>
     
     <code>
         import com.rameses.rcp.common.*;
         import com.rameses.rcp.annotations.*;
-        import com.rameses.osiris2.client.*;
+        import com.rameses.osiris2.client.*;sir
         import com.rameses.osiris2.common.*;
         
         class ControlSeriesListController extends ListController
