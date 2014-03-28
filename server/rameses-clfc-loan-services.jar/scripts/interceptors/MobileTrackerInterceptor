@@ -3,7 +3,7 @@ import com.rameses.common.*;
 
 class MobileTrackerInterceptor
 {
-	@ActiveDB('batch_collectionsheet')
+	@ActiveDB('field_collection')
 	def em;
 
 	@After(pattern='MobileTrackerService.openLog') 

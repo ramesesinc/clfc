@@ -122,7 +122,7 @@ class LoanPaymentService
 			def itm = [
 				objid		: 'LPDTL'+new UID(),
 				parentid 	: o.objid,
-				routecode 	: ,
+				routecode 	: params.routecode,
 				refno 		: params.refno,
 				appid 		: params.appid,
 				paytype 	: params.paytype,
@@ -339,9 +339,9 @@ class LoanPaymentService
 		item.noOfHolidays = calendarSvc.getNoOfHolidays([item: item, lastscheduledate: lastscheduledate]);
 		if (item.noOfHolidays > 0) {
 			cal.setTime(dateSvc.add(txndate, "-"+item.noOfHolidays))
-			if (txndate.toString() == '2014-01-02') {
+			/*if (txndate.toString() == '2014-01-02') {
 				println 'cal-> '+cal;
-			}
+			}*/
 			if ((cal.get(cal.DAY_OF_WEEK)-1) == 1) {
 				ref.hasSunday = true;
 				referencesFact.hasSunday = "true";
@@ -378,7 +378,7 @@ class LoanPaymentService
 		//results.each{ println it; }
 		//throw new Exception('stopping');
 
-		//if (params.txndate.toString() == '2014-02-13') {
+		//if (params.txndate.toString() == '2014-01-17') {
 		//	results.each{
 		//		println it
 		//	}
@@ -492,19 +492,19 @@ class LoanPaymentService
 		if (item.lackingPenalty > 0) balance += item.lackingPenalty
 		if (item.amountPaid >= balance) {
 			def a = new BigDecimal((item.amountPaid - balance)+'').setScale(2);
-			println 'a-> '+a;
+			//println 'a-> '+a;
 			def i = new BigDecimal(ref.interest+'').setScale(2);
-			println 'i-> '+i;
+			//println 'i-> '+i;
 			def d = a.divideAndRemainder(i);
-			println 'd-> '+d;
+			//println 'd-> '+d;
 			if (d[1] == 0.00) {
 				flag = true;
 				//item.totalDays = d[0];
 				//if (item.type == 'schedule') item.totalDays = ref.term;
 			}
 		}
-		println 'item-> '+item;
-		println 'ref-> '+ref;
+		//println 'item-> '+item;
+		//println 'ref-> '+ref;
 		return flag;
 	}
 

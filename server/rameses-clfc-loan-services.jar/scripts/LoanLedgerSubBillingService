@@ -33,7 +33,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 		params.modifiedby = params.createdby;
 		params.branchid = (env.ORGID? env.ORGID : '');
 		setFlags(params)
-		println 'params = '+params;
+		//println 'params = '+params;
 	}
 
 	void afterCreate( params ) {
@@ -43,7 +43,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 		];
 		em.changeState(map);
 		field_collection.changeState(map);//changeBatchCollectionSheetStateVoided([objid: params.parentid]);
-		println 'params = '+params;
+		//println 'params = '+params;
 		sub_billing.create(params);
 		/*if (params.specialcollectionid) {
 			map = [

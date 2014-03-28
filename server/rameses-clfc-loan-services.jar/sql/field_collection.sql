@@ -121,3 +121,16 @@ WHERE fieldcollectionid=$P{fieldcollectionid}
 [removeLoanByParentid]
 DELETE FROM field_collection_loan
 WHERE parentid=$P{parentid}
+
+[findDetailPayment]
+SELECT dp.*, 
+	l.objid AS loanapp_objid, l.appno AS loanapp_appno, 
+	l.borrower_objid, l.borrower_name, b.address AS borrower_address, 
+	r.code AS route_code, r.description AS route_description, r.area AS route_area  
+FROM field_collection_payment dp 
+	INNER JOIN field_collection_loan d ON dp.parentid=d.objid 
+	INNER JOIN loanapp l ON d.loanapp_objid=l.objid 
+	INNER JOIN loan_route r ON l.route_code=r.code 
+	INNER JOIN borrower b ON l.borrower_objid=b.objid  
+WHERE 
+	dp.fieldcollectionid=$P{objid} 

@@ -88,7 +88,7 @@ class LoanVoidRequestService extends ActiveListService
 		def payment;
 		if (params.txncode == 'FIELD') {
 			payment = field_collection.findPaymentById([objid: params.paymentid]);
-			println 'payment = '+payment;
+			//println 'payment = '+payment;
 			itm.type = payment.paytype;
 			itm.amount = payment.payamount;
 			itm.dtpaid = payment.billdate;

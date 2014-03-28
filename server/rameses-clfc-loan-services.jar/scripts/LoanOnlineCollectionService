@@ -316,6 +316,7 @@ class LoanOnlineCollectionService
 			if (it.voided == 0) {
 				//it.collectorid = params.collectorid;
 				it.collector = params.collector;
+				it.routecode = it.route.code;
 				it.appid = it.loanapp.objid;
 				it.borrowername = it.borrower.name;
 				it.paytype = it.type;

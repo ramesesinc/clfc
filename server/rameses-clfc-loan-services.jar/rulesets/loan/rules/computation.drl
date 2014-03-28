@@ -164,7 +164,7 @@ rule "currentDay greater than term"
 		References( isOverdue == 0 && type != 'over', isFullPayment == false, trm: term, amtPaid: amountPaid, ad: amountDue, ap: absentPenalty, td: totalDays, offset: isOffset, i: interest )
 		p: Payment( amountPaid > 0 && currentDay > trm  && balance > 0 )
 	then
-		System.out.println("passing 10"	);
+		//System.out.println("passing 10"	);
 		java.util.Map listItem = new java.util.HashMap();
 		java.util.Map item = new java.util.HashMap();
 		if (results.size() > 0) {
@@ -176,7 +176,7 @@ rule "currentDay greater than term"
 		double totalPenalty = (td-1)*ap;
 		int currentDay = p.getCurrentDay();
 		int totaldays = java.lang.Integer.parseInt(lastPayment.get("totaldays").toString());
-		System.out.println("current day = "+currentDay);
+		//System.out.println("current day = "+currentDay);
 		int tempDays = currentDay-trm;
 		int days = p.getDays()-tempDays;
 		if( offset > 0 ) {
@@ -233,7 +233,7 @@ rule "currentDay greater than term"
 			}
 			amountPaid = 0;
 		}
-		System.out.println("results -> "+results);
+		//System.out.println("results -> "+results);
 		p.setAmountPaid( amountPaid );
 		p.setBalance( balance );
 		update( p );
@@ -286,7 +286,8 @@ rule "amountPaid greater than equal to totalPayment"
 				if( noOfHolidays > 0 ) totalPenalty -= (noOfHolidays*ap);
 				if( totalPenalty < 0 ) totalPenalty = 0;
 				amountPaid = 0;
-			} if (days > td) amountPaid = 0;
+			} 
+			//if (days > td) amountPaid = 0;
 		}
 		p.setTotalPenalty( totalPenalty );
 		p.setTotalInterest( totalInterest );
@@ -303,7 +304,7 @@ rule "amountPaid less than totalPayment"
 		References( trialAndError == 0 && isOffset == 0 && isOverdue == 0 && type != 'over', isFullPayment == false, tp: totalPayment, ad: amountDue, i: interest, td: totalDays, ap: absentPenalty, trm: term, hasSunday: hasSunday, noOfHolidays: noOfHolidays )
 		p: Payment( amountPaid < tp && amountPaid > i && balance > 0 && currentDay <= trm && lackingInterest == 0 && lackingPenalty == 0 )
 	then
-		System.out.println("passing 2");
+		//System.out.println("passing 2");
 		java.util.Map listItem = new java.util.HashMap();
 		double amountPaid = p.getAmountPaid();
 		int days = p.getDays();
@@ -327,7 +328,7 @@ rule "amountPaid less than totalPayment"
 			//System.out.println("current day: "+currentDay);
 			//System.out.println("amount paid = "+amountPaid);
 			//System.out.println("amount due = "+ad);
-			/*if( amountPaid >= ad ) {
+			if( amountPaid >= ad ) {
 				amountPaid -= ad;
 				listItem.put("day", currentDay);
 				listItem.put("partialPayment", "");
@@ -338,7 +339,7 @@ rule "amountPaid less than totalPayment"
 				totalInterest+=i;
 				currentDay++;
 				if (amountPaid < i) amountPaid = 0;
-			} else if( amountPaid > 0 ) */
+			} else if( amountPaid > 0 ) 
 				amountPaid = 0;
 		}
 		if( amountPaid == 0 ) {
@@ -442,7 +443,7 @@ rule "amountPaid less than equal to interest"
 		References( isOverdue == 0 && type != 'over', isFullPayment == false, i: interest, td: totalDays, ap: absentPenalty, ur: underpaymentRate, ad: amountDue, trm: term )
 		p: Payment( amountPaid <= i && amountPaid > 0 && balance > 0 && currentDay <= trm && lackingInterest == 0 && lackingPenalty == 0 )
 	then
-		System.out.println("passing 4");
+		//System.out.println("passing 4");
 		java.util.Map listItem = new java.util.HashMap();
 		double amountPaid = p.getAmountPaid();
 		double lackingInterest = p.getLackingInterest();
