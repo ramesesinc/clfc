@@ -261,6 +261,8 @@ public class CollectionSheetInfoActivity extends ControlActivity
 						}	
 					}
 					
+					ll_info_payments.removeAllViews();
+					ll_info_payments.removeAllViewsInLayout();
 					boolean hasrequest = false;
 					for (int i=0; i<size; i++) {
 						child = (RelativeLayout) inflater.inflate(R.layout.item_payment, null);

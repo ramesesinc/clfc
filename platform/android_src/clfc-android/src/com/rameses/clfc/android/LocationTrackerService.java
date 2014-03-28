@@ -21,7 +21,7 @@ import com.rameses.db.android.SQLTransaction;
 class LocationTrackerService 
 {
 	private ApplicationImpl app;
-	private AppSettingsImpl appSettings;
+	private AppSettingsImpl settings;
 	private Handler handler;
 //	private List tables;
 	private SQLTransaction trackerdb;
@@ -47,7 +47,7 @@ class LocationTrackerService
 	
 	public LocationTrackerService(ApplicationImpl app) {
 		this.app = app;
-		appSettings = (AppSettingsImpl) app.getAppSettings();
+		settings = (AppSettingsImpl) app.getAppSettings();
 	}
 	
 	public void start() {
@@ -58,7 +58,7 @@ class LocationTrackerService
 		
 		if (serviceStarted == false) {
 			serviceStarted = true;
-			timeout = appSettings.getTrackerTimeout()*1000;
+			timeout = settings.getTrackerTimeout()*1000;
 			createTask();
 			System.out.println("timeout -> "+timeout);
 			Platform.getTaskManager().schedule(actionTask, 1000, timeout);
@@ -83,12 +83,13 @@ class LocationTrackerService
 					clfcdb = new DBContext("clfc.db");
 					systemSvc.setDBContext(clfcdb);
 					
-					try {
+					trackerid = settings.getTrackerid();
+					/*try {
 						trackerid = systemSvc.getTrackerid();
 						
 					} catch (Throwable t) {
 						t.printStackTrace();
-					}
+					}*/
 				}
 				
 				if (trackerid == null) return;
@@ -110,6 +111,7 @@ class LocationTrackerService
 			private void execTracker(SQLTransaction trackerdb, String trackerid) throws Exception {
 
 				location = NetworkLocationProvider.getLocation();
+				System.out.println("location -> "+location); 
 				lng = (location == null? 0.0: location.getLongitude());
 				lat = (location == null? 0.0: location.getLatitude());
 

@@ -8,7 +8,7 @@ public class DBSystemService extends AbstractDBMapper
 {
 	public String getTableName() { return "sys_var"; }
 	
-	public String getTrackerid() throws Exception {
+	/*public String getTrackerid() throws Exception {
 		DBContext ctx = createDBContext();
 		try {
 			String sql = "SELECT value FROM "+getTableName()+" WHERE name='trackerid'";
@@ -21,7 +21,7 @@ public class DBSystemService extends AbstractDBMapper
 		} finally {
 			if (isCloseable()) ctx.close(); 
 		}	
-	}
+	}*/
 	
 	public boolean hasBillingid() throws Exception {
 		DBContext ctx = createDBContext();

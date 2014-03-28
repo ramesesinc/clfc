@@ -127,18 +127,19 @@ public class ControlPanelActivity extends ControlActivity
 			if (roles == null) return;
 
 			Intent intent = new Intent(this, SpecialCollectionActivity.class);
-			if (roles.containsKey("LOAN.FIELD_COLLECTOR")) {
-				DBContext clfcdb = new DBContext("clfc.db");
-				systemSvc.setDBContext(clfcdb);
-				
-				if (systemSvc.hasBillingid()) {
-					startActivity(intent);
-				} else {
-					ApplicationUtil.showShortMsg("You have no billing downloaded. Download billing first before you can request for special collection.");
-				}
-			} else {
-				startActivity(intent);
-			}
+			startActivity(intent);
+//			if (roles.containsKey("LOAN.FIELD_COLLECTOR")) {
+//				DBContext clfcdb = new DBContext("clfc.db");
+//				systemSvc.setDBContext(clfcdb);
+//				
+//				if (systemSvc.hasBillingid()) {
+//					startActivity(intent);
+//				} else {
+//					ApplicationUtil.showShortMsg("You have no billing downloaded. Download billing first before you can request for special collection.");
+//				}
+//			} else {
+//				startActivity(intent);
+//			}
 		} else if (itemId.equals("remit")) {
 			Intent intent = new Intent(this, RemitRouteCollectionActivity.class);
 			startActivity(intent);

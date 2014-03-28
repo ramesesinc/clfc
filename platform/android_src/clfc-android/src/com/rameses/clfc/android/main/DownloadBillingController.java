@@ -100,6 +100,8 @@ public class DownloadBillingController
 				
 				String trackerid = settings.getTrackerid();
 				params.put("trackerid", trackerid);
+				System.out.println("settings-> "+settings);
+				
 				
 				Map map = svc.downloadBilling(params);
 //				
@@ -121,6 +123,7 @@ public class DownloadBillingController
 						}
 					}
 				}
+				System.out.println("settings2-> "+settings);
 //				String trackerid = settings.getTrackerid();
 //				if (trackerid == null || "".equals(trackerid)) {
 //				settings.put("trackerid", map.get("trackerid").toString());

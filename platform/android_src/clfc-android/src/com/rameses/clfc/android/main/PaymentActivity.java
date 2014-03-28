@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.rameses.clfc.android.AppSettingsImpl;
 import com.rameses.clfc.android.ApplicationImpl;
 import com.rameses.clfc.android.ApplicationUtil;
 import com.rameses.clfc.android.ControlActivity;
@@ -37,6 +38,8 @@ import com.rameses.db.android.SQLTransaction;
 public class PaymentActivity extends ControlActivity 
 {
 	private ApplicationImpl app;
+	private AppSettingsImpl settings;
+	
 	private String loanappid = "";
 	private String detailid = "";
 	private String refno = "";
@@ -104,6 +107,7 @@ public class PaymentActivity extends ControlActivity
 		
 		objid = "PT"+UUID.randomUUID().toString();
 		app = (ApplicationImpl) Platform.getApplication();
+		settings = (AppSettingsImpl) Platform.getApplication().getAppSettings();
 	}
 	
 	@Override
@@ -200,12 +204,13 @@ public class PaymentActivity extends ControlActivity
 					clfcdb = new DBContext("clfc.db");
 					systemSvc.setDBContext(clfcdb);
 					
-					try {
+					trackerid = settings.getTrackerid();
+					/*try {
 						trackerid = systemSvc.getTrackerid();
 					} catch (Throwable t) {
 						t.printStackTrace();
 						UIDialog.showMessage(t, PaymentActivity.this); 
-					}
+					}*/
 				}
 				
 				System.out.println("trackerid-> "+trackerid);

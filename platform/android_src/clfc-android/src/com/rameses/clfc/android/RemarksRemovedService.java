@@ -11,6 +11,7 @@ import com.rameses.clfc.android.db.DBRemarksRemoved;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.Task;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -82,9 +83,19 @@ public class RemarksRemovedService
 				execRemarksRemoved(list);
 				
 				hasPendingRemarksRemoved = false;
-				if (list.size() == SIZE) {
-					hasPendingRemarksRemoved = true;
+				synchronized (RemarksRemovedDB.LOCK) {
+					DBContext ctx = new DBContext("clfcremarksremoved.db");
+					remarksRemoved.setDBContext(ctx);
+					try {
+						hasPendingRemarksRemoved = remarksRemoved.hasPendingRemarksRemoved();
+					} catch (Throwable t) {
+						t.printStackTrace();
+					}
 				}
+//				hasPendingRemarksRemoved = false;
+//				if (list.size() == SIZE) {
+//					hasPendingRemarksRemoved = true;
+//				}
 				
 				if (hasPendingRemarksRemoved == false) {
 					serviceStarted = false;

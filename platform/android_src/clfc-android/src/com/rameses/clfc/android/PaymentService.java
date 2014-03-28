@@ -11,6 +11,7 @@ import com.rameses.clfc.android.db.DBPaymentService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.Task;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -92,9 +93,19 @@ public class PaymentService
 				execPayment(list);
 
 				hasUnpostedPayments = false;
-				if (list.size() == SIZE) {
-					hasUnpostedPayments = true;
+				synchronized (PaymentDB.LOCK) {
+					DBContext ctx = new DBContext("clfcpayment.db");
+					paymentSvc.setDBContext(ctx);
+					try {
+						hasUnpostedPayments = paymentSvc.hasUnpostedPayments();
+					} catch (Throwable t) {
+						t.printStackTrace();
+					}
 				}
+//				hasUnpostedPayments = false;
+//				if (list.size() == SIZE) {
+//					hasUnpostedPayments = true;
+//				}
 //				synchronized (PaymentDB.LOCK) {
 //					DBContext ctx = new DBContext("clfcpayment.db");
 //					paymentSvc.setDBContext(ctx);

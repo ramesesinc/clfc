@@ -168,6 +168,11 @@ public class CollectionSheetListActivity extends ControlActivity
 				progressDialog.setMessage("processing..");
 				if (!progressDialog.isShowing()) progressDialog.show();
 				collectionSheets = collectionSheet.getCollectionSheetsByRoutecodeAndSearchtext(params, (SIZE+addSize));
+				//System.out.println("collectionsheets -> "+collectionSheets);
+				int listSize = collectionSheets.size();
+				for (int i=0; i<listSize; i++) {
+					System.out.println(collectionSheets.get(i));
+				}
 				loadCollectionSheetsImpl(collectionSheets);
 //				lv_collectionsheet.setAdapter(new CollectionSheetAdapter(this, list));
 			} catch (Throwable t) {
@@ -286,9 +291,15 @@ public class CollectionSheetListActivity extends ControlActivity
 			noOfPayments = proxy.getInteger("noOfPayments");
 			noOfVoids = proxy.getInteger("noOfVoids");
 			if (noOfPayments > 0 && noOfPayments > noOfVoids) {
-				if (MapProxy.getInteger(item, "isfirstbill") == 1) {
-					item.put("isfirstbill", 0);
+//				System.out.println("item-> "+item);
+//				System.out.println("is first bill-> "+item.get("isfirstbill"));
+//				
+				if (proxy.getInteger("isfirstbill") == 1) {
+					proxy.put("isfirstbill", 0); 
 				}
+//				if (MapProxy.getInteger(item, "isfirstbill") == 1) {
+//					item.put("isfirstbill", 0);
+//				}
 				iv_info_paid.setVisibility(View.VISIBLE);
 			}
 

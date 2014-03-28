@@ -11,6 +11,7 @@ import com.rameses.clfc.android.db.DBRemarksService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.Task;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -88,8 +89,14 @@ public class RemarksService
 				execRemarks(list);
 
 				hasUnpostedRemarks = false;
-				if (list.size() == SIZE) {
-					hasUnpostedRemarks = true;
+				synchronized (RemarksDB.LOCK) {
+					DBContext ctx = new DBContext("clfcremarks.db");
+					remarksSvc.setDBContext(ctx);
+					try {
+						hasUnpostedRemarks = remarksSvc.hasUnpostedRemarks();
+					} catch (Throwable t) {
+						t.printStackTrace();
+					}
 				}
 				
 				if (hasUnpostedRemarks == false) {

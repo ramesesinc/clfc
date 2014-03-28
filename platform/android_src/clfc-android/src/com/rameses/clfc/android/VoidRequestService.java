@@ -11,6 +11,7 @@ import com.rameses.clfc.android.db.DBVoidService;
 import com.rameses.clfc.android.services.LoanPostingService;
 import com.rameses.client.android.Platform;
 import com.rameses.client.android.Task;
+import com.rameses.db.android.DBContext;
 import com.rameses.db.android.SQLTransaction;
 import com.rameses.util.MapProxy;
 
@@ -31,7 +32,7 @@ public class VoidRequestService
 	private String state = "";
 	private Task actionTask;
 	
-	public static boolean serviceStarted = false;
+	public boolean serviceStarted = false;
 	
 	public VoidRequestService(ApplicationImpl app) {
 		this.app = app;
@@ -80,8 +81,14 @@ public class VoidRequestService
 				execRequests(list);
 				
 				hasPendingRequest = false;
-				if (list.size() == SIZE) {
-					hasPendingRequest = true;
+				synchronized (VoidRequestDB.LOCK) {
+					DBContext ctx = new DBContext("clfcrequest.db");
+					voidService.setDBContext(ctx);
+					try {
+						hasPendingRequest = voidService.hasPendingVoidRequest();
+					} catch (Throwable t) {
+						t.printStackTrace();
+					}
 				}
 				
 				if (hasPendingRequest == false) {
