@@ -80,8 +80,7 @@
 					<textElement textAlignment="Center">
 						<font size="10"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{branch}.source?.address
-]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{branch}.source?.address]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement

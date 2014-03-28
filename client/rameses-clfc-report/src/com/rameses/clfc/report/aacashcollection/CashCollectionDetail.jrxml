@@ -46,7 +46,7 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="365"  isSplitAllowed="true" >
+			<band height="86"  isSplitAllowed="true" >
 			</band>
 		</detail>
 		<columnFooter>
