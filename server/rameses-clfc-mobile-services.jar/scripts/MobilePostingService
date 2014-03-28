@@ -62,7 +62,7 @@ class MobilePostingService
 				reftype		: 'PAYMENT',
 				lng 		: params.longitude,
 				lat 		: params.latitude,
-				remarks 	: 'RECEIVED PAYMENT FROM '+params.collectionsheet.borrower.name,
+				remarks 	: 'RECEIVED PAYMENT FROM '+params.payment.paidby,
 				state 		: 1
 			];
 			trackerSvc.log(tracker);
@@ -206,22 +206,29 @@ class MobilePostingService
 
 		if (!params.billingid) {
 			def date = dateSvc.serverDate;
-			def map = [
-				objid 			: 'DLB'+new java.rmi.server.UID(),
-				state 			: 'DRAFT',
-				dtcreated 		: date,
-				createdby 		: params.collector.name,
-				dtmodified 		: date,
-				modifiedby 		: params.collector.name,
-				collector 		: params.collector,
-				billdate 		: dateSvc.serverDate,
-				branchid 		: (env.ORGID? env.ORGID : 'NOT IDENTIFIED'),
-				totalfordownload: 0,
-				totaldownloaded : 0,
-				totalunposted 	: 0,
-				totalposted 	: 0
+			def mParams = [
+				collectorid : params.collector.objid,
+				billdate 	: date.toString().split(' ')[0]
 			];
-			ledger_billing.create(map);
+			def map = ledger_billing.findBillingByCollectoridAndBilldate(mParams);
+			if (!map) {
+				map = [
+					objid 			: 'DLB'+new java.rmi.server.UID(),
+					state 			: 'DRAFT',
+					dtcreated 		: date,
+					createdby 		: params.collector.name,
+					dtmodified 		: date,
+					modifiedby 		: params.collector.name,
+					collector 		: params.collector,
+					billdate 		: dateSvc.serverDate,
+					branchid 		: (env.ORGID? env.ORGID : 'NOT IDENTIFIED'),
+					totalfordownload: 0,
+					totaldownloaded : 0,
+					totalunposted 	: 0,
+					totalposted 	: 0
+				];
+				ledger_billing.create(map);
+			}
 			params.billingid = map.objid;
 		}
 		params.type = 'FIELD';

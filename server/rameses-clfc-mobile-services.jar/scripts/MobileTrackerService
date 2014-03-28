@@ -38,6 +38,7 @@ class MobileTrackerService
 
 	@ProxyMethod
 	public Map start(Map params) {
+		//def entity = create(params);
 		def mParams = [ objid: params.trackerid ];
 		def entity = em.findByPrimary(mParams); 
 		if (!entity) throw new Exception("'"+params.trackerid+"' trackerid not found"); 

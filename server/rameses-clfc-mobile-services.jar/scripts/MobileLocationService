@@ -15,8 +15,9 @@ class MobileLocationService
 	@ProxyMethod
 	public def postLocation( params ) {
 		def response = "fail";
+		println 'params-> '+params;
 		if (params.trackerid) {
-			//println 'params -> '+params;
+			println 'params -> '+params;
 			def detail = tracker.findDetailByParentidAndRefid([parentid: params.trackerid, refid: params.objid]);
 			if (!detail) {
 				def map = [
