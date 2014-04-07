@@ -14,10 +14,10 @@
             String serviceName = "LoanLedgerBillingLookupService";
             String entityName = "ledgerbilling";
             
-            List fetchList(Map params) {
+            /*List fetchList(Map params) {
                 params.state = 'DRAFT';
                 return super.fetchList(params);
-            }
+            }*/
         }
     </code>
 </workunit>
