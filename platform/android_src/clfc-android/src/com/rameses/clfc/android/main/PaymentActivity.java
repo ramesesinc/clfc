@@ -135,8 +135,8 @@ public class PaymentActivity extends ControlActivity
 		et_overpayment.setEnabled(false);
 		if (isfirstbill == 1) et_overpayment.setEnabled(true);
 		if (overpayment.compareTo(new BigDecimal("0").setScale(2)) > 0) {
-			decf.format(overpayment, sb, fp);
-			et_overpayment.setText(sb.toString());
+			//decf.format(overpayment, sb, fp);
+			et_overpayment.setText(overpayment.toString());
 		}
 		
 		txndate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -152,6 +152,7 @@ public class PaymentActivity extends ControlActivity
 				try {
 					doSavePayment();
 				} catch(Throwable t) {
+					t.printStackTrace();
 					UIDialog.showMessage("[ERROR] " + t.getMessage()); 
 				}
 			}
