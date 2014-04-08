@@ -10,7 +10,7 @@ class MobileTrackerInterceptor
 	public void afterOpenLog( evt ) { 
 		def result = evt.result;
 		if (result.reftype == 'PAYMENT') {
-			result.info = em.findDetailPayment([objid: result.refid]); 
+			result.info = em.findDetailPayment([objid: result.refid]);
 		} 
 	} 
 

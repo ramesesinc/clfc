@@ -5,7 +5,7 @@ WHERE collector_objid=$P{collectorid}
 
 [getForPostingRoutesByFieldcollectionid]
 SELECT lr.code AS route_code, lr.description AS route_description, lr.area AS route_area,
-	SUM(fcp.payamount) AS total
+	SUM(fcp.payamount) AS total, fcr.trackerid
 FROM field_collection_route fcr 
 INNER JOIN loan_route lr ON fcr.routecode=lr.code
 INNER JOIN field_collection_loan fcl ON fcr.routecode=fcl.routecode
@@ -133,4 +133,4 @@ FROM field_collection_payment dp
 	INNER JOIN loan_route r ON l.route_code=r.code 
 	INNER JOIN borrower b ON l.borrower_objid=b.objid  
 WHERE 
-	dp.fieldcollectionid=$P{objid} 
+	dp.objid=$P{objid} 

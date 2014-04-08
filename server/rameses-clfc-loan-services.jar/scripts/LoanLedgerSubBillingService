@@ -68,7 +68,7 @@ class LoanLedgerSubBillingService extends ActiveCrudService
 		params.modifiedby = (env.NAME? env.NAME : 'NOT IDENTIFIED');
 		def map = [
 			objid 	: params._parentid,
-			state 	: "DRAFT"
+			state 	: "FOR_DOWNLOAD"
 		];
 		em.changeState(map);//em.changeStateDraft([objid: params._parentid]);
 		//em.update([objid: params._parentid, dtcancelled: null, cancelledby: null, remarks: null]);

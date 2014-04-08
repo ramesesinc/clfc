@@ -17,7 +17,9 @@ class LoanLedgerBillingLookupService
 
 	@ProxyMethod
 	public def getList( params ) {
+		//params.state = 'FOR_DOWNLOAD';
 		params.searchtext = (params.searchtext? params.searchtext+'%' : '%');
+		//println 'params: ' + params;
 		def list = ledger_billing.getBillingForSubCollection(params);
 		list.each{ 
 			it.routes = ledger_billing.getUnuploadedRoutesByBillingid([billingid: it.objid]); 

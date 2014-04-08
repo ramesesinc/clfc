@@ -6,7 +6,6 @@
 		<field name="dtfiled" required="true"/>
 		<field name="filedby" required="true"/>
 		<field name="branchid" required="true"/>
-		<field name="trackerid" required="true"/>
 		<field name="billdate" required="true"/>
 		<field name="totalcount" required="true"/>
 		<field name="totalamount" required="true"/>
@@ -51,6 +50,7 @@
 		<field name="fieldcollectionid" required="true"/>
 		<field name="routecode" required="true"/>
 		<field name="totalcount" required="true"/>
+		<field name="trackerid" required="true"/>
 	</element>
 
 	<element name="denomination" tablename="field_collection_cashbreakdown">

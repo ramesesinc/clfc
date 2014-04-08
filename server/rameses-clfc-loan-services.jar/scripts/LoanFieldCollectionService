@@ -16,6 +16,9 @@ class LoanFieldCollectionService
 	@ActiveDB(value="loan_ledger_billing")
 	def ledger_billing;
 
+	@ActiveDB(value="mobile_tracker")
+	def tracker;
+
 	@Service("DateService")
 	def dateSvc;
 
@@ -165,6 +168,18 @@ class LoanFieldCollectionService
 			}
 			billing.totalunposted -= 1;
 			billing.totalposted += 1;
+
+			def t = trackerSvc.open([objid: o.trackerid]);
+			if (t) {
+				def trackerItem = tracker.findLastTrackerItemByParentid([parentid: o.trackerid]);
+				def params = [
+					trackerid 	: o.trackerid,
+					username	: (env.NAME? env.NAME : 'SYSTEM'),
+					lng 		: (trackerItem? trackerItem.lng : 0.00),
+					lat 		: (trackerItem? trackerItem.lat : 0.00)
+				];
+				trackerSvc.stop(params);
+			}
 		}
 		ledger_billing.update(billing, "totalunposted");
 		ledger_billing.update(billing, "totalposted");
@@ -172,7 +187,7 @@ class LoanFieldCollectionService
 			ledger_billing.changeStateCompleted(billing);
 		}
 
-		trackerSvc.stop([trackerid: params.trackerid, username: env.NAME? env.NAME : 'SYSTEM', lng: 0.00, lat: 0.00]);
+		//trackerSvc.stop([trackerid: params.trackerid, username: env.NAME? env.NAME : 'SYSTEM', lng: 0.00, lat: 0.00]);
 		collection.changeState([objid: params.objid, state: 'POSTED']);
 		params.dtposted = dateSvc.serverDate;
 		params.postedby = env.NAME? env.NAME : 'SYSTEM';

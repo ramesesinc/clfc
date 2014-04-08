@@ -18,6 +18,12 @@ SELECT * FROM loan_ledger_billing
 WHERE collector_objid=$P{collectorid}
 	AND billdate=$P{billdate}
 
+[findUnuploadRouteByBillingid]
+SELECT * FROM loan_ledger_billing_route
+WHERE billingid=$P{billingid}
+	AND downloaded=1
+	AND uploaded=0
+
 [getRoutesByBillingid]
 SELECT lr.*, llbr.downloaded 
 FROM loan_ledger_billing_route llbr
@@ -139,7 +145,7 @@ WHERE state IN ('DRAFT', 'FOR_DOWNLOAD')
 [getBillingForSubCollection]
 SELECT * FROM loan_ledger_billing
 WHERE collector_name LIKE $P{searchtext}
-	AND state='DRAFT'
+	AND state='FOR_DOWNLOAD'
 ORDER BY billdate
 
 [findRouteByBillingidAndRoutecode]
