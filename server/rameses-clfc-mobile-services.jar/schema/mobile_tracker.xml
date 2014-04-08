@@ -5,6 +5,7 @@
 		<field name="state" required="true"/>
 		<field name="terminalid"/>
 		<field name="userid"/>
+		<field name="routecode"/>
 		<field name="dtstart" required="true"/>
 		<field name="startlng" required="true"/>
 		<field name="startlat" required="true"/>

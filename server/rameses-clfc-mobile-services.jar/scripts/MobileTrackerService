@@ -23,6 +23,7 @@ class MobileTrackerService
 			state		: 'OPEN', 
 			terminalid	: params.terminalid,
 			userid 		: params.userid, 
+			routecode	: params.routecode,
 			dtstart 	: dateSvc.serverDate,
 			startlng	: params.lng, 
 			startlat	: params.lat 

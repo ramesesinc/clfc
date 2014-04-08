@@ -130,10 +130,15 @@ class MobileBillingService
 		ledger_billing.update(bill, "totaldownloaded");
 		//ledger_billing.create([billingid: params.billingid, routecode: params.route_code], "lock");
 		*/
-		def session = trackerSvc.open([objid: params.trackerid]);
-		if (!session) {
-			params.trackerid = trackerSvc.create([lng: params.longitude, lat: params.latitude, terminalid: params.terminalid, userid: params.userid]).objid;
+		if (params.trackerid) {			
+			def hasUnuploadedRoute = ledger_billing.findUnuploadedRouteByBillingid(params);
+			if (hasUnuploadedRoute) throw new Exception("There is still unremitted route")
 		}
+		params.trackerid = trackerSvc.create([lng: params.longitude, lat: params.latitude, terminalid: params.terminalid, userid: params.userid, routecode: params.route_code]).objid;
+
+		//def session = trackerSvc.open([objid: params.trackerid]);
+		//if (!session) {
+		//}
 		return [billings: list, trackerid: params.trackerid];
 	}	
 

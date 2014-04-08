@@ -125,7 +125,6 @@ class MobilePostingService
 				dtfiled		: date,
 				filedby		: params.collector.name,
 				branchid	: billing.branchid,
-				trackerid	: params.trackerid,
 				billdate	: billing.billdate,
 				totalcount	: 0,
 				totalamount : 0.00,
@@ -144,7 +143,8 @@ class MobilePostingService
 			route = [
 				fieldcollectionid 	: params.sessionid,
 				routecode 			: params.routecode,
-				totalcount			: 0
+				totalcount			: 0,
+				trackerid			: params.trackerid
 			];
 			field_collection.create(route, "route");
 

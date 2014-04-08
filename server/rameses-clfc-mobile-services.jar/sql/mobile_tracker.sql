@@ -33,3 +33,9 @@ WHERE objid=$P{objid}
 SELECT objid FROM mobile_tracker_detail
 WHERE parentid=$P{parentid}
 	AND refid=$P{refid}
+
+[findLastTrackerItemByParentid]
+SELECT * FROM mobile_tracker_detail
+WHERE parentid =  $P{parentid}
+ORDER BY txndate DESC
+LIMIT 1
